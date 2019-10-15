@@ -5,12 +5,20 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.readify.CardFragmentPagerAdapter;
+import com.example.readify.CardItem;
+import com.example.readify.CardPagerAdapter;
 import com.example.readify.R;
+import com.example.readify.ShadowTransformer;
+
+import android.widget.Button;
+import android.widget.CompoundButton;
 
 
 /**
@@ -21,7 +29,20 @@ import com.example.readify.R;
  * Use the {@link DiscoverFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DiscoverFragment extends Fragment {
+public class DiscoverFragment extends Fragment implements View.OnClickListener
+        /*CompoundButton.OnCheckedChangeListener*/{
+
+    private Button mButton;
+    private ViewPager mViewPager;
+
+    private CardPagerAdapter mCardAdapter;
+    private ShadowTransformer mCardShadowTransformer;
+    private CardFragmentPagerAdapter mFragmentCardAdapter;
+    private ShadowTransformer mFragmentCardShadowTransformer;
+    private boolean mShowingFragments = false;
+
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -60,7 +81,46 @@ public class DiscoverFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_discover, container, false);
+        View view = inflater.inflate(R.layout.fragment_discover, container, false);
+        mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        //mButton = (Button) findViewById(R.id.cardTypeBtn);
+        //((CheckBox) findViewById(R.id.checkBox)).setOnCheckedChangeListener(this);
+        //mButton.setOnClickListener(this);
+
+        mCardAdapter = new CardPagerAdapter();
+        mCardAdapter.addCardItem(new CardItem(R.string.title_1, R.string.text_1));
+        mCardAdapter.addCardItem(new CardItem(R.string.title_2, R.string.text_1));
+        mCardAdapter.addCardItem(new CardItem(R.string.title_3, R.string.text_1));
+        mCardAdapter.addCardItem(new CardItem(R.string.title_4, R.string.text_1));
+        mFragmentCardAdapter = new CardFragmentPagerAdapter(getFragmentManager(),
+                dpToPixels(2, getContext()));
+
+        mCardShadowTransformer = new ShadowTransformer(mViewPager, mCardAdapter);
+        mFragmentCardShadowTransformer = new ShadowTransformer(mViewPager, mFragmentCardAdapter);
+
+        mViewPager.setAdapter(mCardAdapter);
+        mViewPager.setPageTransformer(false, mCardShadowTransformer);
+        mViewPager.setOffscreenPageLimit(3);
+        return view;
+    }
+
+    public static float dpToPixels(int dp, Context context) {
+        return dp * (context.getResources().getDisplayMetrics().density);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (!mShowingFragments) {
+            mButton.setText("Views");
+            mViewPager.setAdapter(mFragmentCardAdapter);
+            mViewPager.setPageTransformer(false, mFragmentCardShadowTransformer);
+        } else {
+            mButton.setText("Fragments");
+            mViewPager.setAdapter(mCardAdapter);
+            mViewPager.setPageTransformer(false, mCardShadowTransformer);
+        }
+
+        mShowingFragments = !mShowingFragments;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -101,4 +161,10 @@ public class DiscoverFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+   /* @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        mCardShadowTransformer.enableScaling(b);
+        mFragmentCardShadowTransformer.enableScaling(b);
+    }*/
 }
