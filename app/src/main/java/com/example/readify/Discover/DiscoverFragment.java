@@ -1,4 +1,4 @@
-package com.example.readify;
+package com.example.readify.Discover;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,16 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.readify.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ReadingFragment.OnFragmentInteractionListener} interface
+ * {@link DiscoverFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ReadingFragment#newInstance} factory method to
+ * Use the {@link DiscoverFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReadingFragment extends Fragment {
+public class DiscoverFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,25 +33,17 @@ public class ReadingFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public ReadingFragment() {
+    public DiscoverFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ReadingFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ReadingFragment newInstance(String param1, String param2) {
-        ReadingFragment fragment = new ReadingFragment();
-        Bundle args = new Bundle();
+
+    public static DiscoverFragment newInstance(/*String param1, String param2*/) {
+        DiscoverFragment fragment = new DiscoverFragment();
+        /*Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        fragment.setArguments(args);*/
         return fragment;
     }
 
@@ -66,7 +60,7 @@ public class ReadingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reading, container, false);
+        return inflater.inflate(R.layout.fragment_discover, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
