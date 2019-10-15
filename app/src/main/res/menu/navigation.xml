@@ -2,23 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_read"
-        android:icon="@mipmap/ic_launcher"
-        android:title="Reading" />
+        android:id="@+id/navigation_reading_fragment"
+        android:icon="@drawable/ic_action_reading"
+        android:title="@string/reading" />
 
     <item
-        android:id="@+id/navigation_library"
-        android:icon="@mipmap/ic_launcher"
-        android:title="Library" />
+        android:id="@+id/navigation_library_fragment"
+        android:icon="@drawable/ic_action_library"
+        android:title="@string/library" />
 
     <item
-        android:id="@+id/navigation_discover"
-        android:icon="@mipmap/ic_launcher"
-        android:title="Discover" />
+        android:id="@+id/navigation_discover_fragment"
+        android:icon="@drawable/ic_action_discover"
+        android:title="@string/discover" />
 
     <item
-        android:id="@+id/navigation_profile"
-        android:icon="@mipmap/ic_launcher"
-        android:title="Profile" />
+        android:id="@+id/navigation_profile_fragment"
+        android:icon="@drawable/ic_action_profile"
+        android:title="@string/profile" />
 
 </menu>
