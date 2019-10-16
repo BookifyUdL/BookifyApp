@@ -1,25 +1,33 @@
 package com.example.readify.Discover;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.readify.BooksHorizontalAdapter;
 import com.example.readify.CardFragmentPagerAdapter;
 import com.example.readify.CardItem;
 import com.example.readify.CardPagerAdapter;
 import com.example.readify.MockupsValues;
+import com.example.readify.Models.Book;
 import com.example.readify.R;
 import com.example.readify.ShadowTransformer;
 
 import android.widget.Button;
 import android.widget.CompoundButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -101,6 +109,23 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener
         mViewPager.setAdapter(mCardAdapter);
         mViewPager.setPageTransformer(false, mCardShadowTransformer);
         mViewPager.setOffscreenPageLimit(3);
+
+        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.top_rated_recycler_view);
+        recyclerView.setLayoutManager(horizontalLayoutManagaer);
+
+
+        // set up the RecyclerView
+        //RecyclerView recyclerView = refindViewById(R.id.rvAnimals);
+        List list = MockupsValues.getLastAddedBooks();
+        list.add(new Book());
+        LinearLayoutManager horizontalLayoutManager
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(horizontalLayoutManager);
+        BooksHorizontalAdapter adapter = new BooksHorizontalAdapter(getContext(), list);
+        //adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
+
         return view;
     }
 
