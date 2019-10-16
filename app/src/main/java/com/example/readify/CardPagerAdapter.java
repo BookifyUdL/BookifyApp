@@ -66,6 +66,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         return view;
     }
 
+
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);

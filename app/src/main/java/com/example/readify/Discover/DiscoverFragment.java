@@ -1,15 +1,18 @@
 package com.example.readify.Discover;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +21,16 @@ import com.example.readify.BooksHorizontalAdapter;
 import com.example.readify.CardFragmentPagerAdapter;
 import com.example.readify.CardItem;
 import com.example.readify.CardPagerAdapter;
+import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.R;
+import com.example.readify.SearchBookPopup;
 import com.example.readify.ShadowTransformer;
 
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.PopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +44,13 @@ import java.util.List;
  * Use the {@link DiscoverFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DiscoverFragment extends Fragment implements View.OnClickListener
+public class DiscoverFragment extends Fragment implements View.OnClickListener,
+        BooksHorizontalAdapter.ItemClickListener
         /*CompoundButton.OnCheckedChangeListener*/{
 
     private Button mButton;
     private ViewPager mViewPager;
+    List list;
 
     private CardPagerAdapter mCardAdapter;
     private ShadowTransformer mCardShadowTransformer;
@@ -110,23 +118,34 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener
         mViewPager.setPageTransformer(false, mCardShadowTransformer);
         mViewPager.setOffscreenPageLimit(3);
 
+        /*Llista baix*/
         LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.top_rated_recycler_view);
         recyclerView.setLayoutManager(horizontalLayoutManagaer);
-
-
         // set up the RecyclerView
         //RecyclerView recyclerView = refindViewById(R.id.rvAnimals);
-        List list = MockupsValues.getLastAddedBooks();
+        list = MockupsValues.getLastAddedBooks();
         list.add(new Book());
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
         BooksHorizontalAdapter adapter = new BooksHorizontalAdapter(getContext(), list);
-        //adapter.setClickListener(this);
+        adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        if(position == list.size()-1){
+            searchPopup();
+        }
+    }
+
+    private void searchPopup(){
+        DialogFragment dialog = new SearchBookPopup();
+        dialog.show(getFragmentManager(), "search_book_popup");
     }
 
     public static float dpToPixels(int dp, Context context) {

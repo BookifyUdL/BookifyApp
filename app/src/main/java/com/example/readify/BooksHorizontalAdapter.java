@@ -54,6 +54,29 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
         }
     }
 
+    public void onItemClicked(){
+        /*LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = layoutInflater.inflate(R.layout.popup,null);
+
+        closePopupBtn = (Button) customView.findViewById(R.id.closePopupBtn);
+
+        //instantiate popup window
+        popupWindow = new PopupWindow(customView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
+        //display the popup window
+        popupWindow.showAtLocation(linearLayout1, Gravity.CENTER, 0, 0);
+
+        //close the popup window on button click
+        closePopupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });*/
+
+    }
+
+
     // total number of rows
     @Override
     public int getItemCount() {
