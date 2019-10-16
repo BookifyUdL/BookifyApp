@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    app:cardUseCompatPadding="true"
     android:id="@+id/cardView">
 
 
@@ -16,28 +20,37 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="top|center"
+                android:src="@drawable/lib1"
+                android:id="@+id/bookImageView"/>
 
             <TextView
-                android:id="@+id/titleTextView"
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:id="@+id/contentTextView"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Etiam eget ligula eu lectus lobortis condimentum." />
 
             <TextView
-                android:id="@+id/contentTextView"
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"/>
-
-            <!--  style="@style/ButtonStyle"-->
-            <Button
-
+                android:layout_gravity="center"
+                android:id="@+id/titleTextView"
+                android:text="Card title" />
+            <!--style="@style/ButtonStyle"-->
+            <!--<Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Button" />
+                android:text="Button" />-->
         </LinearLayout>
 
         <ImageView

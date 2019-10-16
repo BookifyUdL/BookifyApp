@@ -1,19 +1,23 @@
 package com.example.readify;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.PagerAdapter;
+
+import com.example.readify.Models.Book;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
     private List<CardView> mViews;
-    private List<CardItem> mData;
+    private List<Book> mData;
     private float mBaseElevation;
 
     public CardPagerAdapter() {
@@ -21,7 +25,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         mViews = new ArrayList<>();
     }
 
-    public void addCardItem(CardItem item) {
+    public void addCardItem(Book item) {
         mViews.add(null);
         mData.add(item);
     }
@@ -50,7 +54,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         View view = LayoutInflater.from(container.getContext())
                 .inflate(R.layout.adapter, container, false);
         container.addView(view);
-        bind(mData.get(position), view);
+        bind(mData.get(position), view, container.getContext());
         CardView cardView = (CardView) view.findViewById(R.id.cardView);
 
         if (mBaseElevation == 0) {
@@ -68,10 +72,13 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         mViews.set(position, null);
     }
 
-    private void bind(CardItem item, View view) {
+    private void bind(Book item, View view, Context context) {
         TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
         TextView contentTextView = (TextView) view.findViewById(R.id.contentTextView);
-        titleTextView.setText(item.getTitle());
-        contentTextView.setText(item.getText());
+        ImageView bookImageView = (ImageView) view.findViewById(R.id.bookImageView);
+        titleTextView.setText(item.getAuthor());
+        contentTextView.setText(item.getTitle());
+        bookImageView.setImageResource(bookImageView.getContext().getResources().getIdentifier(item.getPicture(), "drawable", bookImageView.getContext().getPackageName()));
+        //bookImageView.setImageBitmap(context.getResources().getIdentifier(item.getPicture(), "drawable", context.getPackageName()));
     }
 }

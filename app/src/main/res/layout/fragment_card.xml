@@ -19,25 +19,33 @@
             android:orientation="vertical"
             android:padding="24dp">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|center"
+                android:src="@drawable/lib1" />
+
             <TextView
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="Card title" />
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Etiam eget ligula eu lectus lobortis condimentum." />
 
             <!--style="@style/ButtonStyle"-->
-            <Button
+            <!--<Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Button" />
+                android:text="Button" />-->
         </LinearLayout>
 
         <ImageView

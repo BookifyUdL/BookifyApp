@@ -20,7 +20,7 @@ public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implemen
         mFragments = new ArrayList<>();
         mBaseElevation = baseElevation;
 
-        for(int i = 0; i< 5; i++){
+        for(int i = 0; i< MockupsValues.getLastAddedBooks().size(); i++){
             addCardFragment(new CardFragment());
         }
     }

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.readify.CardFragmentPagerAdapter;
 import com.example.readify.CardItem;
 import com.example.readify.CardPagerAdapter;
+import com.example.readify.MockupsValues;
 import com.example.readify.R;
 import com.example.readify.ShadowTransformer;
 
@@ -88,10 +89,9 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener
         //mButton.setOnClickListener(this);
 
         mCardAdapter = new CardPagerAdapter();
-        mCardAdapter.addCardItem(new CardItem(R.string.title_1, R.string.text_1));
-        mCardAdapter.addCardItem(new CardItem(R.string.title_2, R.string.text_1));
-        mCardAdapter.addCardItem(new CardItem(R.string.title_3, R.string.text_1));
-        mCardAdapter.addCardItem(new CardItem(R.string.title_4, R.string.text_1));
+        for (int i=0; i < MockupsValues.getLastAddedBooks().size(); i++){
+            mCardAdapter.addCardItem(MockupsValues.getLastAddedBooks().get(i));
+        }
         mFragmentCardAdapter = new CardFragmentPagerAdapter(getFragmentManager(),
                 dpToPixels(2, getContext()));
 
