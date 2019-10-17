@@ -14,8 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.readify.R;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.CirclePageIndicator;
+import com.synnapps.carouselview.ViewListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +29,7 @@ import com.example.readify.R;
  * Use the {@link GenresFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GenresFragment extends Fragment implements View.OnClickListener {
+public class GenresFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -40,7 +44,11 @@ public class GenresFragment extends Fragment implements View.OnClickListener {
     View view;
     Activity activity;
     ComunicateFragmentsFirstForm comunicateFragmentsFirstForm;
-    
+
+    //CarouselView
+    CarouselView carouselView;
+    int NUMBER_OF_FORMS = 2;
+
     CardView cardViewBiography;
     CardView cardViewComputing;
     CardView cardViewCrime;
@@ -89,45 +97,92 @@ public class GenresFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_genres, container, false);
+        CirclePageIndicator indicator = view.findViewById(R.id.indicator);
+        indicator.setFillColor(R.color.default_circle_indicator_stroke_color);
 
-        //Defining a skip button
-        TextView skipForm = view.findViewById(R.id.textSkipFirstForm);
-        skipForm.setText(R.string.skip_first_form_message);
-        skipForm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                comunicateFragmentsFirstForm.exitForm();
-            }
-        });
-
-        //Click on every cards and mark
-        cardViewBiography = view.findViewById(R.id.cardViewBiography);
-        linearLayoutBiography = view.findViewById(R.id.linearLayoutBiography);
-        cardViewBiography.setOnClickListener(this);
-
-        cardViewComputing = view.findViewById(R.id.cardViewComputing);
-        linearLayoutComputing = view.findViewById(R.id.linearLayoutComputing);
-        cardViewComputing.setOnClickListener(this);
-
-        cardViewCrime = view.findViewById(R.id.cardViewCrime);
-        linearLayoutCrime = view.findViewById(R.id.linearLayoutCrime);
-        cardViewCrime.setOnClickListener(this);
-
-        cardViewEducation = view.findViewById(R.id.cardViewEducation);
-        linearLayoutEducation = view.findViewById(R.id.linearLayoutEducation);
-        cardViewEducation.setOnClickListener(this);
-
-        cardViewFiction = view.findViewById(R.id.cardViewFiction);
-        linearLayoutFiction = view.findViewById(R.id.linearLayoutFiction);
-        cardViewFiction.setOnClickListener(this);
-
-        cardViewRomance = view.findViewById(R.id.cardViewRomance);
-        linearLayoutRomance = view.findViewById(R.id.linearLayoutRomance);
-        cardViewRomance.setOnClickListener(this);
+        carouselView = (CarouselView) view.findViewById(R.id.carouselView);
+        carouselView.setPageCount(NUMBER_OF_FORMS);
+        carouselView.setSlideInterval(0);
+        carouselView.setViewListener(viewListener);
 
         // Inflate the layout for this fragment
         return view;
     }
+
+    ViewListener viewListener = new ViewListener() {
+
+        @Override
+        public View setViewForPosition(int position) {
+            View view = null;
+
+            switch (position){
+                case 0:
+                    view = getLayoutInflater().inflate(R.layout.fist_form_genres, null);
+                    //set view attributes here
+
+                    //Defining a skip button
+                    TextView skipForm = view.findViewById(R.id.textSkipFirstForm);
+                    skipForm.setText(R.string.skip_first_form_message);
+                    skipForm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            comunicateFragmentsFirstForm.exitForm();
+                        }
+                    });
+
+                    //Click on every cards and mark
+                    cardViewBiography = view.findViewById(R.id.cardViewBiography);
+                    linearLayoutBiography = view.findViewById(R.id.linearLayoutBiography);
+                    cardViewBiography.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            checkCardView(cardViewBiography, linearLayoutBiography);
+                        }
+                    });
+                    break;
+                case 1:
+                    //Libros leídos
+                    view = getLayoutInflater().inflate(R.layout.fragment_discover, null);
+                    break;
+                    //Libros para leer
+                /*case 2:
+
+                    break;*/
+            }
+
+            /*cardViewComputing = view.findViewById(R.id.cardViewComputing);
+            linearLayoutComputing = view.findViewById(R.id.linearLayoutComputing);
+            cardViewComputing.setOnClickListener(this);
+
+            cardViewCrime = view.findViewById(R.id.cardViewCrime);
+            linearLayoutCrime = view.findViewById(R.id.linearLayoutCrime);
+            cardViewCrime.setOnClickListener(this);
+
+            cardViewEducation = view.findViewById(R.id.cardViewEducation);
+            linearLayoutEducation = view.findViewById(R.id.linearLayoutEducation);
+            cardViewEducation.setOnClickListener(this);
+
+            cardViewFiction = view.findViewById(R.id.cardViewFiction);
+            linearLayoutFiction = view.findViewById(R.id.linearLayoutFiction);
+            cardViewFiction.setOnClickListener(this);
+
+            cardViewRomance = view.findViewById(R.id.cardViewRomance);
+            linearLayoutRomance = view.findViewById(R.id.linearLayoutRomance);
+            cardViewRomance.setOnClickListener(this);*/
+
+            return view;
+        }
+
+        void checkCardView(CardView cardView, LinearLayout linearLayout) {
+            if (cardView.getTag() == getString(R.string.cardView_unmark)) {
+                cardView.setTag(getString(R.string.cardView_mark));
+                linearLayout.setBackground(view.getContext().getDrawable(R.drawable.cardview_selected));
+            } else {
+                cardView.setTag(getString(R.string.cardView_unmark));
+                linearLayout.setBackgroundColor(view.getContext().getColor(R.color.colorBlank));
+            }
+        }
+    };
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -157,7 +212,7 @@ public class GenresFragment extends Fragment implements View.OnClickListener {
         mListener = null;
     }
 
-    @Override
+    /*@Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.cardViewBiography:
@@ -179,17 +234,7 @@ public class GenresFragment extends Fragment implements View.OnClickListener {
                 checkCardView(cardViewRomance, linearLayoutRomance);
                 break;
         }
-    }
-
-    public void checkCardView(CardView cardView, LinearLayout linearLayout){
-        if (cardView.getTag() == getString(R.string.cardView_unmark)) {
-            cardView.setTag(getString(R.string.cardView_mark));
-            linearLayout.setBackground(getActivity().getDrawable(R.drawable.cardview_selected));
-        } else {
-            cardView.setTag(getString(R.string.cardView_unmark));
-            linearLayout.setBackgroundColor(getActivity().getColor(R.color.colorBlank));
-        }
-    }
+    }*/
 
     /**
      * This interface must be implemented by activities that contain this
