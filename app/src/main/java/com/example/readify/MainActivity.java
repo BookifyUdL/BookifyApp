@@ -14,12 +14,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements
 ReadingFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
 LibraryFragment.OnFragmentInteractionListener, DiscoverFragment.OnFragmentInteractionListener,
-SearchBookFragment.OnFragmentInteractionListener{
+SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInteractionListener{
 
 
     private BottomNavigationView navigation;
@@ -28,6 +30,7 @@ SearchBookFragment.OnFragmentInteractionListener{
     private  Fragment fragment3 = DiscoverFragment.newInstance();
     private final Fragment fragment4 = new ProfileFragment();
     private Fragment fragment5 = new SearchBookFragment();
+    private Fragment fragment6 = new BookViewFragment();
     private final FragmentManager fm = getSupportFragmentManager();
 
     private Fragment active = fragment1;
@@ -70,10 +73,18 @@ SearchBookFragment.OnFragmentInteractionListener{
         active = fragment3;
     }
 
+    public void goToBookPage(){
+        fragment6.setEnterTransition(new Slide(Gravity.BOTTOM));
+        fragment6.setExitTransition(new Slide(Gravity.TOP));
+        fm.beginTransaction().hide(active).show(fragment6).commit();
+        active = fragment6;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fm.beginTransaction().add(R.id.main_container, fragment6, "6").hide(fragment5).commit();
         fm.beginTransaction().add(R.id.main_container, fragment5, "5").hide(fragment5).commit();
         fm.beginTransaction().add(R.id.main_container, fragment4, "4").hide(fragment4).commit();
         fm.beginTransaction().add(R.id.main_container, fragment3, "3").hide(fragment3).commit();

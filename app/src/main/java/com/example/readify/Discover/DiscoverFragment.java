@@ -93,16 +93,17 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_discover, container, false);
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
+
         final ImageView searchButton = (ImageView) view.findViewById(R.id.searchIcon);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searchPopup();
+                showSearchFragment();
             }
         });
 
 
-        mCardAdapter = new CardPagerAdapter();
+        mCardAdapter = new CardPagerAdapter((MainActivity) getActivity());
         for (int i=0; i < MockupsValues.getLastAddedBooks().size(); i++){
             mCardAdapter.addCardItem(MockupsValues.getLastAddedBooks().get(i));
         }
@@ -139,19 +140,20 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onItemClick(View view, int position) {
         if(position == list.size()-1){
-            searchPopup();
+            showSearchFragment();
+        } else {
+            showBookFragment();
         }
     }
 
-    private void searchPopup(){
+    private void showBookFragment(){
+        MainActivity activity = (MainActivity) getActivity();
+        activity.goToBookPage();
+    }
+
+    private void showSearchFragment(){
         MainActivity activity = (MainActivity) getActivity();
         activity.changeDiscoverFragment();
-        /*FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_discover, new SearchBookFragment());
-        fragmentTransaction.commit();*/
-        //DialogFragment dialog = new SearchBookPopup(width, height);
-        //dialog.
-        //dialog.show(getFragmentManager(), "search_book_popup");
     }
 
     public static float dpToPixels(int dp, Context context) {

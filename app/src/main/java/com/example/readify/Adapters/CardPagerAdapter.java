@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.example.readify.Adapters.CardAdapter;
+import com.example.readify.MainActivity;
 import com.example.readify.Models.Book;
 import com.example.readify.R;
 
@@ -21,10 +22,12 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
     private List<CardView> mViews;
     private List<Book> mData;
     private float mBaseElevation;
+    private MainActivity activity;
 
-    public CardPagerAdapter() {
+    public CardPagerAdapter(MainActivity activity) {
         mData = new ArrayList<>();
         mViews = new ArrayList<>();
+        this.activity = activity;
     }
 
     public void addCardItem(Book item) {
@@ -55,6 +58,12 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         View view = LayoutInflater.from(container.getContext())
                 .inflate(R.layout.adapter, container, false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showBook();
+            }
+        });
         container.addView(view);
         bind(mData.get(position), view, container.getContext());
         CardView cardView = (CardView) view.findViewById(R.id.cardView);
@@ -66,6 +75,10 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         cardView.setMaxCardElevation(mBaseElevation * MAX_ELEVATION_FACTOR);
         mViews.set(position, cardView);
         return view;
+    }
+
+    private void  showBook(){
+        activity.goToBookPage();
     }
 
 
