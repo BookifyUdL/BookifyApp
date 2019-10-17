@@ -7,10 +7,16 @@
     tools:context=".SearchBookFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <SearchView
+        android:id="@+id/search_bar"
         android:layout_width="match_parent"
+        android:iconifiedByDefault="false"
+        android:queryHint="@string/search_bar"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/books_recycler_view"

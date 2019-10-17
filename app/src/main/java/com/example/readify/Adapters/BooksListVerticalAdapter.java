@@ -14,14 +14,17 @@ import com.example.readify.Models.Book;
 import com.example.readify.R;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVerticalAdapter.BookHolder> {
-    private ArrayList<Book> booksList;
+    private ArrayList<Book> booksList, originalSearchList;
     private Context mContext;
 
     // Counstructor for the Class
     public BooksListVerticalAdapter(Context context, ArrayList<Book> booksList) {
         this.booksList = booksList;
+        this.originalSearchList = new ArrayList<>();
+        this.originalSearchList.addAll(booksList);
         this.mContext = context;
     }
 
@@ -39,6 +42,30 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
     @Override
     public int getItemCount() {
         return booksList == null? 0: booksList.size();
+    }
+
+    public void filter(String newText) {
+        String toSearch = newText.toLowerCase();
+
+        booksList = new ArrayList<>();
+        booksList.addAll(originalSearchList);
+
+        if (toSearch.length() == 0)
+        {
+            notifyDataSetChanged();
+            return;
+        }
+
+        ListIterator<Book> itr = booksList.listIterator();
+        while (itr.hasNext())
+        {
+            if (itr.next().getTitle().toLowerCase().contains(toSearch))
+                continue;
+
+            itr.remove();
+        }
+
+        notifyDataSetChanged();
     }
 
     // This method is called when binding the data to the views being created in RecyclerView

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.example.readify.Adapters.BooksListVerticalAdapter;
 
@@ -25,9 +26,10 @@ import java.util.ArrayList;
  * Use the {@link SearchBookFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchBookFragment extends Fragment {
+public class SearchBookFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private OnFragmentInteractionListener mListener;
+    private BooksListVerticalAdapter adapter;
 
     public SearchBookFragment() {
         // Required empty public constructor
@@ -58,13 +60,16 @@ public class SearchBookFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search_book, container, false);
         LinearLayoutManager verticalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        //verticalLayoutManagaer.wid
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.books_recycler_view);
         recyclerView.setLayoutManager(verticalLayoutManagaer);
         ArrayList list = MockupsValues.getLastAddedBooks();
-        //list.remove(list.size() - 1);
-        BooksListVerticalAdapter adapter = new BooksListVerticalAdapter(getContext(), list);
+        adapter = new BooksListVerticalAdapter(getContext(), list);
         recyclerView.setAdapter(adapter);
+
+        SearchView searchView = view.findViewById(R.id.search_bar);
+        searchView.setFocusable(false);
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(this);
         return view;
     }
 
@@ -106,4 +111,16 @@ public class SearchBookFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adapter.filter(newText);
+        return false;
+    }
+
 }
