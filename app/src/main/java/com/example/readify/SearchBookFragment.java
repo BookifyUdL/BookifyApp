@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SearchView;
 
 import com.example.readify.Adapters.BooksListVerticalAdapter;
@@ -30,6 +31,7 @@ public class SearchBookFragment extends Fragment implements SearchView.OnQueryTe
 
     private OnFragmentInteractionListener mListener;
     private BooksListVerticalAdapter adapter;
+    private ImageView goBackButton;
 
     public SearchBookFragment() {
         // Required empty public constructor
@@ -59,6 +61,13 @@ public class SearchBookFragment extends Fragment implements SearchView.OnQueryTe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search_book, container, false);
+        goBackButton = (ImageView) view.findViewById(R.id.go_back_button);
+        goBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onGoBackButtonClicked();
+            }
+        });
         LinearLayoutManager verticalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.books_recycler_view);
         recyclerView.setLayoutManager(verticalLayoutManagaer);
@@ -71,6 +80,11 @@ public class SearchBookFragment extends Fragment implements SearchView.OnQueryTe
         searchView.clearFocus();
         searchView.setOnQueryTextListener(this);
         return view;
+    }
+
+    private void onGoBackButtonClicked(){
+        MainActivity activity = (MainActivity) getActivity();
+        activity.backToDiscoverFragment();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

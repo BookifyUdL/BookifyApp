@@ -65,6 +65,11 @@ SearchBookFragment.OnFragmentInteractionListener{
         active = fragment5;
     }
 
+    public void backToDiscoverFragment(){
+        fm.beginTransaction().hide(active).show(fragment3).commit();
+        active = fragment3;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
