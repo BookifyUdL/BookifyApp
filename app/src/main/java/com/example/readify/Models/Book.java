@@ -19,6 +19,8 @@ public class Book {
         this.picture = picture;
     }
 
+    public Book(){ }
+
     public String getTitle() {
         return title;
     }

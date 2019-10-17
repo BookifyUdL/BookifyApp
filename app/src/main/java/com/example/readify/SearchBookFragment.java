@@ -1,4 +1,4 @@
-package com.example.readify.Reading;
+package com.example.readify;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.SearchView;
 
 import com.example.readify.Adapters.BooksListVerticalAdapter;
-import com.example.readify.MockupsValues;
-import com.example.readify.R;
 
 import java.util.ArrayList;
 
@@ -22,24 +22,18 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ReadingFragment.OnFragmentInteractionListener} interface
+ * {@link SearchBookFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ReadingFragment#newInstance} factory method to
+ * Use the {@link SearchBookFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReadingFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class SearchBookFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private OnFragmentInteractionListener mListener;
+    private BooksListVerticalAdapter adapter;
+    private ImageView goBackButton;
 
-    public ReadingFragment() {
+    public SearchBookFragment() {
         // Required empty public constructor
     }
 
@@ -49,48 +43,48 @@ public class ReadingFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ReadingFragment.
+     * @return A new instance of fragment SearchBookFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ReadingFragment newInstance(String param1, String param2) {
-        ReadingFragment fragment = new ReadingFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+    public static SearchBookFragment newInstance(String param1, String param2) {
+        SearchBookFragment fragment = new SearchBookFragment();
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_reading, container, false);
-        /*RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.books_recycler_view);
-        BooksListVerticalAdapter adapter = new BooksListVerticalAdapter(MockupsValues.getLastAddedBooks(), getContext());
-        recyclerView.setAdapter(adapter);*/
-        /*Llista baix*/
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_search_book, container, false);
+        goBackButton = (ImageView) view.findViewById(R.id.go_back_button);
+        goBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onGoBackButtonClicked();
+            }
+        });
         LinearLayoutManager verticalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.books_recycler_view);
         recyclerView.setLayoutManager(verticalLayoutManagaer);
-        // set up the RecyclerView
-        //RecyclerView recyclerView = refindViewById(R.id.rvAnimals);
         ArrayList list = MockupsValues.getLastAddedBooks();
-        list.remove(list.size() - 1);
-        BooksListVerticalAdapter adapter = new BooksListVerticalAdapter(getContext(), list);
-        //BooksHorizontalAdapter adapter = new BooksHorizontalAdapter(getContext(), list);
-        //adapter.setClickListener(this);
+        adapter = new BooksListVerticalAdapter(getContext(), list);
         recyclerView.setAdapter(adapter);
+
+        SearchView searchView = view.findViewById(R.id.search_bar);
+        searchView.setFocusable(false);
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(this);
         return view;
-        // Inflate the layout for this fragment
+    }
+
+    private void onGoBackButtonClicked(){
+        MainActivity activity = (MainActivity) getActivity();
+        activity.backToDiscoverFragment();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -131,4 +125,16 @@ public class ReadingFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adapter.filter(newText);
+        return false;
+    }
+
 }
