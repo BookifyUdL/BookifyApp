@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="reading">Leyendo</string>
     <string name="library">Libreria</string>
     <string name="discover">Descubrir</string>
     <string name="profile">Perfil</string>
+    <string name="skip_first_form_message"><u>Omitir el formulario</u></string>
+    <string name="description_first_form_text">Para mejorar su experiencia en esta aplicación, le recomendamos que pierda una parte de su tiempo para hacer este formulario para que en el futuro, podamos ofrecerle las mejores recomendaciones de libros. Este formulario no es obligatorio.</string>
+    <string name="select_genres_first_form_title">Selecciona tus géneros</string>
+    <string name="select_genres_first_form_text">Primero, debe seleccionar los géneros de libros que le interesan.</string>
 </resources>
