@@ -1,9 +1,11 @@
-package com.example.readify;
+package com.example.readify.Design;
 
 import android.view.View;
 
 import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.ViewPager;
+
+import com.example.readify.Adapters.CardAdapter;
 
 public class ShadowTransformer implements ViewPager.OnPageChangeListener, ViewPager.PageTransformer{
     private ViewPager mViewPager;

@@ -1,38 +1,30 @@
 package com.example.readify.Discover;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.readify.BooksHorizontalAdapter;
-import com.example.readify.CardFragmentPagerAdapter;
-import com.example.readify.CardItem;
-import com.example.readify.CardPagerAdapter;
+import com.example.readify.Adapters.BooksHorizontalAdapter;
+import com.example.readify.Adapters.CardFragmentPagerAdapter;
+import com.example.readify.Adapters.CardPagerAdapter;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.R;
-import com.example.readify.SearchBookPopup;
-import com.example.readify.ShadowTransformer;
+import com.example.readify.Design.ShadowTransformer;
 
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.PopupWindow;
+import android.widget.ImageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -51,6 +43,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
     private Button mButton;
     private ViewPager mViewPager;
     List list;
+    int width, height;
 
     private CardPagerAdapter mCardAdapter;
     private ShadowTransformer mCardShadowTransformer;
@@ -100,9 +93,14 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_discover, container, false);
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        //mButton = (Button) findViewById(R.id.cardTypeBtn);
-        //((CheckBox) findViewById(R.id.checkBox)).setOnCheckedChangeListener(this);
-        //mButton.setOnClickListener(this);
+        final ImageView searchButton = (ImageView) view.findViewById(R.id.searchIcon);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchPopup();
+            }
+        });
+
 
         mCardAdapter = new CardPagerAdapter();
         for (int i=0; i < MockupsValues.getLastAddedBooks().size(); i++){
@@ -133,6 +131,8 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
+        width = view.getWidth();
+        height = view.getHeight();
         return view;
     }
 
@@ -144,8 +144,14 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
     }
 
     private void searchPopup(){
-        DialogFragment dialog = new SearchBookPopup();
-        dialog.show(getFragmentManager(), "search_book_popup");
+        MainActivity activity = (MainActivity) getActivity();
+        activity.changeDiscoverFragment();
+        /*FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_discover, new SearchBookFragment());
+        fragmentTransaction.commit();*/
+        //DialogFragment dialog = new SearchBookPopup(width, height);
+        //dialog.
+        //dialog.show(getFragmentManager(), "search_book_popup");
     }
 
     public static float dpToPixels(int dp, Context context) {

@@ -1,4 +1,4 @@
-package com.example.readify;
+package com.example.readify.Adapters;
 
 import android.view.ViewGroup;
 
@@ -7,10 +7,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.example.readify.Adapters.CardAdapter;
+import com.example.readify.CardFragment;
+import com.example.readify.MockupsValues;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implements  CardAdapter {
+public class CardFragmentPagerAdapter extends FragmentStatePagerAdapter implements CardAdapter {
 
     private List<CardFragment> mFragments;
     private float mBaseElevation;

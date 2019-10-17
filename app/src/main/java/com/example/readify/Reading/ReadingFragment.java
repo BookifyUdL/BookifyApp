@@ -5,12 +5,18 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.readify.Adapters.BooksListVerticalAdapter;
+import com.example.readify.MockupsValues;
 import com.example.readify.R;
+
+import java.util.ArrayList;
 
 
 /**
@@ -67,8 +73,24 @@ public class ReadingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_reading, container, false);
+        /*RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.books_recycler_view);
+        BooksListVerticalAdapter adapter = new BooksListVerticalAdapter(MockupsValues.getLastAddedBooks(), getContext());
+        recyclerView.setAdapter(adapter);*/
+        /*Llista baix*/
+        LinearLayoutManager verticalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.books_recycler_view);
+        recyclerView.setLayoutManager(verticalLayoutManagaer);
+        // set up the RecyclerView
+        //RecyclerView recyclerView = refindViewById(R.id.rvAnimals);
+        ArrayList list = MockupsValues.getLastAddedBooks();
+        list.remove(list.size() - 1);
+        BooksListVerticalAdapter adapter = new BooksListVerticalAdapter(getContext(), list);
+        //BooksHorizontalAdapter adapter = new BooksHorizontalAdapter(getContext(), list);
+        //adapter.setClickListener(this);
+        recyclerView.setAdapter(adapter);
+        return view;
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reading, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -1,4 +1,4 @@
-package com.example.readify;
+package com.example.readify.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,9 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.example.readify.Adapters.CardAdapter;
 import com.example.readify.Models.Book;
+import com.example.readify.R;
 
 import java.util.ArrayList;
 import java.util.List;

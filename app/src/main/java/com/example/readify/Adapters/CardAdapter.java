@@ -1,4 +1,4 @@
-package com.example.readify;
+package com.example.readify.Adapters;
 
 import androidx.cardview.widget.CardView;
 

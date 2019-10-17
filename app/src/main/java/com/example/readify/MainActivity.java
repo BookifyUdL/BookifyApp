@@ -18,14 +18,16 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements
 ReadingFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
-LibraryFragment.OnFragmentInteractionListener, DiscoverFragment.OnFragmentInteractionListener{
+LibraryFragment.OnFragmentInteractionListener, DiscoverFragment.OnFragmentInteractionListener,
+SearchBookFragment.OnFragmentInteractionListener{
 
 
     private BottomNavigationView navigation;
     private final Fragment fragment1 = new ReadingFragment();
     private final Fragment fragment2 = new LibraryFragment();
-    private final Fragment fragment3 = DiscoverFragment.newInstance();
+    private  Fragment fragment3 = DiscoverFragment.newInstance();
     private final Fragment fragment4 = new ProfileFragment();
+    private Fragment fragment5 = new SearchBookFragment();
     private final FragmentManager fm = getSupportFragmentManager();
 
     private Fragment active = fragment1;
@@ -57,10 +59,17 @@ LibraryFragment.OnFragmentInteractionListener, DiscoverFragment.OnFragmentIntera
         }
     };
 
+    public void changeDiscoverFragment(){
+        //fragment3 = new SearchBookFragment();
+        fm.beginTransaction().hide(active).show(fragment5).commit();
+        active = fragment5;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fm.beginTransaction().add(R.id.main_container, fragment5, "5").hide(fragment5).commit();
         fm.beginTransaction().add(R.id.main_container, fragment4, "4").hide(fragment4).commit();
         fm.beginTransaction().add(R.id.main_container, fragment3, "3").hide(fragment3).commit();
         fm.beginTransaction().add(R.id.main_container, fragment2, "2").hide(fragment2).commit();
