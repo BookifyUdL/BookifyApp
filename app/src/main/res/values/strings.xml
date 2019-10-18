@@ -21,5 +21,6 @@
     <string name="publication">PUBLICATION</string>
     <string name="extension">EXTENSION</string>
     <string name="paginas">Pages</string>
+    <string name="discover_link"><u>Discover</u></string>
 
 </resources>
