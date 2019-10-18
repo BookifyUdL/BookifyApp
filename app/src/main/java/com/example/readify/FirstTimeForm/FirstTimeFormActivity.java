@@ -38,17 +38,8 @@ public class FirstTimeFormActivity extends AppCompatActivity
     }
 
     @Override
-    public void nextGenreForm() {
+    public void doneForm() {
 
     }
 
-    @Override
-    public void nextReadbooksForm() {
-
-    }
-
-    @Override
-    public void nextLikeReadBooksForm() {
-
-    }
 }

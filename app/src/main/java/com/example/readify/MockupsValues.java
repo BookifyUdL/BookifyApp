@@ -1,22 +1,24 @@
 package com.example.readify;
 
+import com.example.readify.Models.Genre;
+
 import java.util.ArrayList;
 
 public class MockupsValues {
-    private static ArrayList<String> GENRE;
+    private static ArrayList<Genre> GENRE;
 
-    public static ArrayList<String> getGenres(){
+    public static ArrayList<Genre> getGenres(){
         if (GENRE == null || GENRE.isEmpty()){
             GENRE = new ArrayList<>();
-            GENRE.add("Biography");
-            GENRE.add("Computing & internet");
-            GENRE.add("Crime & thrillers");
-            GENRE.add("Education");
-            GENRE.add("Fiction & Literature");
-            GENRE.add("Health & well-being");
-            GENRE.add("Romance");
-            GENRE.add("Sci-fi & Fantasy");
-            GENRE.add("Travel & Adventure");
+            GENRE.add(new Genre("Biography", "genre1"));
+            GENRE.add(new Genre("Computing & internet", "genre2"));
+            GENRE.add(new Genre("Crime & thrillers","genre3"));
+            GENRE.add(new Genre("Education", "genre4"));
+            GENRE.add(new Genre("Fiction & Literature", "genre5"));
+            GENRE.add(new Genre("Health & well-being","genre6"));
+            GENRE.add(new Genre("Romance", "genre7"));
+            GENRE.add(new Genre("Sci-fi & Fantasy", "genre8"));
+            GENRE.add(new Genre("Travel & Adventure", "genre9"));
         }
         return GENRE;
     }

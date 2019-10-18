@@ -3,23 +3,35 @@ package com.example.readify.FirstTimeForm;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.readify.MockupsValues;
+import com.example.readify.Models.Genre;
 import com.example.readify.R;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.CirclePageIndicator;
 import com.synnapps.carouselview.ViewListener;
+
+import java.util.ArrayList;
+import java.util.ListIterator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +41,7 @@ import com.synnapps.carouselview.ViewListener;
  * Use the {@link GenresFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GenresFragment extends Fragment {
+public class GenresFragment extends Fragment implements RecyclerViewAdapterGenres.ItemClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -49,18 +61,7 @@ public class GenresFragment extends Fragment {
     CarouselView carouselView;
     int NUMBER_OF_FORMS = 2;
 
-    CardView cardViewBiography;
-    CardView cardViewComputing;
-    CardView cardViewCrime;
-    CardView cardViewEducation;
-    CardView cardViewFiction;
-    CardView cardViewRomance;
-    LinearLayout linearLayoutBiography;
-    LinearLayout linearLayoutComputing;
-    LinearLayout linearLayoutCrime;
-    LinearLayout linearLayoutEducation;
-    LinearLayout linearLayoutFiction;
-    LinearLayout linearLayoutRomance;
+    RecyclerViewAdapterGenres adapter;
 
     public GenresFragment() {
         // Required empty public constructor
@@ -115,7 +116,7 @@ public class GenresFragment extends Fragment {
         public View setViewForPosition(int position) {
             View view = null;
 
-            switch (position){
+            switch (position) {
                 case 0:
                     view = getLayoutInflater().inflate(R.layout.fist_form_genres, null);
                     //set view attributes here
@@ -130,59 +131,46 @@ public class GenresFragment extends Fragment {
                         }
                     });
 
-                    //Click on every cards and mark
-                    cardViewBiography = view.findViewById(R.id.cardViewBiography);
-                    linearLayoutBiography = view.findViewById(R.id.linearLayoutBiography);
-                    cardViewBiography.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            checkCardView(cardViewBiography, linearLayoutBiography);
-                        }
-                    });
+                    //Defining every genre
+                    RecyclerView recyclerView = view.findViewById(R.id.recyclerViewGenres);
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
+                    recyclerView.setLayoutManager(gridLayoutManager);
+
+                    ArrayList list = MockupsValues.getGenres();
+
+                    adapter = new RecyclerViewAdapterGenres(view.getContext(), list);
+                    adapter.setClickListener(GenresFragment.this);
+                    recyclerView.setAdapter(adapter);
                     break;
                 case 1:
                     //Libros leídos
                     view = getLayoutInflater().inflate(R.layout.fragment_discover, null);
                     break;
-                    //Libros para leer
+                //TODO: Libros para leer
                 /*case 2:
 
                     break;*/
             }
-
-            /*cardViewComputing = view.findViewById(R.id.cardViewComputing);
-            linearLayoutComputing = view.findViewById(R.id.linearLayoutComputing);
-            cardViewComputing.setOnClickListener(this);
-
-            cardViewCrime = view.findViewById(R.id.cardViewCrime);
-            linearLayoutCrime = view.findViewById(R.id.linearLayoutCrime);
-            cardViewCrime.setOnClickListener(this);
-
-            cardViewEducation = view.findViewById(R.id.cardViewEducation);
-            linearLayoutEducation = view.findViewById(R.id.linearLayoutEducation);
-            cardViewEducation.setOnClickListener(this);
-
-            cardViewFiction = view.findViewById(R.id.cardViewFiction);
-            linearLayoutFiction = view.findViewById(R.id.linearLayoutFiction);
-            cardViewFiction.setOnClickListener(this);
-
-            cardViewRomance = view.findViewById(R.id.cardViewRomance);
-            linearLayoutRomance = view.findViewById(R.id.linearLayoutRomance);
-            cardViewRomance.setOnClickListener(this);*/
-
             return view;
         }
-
-        void checkCardView(CardView cardView, LinearLayout linearLayout) {
-            if (cardView.getTag() == getString(R.string.cardView_unmark)) {
-                cardView.setTag(getString(R.string.cardView_mark));
-                linearLayout.setBackground(view.getContext().getDrawable(R.drawable.cardview_selected));
-            } else {
-                cardView.setTag(getString(R.string.cardView_unmark));
-                linearLayout.setBackgroundColor(view.getContext().getColor(R.color.colorBlank));
-            }
-        }
     };
+
+    @Override
+    public void onItemClick(View view, int position) {
+        LinearLayout linearLayout = view.findViewById(R.id.LayoutBackgroundCardView);
+        CardView cardView = view.findViewById(R.id.cardView);
+        checkCardView(cardView, linearLayout);
+    }
+
+    void checkCardView(CardView cardView, LinearLayout linearLayout) {
+        if (cardView.getTag() == getString(R.string.cardView_unmark)) {
+            cardView.setTag(getString(R.string.cardView_mark));
+            linearLayout.setBackground(view.getContext().getDrawable(R.drawable.cardview_selected));
+        } else {
+            cardView.setTag(getString(R.string.cardView_unmark));
+            linearLayout.setBackgroundColor(view.getContext().getColor(R.color.colorBlank));
+        }
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -211,30 +199,6 @@ public class GenresFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
-    /*@Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.cardViewBiography:
-                checkCardView(cardViewBiography, linearLayoutBiography);
-                break;
-            case R.id.cardViewComputing:
-                checkCardView(cardViewComputing, linearLayoutComputing);
-                break;
-            case R.id.cardViewCrime:
-                checkCardView(cardViewCrime, linearLayoutCrime);
-                break;
-            case R.id.cardViewEducation:
-                checkCardView(cardViewEducation, linearLayoutEducation);
-                break;
-            case R.id.cardViewFiction:
-                checkCardView(cardViewFiction, linearLayoutFiction);
-                break;
-            case R.id.cardViewRomance:
-                checkCardView(cardViewRomance, linearLayoutRomance);
-                break;
-        }
-    }*/
 
     /**
      * This interface must be implemented by activities that contain this
