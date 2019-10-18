@@ -62,8 +62,44 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="15dp"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Etiam eget ligula eu lectus lobortis condimentum." />
+                    android:layout_marginTop="15dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_add_white"
+                            android:background="@drawable/shape_button_up_left"
+                            android:layout_marginEnd="5dp"/>
+
+                        <ImageButton
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_buy_cart_white"
+                            android:background="@drawable/shape_non_curve"/>
+
+                        <ImageButton
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_comment_white"
+                            android:background="@drawable/shape_button_up_right"
+                            android:layout_marginStart="5dp"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
 
                 <!--style="@style/ButtonStyle"-->
                 <!--<Button
