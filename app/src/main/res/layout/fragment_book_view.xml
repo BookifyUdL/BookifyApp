@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".BookViewFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -98,6 +99,181 @@
                             android:layout_marginStart="5dp"/>
 
                     </LinearLayout>
+
+
+
+                    <androidx.slidingpanelayout.widget.SlidingPaneLayout
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBlack"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal|center_vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_gravity="center_horizontal">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="5dp"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:text="@string/gender"
+                                    android:textSize="16dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"/>
+
+                                <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:src="@drawable/mystery"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"/>
+
+
+                                <TextView
+                                    android:text="Nombre genero"
+                                    style="@style/TextAppearance.AppCompat.Body1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"/>
+                            </LinearLayout>
+
+                            <androidx.slidingpanelayout.widget.SlidingPaneLayout
+                                android:layout_marginTop="10dp"
+                                android:layout_width="1dp"
+                                android:layout_height="65dp"
+                                android:background="@color/colorBlack"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal"/>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:text="@string/publication"
+                                    android:textSize="16dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:text="2017"
+                                    android:textSize="22dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"/>
+                                <!--<ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:src="@drawable/mystery"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"/>-->
+
+
+                                <TextView
+                                    android:text="1 octubre"
+                                    style="@style/TextAppearance.AppCompat.Body1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"/>
+                            </LinearLayout>
+
+                            <androidx.slidingpanelayout.widget.SlidingPaneLayout
+                                android:layout_marginTop="10dp"
+                                android:layout_width="1dp"
+                                android:layout_height="65dp"
+                                android:background="@color/colorBlack"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal"/>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginStart="5dp"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:textSize="16dp"
+                                    android:text="@string/extension"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:text="299"
+                                    android:textSize="22dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"/>
+                                <!--<ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:src="@drawable/mystery"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"/>-->
+
+
+                                <TextView
+                                    android:text="@string/paginas"
+                                    style="@style/TextAppearance.AppCompat.Body1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"/>
+                            </LinearLayout>
+
+
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <androidx.slidingpanelayout.widget.SlidingPaneLayout
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBlack"/>
+
                 </LinearLayout>
 
 

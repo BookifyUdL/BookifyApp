@@ -17,5 +17,9 @@
 
     <string name="text_1">Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Etiam eget ligula eu lectus lobortis condimentum.</string>
     <string name="top_rated">Top rated</string>
+    <string name="gender">GENDER</string>
+    <string name="publication">PUBLICATION</string>
+    <string name="extension">EXTENSION</string>
+    <string name="paginas">Pages</string>
 
 </resources>

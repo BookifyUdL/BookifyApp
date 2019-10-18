@@ -15,4 +15,8 @@
     <string name="title_4">Ugly card</string>
 
     <string name="text_1">Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Etiam eget ligula eu lectus lobortis condimentum.</string>
+    <string name="gender">GÉNDER</string>
+    <string name="publication">PUBLICACIÓN</string>
+    <string name="extension">EXTENSIÓN</string>
+    <string name="paginas">Páginas</string>
 </resources>
