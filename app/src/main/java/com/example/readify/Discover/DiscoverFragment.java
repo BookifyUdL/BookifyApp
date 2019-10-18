@@ -42,7 +42,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
     private Button mButton;
     private ViewPager mViewPager;
-    List list;
+    List<Book> list;
     int width, height;
 
     private CardPagerAdapter mCardAdapter;
@@ -142,13 +142,13 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         if(position == list.size()-1){
             showSearchFragment();
         } else {
-            showBookFragment();
+            showBookFragment(list.get(position));
         }
     }
 
-    private void showBookFragment(){
+    private void showBookFragment(Book book){
         MainActivity activity = (MainActivity) getActivity();
-        activity.goToBookPage();
+        activity.goToBookPage(book);
     }
 
     private void showSearchFragment(){
