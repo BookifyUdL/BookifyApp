@@ -1,16 +1,20 @@
 package com.example.readify.Adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readify.Models.Book;
 import com.example.readify.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -20,9 +24,10 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
     private boolean mHasDiscoverButtons;
-
+    private Context context;
     // data is passed into the constructor
     public BooksHorizontalAdapter(Context context, List<Book> books, boolean hasDiscoverButton) {
+        this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.mViewBooks = books;
         this.mHasDiscoverButtons = hasDiscoverButton;
@@ -40,15 +45,32 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
 
     // binds the data to the view and textview in each row
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         if(position == mViewBooks.size() - 1 && mHasDiscoverButtons){
-            holder.myImageView.setVisibility(View.INVISIBLE);
+            //holder.myImageView.setVisibility(View.INVISIBLE);
+            holder.layout.setVisibility(View.INVISIBLE);
             holder.lastView.setVisibility(View.VISIBLE);
 
         } else {
-            holder.myImageView.setImageResource(holder.myImageView.getContext().getResources()
-                    .getIdentifier(mViewBooks.get(position).getPicture(), "drawable", holder.myImageView.getContext().getPackageName()));
+            holder.imageLayout.setBackground(ContextCompat.getDrawable(holder.imageLayout.getContext(),
+                    holder.imageLayout.getContext().getResources().getIdentifier(mViewBooks.get(position).getPicture(), "drawable", holder.layout.getContext().getPackageName())));
+            holder.addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setAddButtonIcon(holder);
+                }
+            });
+            //holder.myImageView.setImageResource(holder.myImageView.getContext().getResources()
+             //       .getIdentifier(mViewBooks.get(position).getPicture(), "drawable", holder.myImageView.getContext().getPackageName()));
         }
+    }
+
+    private void setAddButtonIcon(ViewHolder holder){
+        Drawable drawable = ContextCompat.getDrawable(holder.addButton.getContext(),
+                holder.addButton.getContext().getResources().getIdentifier("ic_added_book", "drawable", holder.addButton.getContext().getPackageName()));
+        holder.addButton.setImageResource(R.drawable.ic_added_book);
+        //holder.addButton.setIcon(drawable, true);
+        //holder.addButton.setBackgroundDrawable(drawable);
     }
 
     public void onItemClicked(){
@@ -82,14 +104,27 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView myImageView;
+        //ImageView myImageView;
+        FloatingActionButton addButton;
         View lastView;
+        RelativeLayout layout, imageLayout;
 
         ViewHolder(View itemView) {
             super(itemView);
-            myImageView = itemView.findViewById(R.id.coverImageView);
+            //myImageView = itemView.findViewById(R.id.coverImageView);
             lastView = itemView.findViewById(R.id.coverView);
-            //myTextView = itemView.findViewById(R.id.tvAnimalName);
+            layout = itemView.findViewById(R.id.relative_layout);
+            imageLayout = itemView.findViewById(R.id.image_layout);
+            addButton = itemView.findViewById(R.id.add_button);
+            /*addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //addButton.setIcon(addButton.getContext().getResources().getDrawable(R.drawable.ic_added_book), true);
+                    Drawable drawable = ContextCompat.getDrawable(addButton.getContext(),
+                            addButton.getContext().getResources().getIdentifier("ic_added_book", "drawable", addButton.getContext().getPackageName()));
+                    addButton.setIcon(drawable, true);
+                }
+            });*/
             itemView.setOnClickListener(this);
         }
 

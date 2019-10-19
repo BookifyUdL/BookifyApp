@@ -119,7 +119,7 @@ public class BookViewFragment extends Fragment implements  BooksHorizontalAdapte
         TextView textView = (TextView) view.findViewById(R.id.same_author_books_title);
         bookTitle.setText(book.getTitle());
         bookAuthor.setText(book.getAuthor());
-        String aux  = textView.getText() + book.getAuthor() + " :";
+        String aux  = textView.getText() + " " + book.getAuthor() + " :";
         textView.setText(aux);
     }
 
