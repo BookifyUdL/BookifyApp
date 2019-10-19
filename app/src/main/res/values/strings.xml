@@ -22,5 +22,7 @@
     <string name="extension">EXTENSION</string>
     <string name="paginas">Pages</string>
     <string name="discover_link"><u>Discover</u></string>
+    <string name="more_books_of">More books of </string>
+    <string name="more_books_genre">More books of this genre:</string>
 
 </resources>

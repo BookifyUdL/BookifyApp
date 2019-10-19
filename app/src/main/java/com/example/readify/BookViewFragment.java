@@ -82,7 +82,7 @@ public class BookViewFragment extends Fragment implements  BooksHorizontalAdapte
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
-        BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter(getContext(), sameAuthorBooks);
+        BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter(getContext(), sameAuthorBooks, false);
         adapterAuth.setClickListener(this);
         recyclerViewAuthor.setAdapter(adapterAuth);
 
@@ -94,9 +94,10 @@ public class BookViewFragment extends Fragment implements  BooksHorizontalAdapte
         LinearLayoutManager horizontalLayoutManagerGender
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManagerGender);
-        BooksHorizontalAdapter adapterGender = new BooksHorizontalAdapter(getContext(), samgeGenderBooks);
+        BooksHorizontalAdapter adapterGender = new BooksHorizontalAdapter(getContext(), samgeGenderBooks, false);
         adapterGender.setClickListener(this);
         recyclerView.setAdapter(adapterGender);
+
 
         return view;
     }
@@ -115,8 +116,11 @@ public class BookViewFragment extends Fragment implements  BooksHorizontalAdapte
         bookImageView.setImageResource(bookImageView.getContext().getResources().getIdentifier(book.getPicture(), "drawable", bookImageView.getContext().getPackageName()));
         TextView bookTitle = (TextView) view.findViewById(R.id.book_title);
         TextView bookAuthor = (TextView) view.findViewById(R.id.book_author);
+        TextView textView = (TextView) view.findViewById(R.id.same_author_books_title);
         bookTitle.setText(book.getTitle());
         bookAuthor.setText(book.getAuthor());
+        String aux  = textView.getText() + book.getAuthor() + " :";
+        textView.setText(aux);
     }
 
     private void onGoBackButtonClicked(){

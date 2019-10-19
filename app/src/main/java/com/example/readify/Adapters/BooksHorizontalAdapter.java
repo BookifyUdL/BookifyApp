@@ -17,15 +17,17 @@ import java.util.List;
 public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontalAdapter.ViewHolder> {
 
     private List<Book> mViewBooks;
-    //private List<String> mAnimals;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+    private boolean mHasDiscoverButtons;
 
     // data is passed into the constructor
-    public BooksHorizontalAdapter(Context context, List<Book> colors) {
+    public BooksHorizontalAdapter(Context context, List<Book> books, boolean hasDiscoverButton) {
         this.mInflater = LayoutInflater.from(context);
-        this.mViewBooks = colors;
-        //this.mAnimals = animals;
+        this.mViewBooks = books;
+        this.mHasDiscoverButtons = hasDiscoverButton;
+        if(hasDiscoverButton)
+            mViewBooks.add(new Book());
     }
 
     // inflates the row layout from xml when needed
@@ -39,18 +41,13 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
     // binds the data to the view and textview in each row
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if(position == mViewBooks.size() - 1){
+        if(position == mViewBooks.size() - 1 && mHasDiscoverButtons){
             holder.myImageView.setVisibility(View.INVISIBLE);
             holder.lastView.setVisibility(View.VISIBLE);
-            /*holder.myImageView.setImageResource(
-                    holder.myImageView.getContext().getResources()
-                            .getIdentifier(mViewBooks.get(0).getPicture(),
-                                    "drawable", holder.myImageView.getContext().getPackageName()));*/
+
         } else {
-            holder.myImageView.setImageResource(
-                    holder.myImageView.getContext().getResources()
-                            .getIdentifier(mViewBooks.get(position).getPicture(),
-                                    "drawable", holder.myImageView.getContext().getPackageName()));
+            holder.myImageView.setImageResource(holder.myImageView.getContext().getResources()
+                    .getIdentifier(mViewBooks.get(position).getPicture(), "drawable", holder.myImageView.getContext().getPackageName()));
         }
     }
 

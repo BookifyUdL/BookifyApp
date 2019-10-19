@@ -20,4 +20,6 @@
     <string name="extension">EXTENSIÓN</string>
     <string name="paginas">Páginas</string>
     <string name="discover_link"><u>Descubrir</u></string>
+    <string name="more_books_of">Más libros de </string>
+    <string name="more_books_genre">Maś libros de este género: </string>
 </resources>
