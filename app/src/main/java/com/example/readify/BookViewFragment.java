@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.readify.Adapters.BooksHorizontalAdapter;
 import com.example.readify.Models.Book;
+
+import java.util.List;
 
 
 /**
@@ -23,10 +28,12 @@ import com.example.readify.Models.Book;
  * Use the {@link BookViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BookViewFragment extends Fragment {
+public class BookViewFragment extends Fragment implements  BooksHorizontalAdapter.ItemClickListener{
 
     private Book book;
     private View view;
+    private List<Book> sameAuthorBooks;
+    private List<Book> samgeGenderBooks;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,7 +73,41 @@ public class BookViewFragment extends Fragment {
         if(book != null){
            setContent();
         }
+        /*Recyclers Views*/
+        /*Same author books*/
+        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView recyclerViewAuthor = (RecyclerView) view.findViewById(R.id.author_books_recycler_view);
+        recyclerViewAuthor.setLayoutManager(horizontalLayoutManagaer);
+        sameAuthorBooks = MockupsValues.getSameAuthorBooks();
+        LinearLayoutManager horizontalLayoutManager
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
+        BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter(getContext(), sameAuthorBooks);
+        adapterAuth.setClickListener(this);
+        recyclerViewAuthor.setAdapter(adapterAuth);
+
+        /*Same gender books*/
+        //LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.gender_books_recycler_view);
+        recyclerView.setLayoutManager(horizontalLayoutManagaer);
+        samgeGenderBooks = MockupsValues.getSameGenderBooks();
+        LinearLayoutManager horizontalLayoutManagerGender
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(horizontalLayoutManagerGender);
+        BooksHorizontalAdapter adapterGender = new BooksHorizontalAdapter(getContext(), samgeGenderBooks);
+        adapterGender.setClickListener(this);
+        recyclerView.setAdapter(adapterGender);
+
         return view;
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        /*if(position == list.size()-1){
+            showSearchFragment();
+        } else {
+            showBookFragment(list.get(position));
+        }*/
     }
 
     private void setContent(){
