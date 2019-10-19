@@ -14,4 +14,13 @@
     <string name="separator_text" translatable="false">Separator</string>
     <string name="cardView_unmark" translatable="false">0</string>
     <string name="cardView_mark" translatable="false">1</string>
+    <string name="select_read_books_first_form_title">Select your read books</string>
+    <string name="select_read_books_first_form_text">Second, you must select the books that you have read.</string>
+    <string name="cardView_add" translatable="false">0</string>
+    <string name="cardView_remove" translatable="false">1</string>
+    <string name="select_interested_books_first_form_title">Books that interest you</string>
+    <string name="select_interest_books_first_form_text">Finally, you must select the books that you are interested.</string>
+    <string name="done_first_form_title">Thank you!</string>
+    <string name="done_first_form_text">Finally, we have correctly configured your library and have optimized your searches based on the options that you have chosen. These options can be modified in the future if you wish.</string>
+    <string name="done_redirect_first_form_text">To start using the application, press "done" for the changes to take effect.</string>
 </resources>

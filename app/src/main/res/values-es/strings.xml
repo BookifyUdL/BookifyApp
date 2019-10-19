@@ -8,4 +8,11 @@
     <string name="description_first_form_text">Para mejorar su experiencia en esta aplicación, le recomendamos que pierda una parte de su tiempo para hacer este formulario para que en el futuro, podamos ofrecerle las mejores recomendaciones de libros. Este formulario no es obligatorio.</string>
     <string name="select_genres_first_form_title">Selecciona tus géneros</string>
     <string name="select_genres_first_form_text">Primero, debe seleccionar los géneros de libros que le interesan.</string>
+    <string name="select_read_books_first_form_title">Selecciona tus libros leídos</string>
+    <string name="select_read_books_first_form_text">En segundo lugar, debe seleccionar los libros que haya leído.</string>
+    <string name="select_interested_books_first_form_title">Libros que te interesan</string>
+    <string name="select_interest_books_first_form_text">Finalmente, debe seleccionar los libros que le interesan.</string>
+    <string name="done_first_form_title">Gracias!</string>
+    <string name="done_first_form_text">Finalmente, hemos configurado correctamente su biblioteca y hemos optimizado sus búsquedas en función de las opciones que haya elegido. Estas opciones se pueden modificar en el futuro si lo desea.</string>
+    <string name="done_redirect_first_form_text">Para comenzar a usar la aplicación, presione "listo" para que los cambios surtan efecto.</string>
 </resources>

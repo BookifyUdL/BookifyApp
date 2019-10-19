@@ -2,36 +2,32 @@ package com.example.readify.FirstTimeForm;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.readify.Adapters.BooksListVerticalAdapter;
 import com.example.readify.MockupsValues;
-import com.example.readify.Models.Genre;
+import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.CirclePageIndicator;
 import com.synnapps.carouselview.ViewListener;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +37,7 @@ import java.util.ListIterator;
  * Use the {@link GenresFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GenresFragment extends Fragment implements RecyclerViewAdapterGenres.ItemClickListener{
+public class GenresFragment extends Fragment implements RecyclerViewAdapterGenres.ItemClickListener, SearchView.OnQueryTextListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -59,9 +55,10 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
 
     //CarouselView
     CarouselView carouselView;
-    int NUMBER_OF_FORMS = 2;
+    int NUMBER_OF_FORMS = 4;
 
-    RecyclerViewAdapterGenres adapter;
+    RecyclerViewAdapterGenres adapterGenres;
+    BooksListVerticalAdapter adapterBooksList;
 
     public GenresFragment() {
         // Required empty public constructor
@@ -118,39 +115,83 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
 
             switch (position) {
                 case 0:
-                    view = getLayoutInflater().inflate(R.layout.fist_form_genres, null);
-                    //set view attributes here
-
-                    //Defining a skip button
-                    TextView skipForm = view.findViewById(R.id.textSkipFirstForm);
-                    skipForm.setText(R.string.skip_first_form_message);
-                    skipForm.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            comunicateFragmentsFirstForm.exitForm();
-                        }
-                    });
+                    //Selección de géneros
+                    view = getLayoutInflater().inflate(R.layout.first_form_genres, null);
 
                     //Defining every genre
-                    RecyclerView recyclerView = view.findViewById(R.id.recyclerViewGenres);
+                    RecyclerView recyclerViewGenres = view.findViewById(R.id.recyclerViewGenres);
                     GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
-                    recyclerView.setLayoutManager(gridLayoutManager);
+                    recyclerViewGenres.setLayoutManager(gridLayoutManager);
 
-                    ArrayList list = MockupsValues.getGenres();
+                    ArrayList genres = MockupsValues.getGenres();
 
-                    adapter = new RecyclerViewAdapterGenres(view.getContext(), list);
-                    adapter.setClickListener(GenresFragment.this);
-                    recyclerView.setAdapter(adapter);
+                    adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres);
+                    adapterGenres.setClickListener(GenresFragment.this);
+                    recyclerViewGenres.setAdapter(adapterGenres);
                     break;
+
                 case 1:
                     //Libros leídos
-                    view = getLayoutInflater().inflate(R.layout.fragment_discover, null);
-                    break;
-                //TODO: Libros para leer
-                /*case 2:
+                    view = getLayoutInflater().inflate(R.layout.first_form_books_read, null);
 
-                    break;*/
+                    LinearLayoutManager linearLayoutManagerRead = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
+                    RecyclerView recyclerViewReadBooks = view.findViewById(R.id.recyclerViewReadBooks);
+                    recyclerViewReadBooks.setLayoutManager(linearLayoutManagerRead);
+
+                    ArrayList booksRead = MockupsValues.getLastAddedBooks();
+                    adapterBooksList = new BooksListVerticalAdapter(getContext(), booksRead, new User());
+                    recyclerViewReadBooks.setAdapter(adapterBooksList);
+
+                    SearchView searchViewBooksRead = view.findViewById(R.id.search_bar_read_books);
+                    searchViewBooksRead.setFocusable(false);
+                    searchViewBooksRead.clearFocus();
+                    searchViewBooksRead.setOnQueryTextListener(GenresFragment.this);
+
+                    break;
+
+                case 2:
+                    //Libros por interés
+                    view = getLayoutInflater().inflate(R.layout.first_form_books_interest, null);
+
+                    LinearLayoutManager linearLayoutManagerInterest = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
+                    RecyclerView recyclerViewInterestBooks = view.findViewById(R.id.recyclerViewInterestBooks);
+                    recyclerViewInterestBooks.setLayoutManager(linearLayoutManagerInterest);
+
+                    ArrayList booksInterest = MockupsValues.getLastAddedBooks();
+                    //TODO Cambiar el adapter perque sino un dels dos buscadors no funciona
+                    adapterBooksList = new BooksListVerticalAdapter(getContext(), booksInterest, new User());
+                    recyclerViewInterestBooks.setAdapter(adapterBooksList);
+
+                    SearchView searchViewBooksInterest = view.findViewById(R.id.search_bar_interest_books);
+                    searchViewBooksInterest.setFocusable(false);
+                    searchViewBooksInterest.clearFocus();
+                    searchViewBooksInterest.setOnQueryTextListener(GenresFragment.this);
+                    break;
+
+                case 3:
+                    //Finalización del formulario
+                    view = getLayoutInflater().inflate(R.layout.first_form_done, null);
+                    Button buttonDone = view.findViewById(R.id.buttonFirstFormDone);
+                    buttonDone.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            comunicateFragmentsFirstForm.doneForm();
+                        }
+                    });
             }
+
+            //Defining a skip button
+            TextView skipForm = view.findViewById(R.id.textSkipFirstForm);
+            if (skipForm != null) {
+                skipForm.setText(R.string.skip_first_form_message);
+                skipForm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        comunicateFragmentsFirstForm.exitForm();
+                    }
+                });
+            }
+
             return view;
         }
     };
@@ -198,6 +239,17 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        adapterBooksList.filter(s);
+        return false;
     }
 
     /**
