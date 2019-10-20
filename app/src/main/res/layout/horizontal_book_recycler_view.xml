@@ -16,19 +16,41 @@
         >
 
         <RelativeLayout
+            android:layout_marginTop="5dp"
             android:id="@+id/image_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/lib1"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <ImageButton
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/add_button"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_add_book"
+            app:backgroundTint="@color/cardview_light_background"
+            android:background="@drawable/roudend_image_button"/>
+
+        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_button"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_add_book"
+            app:backgroundTint="@color/cardview_light_background"
+            />-->
+
+
+        <!--<FloatingActionButton
             android:id="@+id/add_button"
             android:layout_alignParentEnd="true"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_add_book"
             android:scaleType="center"
-            />
+            />-->
 
         <!--<com.rey.material.widget.FloatingActionButton
             android:id="@+id/add_button"
