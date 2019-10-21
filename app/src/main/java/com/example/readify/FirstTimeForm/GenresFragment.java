@@ -59,6 +59,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
 
     RecyclerViewAdapterGenres adapterGenres;
     BooksListVerticalAdapter adapterBooksList;
+    BooksListVerticalAdapter adapterBooksInterest;
 
     public GenresFragment() {
         // Required empty public constructor
@@ -117,55 +118,19 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
                 case 0:
                     //Selección de géneros
                     view = getLayoutInflater().inflate(R.layout.first_form_genres, null);
-
-                    //Defining every genre
-                    RecyclerView recyclerViewGenres = view.findViewById(R.id.recyclerViewGenres);
-                    GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
-                    recyclerViewGenres.setLayoutManager(gridLayoutManager);
-
-                    ArrayList genres = MockupsValues.getGenres();
-
-                    adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres);
-                    adapterGenres.setClickListener(GenresFragment.this);
-                    recyclerViewGenres.setAdapter(adapterGenres);
+                    createBookGenresDinamically(view);
                     break;
 
                 case 1:
                     //Libros leídos
                     view = getLayoutInflater().inflate(R.layout.first_form_books_read, null);
-
-                    LinearLayoutManager linearLayoutManagerRead = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
-                    RecyclerView recyclerViewReadBooks = view.findViewById(R.id.recyclerViewReadBooks);
-                    recyclerViewReadBooks.setLayoutManager(linearLayoutManagerRead);
-
-                    ArrayList booksRead = MockupsValues.getLastAddedBooks();
-                    adapterBooksList = new BooksListVerticalAdapter(getContext(), booksRead, new User());
-                    recyclerViewReadBooks.setAdapter(adapterBooksList);
-
-                    SearchView searchViewBooksRead = view.findViewById(R.id.search_bar_read_books);
-                    searchViewBooksRead.setFocusable(false);
-                    searchViewBooksRead.clearFocus();
-                    searchViewBooksRead.setOnQueryTextListener(GenresFragment.this);
-
+                    createBookReadDinamically(view);
                     break;
 
                 case 2:
                     //Libros por interés
                     view = getLayoutInflater().inflate(R.layout.first_form_books_interest, null);
-
-                    LinearLayoutManager linearLayoutManagerInterest = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
-                    RecyclerView recyclerViewInterestBooks = view.findViewById(R.id.recyclerViewInterestBooks);
-                    recyclerViewInterestBooks.setLayoutManager(linearLayoutManagerInterest);
-
-                    ArrayList booksInterest = MockupsValues.getLastAddedBooks();
-                    //TODO Cambiar el adapter perque sino un dels dos buscadors no funciona
-                    adapterBooksList = new BooksListVerticalAdapter(getContext(), booksInterest, new User());
-                    recyclerViewInterestBooks.setAdapter(adapterBooksList);
-
-                    SearchView searchViewBooksInterest = view.findViewById(R.id.search_bar_interest_books);
-                    searchViewBooksInterest.setFocusable(false);
-                    searchViewBooksInterest.clearFocus();
-                    searchViewBooksInterest.setOnQueryTextListener(GenresFragment.this);
+                    createBookInterestDinamically(view);
                     break;
 
                 case 3:
@@ -195,6 +160,51 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
             return view;
         }
     };
+
+    private void createBookGenresDinamically(View view) {
+        //Defining every genre
+        RecyclerView recyclerViewGenres = view.findViewById(R.id.recyclerViewGenres);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
+        recyclerViewGenres.setLayoutManager(gridLayoutManager);
+
+        ArrayList genres = MockupsValues.getGenres();
+
+        adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres);
+        adapterGenres.setClickListener(GenresFragment.this);
+        recyclerViewGenres.setAdapter(adapterGenres);
+    }
+
+    private void createBookReadDinamically(View view) {
+        //Defining the adapters and SearchView to show every book
+        LinearLayoutManager linearLayoutManagerRead = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
+        RecyclerView recyclerViewReadBooks = view.findViewById(R.id.recyclerViewReadBooks);
+        recyclerViewReadBooks.setLayoutManager(linearLayoutManagerRead);
+
+        ArrayList booksRead = MockupsValues.getLastAddedBooks();
+        adapterBooksList = new BooksListVerticalAdapter(getContext(), booksRead, new User());
+        recyclerViewReadBooks.setAdapter(adapterBooksList);
+
+        SearchView searchViewBooksRead = view.findViewById(R.id.search_bar_read_books);
+        searchViewBooksRead.setFocusable(false);
+        searchViewBooksRead.clearFocus();
+        searchViewBooksRead.setOnQueryTextListener(GenresFragment.this);
+    }
+
+    private void createBookInterestDinamically(View view) {
+        //Defining the adapters and SearchView to show every book
+        LinearLayoutManager linearLayoutManagerInterest = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
+        RecyclerView recyclerViewInterestBooks = view.findViewById(R.id.recyclerViewInterestBooks);
+        recyclerViewInterestBooks.setLayoutManager(linearLayoutManagerInterest);
+
+        ArrayList booksInterest = MockupsValues.getLastAddedBooks();
+        adapterBooksInterest = new BooksListVerticalAdapter(getContext(), booksInterest, new User());
+        recyclerViewInterestBooks.setAdapter(adapterBooksInterest);
+
+        SearchView searchViewBooksInterest = view.findViewById(R.id.search_bar_interest_books);
+        searchViewBooksInterest.setFocusable(false);
+        searchViewBooksInterest.clearFocus();
+        searchViewBooksInterest.setOnQueryTextListener(GenresFragment.this);
+    }
 
     @Override
     public void onItemClick(View view, int position) {
@@ -248,7 +258,14 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
 
     @Override
     public boolean onQueryTextChange(String s) {
-        adapterBooksList.filter(s);
+        switch (carouselView.getCurrentItem()) {
+            case 1:
+                adapterBooksList.filter(s);
+                break;
+            case 2:
+                adapterBooksInterest.filter(s);
+                break;
+        }
         return false;
     }
 
