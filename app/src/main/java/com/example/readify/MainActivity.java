@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.readify.Discover.DiscoverFragment;
 import com.example.readify.Library.LibraryFragment;
+import com.example.readify.Models.Book;
 import com.example.readify.Profile.ProfileFragment;
 import com.example.readify.Reading.ReadingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,12 +26,12 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
 
 
     private BottomNavigationView navigation;
-    private final Fragment fragment1 = new ReadingFragment();
+    private final ReadingFragment fragment1 = new ReadingFragment();
     private final Fragment fragment2 = new LibraryFragment();
     private  Fragment fragment3 = DiscoverFragment.newInstance();
     private final Fragment fragment4 = new ProfileFragment();
     private Fragment fragment5 = new SearchBookFragment();
-    private Fragment fragment6 = new BookViewFragment();
+    private BookViewFragment fragment6 = new BookViewFragment();
     private final FragmentManager fm = getSupportFragmentManager();
 
     private Fragment active = fragment1;
@@ -62,8 +63,13 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         }
     };
 
+    public void notifyPendingListChanged(){
+        fragment1.pendingListChanged();
+    }
+
     public void changeDiscoverFragment(){
-        //fragment3 = new SearchBookFragment();
+        fragment5.setEnterTransition(new Slide(Gravity.BOTTOM));
+        fragment5.setExitTransition(new Slide(Gravity.TOP));
         fm.beginTransaction().hide(active).show(fragment5).commit();
         active = fragment5;
     }
@@ -73,11 +79,18 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         active = fragment3;
     }
 
-    public void goToBookPage(){
+    public void goToBookPage(Book book){
+        fragment6.setBook(book);
         fragment6.setEnterTransition(new Slide(Gravity.BOTTOM));
         fragment6.setExitTransition(new Slide(Gravity.TOP));
         fm.beginTransaction().hide(active).show(fragment6).commit();
         active = fragment6;
+    }
+
+    public void focusDiscoverFragment(){
+        fm.beginTransaction().hide(active).show(fragment3).commit();
+        navigation.getMenu().getItem(2).setChecked(true);
+        active = fragment3;
     }
 
     @Override

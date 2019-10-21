@@ -42,7 +42,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
     private Button mButton;
     private ViewPager mViewPager;
-    List list;
+    List<Book> list;
     int width, height;
 
     private CardPagerAdapter mCardAdapter;
@@ -122,13 +122,11 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.top_rated_recycler_view);
         recyclerView.setLayoutManager(horizontalLayoutManagaer);
         // set up the RecyclerView
-        //RecyclerView recyclerView = refindViewById(R.id.rvAnimals);
         list = MockupsValues.getLastAddedBooks();
-        list.add(new Book());
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
-        BooksHorizontalAdapter adapter = new BooksHorizontalAdapter(getContext(), list);
+        BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), list, true);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
@@ -142,13 +140,13 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         if(position == list.size()-1){
             showSearchFragment();
         } else {
-            showBookFragment();
+            showBookFragment(list.get(position));
         }
     }
 
-    private void showBookFragment(){
+    private void showBookFragment(Book book){
         MainActivity activity = (MainActivity) getActivity();
-        activity.goToBookPage();
+        activity.goToBookPage(book);
     }
 
     private void showSearchFragment(){

@@ -55,13 +55,13 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, final int position) {
         View view = LayoutInflater.from(container.getContext())
                 .inflate(R.layout.adapter, container, false);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showBook();
+                showBook(mData.get(position));
             }
         });
         container.addView(view);
@@ -77,8 +77,8 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         return view;
     }
 
-    private void  showBook(){
-        activity.goToBookPage();
+    private void  showBook(Book book){
+        activity.goToBookPage(book);
     }
 
 
