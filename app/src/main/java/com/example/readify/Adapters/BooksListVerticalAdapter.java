@@ -96,7 +96,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         holder.bookCover.setImageResource(
                 mContext.getResources().getIdentifier(book.getPicture(), "drawable", mContext.getPackageName()));
 
-        
+
         //if (user != null && user.containsBook(book))
             //holder.addButton.setText("Remove");
         //else

@@ -2,6 +2,7 @@ package com.example.readify;
 
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
+import com.example.readify.Models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,11 @@ public class MockupsValues {
     private static ArrayList<Book> SAME_GENDER_BOOKS;
     private static ArrayList<Book> PENDING_LIST_BOOKS;
     private static ArrayList<Book> READING_LIST_BOOKS;
+    public static User user;
+
+    public static User getUser(){
+        return user;
+    }
 
     public static ArrayList<Genre> getGenres() {
         if (GENRE == null || GENRE.isEmpty()) {

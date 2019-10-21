@@ -181,7 +181,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         recyclerViewReadBooks.setLayoutManager(linearLayoutManagerRead);
 
         ArrayList booksRead = MockupsValues.getLastAddedBooks();
-        adapterBooksList = new BooksListVerticalAdapter(getContext(), booksRead, new User());
+        adapterBooksList = new BooksListVerticalAdapter(getContext(), booksRead, MockupsValues.user);
         recyclerViewReadBooks.setAdapter(adapterBooksList);
 
         SearchView searchViewBooksRead = view.findViewById(R.id.search_bar_read_books);
@@ -197,7 +197,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         recyclerViewInterestBooks.setLayoutManager(linearLayoutManagerInterest);
 
         ArrayList booksInterest = MockupsValues.getLastAddedBooks();
-        adapterBooksInterest = new BooksListVerticalAdapter(getContext(), booksInterest, new User());
+        adapterBooksInterest = new BooksListVerticalAdapter(getContext(), booksInterest, MockupsValues.user);
         recyclerViewInterestBooks.setAdapter(adapterBooksInterest);
 
         SearchView searchViewBooksInterest = view.findViewById(R.id.search_bar_interest_books);
