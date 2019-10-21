@@ -28,6 +28,10 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         this.mContext = context;
     }
 
+    public void setBooksList(ArrayList<Book> books){
+        this.booksList = books;
+    }
+
     // This method creates views for the RecyclerView by inflating the layout
     // Into the viewHolders which helps to display the items in the RecyclerView
     @Override

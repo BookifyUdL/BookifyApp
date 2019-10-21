@@ -88,7 +88,7 @@ public class BookViewFragment extends Fragment {
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
-        BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter(getContext(), sameAuthorBooks, false);
+        BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), sameAuthorBooks, false);
         adapterAuth.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
            @Override
            public void onItemClick(View view, int position) {
@@ -105,7 +105,7 @@ public class BookViewFragment extends Fragment {
         LinearLayoutManager horizontalLayoutManagerGender
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManagerGender);
-        BooksHorizontalAdapter adapterGender = new BooksHorizontalAdapter(getContext(), sameGenderBooks, false);
+        BooksHorizontalAdapter adapterGender = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), sameGenderBooks, false);
         //adapterGender.setClickListener(this);
         adapterGender.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
             @Override

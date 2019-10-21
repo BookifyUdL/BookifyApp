@@ -126,7 +126,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
-        BooksHorizontalAdapter adapter = new BooksHorizontalAdapter(getContext(), list, true);
+        BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), list, true);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 

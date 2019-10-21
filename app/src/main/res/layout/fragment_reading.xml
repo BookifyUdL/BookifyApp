@@ -22,13 +22,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
+                <!--<TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/hello_blank_fragment" />
+                    android:text="@string/hello_blank_fragment" />-->
+
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:id="@+id/reading_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reading_text_title"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="5dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/books_recycler_view"
+                    android:id="@+id/reading_books_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"/>
+
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:id="@+id/pending_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reading_text_title"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="5dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/pending_books_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"

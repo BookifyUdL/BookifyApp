@@ -33,12 +33,7 @@ import java.util.ArrayList;
 public class ReadingFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    BooksListVerticalAdapter pendingBooksAdapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -46,31 +41,19 @@ public class ReadingFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ReadingFragment.
-     */
     // TODO: Rename and change types and number of parameters
-    public static ReadingFragment newInstance(String param1, String param2) {
+    public static ReadingFragment newInstance() {
         ReadingFragment fragment = new ReadingFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        /*if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        }*/
     }
 
     @Override
@@ -90,21 +73,37 @@ public class ReadingFragment extends Fragment {
         recyclerView.setAdapter(adapter);*/
         /*Llista baix*/
         LinearLayoutManager verticalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.books_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.reading_books_recycler_view);
         recyclerView.setLayoutManager(verticalLayoutManagaer);
         // set up the RecyclerView
         //RecyclerView recyclerView = refindViewById(R.id.rvAnimals);
         //ArrayList list = MockupsValues.getLastAddedBooks();
         //list.remove(list.size() - 1);
         ArrayList<Book> list = new ArrayList<>();
-        list.addAll(MockupsValues.getLastAddedBooks());
-        list.remove(list.size() - 1);
+        list.add(MockupsValues.getLastAddedBooks().get(0));
+        //list.addAll(MockupsValues.getLastAddedBooks());
+        //list.remove(list.size() - 1);
         BooksListVerticalAdapter adapter = new BooksListVerticalAdapter(getContext(), list);
         //BooksHorizontalAdapter adapter = new BooksHorizontalAdapter(getContext(), list);
         //adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
+
+        LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        RecyclerView recyclerView2 = (RecyclerView) view.findViewById(R.id.pending_books_recycler_view);
+        recyclerView2.setLayoutManager(vlm);
+        ArrayList<Book> pendingBooksList = new ArrayList<>();
+        pendingBooksList.addAll(MockupsValues.getPendingListBooks());
+        pendingBooksAdapter = new BooksListVerticalAdapter(getContext(), pendingBooksList);
+        recyclerView2.setAdapter(pendingBooksAdapter);
         return view;
         // Inflate the layout for this fragment
+    }
+
+    public void pendingListChanged(){
+        ArrayList<Book> pendingBooks = MockupsValues.getPendingListBooks();
+        pendingBooksAdapter.setBooksList(pendingBooks);
+        pendingBooksAdapter.notifyDataSetChanged();
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

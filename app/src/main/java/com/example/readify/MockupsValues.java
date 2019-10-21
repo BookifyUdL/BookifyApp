@@ -7,9 +7,38 @@ import java.util.List;
 
 public class MockupsValues {
 
-    public static ArrayList<Book> LAST_ADDED_BOOKS;
-    public static ArrayList<Book> SAME_AUTHOR_BOOKS;
-    public static ArrayList<Book> SAME_GENDER_BOOKS;
+    private static ArrayList<Book> LAST_ADDED_BOOKS;
+    private static ArrayList<Book> SAME_AUTHOR_BOOKS;
+    private static ArrayList<Book> SAME_GENDER_BOOKS;
+    private static ArrayList<Book> PENDING_LIST_BOOKS;
+    private static ArrayList<Book> READING_LIST_BOOKS;
+
+
+    public static void addPendingBook(Book book){
+        if(PENDING_LIST_BOOKS == null)
+            PENDING_LIST_BOOKS = new ArrayList<>();
+        PENDING_LIST_BOOKS.add(book);
+    }
+
+    public static  void addReadingBook(Book book){
+        if(READING_LIST_BOOKS== null)
+            READING_LIST_BOOKS = new ArrayList<>();
+        READING_LIST_BOOKS.add(book);
+    }
+
+    public static ArrayList<Book> getPendingListBooks(){
+        if(PENDING_LIST_BOOKS == null){
+            PENDING_LIST_BOOKS = new ArrayList<>();
+        }
+        return PENDING_LIST_BOOKS;
+    }
+
+    public static ArrayList<Book> getReandingListBooks(){
+        if(READING_LIST_BOOKS == null){
+            READING_LIST_BOOKS = new ArrayList<>();
+        }
+        return READING_LIST_BOOKS;
+    }
 
 
     public static ArrayList<Book> getLastAddedBooks(){

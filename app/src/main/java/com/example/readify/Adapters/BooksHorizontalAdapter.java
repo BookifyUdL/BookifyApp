@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.readify.MainActivity;
+import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,12 +29,14 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
     private ItemClickListener mClickListener;
     private boolean mHasDiscoverButtons;
     private Context context;
+    private MainActivity activity;
     // data is passed into the constructor
-    public BooksHorizontalAdapter(Context context, List<Book> books, boolean hasDiscoverButton) {
+    public BooksHorizontalAdapter(MainActivity activity, Context context, List<Book> books, boolean hasDiscoverButton) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.mViewBooks = books;
         this.mHasDiscoverButtons = hasDiscoverButton;
+        this.activity = activity;
         if(hasDiscoverButton)
             mViewBooks.add(new Book());
     }
@@ -47,7 +51,7 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
 
     // binds the data to the view and textview in each row
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         if(position == mViewBooks.size() - 1 && mHasDiscoverButtons){
             //holder.myImageView.setVisibility(View.INVISIBLE);
             holder.layout.setVisibility(View.INVISIBLE);
@@ -56,12 +60,19 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
         } else {
             holder.imageLayout.setBackground(ContextCompat.getDrawable(holder.imageLayout.getContext(),
                     holder.imageLayout.getContext().getResources().getIdentifier(mViewBooks.get(position).getPicture(), "drawable", holder.layout.getContext().getPackageName())));
-            holder.addButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    setAddButtonIcon(holder);
-                }
-            });
+            if(MockupsValues.getPendingListBooks().contains(mViewBooks.get(position))){
+                setAddButtonIcon(holder);
+            } else {
+                holder.addButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        setAddButtonIcon(holder);
+                        MockupsValues.addPendingBook(mViewBooks.get(position));
+                        activity.notifyPendingListChanged();
+                    }
+                });
+            }
+
             //holder.myImageView.setImageResource(holder.myImageView.getContext().getResources()
              //       .getIdentifier(mViewBooks.get(position).getPicture(), "drawable", holder.myImageView.getContext().getPackageName()));
         }

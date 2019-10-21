@@ -26,7 +26,7 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
 
 
     private BottomNavigationView navigation;
-    private final Fragment fragment1 = new ReadingFragment();
+    private final ReadingFragment fragment1 = new ReadingFragment();
     private final Fragment fragment2 = new LibraryFragment();
     private  Fragment fragment3 = DiscoverFragment.newInstance();
     private final Fragment fragment4 = new ProfileFragment();
@@ -62,6 +62,10 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
             return false;
         }
     };
+
+    public void notifyPendingListChanged(){
+        fragment1.pendingListChanged();
+    }
 
     public void changeDiscoverFragment(){
         fragment5.setEnterTransition(new Slide(Gravity.BOTTOM));
