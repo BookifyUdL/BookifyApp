@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,7 +88,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
 
     // This method is called when binding the data to the views being created in RecyclerView
     @Override
-    public void onBindViewHolder(@NonNull BookHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final BookHolder holder, final int position) {
         final Book book = booksList.get(position);
         holder.bookTitle.setText(book.getTitle());
         holder.bookAuthor.setText(book.getAuthor());
@@ -96,21 +97,21 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
                 mContext.getResources().getIdentifier(book.getPicture(), "drawable", mContext.getPackageName()));
 
         
-        if (user && user.containsBook(book))
-            holder.addButton.setText("Remove");
-        else
-            holder.addButton.setText("Add");
+        //if (user != null && user.containsBook(book))
+            //holder.addButton.setText("Remove");
+        //else
+            //holder.addButton.setText("Add");
         holder.addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (user.containsBook(book)) {
                     user.removeBookToLibrary(book);
                     Toast.makeText(view.getContext(), "Book removed on your library", Toast.LENGTH_LONG).show();
-                    holder.addButton.setText("Add");
+                    //holder.addButton.setText("Add");
                 } else {
                     user.addBookToLibrary(book);
                     Toast.makeText(view.getContext(), "Book added on your library", Toast.LENGTH_LONG).show();
-                    holder.addButton.setText("Remove");
+                    //holder.addButton.setText("Remove");
                 }
             }
         });
@@ -122,7 +123,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         private ImageView bookCover;
         private TextView bookTitle;
         private TextView bookAuthor;
-        private Button addButton;
+        private ImageButton addButton;
 
         public BookHolder(View itemView) {
             super(itemView);
@@ -130,7 +131,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
             bookCover = (ImageView) itemView.findViewById(R.id.book_cover_image_view);
             bookTitle = (TextView) itemView.findViewById(R.id.book_title);
             bookAuthor = (TextView) itemView.findViewById(R.id.book_author);
-            addButton = (Button) itemView.findViewById(R.id.addButton);
+            addButton = (ImageButton) itemView.findViewById(R.id.addButton);
         }
       
         /*public void setContactName(String name) {
