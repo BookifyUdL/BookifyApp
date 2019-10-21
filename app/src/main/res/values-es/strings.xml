@@ -4,6 +4,7 @@
     <string name="library">Libreria</string>
     <string name="discover">Descubrir</string>
     <string name="profile">Perfil</string>
+  
     <string name="skip_first_form_message"><u>Omitir el formulario</u></string>
     <string name="description_first_form_text">Para mejorar su experiencia en esta aplicación, le recomendamos que pierda una parte de su tiempo para hacer este formulario para que en el futuro, podamos ofrecerle las mejores recomendaciones de libros. Este formulario no es obligatorio.</string>
     <string name="select_genres_first_form_title">Selecciona tus géneros</string>
@@ -15,4 +16,25 @@
     <string name="done_first_form_title">Gracias!</string>
     <string name="done_first_form_text">Finalmente, hemos configurado correctamente su biblioteca y hemos optimizado sus búsquedas en función de las opciones que haya elegido. Estas opciones se pueden modificar en el futuro si lo desea.</string>
     <string name="done_redirect_first_form_text">Para comenzar a usar la aplicación, presione "listo" para que los cambios surtan efecto.</string>
+
+    <string name="last_added">Ultimos añadidos</string>
+    <string name="top_rated">Mejor valorados</string>
+    <string name="search_bar">Descubre libros</string>
+
+    <string name="title_1">Cool card</string>
+    <string name="title_2">Ok card</string>
+    <string name="title_3">Bad card</string>
+    <string name="title_4">Ugly card</string>
+
+    <string name="text_1">Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Etiam eget ligula eu lectus lobortis condimentum.</string>
+    <string name="gender">GÉNDER</string>
+    <string name="publication">PUBLICACIÓN</string>
+    <string name="extension">EXTENSIÓN</string>
+    <string name="paginas">Páginas</string>
+    <string name="discover_link"><u>Descubrir</u></string>
+    <string name="more_books_of">Más libros de </string>
+    <string name="more_books_genre">Maś libros de este género: </string>
+    <string name="summary">Resumen: </string>
+    <string name="book_summary_text">En una noche de tormenta y barro nace una niña bastarda a la que, creyéndola muerta, bautizan con el nombre de Betsabé. Nadie sabe que en su interior lleva la fuerza de la feminidad, así como la magia y la rebeldía que la harán superar todos los obstáculos. Creará un vínculo indisoluble con su hermana de leche, Capitolina, una pobre niña rica, y ninguno quedará indiferente a su mirada de fuego. Ni siquiera Emmanuel, el revolucionario francés salido del Montparnasse más artístico que, al conocerla, caerá enfermo de amor.</string>
+    <string name="reading_text_title">Leyendo</string>
 </resources>

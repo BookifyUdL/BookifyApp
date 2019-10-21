@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readify.Models.Book;
 import com.example.readify.Models.User;
+
 import com.example.readify.R;
 
 import java.util.ArrayList;
@@ -31,6 +32,18 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         this.originalSearchList.addAll(booksList);
         this.mContext = context;
         this.user = user;
+    }
+
+    // Counstructor for the Class
+    public BooksListVerticalAdapter(Context context, ArrayList<Book> booksList) {
+        this.booksList = booksList;
+        this.originalSearchList = new ArrayList<>();
+        this.originalSearchList.addAll(booksList);
+        this.mContext = context;
+    }
+
+    public void setBooksList(ArrayList<Book> books){
+        this.booksList = books;
     }
 
     // This method creates views for the RecyclerView by inflating the layout
@@ -55,32 +68,35 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         booksList = new ArrayList<>();
         booksList.addAll(originalSearchList);
 
-        if (toSearch.length() == 0) {
+        if (toSearch.length() == 0)
+        {
             notifyDataSetChanged();
             return;
         }
 
         ListIterator<Book> itr = booksList.listIterator();
-        while (itr.hasNext()) {
+        while (itr.hasNext())
+        {
             if (itr.next().getTitle().toLowerCase().contains(toSearch))
                 continue;
 
             itr.remove();
         }
-
         notifyDataSetChanged();
     }
 
     // This method is called when binding the data to the views being created in RecyclerView
     @Override
-    public void onBindViewHolder(@NonNull final BookHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull BookHolder holder, final int position) {
         final Book book = booksList.get(position);
         holder.bookTitle.setText(book.getTitle());
         holder.bookAuthor.setText(book.getAuthor());
         String aux = mContext.getPackageName();
         holder.bookCover.setImageResource(
                 mContext.getResources().getIdentifier(book.getPicture(), "drawable", mContext.getPackageName()));
-        if (user.containsBook(book))
+
+        
+        if (user && user.containsBook(book))
             holder.addButton.setText("Remove");
         else
             holder.addButton.setText("Add");
@@ -98,7 +114,6 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
                 }
             }
         });
-
     }
 
     // This is your ViewHolder class that helps to populate data to the view
@@ -117,7 +132,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
             bookAuthor = (TextView) itemView.findViewById(R.id.book_author);
             addButton = (Button) itemView.findViewById(R.id.addButton);
         }
-
+      
         /*public void setContactName(String name) {
             txtName.setText(name);
         }
