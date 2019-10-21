@@ -1,19 +1,36 @@
 package com.example.readify;
 
 import com.example.readify.Models.Book;
+import com.example.readify.Models.Genre;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MockupsValues {
 
+    private static ArrayList<Genre> GENRE;
     private static ArrayList<Book> LAST_ADDED_BOOKS;
     private static ArrayList<Book> SAME_AUTHOR_BOOKS;
     private static ArrayList<Book> SAME_GENDER_BOOKS;
     private static ArrayList<Book> PENDING_LIST_BOOKS;
     private static ArrayList<Book> READING_LIST_BOOKS;
 
-
+    public static ArrayList<Genre> getGenres() {
+        if (GENRE == null || GENRE.isEmpty()) {
+            GENRE = new ArrayList<>();
+            GENRE.add(new Genre("Biography", "genre1"));
+            GENRE.add(new Genre("Computing & internet", "genre2"));
+            GENRE.add(new Genre("Crime & thrillers", "genre3"));
+            GENRE.add(new Genre("Education", "genre4"));
+            GENRE.add(new Genre("Fiction & Literature", "genre5"));
+            GENRE.add(new Genre("Health & well-being", "genre6"));
+            GENRE.add(new Genre("Romance", "genre7"));
+            GENRE.add(new Genre("Sci-fi & Fantasy", "genre8"));
+            GENRE.add(new Genre("Travel & Adventure", "genre9"));
+        }
+        return GENRE;
+    }
+  
     public static void addPendingBook(Book book){
         if(PENDING_LIST_BOOKS == null)
             PENDING_LIST_BOOKS = new ArrayList<>();

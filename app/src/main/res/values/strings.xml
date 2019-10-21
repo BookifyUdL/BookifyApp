@@ -1,12 +1,30 @@
 <resources>
-    <string name="app_name">Readify</string>
+    <string name="app_name" translatable="false">Readify</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="reading">Reading</string>
     <string name="library">Library</string>
     <string name="discover">Discover</string>
     <string name="profile">Profile</string>
+  
+    <string name="skip_first_form_message"><u>Skip the form</u></string>
+    <string name="description_first_form_text">To improve your experience in this application, we recommend that you waste a part of your time to make this form so that in the future, we can offer you the best book recommendations. This form is not mandatory.</string>
+    <string name="select_genres_first_form_title">Select your genres</string>
+    <string name="select_genres_first_form_text">First, you must select the genres of books that interest you.</string>
+    <string name="separator_text" translatable="false">Separator</string>
+    <string name="cardView_unmark" translatable="false">0</string>
+    <string name="cardView_mark" translatable="false">1</string>
+    <string name="select_read_books_first_form_title">Select your read books</string>
+    <string name="select_read_books_first_form_text">Second, you must select the books that you have read.</string>
+    <string name="cardView_add" translatable="false">0</string>
+    <string name="cardView_remove" translatable="false">1</string>
+    <string name="select_interested_books_first_form_title">Books that interest you</string>
+    <string name="select_interest_books_first_form_text">Finally, you must select the books that you are interested.</string>
+    <string name="done_first_form_title">Thank you!</string>
+    <string name="done_first_form_text">Finally, we have correctly configured your library and have optimized your searches based on the options that you have chosen. These options can be modified in the future if you wish.</string>
+    <string name="done_redirect_first_form_text">To start using the application, press "done" for the changes to take effect.</string>
+  
     <string name="last_added">Latest additions</string>
     <string name="search_bar">Discover books</string>
 
@@ -27,5 +45,4 @@
     <string name="summary">Summary: </string>
     <string name="book_summary_text">En una noche de tormenta y barro nace una niña bastarda a la que, creyéndola muerta, bautizan con el nombre de Betsabé. Nadie sabe que en su interior lleva la fuerza de la feminidad, así como la magia y la rebeldía que la harán superar todos los obstáculos. Creará un vínculo indisoluble con su hermana de leche, Capitolina, una pobre niña rica, y ninguno quedará indiferente a su mirada de fuego. Ni siquiera Emmanuel, el revolucionario francés salido del Montparnasse más artístico que, al conocerla, caerá enfermo de amor.</string>
     <string name="reading_text_title">Reading</string>
-
 </resources>
