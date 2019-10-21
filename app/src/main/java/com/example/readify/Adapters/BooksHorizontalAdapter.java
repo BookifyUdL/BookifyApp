@@ -70,8 +70,9 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
     private void setAddButtonIcon(ViewHolder holder){
         Drawable drawable = ContextCompat.getDrawable(holder.addButton.getContext(),
                 holder.addButton.getContext().getResources().getIdentifier("ic_added_book", "drawable", holder.addButton.getContext().getPackageName()));
-        holder.addButton.setImageResource(R.drawable.ic_action_reading);
-        holder.addButton.setBackgroundTintList(ColorStateList.valueOf(holder.addButton.getContext().getResources().getColor(R.color.colorAddedGreen)));
+        holder.addButton.setImageResource(R.drawable.ic_added_book);
+        //holder.addButton.setBackgroundTintList(ColorStateList.valueOf(holder.addButton.getContext().getResources().getColor(R.color.colorAddedGreen)));
+        //holder.addButton.setBackgroundColor(holder.addButton.getContext().getResources().getColor(R.color.colorAddedGreen));
         //holder.addButton.setBackgroundColor(holder.addButton.getContext().getResources().getColor(R.color.colorAddedGreen));
         //holder.addButton.setBackgroundDrawable(drawable);
         //holder.addButton.setImageResource(drawable);

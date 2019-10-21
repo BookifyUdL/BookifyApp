@@ -12,11 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.readify.Adapters.BooksHorizontalAdapter;
 import com.example.readify.Models.Book;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,12 +30,13 @@ import java.util.List;
  * Use the {@link BookViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BookViewFragment extends Fragment implements  BooksHorizontalAdapter.ItemClickListener{
+public class BookViewFragment extends Fragment {
 
     private Book book;
+    private ArrayList<Book> prevoiusBooks;
     private View view;
     private List<Book> sameAuthorBooks;
-    private List<Book> samgeGenderBooks;
+    private List<Book> sameGenderBooks;
 
     private OnFragmentInteractionListener mListener;
 
@@ -42,6 +45,8 @@ public class BookViewFragment extends Fragment implements  BooksHorizontalAdapte
     }
 
     public void setBook(Book book){
+        if(this.book != null)
+            prevoiusBooks.add(this.book);
         this.book = book;
         setContent();
     }
@@ -62,6 +67,7 @@ public class BookViewFragment extends Fragment implements  BooksHorizontalAdapte
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        prevoiusBooks = new ArrayList<>();
         view = inflater.inflate(R.layout.fragment_book_view, container, false);
         ImageView backButton = (ImageView) view.findViewById(R.id.go_back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -83,35 +89,51 @@ public class BookViewFragment extends Fragment implements  BooksHorizontalAdapte
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
         BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter(getContext(), sameAuthorBooks, false);
-        adapterAuth.setClickListener(this);
+        adapterAuth.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
+           @Override
+           public void onItemClick(View view, int position) {
+               showBookFragment(sameAuthorBooks.get(position));
+           }
+        });
         recyclerViewAuthor.setAdapter(adapterAuth);
 
         /*Same gender books*/
         //LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.gender_books_recycler_view);
         recyclerView.setLayoutManager(horizontalLayoutManagaer);
-        samgeGenderBooks = MockupsValues.getSameGenderBooks();
+        sameGenderBooks = MockupsValues.getSameGenderBooks();
         LinearLayoutManager horizontalLayoutManagerGender
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManagerGender);
-        BooksHorizontalAdapter adapterGender = new BooksHorizontalAdapter(getContext(), samgeGenderBooks, false);
-        adapterGender.setClickListener(this);
+        BooksHorizontalAdapter adapterGender = new BooksHorizontalAdapter(getContext(), sameGenderBooks, false);
+        //adapterGender.setClickListener(this);
+        adapterGender.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                showBookFragment(sameGenderBooks.get(position));
+            }
+        });
         recyclerView.setAdapter(adapterGender);
 
 
         return view;
     }
 
-    @Override
+    /*@Override
     public void onItemClick(View view, int position) {
-        /*if(position == list.size()-1){
-            showSearchFragment();
-        } else {
-            showBookFragment(list.get(position));
-        }*/
+        //showBookFragment();
+
+    }*/
+
+    private void showBookFragment(Book book){
+        MainActivity activity = (MainActivity) getActivity();
+        activity.goToBookPage(book);
     }
 
     private void setContent(){
+        //if(book != null)
+        //    prevoiusBooks.add()
+        ScrollView scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
         ImageView bookImageView = (ImageView) view.findViewById(R.id.book_cover_image_view);
         bookImageView.setImageResource(bookImageView.getContext().getResources().getIdentifier(book.getPicture(), "drawable", bookImageView.getContext().getPackageName()));
         TextView bookTitle = (TextView) view.findViewById(R.id.book_title);
@@ -119,13 +141,24 @@ public class BookViewFragment extends Fragment implements  BooksHorizontalAdapte
         TextView textView = (TextView) view.findViewById(R.id.same_author_books_title);
         bookTitle.setText(book.getTitle());
         bookAuthor.setText(book.getAuthor());
-        String aux  = textView.getText() + " " + book.getAuthor() + " :";
+        String aux  = getString(R.string.more_books_of) + " " + book.getAuthor() + " :";
         textView.setText(aux);
+        scrollView.setScrollY(0);
+        //scrollView.fullScroll(ScrollView.FOCUS_UP);
+        //scrollView.fullScroll(ScrollView.Focus)
     }
 
     private void onGoBackButtonClicked(){
-        MainActivity activity = (MainActivity) getActivity();
-        activity.backToDiscoverFragment();
+        if(!prevoiusBooks.isEmpty()) {
+            book = prevoiusBooks.get(prevoiusBooks.size() - 1);
+            setContent();
+            prevoiusBooks.remove(prevoiusBooks.size() - 1);
+        } else {
+            this.book = null;
+            prevoiusBooks = new ArrayList<>();
+            MainActivity activity = (MainActivity) getActivity();
+            activity.backToDiscoverFragment();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

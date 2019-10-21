@@ -69,7 +69,6 @@
                     android:src="@drawable/ic_add_book"
                     android:layout_gravity="center_vertical"
                     android:foregroundGravity="right"
-                    app:backgroundTint="@color/cardview_light_background"
                     android:background="@drawable/roudend_image_button"/>
 
                 <!--<Button
