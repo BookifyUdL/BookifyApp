@@ -83,6 +83,12 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         active = fragment6;
     }
 
+    public void focusDiscoverFragment(){
+        fm.beginTransaction().hide(active).show(fragment3).commit();
+        navigation.getMenu().getItem(2).setChecked(true);
+        active = fragment3;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

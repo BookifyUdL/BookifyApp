@@ -72,7 +72,8 @@ public class SearchBookFragment extends Fragment implements SearchView.OnQueryTe
         LinearLayoutManager verticalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.books_recycler_view);
         recyclerView.setLayoutManager(verticalLayoutManagaer);
-        ArrayList<Book> list = MockupsValues.getLastAddedBooks();
+        ArrayList<Book> list  = new ArrayList<>();
+        list.addAll(MockupsValues.getLastAddedBooks());
         list.addAll(MockupsValues.getSameAuthorBooks());
         list.addAll(MockupsValues.getSameGenderBooks());
         adapter = new BooksListVerticalAdapter(getContext(), list);

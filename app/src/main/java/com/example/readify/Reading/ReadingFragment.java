@@ -11,9 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.readify.Adapters.BooksListVerticalAdapter;
+import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
+import com.example.readify.Models.Book;
 import com.example.readify.R;
 
 import java.util.ArrayList;
@@ -74,6 +77,14 @@ public class ReadingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reading, container, false);
+        LinearLayout discoverButton = view.findViewById(R.id.discover_layout);
+        discoverButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.focusDiscoverFragment();
+            }
+        });
         /*RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.books_recycler_view);
         BooksListVerticalAdapter adapter = new BooksListVerticalAdapter(MockupsValues.getLastAddedBooks(), getContext());
         recyclerView.setAdapter(adapter);*/
@@ -83,7 +94,10 @@ public class ReadingFragment extends Fragment {
         recyclerView.setLayoutManager(verticalLayoutManagaer);
         // set up the RecyclerView
         //RecyclerView recyclerView = refindViewById(R.id.rvAnimals);
-        ArrayList list = MockupsValues.getLastAddedBooks();
+        //ArrayList list = MockupsValues.getLastAddedBooks();
+        //list.remove(list.size() - 1);
+        ArrayList<Book> list = new ArrayList<>();
+        list.addAll(MockupsValues.getLastAddedBooks());
         list.remove(list.size() - 1);
         BooksListVerticalAdapter adapter = new BooksListVerticalAdapter(getContext(), list);
         //BooksHorizontalAdapter adapter = new BooksHorizontalAdapter(getContext(), list);
