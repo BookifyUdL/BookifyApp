@@ -63,6 +63,8 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         }
     };
 
+    public void notifyReadingListChanged() { fragment1.readingBooksChanged();}
+
     public void notifyPendingListChanged(){
         fragment1.pendingListChanged();
     }

@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.readify.MainActivity;
+import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.User;
 
@@ -23,16 +25,35 @@ import java.util.ListIterator;
 
 public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVerticalAdapter.BookHolder> {
     private ArrayList<Book> booksList, originalSearchList;
+    private MainActivity activity;
     private Context mContext;
     private User user;
 
     // Counstructor for the Class
+    public BooksListVerticalAdapter(MainActivity activity, Context context, ArrayList<Book> booksList, User user) {
+        this.booksList = booksList;
+        this.originalSearchList = new ArrayList<>();
+        this.originalSearchList.addAll(booksList);
+        this.activity = activity;
+        this.mContext = context;
+        this.user = user;
+    }
+
     public BooksListVerticalAdapter(Context context, ArrayList<Book> booksList, User user) {
         this.booksList = booksList;
         this.originalSearchList = new ArrayList<>();
         this.originalSearchList.addAll(booksList);
+        //this.activity = activity;
         this.mContext = context;
         this.user = user;
+    }
+
+    public BooksListVerticalAdapter(MainActivity activity, Context context, ArrayList<Book> booksList) {
+        this.booksList = booksList;
+        this.originalSearchList = new ArrayList<>();
+        this.originalSearchList.addAll(booksList);
+        this.mContext = context;
+        this.activity = activity;
     }
 
     // Counstructor for the Class
@@ -43,8 +64,27 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         this.mContext = context;
     }
 
+    public Context getContext(){
+        return mContext;
+    }
+
     public void setBooksList(ArrayList<Book> books){
         this.booksList = books;
+    }
+
+    public void deleteItem(int position){
+        //MockupsValues.getPendingListBooks().remove(position);
+        MockupsValues.removePendingListBook(booksList.get(position));
+        booksList.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void readingListChanged(int position){
+        MockupsValues.addReadingBook(booksList.get(position));
+        MockupsValues.removePendingListBook(booksList.get(position));
+        activity.notifyPendingListChanged();
+        activity.notifyReadingListChanged();
+        //MockupsValues
     }
 
     // This method creates views for the RecyclerView by inflating the layout

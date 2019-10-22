@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.readify.Adapters.BooksHorizontalAdapter;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +68,7 @@ public class BookViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        User user = MockupsValues.getUser();
         prevoiusBooks = new ArrayList<>();
         view = inflater.inflate(R.layout.fragment_book_view, container, false);
         ImageView backButton = (ImageView) view.findViewById(R.id.go_back_button);

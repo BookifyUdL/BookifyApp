@@ -15,7 +15,7 @@ public class MockupsValues {
     private static ArrayList<Book> SAME_GENDER_BOOKS;
     private static ArrayList<Book> PENDING_LIST_BOOKS;
     private static ArrayList<Book> READING_LIST_BOOKS;
-    public static User user;
+    public static User user = new User();
 
     public static User getUser(){
         return user;
@@ -41,6 +41,10 @@ public class MockupsValues {
         if(PENDING_LIST_BOOKS == null)
             PENDING_LIST_BOOKS = new ArrayList<>();
         PENDING_LIST_BOOKS.add(book);
+    }
+
+    public static void removePendingListBook(Book book){
+        PENDING_LIST_BOOKS.remove(book);
     }
 
     public static  void addReadingBook(Book book){
