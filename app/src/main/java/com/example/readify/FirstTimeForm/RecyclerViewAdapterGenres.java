@@ -6,11 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readify.Models.Genre;
+import com.example.readify.Models.User;
 import com.example.readify.R;
 
 import java.util.ArrayList;
@@ -19,11 +21,13 @@ public class RecyclerViewAdapterGenres extends RecyclerView.Adapter<RecyclerView
     private ArrayList<Genre> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+    private User user;
 
     // data is passed into the constructor
-    RecyclerViewAdapterGenres(Context context, ArrayList<Genre> data) {
+    RecyclerViewAdapterGenres(Context context, ArrayList<Genre> data, User user) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
+        this.user = user;
     }
 
     // inflates the cell layout from xml when needed
@@ -37,10 +41,23 @@ public class RecyclerViewAdapterGenres extends RecyclerView.Adapter<RecyclerView
     // binds the data to the TextView in each cell
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Genre genre = mData.get(position);
+        final Genre genre = mData.get(position);
         holder.myTextView.setText(genre.getName());
         holder.myImageView.setImageResource(mInflater.getContext()
                 .getResources().getIdentifier(genre.getPicture(), "drawable", mInflater.getContext().getPackageName()));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (user.containsGenre(genre)) {
+                    user.removeGenreToGenres(genre);
+                    Toast.makeText(view.getContext(), "Genre removed on your favourite genres", Toast.LENGTH_SHORT).show();
+                } else {
+                    user.addGenreToGenres(genre);
+                    Toast.makeText(view.getContext(), "Genre added on your favourite genres", Toast.LENGTH_SHORT).show();
+                }
+                if (mClickListener != null) mClickListener.onItemClick(view);
+            }
+        });
     }
 
     // total number of cells
@@ -51,22 +68,15 @@ public class RecyclerViewAdapterGenres extends RecyclerView.Adapter<RecyclerView
 
 
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView myTextView;
         ImageView myImageView;
 
         ViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.cardViewText);
-            itemView.setOnClickListener(this);
             myImageView = itemView.findViewById(R.id.cardViewImage);
-            itemView.setOnClickListener(this);
 
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -82,6 +92,6 @@ public class RecyclerViewAdapterGenres extends RecyclerView.Adapter<RecyclerView
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(View view);
     }
 }

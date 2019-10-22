@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.readify.MainActivity;
+import com.example.readify.Models.User;
 import com.example.readify.R;
 
 public class FirstTimeFormActivity extends AppCompatActivity
@@ -39,7 +40,7 @@ public class FirstTimeFormActivity extends AppCompatActivity
     }
 
     @Override
-    public void doneForm() {
+    public void doneForm(User user) {
         Toast.makeText(this, "Form completed correctly", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(FirstTimeFormActivity.this, MainActivity.class);
         startActivity(intent);

@@ -4,11 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -119,15 +117,13 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         booksList = new ArrayList<>();
         booksList.addAll(originalSearchList);
 
-        if (toSearch.length() == 0)
-        {
+        if (toSearch.length() == 0) {
             notifyDataSetChanged();
             return;
         }
 
         ListIterator<Book> itr = booksList.listIterator();
-        while (itr.hasNext())
-        {
+        while (itr.hasNext()) {
             if (itr.next().getTitle().toLowerCase().contains(toSearch))
                 continue;
 
@@ -146,12 +142,11 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         holder.bookCover.setImageResource(
                 mContext.getResources().getIdentifier(book.getPicture(), "drawable", mContext.getPackageName()));
 
-
         //if (user != null && user.containsBook(book))
-            //holder.addButton.setText("Remove");
+        //holder.addButton.setText("Remove");
         //else
-            //holder.addButton.setText("Add");
-        holder.addButton.setOnClickListener(new View.OnClickListener() {
+        //holder.addButton.setText("Add");
+        /*holder.addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (user.containsBook(book)) {
@@ -164,7 +159,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
                     //holder.addButton.setText("Remove");
                 }
             }
-        });
+        });*/
     }
 
     // This is your ViewHolder class that helps to populate data to the view

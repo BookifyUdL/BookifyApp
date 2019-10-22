@@ -4,6 +4,7 @@ public class Book {
     private String title;
     private String author;
     private String picture;
+    private boolean read;
     private int year;
 
     public Book(String title, String author, String picture, int year) {
@@ -11,15 +12,18 @@ public class Book {
         this.author = author;
         this.picture = picture;
         this.year = year;
+        this.read = false;
     }
 
     public Book(String title, String author, String picture) {
         this.title = title;
         this.author = author;
         this.picture = picture;
+        this.read = false;
     }
 
-    public Book(){ }
+    public Book() {
+    }
 
     public String getTitle() {
         return title;
@@ -51,5 +55,13 @@ public class Book {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 }

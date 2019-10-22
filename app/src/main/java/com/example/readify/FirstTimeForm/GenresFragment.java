@@ -18,7 +18,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.readify.Adapters.BooksListFormAdapter;
 import com.example.readify.Adapters.BooksListVerticalAdapter;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.User;
@@ -37,7 +39,7 @@ import java.util.ArrayList;
  * Use the {@link GenresFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GenresFragment extends Fragment implements RecyclerViewAdapterGenres.ItemClickListener, SearchView.OnQueryTextListener {
+public class GenresFragment extends Fragment implements RecyclerViewAdapterGenres.ItemClickListener, BooksListFormAdapter.ItemClickListener, SearchView.OnQueryTextListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -58,8 +60,10 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
     int NUMBER_OF_FORMS = 4;
 
     RecyclerViewAdapterGenres adapterGenres;
-    BooksListVerticalAdapter adapterBooksList;
-    BooksListVerticalAdapter adapterBooksInterest;
+    BooksListFormAdapter adapterBooksList;
+    BooksListFormAdapter adapterBooksInterest;
+
+    User user = MockupsValues.user;
 
     public GenresFragment() {
         // Required empty public constructor
@@ -140,7 +144,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
                     buttonDone.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            comunicateFragmentsFirstForm.doneForm();
+                            comunicateFragmentsFirstForm.doneForm(user);
                         }
                     });
             }
@@ -169,19 +173,22 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
 
         ArrayList genres = MockupsValues.getGenres();
 
-        adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres);
+        adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres, user);
         adapterGenres.setClickListener(GenresFragment.this);
         recyclerViewGenres.setAdapter(adapterGenres);
     }
 
     private void createBookReadDinamically(View view) {
         //Defining the adapters and SearchView to show every book
-        LinearLayoutManager linearLayoutManagerRead = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerViewReadBooks = view.findViewById(R.id.recyclerViewReadBooks);
-        recyclerViewReadBooks.setLayoutManager(linearLayoutManagerRead);
+        GridLayoutManager gridLayoutManagerBooksRead = new GridLayoutManager(view.getContext(), 1);
+        //LinearLayoutManager linearLayoutManagerRead = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerViewReadBooks.setLayoutManager(gridLayoutManagerBooksRead);
 
         ArrayList booksRead = MockupsValues.getLastAddedBooks();
-        adapterBooksList = new BooksListVerticalAdapter(getContext(), booksRead, MockupsValues.user);
+
+        adapterBooksList = new BooksListFormAdapter(getContext(), booksRead, user, true);
+        adapterBooksList.setClickListener(GenresFragment.this);
         recyclerViewReadBooks.setAdapter(adapterBooksList);
 
         SearchView searchViewBooksRead = view.findViewById(R.id.search_bar_read_books);
@@ -197,7 +204,8 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         recyclerViewInterestBooks.setLayoutManager(linearLayoutManagerInterest);
 
         ArrayList booksInterest = MockupsValues.getLastAddedBooks();
-        adapterBooksInterest = new BooksListVerticalAdapter(getContext(), booksInterest, MockupsValues.user);
+        adapterBooksInterest = new BooksListFormAdapter(getContext(), booksInterest, MockupsValues.user, false);
+        adapterBooksInterest.setClickListener(GenresFragment.this);
         recyclerViewInterestBooks.setAdapter(adapterBooksInterest);
 
         SearchView searchViewBooksInterest = view.findViewById(R.id.search_bar_interest_books);
@@ -207,19 +215,29 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
     }
 
     @Override
-    public void onItemClick(View view, int position) {
-        LinearLayout linearLayout = view.findViewById(R.id.LayoutBackgroundCardView);
-        CardView cardView = view.findViewById(R.id.cardView);
-        checkCardView(cardView, linearLayout);
+    public void onItemClick(View view) {
+        switch (carouselView.getCurrentItem()) {
+            case 0:
+                LinearLayout linearLayoutGenre = view.findViewById(R.id.LayoutBackgroundCardView);
+                CardView cardViewGenre = view.findViewById(R.id.cardView);
+                changeCardView(cardViewGenre, linearLayoutGenre);
+                break;
+            case 1:
+            case 2:
+                LinearLayout linearLayoutCardViewInterestBook = view.findViewById(R.id.linearLayoutCardView);
+                CardView cardViewInterestBook = view.findViewById(R.id.card_view);
+                changeCardView(cardViewInterestBook, linearLayoutCardViewInterestBook);
+                break;
+        }
     }
 
-    void checkCardView(CardView cardView, LinearLayout linearLayout) {
+    void changeCardView(CardView cardView, LinearLayout linearLayout) {
         if (cardView.getTag() == getString(R.string.cardView_unmark)) {
             cardView.setTag(getString(R.string.cardView_mark));
             linearLayout.setBackground(view.getContext().getDrawable(R.drawable.cardview_selected));
         } else {
             cardView.setTag(getString(R.string.cardView_unmark));
-            linearLayout.setBackgroundColor(view.getContext().getColor(R.color.colorBlank));
+            linearLayout.setBackgroundColor(view.getContext().getColor(R.color.colorGrayCardBackground));
         }
     }
 
