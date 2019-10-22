@@ -43,6 +43,18 @@ public class MockupsValues {
         PENDING_LIST_BOOKS.add(book);
     }
 
+    public static void removePendingListBook(Book book){
+        if(PENDING_LIST_BOOKS == null)
+            PENDING_LIST_BOOKS = new ArrayList<>();
+        PENDING_LIST_BOOKS.remove(book);
+    }
+
+    public static void removeReadingListBook(Book book){
+        if(READING_LIST_BOOKS == null)
+            READING_LIST_BOOKS = new ArrayList<>();
+        READING_LIST_BOOKS.remove(book);
+    }
+
     public static  void addReadingBook(Book book){
         if(READING_LIST_BOOKS== null)
             READING_LIST_BOOKS = new ArrayList<>();

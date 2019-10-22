@@ -63,6 +63,8 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         }
     };
 
+    public void notifyReadingListChanged() { fragment1.readingBooksChanged();}
+
     public void notifyPendingListChanged(){
         fragment1.pendingListChanged();
     }
@@ -91,6 +93,12 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         fm.beginTransaction().hide(active).show(fragment3).commit();
         navigation.getMenu().getItem(2).setChecked(true);
         active = fragment3;
+    }
+
+    public void focusToReadingFragment(){
+        fm.beginTransaction().hide(active).show(fragment1).commit();
+        navigation.getMenu().getItem(0).setChecked(true);
+        active = fragment1;
     }
 
     @Override

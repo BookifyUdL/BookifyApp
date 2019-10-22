@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -67,8 +68,11 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
                     @Override
                     public void onClick(View view) {
                         setAddButtonIcon(holder);
-                        MockupsValues.addPendingBook(mViewBooks.get(position));
+                        Book book = mViewBooks.get(position);
+                        MockupsValues.addPendingBook(book);
                         activity.notifyPendingListChanged();
+                        Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
+
                     }
                 });
             }
