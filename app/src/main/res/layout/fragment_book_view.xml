@@ -80,6 +80,7 @@
                         android:orientation="horizontal">
 
                         <ImageButton
+                            android:id="@+id/add_button"
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_add_white"

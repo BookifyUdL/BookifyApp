@@ -1,9 +1,11 @@
 package com.example.readify;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,9 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.readify.Adapters.BooksHorizontalAdapter;
 import com.example.readify.Models.Book;
@@ -81,6 +85,34 @@ public class BookViewFragment extends Fragment {
         if(book != null){
            setContent();
         }
+
+        final ImageButton addBook = (ImageButton) view.findViewById(R.id.add_button);
+        if(MockupsValues.getPendingListBooks().contains(book)){
+            Drawable drawable = ContextCompat.getDrawable(getContext(),
+                    getContext().getResources().getIdentifier("ic_reading_white", "drawable", getContext().getPackageName()));
+            //holder.addButton.setImageResource(R.drawable.ic_added_book);
+            addBook.setImageDrawable(drawable);
+        }
+        addBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!MockupsValues.getPendingListBooks().contains(book)){
+                    Drawable drawable = ContextCompat.getDrawable(getContext(),
+                            getContext().getResources().getIdentifier("ic_reading_white", "drawable", getContext().getPackageName()));
+                    //holder.addButton.setImageResource(R.drawable.ic_added_book);
+                    addBook.setImageDrawable(drawable);
+                    //Book book = mViewBooks.get(position);
+                    MockupsValues.addPendingBook(book);
+                    MainActivity activity = (MainActivity) getActivity();
+                    activity.notifyPendingListChanged();
+                    Toast.makeText(getContext(), book.getTitle() + " " + getContext().getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
+
+                } else {
+                    MainActivity activity = (MainActivity) getActivity();
+                    activity.focusToReadingFragment();
+                }
+            }
+        });
         /*Recyclers Views*/
         /*Same author books*/
         LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
