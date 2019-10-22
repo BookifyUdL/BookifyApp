@@ -1,5 +1,7 @@
 package com.example.readify;
 
+import android.content.Context;
+
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
 import com.example.readify.Models.User;
@@ -16,6 +18,11 @@ public class MockupsValues {
     private static ArrayList<Book> PENDING_LIST_BOOKS;
     private static ArrayList<Book> READING_LIST_BOOKS;
     public  static User user = new User();
+    private static Context context;
+
+    public static void setContext(Context con){
+        context = con;
+    }
 
     public static User getUser(){
         return user;
@@ -26,15 +33,15 @@ public class MockupsValues {
     public static ArrayList<Genre> getGenres() {
         if (GENRE == null || GENRE.isEmpty()) {
             GENRE = new ArrayList<>();
-            GENRE.add(new Genre("Biography", "genre1"));
-            GENRE.add(new Genre("Computing & internet", "genre2"));
-            GENRE.add(new Genre("Crime & thrillers", "genre3"));
-            GENRE.add(new Genre("Education", "genre4"));
-            GENRE.add(new Genre("Fiction & Literature", "genre5"));
-            GENRE.add(new Genre("Health & well-being", "genre6"));
-            GENRE.add(new Genre("Romance", "genre7"));
-            GENRE.add(new Genre("Sci-fi & Fantasy", "genre8"));
-            GENRE.add(new Genre("Travel & Adventure", "genre9"));
+            GENRE.add(new Genre( context.getResources().getString(R.string.biography_gender), "genre1"));
+            GENRE.add(new Genre( context.getResources().getString(R.string.internet_gender), "genre2"));
+            GENRE.add(new Genre( context.getResources().getString(R.string.crime_gender), "genre3"));
+            GENRE.add(new Genre( context.getResources().getString(R.string.education_gender), "genre4"));
+            GENRE.add(new Genre( context.getResources().getString(R.string.literature_gender), "genre5"));
+            GENRE.add(new Genre( context.getResources().getString(R.string.health_gender), "genre6"));
+            GENRE.add(new Genre( context.getResources().getString(R.string.romance_gender), "genre7"));
+            GENRE.add(new Genre( context.getResources().getString(R.string.fantasy_gender), "genre8"));
+            GENRE.add(new Genre( context.getResources().getString(R.string.adventure_gender), "genre9"));
         }
         return GENRE;
     }

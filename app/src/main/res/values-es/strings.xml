@@ -39,4 +39,14 @@
     <string name="reading_text_title">Leyendo</string>
     <string name="book_added_correctly_message"> se ha añadido correctamente a tu Libreria.</string>
     <string name="pending">Pendientes</string>
+
+    <string name="biography_gender">Biografia</string>
+    <string name="internet_gender">Computación</string>
+    <string name="education_gender">Educación</string>
+    <string name="crime_gender">Crimen</string>
+    <string name="literature_gender">Literatura</string>
+    <string name="health_gender">Salud</string>
+    <string name="romance_gender">Romance</string>
+    <string name="fantasy_gender">Fantasía</string>
+    <string name="adventure_gender">Aventura</string>
 </resources>

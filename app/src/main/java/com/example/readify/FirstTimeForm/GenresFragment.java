@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.example.readify.Adapters.BooksListFormAdapter;
 import com.example.readify.Adapters.BooksListVerticalAdapter;
 import com.example.readify.MockupsValues;
+import com.example.readify.Models.Book;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.synnapps.carouselview.CarouselView;
@@ -90,10 +92,10 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        /*if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        }*/
     }
 
     @Override
@@ -107,6 +109,28 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         carouselView.setPageCount(NUMBER_OF_FORMS);
         carouselView.setSlideInterval(0);
         carouselView.setViewListener(viewListener);
+        carouselView.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 2){
+                    changeInterestedBooks();
+                    //viewListener.setViewForPosition(2);
+                    //viewListener.
+                    //viewListener.notifyAll();
+                    //createBookInterestDinamically(view);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         // Inflate the layout for this fragment
         return view;
@@ -197,13 +221,25 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         searchViewBooksRead.setOnQueryTextListener(GenresFragment.this);
     }
 
+    private void changeInterestedBooks(){
+        ArrayList booksInterest = MockupsValues.getLastAddedBooks();
+        for (Book book : user.getLibrary()){
+            booksInterest.remove(book);
+        }
+        adapterBooksInterest.setBooksList(booksInterest);
+        adapterBooksInterest.notifyDataSetChanged();
+    }
+
     private void createBookInterestDinamically(View view) {
         //Defining the adapters and SearchView to show every book
         LinearLayoutManager linearLayoutManagerInterest = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerViewInterestBooks = view.findViewById(R.id.recyclerViewInterestBooks);
         recyclerViewInterestBooks.setLayoutManager(linearLayoutManagerInterest);
-
         ArrayList booksInterest = MockupsValues.getLastAddedBooks();
+        for (Book book : user.getLibrary()){
+            booksInterest.remove(book);
+        }
+        //ArrayList booksInterest = MockupsValues.getLastAddedBooks();
         adapterBooksInterest = new BooksListFormAdapter(getContext(), booksInterest, MockupsValues.user, false);
         adapterBooksInterest.setClickListener(GenresFragment.this);
         recyclerViewInterestBooks.setAdapter(adapterBooksInterest);

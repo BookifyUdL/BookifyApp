@@ -25,7 +25,7 @@ public class FirstTimeFormActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_time_form);
-
+        MockupsValues.setContext(this.getApplicationContext());
         fm.beginTransaction().add(R.id.main_container_first_form,genreFragment, "1").commit();
     }
 
