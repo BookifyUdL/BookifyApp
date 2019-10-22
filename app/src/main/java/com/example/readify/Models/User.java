@@ -3,12 +3,16 @@ package com.example.readify.Models;
 import java.util.ArrayList;
 
 public class User {
-    ArrayList<Book> library;
-    ArrayList<Genre> genres;
+    private ArrayList<Book> library;
+    private ArrayList<Genre> genres;
+    private ArrayList<Book> interested;
+    private ArrayList<Book> read;
 
     public User() {
         library = new ArrayList<>();
         genres = new ArrayList<>();
+        interested = new ArrayList<>();
+        read = new ArrayList<>();
     }
 
     public User(ArrayList<Genre> genres, ArrayList<Book> library) {
@@ -16,6 +20,22 @@ public class User {
             this.library = library;
         if (genres != null)
             this.genres = genres;
+    }
+
+    public void addBookToInterestedBooks(Book book){
+        interested.add(book);
+    }
+
+    public ArrayList<Book> getReadBooks(){
+        return read;
+    }
+
+    public void addBookToReadBooks(Book book){
+        read.add(book);
+    }
+
+    public ArrayList<Book> getInterestedBooks(){
+        return interested;
     }
 
     public ArrayList<Genre> getGenres() { return genres; }
@@ -56,5 +76,15 @@ public class User {
             if (library.get(i).equals(book))
                 return true;
         return false;
+    }
+
+    public void booksReSet(){
+        for (Book book : getLibrary()){
+            if(book.isRead()){
+                addBookToReadBooks(book);
+            } else {
+                addBookToInterestedBooks(book);
+            }
+        }
     }
 }

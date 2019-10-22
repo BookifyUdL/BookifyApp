@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.readify.MainActivity;
+import com.example.readify.MockupsValues;
+import com.example.readify.Models.Book;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 
@@ -42,9 +44,12 @@ public class FirstTimeFormActivity extends AppCompatActivity
     @Override
     public void doneForm(User user) {
         Toast.makeText(this, "Form completed correctly", Toast.LENGTH_LONG).show();
+        user.booksReSet();
+        MockupsValues.user = user;
         Intent intent = new Intent(FirstTimeFormActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
+
 
 }

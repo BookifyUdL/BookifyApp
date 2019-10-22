@@ -105,6 +105,9 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MockupsValues.setPendingListBooks(MockupsValues.user.getInterestedBooks());
+
         fm.beginTransaction().add(R.id.main_container, fragment6, "6").hide(fragment6).commit();
         fm.beginTransaction().add(R.id.main_container, fragment5, "5").hide(fragment5).commit();
         fm.beginTransaction().add(R.id.main_container, fragment4, "4").hide(fragment4).commit();

@@ -15,11 +15,13 @@ public class MockupsValues {
     private static ArrayList<Book> SAME_GENDER_BOOKS;
     private static ArrayList<Book> PENDING_LIST_BOOKS;
     private static ArrayList<Book> READING_LIST_BOOKS;
-    public static User user = new User();
+    public  static User user = new User();
 
     public static User getUser(){
         return user;
     }
+
+    //public void setUser(User user) { this.user = user; }
 
     public static ArrayList<Genre> getGenres() {
         if (GENRE == null || GENRE.isEmpty()) {
@@ -59,6 +61,10 @@ public class MockupsValues {
         if(READING_LIST_BOOKS== null)
             READING_LIST_BOOKS = new ArrayList<>();
         READING_LIST_BOOKS.add(book);
+    }
+
+    public static void setPendingListBooks(ArrayList<Book> books){
+        PENDING_LIST_BOOKS = books;
     }
 
     public static ArrayList<Book> getPendingListBooks(){
