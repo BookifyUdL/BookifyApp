@@ -26,18 +26,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/hello_blank_fragment" />-->
-
-                <TextView
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:id="@+id/reading_text"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/reading_text_title"
-                    android:textSize="25dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorBlack"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="5dp"/>
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:id="@+id/reading_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/reading_text_title"
+                        android:textSize="25dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="5dp"/>
+                    <androidx.slidingpanelayout.widget.SlidingPaneLayout
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorMark"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"/>
+
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/reading_books_recycler_view"
@@ -48,17 +63,36 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"/>
 
-                <TextView
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:id="@+id/pending_text"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/reading_text_title"
-                    android:textSize="25dp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorBlack"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="5dp"/>
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:id="@+id/pending_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pending"
+                        android:textSize="25dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="5dp"/>
+
+                    <androidx.slidingpanelayout.widget.SlidingPaneLayout
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorYellowSwipe"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"/>
+
+                </LinearLayout>
+
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/pending_books_recycler_view"

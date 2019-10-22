@@ -16,16 +16,23 @@ import com.example.readify.R;
 public class SwipeToReadOrDeleteCallback extends ItemTouchHelper.SimpleCallback {
 
     public BooksListVerticalAdapter mAdapter;
-    private Drawable icon, delete, read;
-    private  ColorDrawable background;
+    private Drawable icon, delete, action;
+    private ColorDrawable background;
+    private boolean toPending;
     ColorDrawable red = new ColorDrawable(Color.RED);
     ColorDrawable yellow = new ColorDrawable(Color.parseColor("#d9c01c"));
+    ColorDrawable green = new ColorDrawable(Color.parseColor("#5BE356"));
 
-    public SwipeToReadOrDeleteCallback(BooksListVerticalAdapter adapter){
+    public SwipeToReadOrDeleteCallback(BooksListVerticalAdapter adapter, boolean pending ){
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         mAdapter = adapter;
         icon = delete = ContextCompat.getDrawable(mAdapter.getContext(), R.drawable.ic_delete_white);
-        read = ContextCompat.getDrawable(mAdapter.getContext(), R.drawable.ic_reading_white);
+        toPending = pending;
+        if(pending){
+            action = ContextCompat.getDrawable(mAdapter.getContext(), R.drawable.ic_reading_white);
+        } else {
+            action = ContextCompat.getDrawable(mAdapter.getContext(), R.drawable.ic_pending_white);
+        }
         background = new ColorDrawable(Color.RED);
     }
 
@@ -40,7 +47,10 @@ public class SwipeToReadOrDeleteCallback extends ItemTouchHelper.SimpleCallback 
         if(direction == ItemTouchHelper.LEFT){
             mAdapter.deleteItem(position);
         } else {
-            mAdapter.readingListChanged(position);
+            if(toPending)
+                mAdapter.readingListChanged(position);
+            if(!toPending)
+                mAdapter.pendingListChanged(position);
             // Add to reading list
         }
     }
@@ -52,7 +62,10 @@ public class SwipeToReadOrDeleteCallback extends ItemTouchHelper.SimpleCallback 
         View itemView = viewHolder.itemView;
         int backgroundCornerOffset = 20;
         if (dX > 0) { // Swiping to the right
-            background = yellow;
+            if(toPending)
+                background = green;
+            if(!toPending)
+                background = yellow;
             background.setBounds(itemView.getLeft(), itemView.getTop(),
                     itemView.getLeft() + ((int) dX) + backgroundCornerOffset,
                     itemView.getBottom());
@@ -70,7 +83,7 @@ public class SwipeToReadOrDeleteCallback extends ItemTouchHelper.SimpleCallback 
         int iconBottom = iconTop + icon.getIntrinsicHeight();
 
         if (dX > 0) { // Swiping to the right
-            icon = read;
+            icon = action;
             int iconLeft = itemView.getLeft() + iconMargin;
             //int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
             int iconRight = itemView.getLeft() + iconMargin + icon.getIntrinsicWidth();

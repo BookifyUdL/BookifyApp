@@ -75,16 +75,26 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
     public void deleteItem(int position){
         //MockupsValues.getPendingListBooks().remove(position);
         MockupsValues.removePendingListBook(booksList.get(position));
-        booksList.remove(position);
+        if(!booksList.isEmpty())
+            booksList.remove(position);
         notifyDataSetChanged();
     }
 
     public void readingListChanged(int position){
-        MockupsValues.addReadingBook(booksList.get(position));
-        MockupsValues.removePendingListBook(booksList.get(position));
+        Book book  = booksList.get(position);
+        MockupsValues.addReadingBook(book);
+        MockupsValues.removePendingListBook(book);
         activity.notifyPendingListChanged();
         activity.notifyReadingListChanged();
         //MockupsValues
+    }
+
+    public void pendingListChanged(int position){
+        Book book  = booksList.get(position);
+        MockupsValues.addPendingBook(book);
+        MockupsValues.removeReadingListBook(book);
+        activity.notifyReadingListChanged();
+        activity.notifyPendingListChanged();
     }
 
     // This method creates views for the RecyclerView by inflating the layout
