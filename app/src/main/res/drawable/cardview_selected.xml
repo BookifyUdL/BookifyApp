@@ -4,7 +4,7 @@
     <layer-list>
         <item>
             <shape>
-                <solid android:color="@android:color/white"/>
+                <solid android:color="@color/colorGrayCardBackground"/>
                 <corners android:radius="6dp"/>
                 <stroke android:width="3dp" android:color="#5BE356"/>
             </shape>

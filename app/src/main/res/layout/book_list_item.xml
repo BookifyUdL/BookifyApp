@@ -1,88 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_height="120dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginTop="5dp"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="120dp">
+    android:tag="@string/cardView_unmark"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="8dp">
 
-    <androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/linearLayoutCardView"
         android:layout_height="match_parent"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardBackgroundColor="@color/colorGrayCardBackground">
+        android:layout_width="match_parent"
+        android:background="@color/colorGrayCardBackground">
+
+        <ImageView
+            android:id="@+id/book_cover_image_view"
+            android:layout_height="100dp"
+            android:layout_width="100dp"
+            android:src="@drawable/lib1"
+            android:tag="Image"
+            android:layout_gravity="center"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:id="@+id/book_title"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:padding="5dp"
+                android:textSize="18sp" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:id="@+id/book_author"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:padding="5dp"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="end"
+            android:id="@+id/linearLayout"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingEnd="15dp">
 
-            <ImageView
-                android:id="@+id/book_cover_image_view"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/lib1"
-                android:tag="Image"/>
 
-            <LinearLayout
-                android:orientation="vertical"
+            <ImageButton
+                android:background="@drawable/roudend_image_button"
+                android:foregroundGravity="right"
+                android:id="@+id/addButton"
+                android:layout_gravity="center_vertical"
+                android:layout_height="40dp"
+                android:layout_width="40dp"
+                android:src="@drawable/ic_add_book" />
+
+            <!--<Button
+                android:id="@+id/addButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/book_title"
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:padding="5dp"
-                    android:textSize="18sp" />
-
-                <TextView
-                    style="@style/TextAppearance.AppCompat.Body1"
-                    android:id="@+id/book_author"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:padding="5dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/linearLayout"
-                android:gravity="right"
-                android:paddingEnd="15dp">
-
-
-                <ImageButton
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:id="@+id/addButton"
-                    android:src="@drawable/ic_add_book"
-                    android:layout_gravity="center_vertical"
-                    android:foregroundGravity="right"
-                    android:background="@drawable/roudend_image_button"/>
-
-                <!--<Button
-                    android:id="@+id/addButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:foregroundGravity="right"
-                    android:tag="addButton"/>-->
-
-            </LinearLayout>
+                android:layout_gravity="center_vertical"
+                android:foregroundGravity="right"
+                android:tag="addButton"/>-->
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
-  
-</LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

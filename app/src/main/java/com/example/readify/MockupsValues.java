@@ -15,7 +15,7 @@ public class MockupsValues {
     private static ArrayList<Book> SAME_GENDER_BOOKS;
     private static ArrayList<Book> PENDING_LIST_BOOKS;
     private static ArrayList<Book> READING_LIST_BOOKS;
-    public static User user;
+    public static User user = new User();
 
     public static User getUser(){
         return user;

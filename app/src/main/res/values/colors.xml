@@ -7,7 +7,7 @@
     <color name="colorBlank">#FFFFFF</color>
     <color name="colorMark">#5BE356</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorGrayCardBackground">#f5f5f5</color>
+    <color name="colorGrayCardBackground">#F5F5F5</color>
     <color name="colorBlueLink">#037bfc</color>
     <color name="colorAddedGreen">#00ffa2</color>
 </resources>
