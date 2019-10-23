@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.readify.Discover.DiscoverFragment;
 import com.example.readify.Library.LibraryFragment;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.Genre;
 import com.example.readify.Profile.ProfileFragment;
 import com.example.readify.Reading.ReadingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -18,6 +19,8 @@ import android.os.Bundle;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.MenuItem;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements
 ReadingFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
@@ -105,6 +108,17 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MockupsValues.setPendingListBooks(MockupsValues.user.getInterestedBooks());
+        if(MockupsValues.user.getGenres() == null || MockupsValues.user.getGenres().isEmpty()){
+            ArrayList<Genre> genres = new ArrayList<>();
+            genres.add(MockupsValues.getGenres().get(2));
+            genres.add(MockupsValues.getGenres().get(4));
+            MockupsValues.user.setGenres(genres);
+
+        }
+
+
         fm.beginTransaction().add(R.id.main_container, fragment6, "6").hide(fragment6).commit();
         fm.beginTransaction().add(R.id.main_container, fragment5, "5").hide(fragment5).commit();
         fm.beginTransaction().add(R.id.main_container, fragment4, "4").hide(fragment4).commit();

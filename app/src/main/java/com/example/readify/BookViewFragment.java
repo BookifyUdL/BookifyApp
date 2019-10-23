@@ -177,6 +177,13 @@ public class BookViewFragment extends Fragment {
         bookAuthor.setText(book.getAuthor());
         String aux  = getString(R.string.more_books_of) + " " + book.getAuthor() + " :";
         textView.setText(aux);
+        ImageButton addBook = (ImageButton) view.findViewById(R.id.add_button);
+        if(MockupsValues.getPendingListBooks().contains(book)){
+            Drawable drawable = ContextCompat.getDrawable(getContext(),
+                    getContext().getResources().getIdentifier("ic_reading_white", "drawable", getContext().getPackageName()));
+            //holder.addButton.setImageResource(R.drawable.ic_added_book);
+            addBook.setImageDrawable(drawable);
+        }
         scrollView.setScrollY(0);
         //scrollView.fullScroll(ScrollView.FOCUS_UP);
         //scrollView.fullScroll(ScrollView.Focus)

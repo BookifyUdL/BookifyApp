@@ -47,4 +47,15 @@
     <string name="reading_text_title">Reading</string>
     <string name="book_added_correctly_message"> added correctly to your Library.</string>
     <string name="pending">Pending</string>
+
+    <string name="biography_gender">Biography</string>
+    <string name="internet_gender">Computing / Internet</string>
+    <string name="education_gender">Education</string>
+    <string name="crime_gender">Crime</string>
+    <string name="literature_gender">Literature</string>
+    <string name="health_gender">Health</string>
+    <string name="romance_gender">Romance</string>
+    <string name="fantasy_gender">Fantasy</string>
+    <string name="adventure_gender">Adventure</string>
+
 </resources>

@@ -6,6 +6,18 @@ public class Book {
     private String picture;
     private boolean read;
     private int year;
+    private int extension;
+    private Genre genre;
+
+    public Book(String title, String author, String picture, int year, int extension, Genre genre) {
+        this.title = title;
+        this.author = author;
+        this.picture = picture;
+        this.year = year;
+        this.read = false;
+        this.genre = genre;
+        this.extension = extension;
+    }
 
     public Book(String title, String author, String picture, int year) {
         this.title = title;
@@ -24,6 +36,16 @@ public class Book {
 
     public Book() {
     }
+
+    public int getExtension() { return this.extension; }
+
+    public void setExtension(int extension){
+        this.extension = extension;
+    }
+
+    public Genre getGenre() { return this.genre; }
+
+    public void setGenre(Genre genre) { this.genre = genre; }
 
     public String getTitle() {
         return title;
