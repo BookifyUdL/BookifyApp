@@ -58,6 +58,8 @@
     <string name="fantasy_gender">Fantasy</string>
     <string name="adventure_gender">Adventure</string>
 
+    <string name="rate_it_sentence">Rate it!</string>
+    <string name="feeling_sentecte">How did you feel?</string>
     <string name="happy_emoji">HAPPY</string>
     <string name="confused_emoji">CONFUSED</string>
     <string name="sad_emoji">SAD</string>

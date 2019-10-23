@@ -50,6 +50,8 @@
     <string name="fantasy_gender">Fantasía</string>
     <string name="adventure_gender">Aventura</string>
 
+    <string name="feeling_sentecte">¿Cómo te sentiste?</string>
+    <string name="rate_it_sentence">Púntualo!</string>
     <string name="happy_emoji">CONTENTO</string>
     <string name="confused_emoji">COONFUNDIDO</string>
     <string name="sad_emoji">TRISTE</string>

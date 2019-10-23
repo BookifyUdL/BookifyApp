@@ -11,6 +11,7 @@
     <dimen name="card_height">200dp</dimen>
     <dimen name="blank_layout">70dp</dimen>
     <dimen name="emoji_size">75dp</dimen>
+    <dimen name="star_size">60dp</dimen>
     <dimen name="margin_20dp">20dp</dimen>
     <dimen name="emoji_text_size">10sp</dimen>
 

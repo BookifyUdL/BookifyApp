@@ -5,12 +5,209 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/emoji_text_size"
+        android:text="@string/rate_it_sentence"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/margin_5dp"
+        android:layout_marginTop="@dimen/margin_5dp"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_marginTop="@dimen/margin_20dp"
+        android:layout_marginTop="@dimen/margin_5dp"
+        android:layout_marginBottom="@dimen/margin_10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginBottom="@dimen/margin_20dp"
+            android:layout_marginStart="@dimen/margin_10dp"
+            android:layout_marginEnd="@dimen/margin_10dp">
+
+            <androidx.cardview.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view11"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                card_view:cardCornerRadius="4dp"
+                card_view:cardBackgroundColor="@color/cardview_light_background">
+
+                <ImageButton
+                    android:backgroundTint="@color/colorGrayCardBackground"
+                    android:layout_width="@dimen/star_size"
+                    android:layout_height="@dimen/star_size"
+                    android:orientation="horizontal"
+                    android:src="@drawable/ic_empty_star"
+                    android:layout_marginBottom="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/emoji_text_size"
+                    android:text="@string/happy_emoji"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="@dimen/margin_5dp"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view12"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                card_view:cardCornerRadius="4dp"
+                card_view:cardBackgroundColor="@color/cardview_light_background">
+
+                <ImageButton
+                    android:backgroundTint="@color/colorGrayCardBackground"
+                    android:layout_width="@dimen/star_size"
+                    android:layout_height="@dimen/star_size"
+                    android:orientation="horizontal"
+                    android:src="@drawable/ic_empty_star"
+                    android:layout_marginBottom="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/emoji_text_size"
+                    android:text="@string/confused_emoji"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="@dimen/margin_5dp"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view13"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                card_view:cardCornerRadius="4dp"
+                card_view:cardBackgroundColor="@color/cardview_light_background">
+
+                <ImageButton
+                    android:backgroundTint="@color/colorGrayCardBackground"
+                    android:layout_width="@dimen/star_size"
+                    android:layout_height="@dimen/star_size"
+                    android:orientation="horizontal"
+                    android:src="@drawable/ic_empty_star"
+                    android:layout_marginBottom="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/emoji_text_size"
+                    android:text="@string/sad_emoji"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="@dimen/margin_5dp"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view14"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                card_view:cardCornerRadius="4dp"
+                card_view:cardBackgroundColor="@color/cardview_light_background">
+
+                <ImageButton
+                    android:backgroundTint="@color/colorGrayCardBackground"
+                    android:layout_width="@dimen/star_size"
+                    android:layout_height="@dimen/star_size"
+                    android:orientation="horizontal"
+                    android:src="@drawable/ic_empty_star"
+                    android:layout_marginBottom="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/emoji_text_size"
+                    android:text="@string/scared_emoji"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="@dimen/margin_5dp"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view15"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                card_view:cardCornerRadius="4dp"
+                card_view:cardBackgroundColor="@color/cardview_light_background">
+
+                <ImageButton
+                    android:backgroundTint="@color/colorGrayCardBackground"
+                    android:layout_width="@dimen/star_size"
+                    android:layout_height="@dimen/star_size"
+                    android:orientation="horizontal"
+                    android:src="@drawable/ic_empty_star"
+                    android:layout_marginBottom="5dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/emoji_text_size"
+                    android:text="@string/scared_emoji"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="@dimen/margin_5dp"/>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/emoji_text_size"
+        android:text="@string/feeling_sentecte"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/margin_5dp"
+        android:layout_marginTop="@dimen/margin_5dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginTop="@dimen/margin_5dp"
         android:layout_marginBottom="@dimen/margin_20dp">
 
         <LinearLayout
