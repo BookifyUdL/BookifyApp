@@ -39,4 +39,9 @@
     <string name="reading_text_title">Leyendo</string>
     <string name="book_added_correctly_message"> se ha añadido correctamente a tu Libreria.</string>
     <string name="pending">Pendientes</string>
+    <string name="accountFreeText">Gratuita</string>
+    <string name="accountTitleProfile">ACCOUNT</string>
+    <string name="commentsFeedTitleProfile">comments</string>
+    <string name="libraryTitleProfile">LIBRARY</string>
+    <string name="readedbooksSubtitleProfile">readed books</string>
 </resources>

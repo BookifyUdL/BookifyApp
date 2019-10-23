@@ -3,6 +3,8 @@ package com.example.readify.Models;
 import java.util.ArrayList;
 
 public class User {
+    String name;
+    Boolean premium;
     ArrayList<Book> library;
     ArrayList<Genre> genres;
 
@@ -11,12 +13,22 @@ public class User {
         genres = new ArrayList<>();
     }
 
-    public User(ArrayList<Genre> genres, ArrayList<Book> library) {
+    public User(String name, Boolean premium, ArrayList<Genre> genres, ArrayList<Book> library) {
+        this.name = name;
+        this.premium = premium;
         if (library != null)
             this.library = library;
         if (genres != null)
             this.genres = genres;
     }
+
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
+
+    public Boolean isPremium() { return premium; }
+
+    public void setPremium(Boolean premium) { this.premium = premium; }
 
     public ArrayList<Genre> getGenres() { return genres; }
 

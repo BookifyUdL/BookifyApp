@@ -47,4 +47,14 @@
     <string name="reading_text_title">Reading</string>
     <string name="book_added_correctly_message"> added correctly to your Library.</string>
     <string name="pending">Pending</string>
+    <string name="accountPremiumText" translatable="false">Premium</string>
+    <string name="accountFreeText">Free</string>
+    <string name="typeAccountExampleText">Freemium</string>
+    <string name="accountTitleProfile">ACCOUNT</string>
+    <string name="periodAccountText">1 year</string>
+    <string name="feedbackTitleProfile">FEEDBACK</string>
+    <string name="numExample">103</string>
+    <string name="commentsFeedTitleProfile">comments</string>
+    <string name="libraryTitleProfile">LIBRARY</string>
+    <string name="readedbooksSubtitleProfile">readed books</string>
 </resources>

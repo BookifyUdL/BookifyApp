@@ -16,6 +16,9 @@ public class MockupsValues {
     private static ArrayList<Book> PENDING_LIST_BOOKS;
     private static ArrayList<Book> READING_LIST_BOOKS;
     public static User user = new User();
+    public static User userProfile = new User("Connor MacArthur", true, new ArrayList<Genre>(), getLastAddedBooks());
+
+    public static User getUserProfile() { return userProfile; }
 
     public static User getUser(){
         return user;
