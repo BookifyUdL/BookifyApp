@@ -31,6 +31,7 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
     private boolean mHasDiscoverButtons;
     private Context context;
     private MainActivity activity;
+    private boolean added = false;
     // data is passed into the constructor
     public BooksHorizontalAdapter(MainActivity activity, Context context, List<Book> books, boolean hasDiscoverButton) {
         this.context = context;
@@ -38,8 +39,7 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
         this.mViewBooks = books;
         this.mHasDiscoverButtons = hasDiscoverButton;
         this.activity = activity;
-        if(hasDiscoverButton)
-            mViewBooks.add(new Book());
+
     }
 
     // inflates the row layout from xml when needed
@@ -47,20 +47,25 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.horizontal_book_recycler_view, parent, false);
+        /*if(mHasDiscoverButtons && !added){
+            mViewBooks.add(mViewBooks.get(mViewBooks.size()-1));
+            added = true;
+        }*/
         return new ViewHolder(view);
     }
 
     // binds the data to the view and textview in each row
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        if(position == mViewBooks.size() - 1 && mHasDiscoverButtons){
+        if((position == mViewBooks.size() - 1 && mHasDiscoverButtons)){
             //holder.myImageView.setVisibility(View.INVISIBLE);
             holder.layout.setVisibility(View.INVISIBLE);
             holder.lastView.setVisibility(View.VISIBLE);
 
         } else {
+            String namePicture = mViewBooks.get(position).getPicture();
             holder.imageLayout.setBackground(ContextCompat.getDrawable(holder.imageLayout.getContext(),
-                    holder.imageLayout.getContext().getResources().getIdentifier(mViewBooks.get(position).getPicture(), "drawable", holder.layout.getContext().getPackageName())));
+                    holder.imageLayout.getContext().getResources().getIdentifier(namePicture, "drawable", holder.layout.getContext().getPackageName())));
             if(MockupsValues.getPendingListBooks().contains(mViewBooks.get(position))){
                 setAddButtonIcon(holder);
             } else {

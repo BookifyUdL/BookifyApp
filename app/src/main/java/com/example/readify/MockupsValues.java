@@ -18,6 +18,7 @@ public class MockupsValues {
     private static ArrayList<Book> SAME_GENDER_BOOKS;
     private static ArrayList<Book> PENDING_LIST_BOOKS;
     private static ArrayList<Book> READING_LIST_BOOKS;
+    private static ArrayList<Book> PENDING_BOOKS_WITH_DISCOVER_BUTTON;
     public  static User user = new User();
     private static Context context;
 
@@ -113,6 +114,15 @@ public class MockupsValues {
             LAST_ADDED_BOOKS.add(new Book("100 recetas de oro", "Carlos Arguiñano", "lib4", 2019, 153,getGenreFromGenresList(5)));
             LAST_ADDED_BOOKS.add(new Book("Patria", "Fernando Aramburu", "lib5", 2018, 99,getGenreFromGenresList(7)));
         }
+        return LAST_ADDED_BOOKS;
+    }
+
+    public static ArrayList<Book> getLastAddedBooksDiscover(){
+        if(PENDING_BOOKS_WITH_DISCOVER_BUTTON == null || PENDING_BOOKS_WITH_DISCOVER_BUTTON.isEmpty()){
+            PENDING_BOOKS_WITH_DISCOVER_BUTTON = new ArrayList<>();
+            PENDING_BOOKS_WITH_DISCOVER_BUTTON.addAll(getLastAddedBooks());
+            PENDING_BOOKS_WITH_DISCOVER_BUTTON.add(new Book());
+      }
         return LAST_ADDED_BOOKS;
     }
 

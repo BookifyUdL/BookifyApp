@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -49,7 +50,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
     private Button mButton;
     private ViewPager mViewPager;
-    List<Book> list;
+    //List<Book> list = MockupsValues.getLastAddedBooks();
     int width, height;
 
     private CardPagerAdapter mCardAdapter;
@@ -129,7 +130,8 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.top_rated_recycler_view);
         recyclerView.setLayoutManager(horizontalLayoutManagaer);
         // set up the RecyclerView
-        list = MockupsValues.getLastAddedBooks();
+        ArrayList<Book> list = MockupsValues.getLastAddedBooks();
+        list.add(MockupsValues.getSameAuthorBooks().get(0));
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
@@ -150,6 +152,9 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         int previousCardId = 0;
         int margin_5dp = (int) getContext().getResources().getDimension(R.dimen.margin_5dp);
         int margin_10dp = (int) getContext().getResources().getDimension(R.dimen.margin_10dp);
+
+        ArrayList<Book> books = MockupsValues.getLastAddedBooksDiscover();
+        //books.add(MockupsValues.getSameAuthorBooks().get(0));
 
         for(Genre genre: MockupsValues.user.getGenres()){
             TextView textView = new TextView(getContext());
@@ -191,11 +196,11 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
             recyclerParams.setMargins(margin_10dp, margin_10dp, margin_10dp, margin_10dp);
             recyclerView.setLayoutParams(recyclerParams);
 
-            List list = MockupsValues.getLastAddedBooks();
+            //List list = MockupsValues.getLastAddedBooks();
             LinearLayoutManager horizontalLayoutManager
                     = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
             recyclerView.setLayoutManager(horizontalLayoutManager);
-            BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), list, true);
+            BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), books, true);
             adapter.setClickListener(this);
             recyclerView.setAdapter(adapter);
 
@@ -221,10 +226,10 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onItemClick(View view, int position) {
-        if(position == list.size()-1){
+        if(position == MockupsValues.getLastAddedBooks().size()-1){
             showSearchFragment();
         } else {
-            showBookFragment(list.get(position));
+            showBookFragment(MockupsValues.getLastAddedBooks().get(position));
         }
     }
 
