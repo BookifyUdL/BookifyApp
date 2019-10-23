@@ -209,7 +209,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         //LinearLayoutManager linearLayoutManagerRead = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerViewReadBooks.setLayoutManager(gridLayoutManagerBooksRead);
 
-        ArrayList booksRead = MockupsValues.getLastAddedBooks();
+        ArrayList booksRead = MockupsValues.getAllBooksForTutorial();
 
         adapterBooksList = new BooksListFormAdapter(getContext(), booksRead, user, true);
         adapterBooksList.setClickListener(GenresFragment.this);
@@ -222,7 +222,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
     }
 
     private void changeInterestedBooks(){
-        ArrayList booksInterest = MockupsValues.getLastAddedBooks();
+        ArrayList booksInterest = MockupsValues.getAllBooksForTutorial();
         for (Book book : user.getLibrary()){
             booksInterest.remove(book);
         }
@@ -235,7 +235,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         LinearLayoutManager linearLayoutManagerInterest = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerViewInterestBooks = view.findViewById(R.id.recyclerViewInterestBooks);
         recyclerViewInterestBooks.setLayoutManager(linearLayoutManagerInterest);
-        ArrayList booksInterest = MockupsValues.getLastAddedBooks();
+        ArrayList booksInterest = MockupsValues.getAllBooksForTutorial();
         for (Book book : user.getLibrary()){
             booksInterest.remove(book);
         }
