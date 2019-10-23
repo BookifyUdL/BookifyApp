@@ -82,10 +82,11 @@ public class ReadingFragment extends Fragment {
         recyclerView.setLayoutManager(verticalLayoutManagaer);
         ArrayList<Book> list = new ArrayList<>();
         //list.add(MockupsValues.getLastAddedBooks().get(0));
-        readingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), list);
+        readingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), list, true, getActivity().getSupportFragmentManager());
         recyclerView.setAdapter(readingBooksAdapter);
         ItemTouchHelper itemTouchHelperReading = new ItemTouchHelper(new SwipeToReadOrDeleteCallback(readingBooksAdapter, false));
         itemTouchHelperReading.attachToRecyclerView(recyclerView);
+
 
         LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerView2 = (RecyclerView) view.findViewById(R.id.pending_books_recycler_view);

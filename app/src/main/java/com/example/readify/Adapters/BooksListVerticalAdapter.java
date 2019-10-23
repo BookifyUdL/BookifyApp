@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readify.MainActivity;
@@ -16,6 +19,7 @@ import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.User;
 
+import com.example.readify.Popups.BookReadedPopup;
 import com.example.readify.R;
 
 import java.util.ArrayList;
@@ -26,6 +30,8 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
     private MainActivity activity;
     private Context mContext;
     private User user;
+    private boolean isInReadingList;
+    private FragmentManager fragmentManager;
 
     // Counstructor for the Class
     public BooksListVerticalAdapter(MainActivity activity, Context context, ArrayList<Book> booksList, User user) {
@@ -46,12 +52,23 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         this.user = user;
     }
 
+    public BooksListVerticalAdapter(MainActivity activity, Context context, ArrayList<Book> booksList, boolean isInReadingList, FragmentManager manager) {
+        this.booksList = booksList;
+        this.originalSearchList = new ArrayList<>();
+        this.originalSearchList.addAll(booksList);
+        this.mContext = context;
+        this.activity = activity;
+        this.isInReadingList = true;
+        this.fragmentManager = manager;
+    }
+
     public BooksListVerticalAdapter(MainActivity activity, Context context, ArrayList<Book> booksList) {
         this.booksList = booksList;
         this.originalSearchList = new ArrayList<>();
         this.originalSearchList.addAll(booksList);
         this.mContext = context;
         this.activity = activity;
+        this.isInReadingList = false;
     }
 
     // Counstructor for the Class
@@ -60,6 +77,8 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         this.originalSearchList = new ArrayList<>();
         this.originalSearchList.addAll(booksList);
         this.mContext = context;
+        this.isInReadingList = false;
+
     }
 
     public Context getContext(){
@@ -142,6 +161,18 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         holder.bookCover.setImageResource(
                 mContext.getResources().getIdentifier(book.getPicture(), "drawable", mContext.getPackageName()));
 
+        if(isInReadingList) {
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BookReadedPopup dialog =  new BookReadedPopup();
+                    //dialog = new ProfileDialog(post.getGuide(), this, post.getPlace());
+                    FragmentTransaction ft2 = fragmentManager.beginTransaction();
+                    dialog.show(ft2, "book_readed_popup");
+                    //dialog.show(ft2, "profile_fragment_popup")
+                }
+            });
+        }
         //if (user != null && user.containsBook(book))
         //holder.addButton.setText("Remove");
         //else
@@ -169,6 +200,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         private TextView bookTitle;
         private TextView bookAuthor;
         private ImageButton addButton;
+        private CardView cardView;
 
         public BookHolder(View itemView) {
             super(itemView);
@@ -177,6 +209,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
             bookTitle = (TextView) itemView.findViewById(R.id.book_title);
             bookAuthor = (TextView) itemView.findViewById(R.id.book_author);
             addButton = (ImageButton) itemView.findViewById(R.id.addButton);
+            cardView = (CardView) itemView.findViewById(R.id.card_view);
         }
       
         /*public void setContactName(String name) {
