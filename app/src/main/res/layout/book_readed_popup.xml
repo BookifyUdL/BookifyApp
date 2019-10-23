@@ -42,13 +42,16 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background">
+                android:tag="1"
+                card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                 <ImageButton
                     android:backgroundTint="@color/colorGrayCardBackground"
                     android:layout_width="@dimen/star_size"
                     android:layout_height="@dimen/star_size"
                     android:orientation="horizontal"
+                    android:id="@+id/star1"
+                    android:tag="1"
                     android:src="@drawable/ic_empty_star"
                     android:layout_marginBottom="5dp"/>
 
@@ -73,13 +76,16 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background">
+                android:tag="2"
+                card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                 <ImageButton
                     android:backgroundTint="@color/colorGrayCardBackground"
                     android:layout_width="@dimen/star_size"
                     android:layout_height="@dimen/star_size"
                     android:orientation="horizontal"
+                    android:id="@+id/star2"
+                    android:tag="2"
                     android:src="@drawable/ic_empty_star"
                     android:layout_marginBottom="5dp"/>
 
@@ -104,13 +110,16 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background">
+                android:tag="3"
+                card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                 <ImageButton
                     android:backgroundTint="@color/colorGrayCardBackground"
                     android:layout_width="@dimen/star_size"
                     android:layout_height="@dimen/star_size"
                     android:orientation="horizontal"
+                    android:id="@+id/star3"
+                    android:tag="3"
                     android:src="@drawable/ic_empty_star"
                     android:layout_marginBottom="5dp"/>
 
@@ -128,6 +137,7 @@
 
             <androidx.cardview.widget.CardView
                 xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:backgroundTint="@color/colorGrayCardBackground"
                 android:id="@+id/card_view14"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -135,13 +145,16 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background">
+                android:tag="4"
+                card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                 <ImageButton
                     android:backgroundTint="@color/colorGrayCardBackground"
                     android:layout_width="@dimen/star_size"
                     android:layout_height="@dimen/star_size"
                     android:orientation="horizontal"
+                    android:id="@+id/star4"
+                    android:tag="4"
                     android:src="@drawable/ic_empty_star"
                     android:layout_marginBottom="5dp"/>
 
@@ -166,13 +179,17 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background">
+                android:tag="5"
+                android:backgroundTint="@color/colorGrayCardBackground"
+                card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                 <ImageButton
                     android:backgroundTint="@color/colorGrayCardBackground"
                     android:layout_width="@dimen/star_size"
                     android:layout_height="@dimen/star_size"
                     android:orientation="horizontal"
+                    android:id="@+id/star5"
+                    android:tag="5"
                     android:src="@drawable/ic_empty_star"
                     android:layout_marginBottom="5dp"/>
 
@@ -228,7 +245,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background">
+                card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                 <ImageButton
                     android:backgroundTint="@color/colorGrayCardBackground"
@@ -258,7 +275,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background">
+                card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                 <ImageButton
                     android:backgroundTint="@color/colorGrayCardBackground"
@@ -288,7 +305,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background">
+                card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                 <ImageButton
                     android:backgroundTint="@color/colorGrayCardBackground"
@@ -318,7 +335,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background">
+                card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                 <ImageButton
                     android:backgroundTint="@color/colorGrayCardBackground"
@@ -359,7 +376,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background">
+                card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                 <ImageButton
                     android:backgroundTint="@color/colorGrayCardBackground"
@@ -389,7 +406,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background">
+                card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                 <ImageButton
                     android:backgroundTint="@color/colorGrayCardBackground"
@@ -419,7 +436,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background">
+                card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                 <ImageButton
                     android:backgroundTint="@color/colorGrayCardBackground"
@@ -449,7 +466,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 card_view:cardCornerRadius="4dp"
-                card_view:cardBackgroundColor="@color/cardview_light_background">
+                card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                 <ImageButton
                     android:backgroundTint="@color/colorGrayCardBackground"
