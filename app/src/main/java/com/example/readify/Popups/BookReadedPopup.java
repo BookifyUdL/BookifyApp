@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -29,7 +30,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookReadedPopup extends DialogFragment {
+public class BookReadedPopup extends DialogFragment implements Popup {
 
     private View view;
     private ArrayList<CardView> stars;
@@ -62,6 +63,13 @@ public class BookReadedPopup extends DialogFragment {
         }
     };
 
+    private void showReviewsPopup(){
+        ReviewsPopup dialog =  new ReviewsPopup();
+        //dialog = new ProfileDialog(post.getGuide(), this, post.getPlace());
+        FragmentTransaction ft2 = fragmentManager.beginTransaction();
+        dialog.show(ft2, "reviews_fragment");
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,16 +79,41 @@ public class BookReadedPopup extends DialogFragment {
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ReviewsPopup dialog =  new ReviewsPopup();
-                //dialog = new ProfileDialog(post.getGuide(), this, post.getPlace());
-                FragmentTransaction ft2 = fragmentManager.beginTransaction();
-                dialog.show(ft2, "reviews_fragment");
+                showReviewsPopup();
             }
         });
-        //LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.top_linear_layout);
-        //RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.top_relative_layout);
-        //linearLayout.setBackgroundColor(Color.TRANSPARENT);
-        //relativeLayout.setBackgroundColor(Color.TRANSPARENT);
+
+        ImageButton imageButton = (ImageButton) view.findViewById(R.id.reviews_image_button);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showReviewsPopup();
+            }
+        });
+
+        ImageButton closeArrow = (ImageButton) view.findViewById(R.id.close_arrow);
+        closeArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                close();
+            }
+        });
+
+        CardView cancelCardView = view.findViewById(R.id.cancel_card_view);
+        cancelCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                close();
+            }
+        });
+
+        TextView cancelTextView = view.findViewById(R.id.cancel_text_view);
+        cancelTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                close();
+            }
+        });
 
 
         CardView star1 = (CardView) view.findViewById(R.id.card_view11);
@@ -111,15 +144,10 @@ public class BookReadedPopup extends DialogFragment {
         starsImage.add(starButton4);
         starsImage.add(starButton5);
 
-
-        /*LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.comments_recyclerView);
-        recyclerView.setLayoutManager(vlm);
-        ArrayList<Book> pendingBooksList = new ArrayList<>();
-        pendingBooksList.addAll(MockupsValues.getLastAddedBooks());
-        BooksListVerticalAdapter pendingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), pendingBooksList);
-        recyclerView.setAdapter(pendingBooksAdapter);*/
-
         return view;
+    }
+
+    public void close(){
+        this.dismiss();
     }
 }

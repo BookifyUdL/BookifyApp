@@ -19,7 +19,7 @@ import com.example.readify.R;
 
 import java.util.ArrayList;
 
-public class ReviewsPopup extends DialogFragment {
+public class ReviewsPopup extends DialogFragment implements Popup {
 
     public ReviewsPopup(){
 
@@ -47,7 +47,7 @@ public class ReviewsPopup extends DialogFragment {
         return view;
     }
 
-    private void close(){
+    public void close(){
         this.dismiss();
     }
 }

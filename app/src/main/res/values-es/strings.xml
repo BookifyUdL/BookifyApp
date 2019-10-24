@@ -68,5 +68,7 @@
     <string name="wow_review">WOW</string>
 
     <string name="comments">Reviews</string>
+    <string name="cancel_upper_case">CANCELAR</string>
+
 
 </resources>
