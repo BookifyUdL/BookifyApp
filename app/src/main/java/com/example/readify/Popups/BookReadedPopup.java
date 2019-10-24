@@ -1,19 +1,25 @@
 package com.example.readify.Popups;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readify.Adapters.BooksListVerticalAdapter;
+import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
@@ -28,10 +34,11 @@ public class BookReadedPopup extends DialogFragment {
     private View view;
     private ArrayList<CardView> stars;
     private ArrayList<ImageButton> starsImage;
+    private FragmentManager fragmentManager;
     private int width, height;
 
-    public  BookReadedPopup(){
-
+    public  BookReadedPopup(FragmentManager fragmentManager){
+        this.fragmentManager = fragmentManager;
         //this.width = width;
         //this.height = height;
     }
@@ -60,6 +67,22 @@ public class BookReadedPopup extends DialogFragment {
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.book_readed_popup, container);
+        CardView cardView = view.findViewById(R.id.card_reviews);
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ReviewsPopup dialog =  new ReviewsPopup();
+                //dialog = new ProfileDialog(post.getGuide(), this, post.getPlace());
+                FragmentTransaction ft2 = fragmentManager.beginTransaction();
+                dialog.show(ft2, "reviews_fragment");
+            }
+        });
+        //LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.top_linear_layout);
+        //RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.top_relative_layout);
+        //linearLayout.setBackgroundColor(Color.TRANSPARENT);
+        //relativeLayout.setBackgroundColor(Color.TRANSPARENT);
+
+
         CardView star1 = (CardView) view.findViewById(R.id.card_view11);
         CardView star2 = (CardView) view.findViewById(R.id.card_view12);
         CardView star3 = (CardView) view.findViewById(R.id.card_view13);
@@ -89,21 +112,14 @@ public class BookReadedPopup extends DialogFragment {
         starsImage.add(starButton5);
 
 
+        /*LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.comments_recyclerView);
+        recyclerView.setLayoutManager(vlm);
+        ArrayList<Book> pendingBooksList = new ArrayList<>();
+        pendingBooksList.addAll(MockupsValues.getLastAddedBooks());
+        BooksListVerticalAdapter pendingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), pendingBooksList);
+        recyclerView.setAdapter(pendingBooksAdapter);*/
 
-        /*RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.books_recycler_view);
-        BooksListVerticalAdapter adapter = new BooksListVerticalAdapter(getContext(), MockupsValues.getLastAddedBooks());
-        recyclerView.setAdapter(adapter);*/
-        /*LinearLayoutManager verticalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        //verticalLayoutManagaer.wid
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.books_recycler_view);
-        recyclerView.setLayoutManager(verticalLayoutManagaer);
-        ArrayList list = MockupsValues.getLastAddedBooks();
-        list.remove(list.size() - 1);
-        BooksListVerticalAdapter adapter = new BooksListVerticalAdapter(getContext(), list);
-        recyclerView.setAdapter(adapter);
-        //view.setLayoutParams(new LinearLayout.LayoutParams(width, height));
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(width, height);
-        view.setLayoutParams(params);*/
         return view;
     }
 }

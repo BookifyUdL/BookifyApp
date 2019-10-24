@@ -69,5 +69,13 @@
     <string name="excited_emoji">EXCITED</string>
     <string name="bored_emoji">BORED</string>
 
+    <string name="bad_review">BAD</string>
+    <string name="ok_review">OK</string>
+    <string name="good_review">GOOD</string>
+    <string name="great_review">GREAT</string>
+    <string name="wow_review">WOW</string>
+
+    <string name="comments">Reviews</string>
+
 
 </resources>

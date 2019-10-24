@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:tag="reviews_fragment"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="start">
+
+            <ImageButton
+                android:id="@+id/close_arrow"
+                android:background="@color/cardview_light_background"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_10dp"
+                android:layout_marginTop="@dimen/margin_10dp"
+                android:src="@drawable/ic_close_arrow"/>
+
+            <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_review_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorGrayCardBackground"
+                android:foregroundTint="@color/colorGrayCardBackground"
+                android:src="@drawable/ic_add_book" />-->
+        </LinearLayout>
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Title"
+            android:id="@+id/info_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comments"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_gravity="center_vertical"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/linearLayout"
+            android:gravity="end">
+
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/roudend_image_button"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/margin_10dp"
+                android:layout_marginTop="@dimen/margin_10dp"
+                android:src="@drawable/ic_add_book"/>
+
+            <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_review_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorGrayCardBackground"
+                android:foregroundTint="@color/colorGrayCardBackground"
+                android:src="@drawable/ic_add_book" />-->
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_10dp"
+        android:layout_marginTop="@dimen/margin_10dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/comments_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"/>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -165,7 +165,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    BookReadedPopup dialog =  new BookReadedPopup();
+                    BookReadedPopup dialog =  new BookReadedPopup(fragmentManager);
                     //dialog = new ProfileDialog(post.getGuide(), this, post.getPlace());
                     FragmentTransaction ft2 = fragmentManager.beginTransaction();
                     dialog.show(ft2, "book_readed_popup");

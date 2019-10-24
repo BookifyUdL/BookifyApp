@@ -60,4 +60,13 @@
     <string name="shocked_emoji">EN SHOCK</string>
     <string name="excited_emoji">EXCITADO</string>
     <string name="bored_emoji">ABURRIDO</string>
+
+    <string name="bad_review">MALO</string>
+    <string name="ok_review">OK</string>
+    <string name="good_review">BUENO</string>
+    <string name="great_review">GENIAL</string>
+    <string name="wow_review">WOW</string>
+
+    <string name="comments">Reviews</string>
+
 </resources>
