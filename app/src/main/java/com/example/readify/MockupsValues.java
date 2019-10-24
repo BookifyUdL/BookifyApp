@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
+import com.example.readify.Models.Review;
 import com.example.readify.Models.User;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class MockupsValues {
     private static ArrayList<Book> PENDING_LIST_BOOKS;
     private static ArrayList<Book> READING_LIST_BOOKS;
     private static ArrayList<Book> PENDING_BOOKS_WITH_DISCOVER_BUTTON;
+    private static ArrayList<Review> REVIEWS;
     public  static User user = new User();
     private static Context context;
 
@@ -46,6 +48,21 @@ public class MockupsValues {
             GENRE.add(new Genre( context.getResources().getString(R.string.adventure_gender), "genre9"));
         }
         return GENRE;
+    }
+
+    public static ArrayList<Review> getReviews(){
+        if(REVIEWS == null || REVIEWS.isEmpty()){
+            REVIEWS = new ArrayList<>();
+            REVIEWS.add(new Review(new User("Joaquim Sabina", "user1"), "Un libro intrigante y entretenido."));
+            REVIEWS.add(new Review(new User("Mateo Jordi", "user2"), "Cuando leí este libro por primera vez era demasiado pequeña para entender su verdadero significado. Un par de años después, cuando lo releí, descubrí lo bien escrito que estaba, lo realista que era. Todos los adolescentes (o al menos, la inmensa mayoría) hemos sido como Holden Caulfield alguna vez. Sorprendente y brillante, un clásico que debe leerse como mínimo una vez en la vida."));
+            REVIEWS.add(new Review(new User("Maite La Cruz", "user3"), "\n" +
+                    "Un libro para leer y disfrutar, histórico, esta vez deja de lado libros fantásticos, el autor que escribía en el semanal de los Domingos que entraba con en el Norte de Castilla, Arturo Pérez-Reverte, dejando de lado \"El capitán Alatriste\" y su personaje de Ficción. Se habla del Cid, un personaje de Castilla muy temido por los árabes y también apreciado, despreciado por Doña Urraca y Alfonso, y acusado por la muerte de su hermano Sancho estará siempre en el exilio, sirviendo a Alfonso y no sabiendo o sí el engaño. Una novela que sale en la prensa , y revistas de moda como Marie Claire, que gusta leer, para ver diversas versiones de la historia del CID, que por algunos historiadores, se piensa que es un personaje legendario, y nunca existió."));
+            REVIEWS.add(new Review(new User("Joaquim Sabina", "user1"), "Un libro intrigante y entretenido."));
+            REVIEWS.add(new Review(new User("Joaquim Sabina", "user1"), "Un libro intrigante y entretenido."));
+            REVIEWS.add(new Review(new User("Joaquim Sabina", "user1"), "Un libro intrigante y entretenido."));
+
+        }
+        return REVIEWS;
     }
 
     public static Genre getGenreFromGenresList(int i){

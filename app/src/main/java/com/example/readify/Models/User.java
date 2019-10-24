@@ -7,6 +7,13 @@ public class User {
     private ArrayList<Genre> genres;
     private ArrayList<Book> interested;
     private ArrayList<Book> read;
+    private String picture;
+    private String name;
+
+    public User(String name, String picture){
+        this.name = name;
+        this.picture = picture;
+    }
 
     public User() {
         library = new ArrayList<>();
@@ -20,6 +27,22 @@ public class User {
             this.library = library;
         if (genres != null)
             this.genres = genres;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void addBookToInterestedBooks(Book book){
