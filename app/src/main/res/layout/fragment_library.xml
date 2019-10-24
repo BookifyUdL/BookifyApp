@@ -12,6 +12,17 @@
         android:layout_height="wrap_content"
         android:text="@string/hello_blank_fragment" />-->
 
+    <SearchView
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:iconifiedByDefault="false"
+        android:queryHint="@string/search_book"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -24,7 +35,10 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewGenres"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_5dp"
+                android:layout_marginEnd="@dimen/margin_5dp"
+                android:layout_marginBottom="@dimen/margin_5dp"/>
 
             <LinearLayout
                 android:id="@+id/discover_layout"
@@ -38,9 +52,9 @@
                     android:id="@+id/card_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginStart="@dimen/margin_5dp"
+                    android:layout_marginEnd="@dimen/margin_5dp"
+                    android:layout_marginBottom="@dimen/margin_5dp"
                     card_view:cardCornerRadius="4dp"
                     card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
