@@ -5,12 +5,22 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.readify.Adapters.BooksHorizontalAdapter;
+import com.example.readify.FirstTimeForm.GenresFragment;
+import com.example.readify.FirstTimeForm.RecyclerViewAdapterGenres;
+import com.example.readify.MainActivity;
+import com.example.readify.MockupsValues;
+import com.example.readify.Models.Book;
 import com.example.readify.R;
+
+import java.util.ArrayList;
 
 
 /**
@@ -48,10 +58,6 @@ public class LibraryFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static LibraryFragment newInstance(String param1, String param2) {
         LibraryFragment fragment = new LibraryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -68,7 +74,19 @@ public class LibraryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_library, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_library, container, false);
+        RecyclerView recyclerViewGenres = view.findViewById(R.id.recyclerViewGenres);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
+        recyclerViewGenres.setLayoutManager(gridLayoutManager);
+
+        ArrayList genres = MockupsValues.getGenres();
+
+        //RecyclerViewAdapterGenres adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres, MockupsValues.user);
+        //adapterGenres.setClickListener(GenresFragment.this);
+        BooksHorizontalAdapter booksAdapter = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), MockupsValues.user.getLibrary(), false);
+        recyclerViewGenres.setAdapter(booksAdapter);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
