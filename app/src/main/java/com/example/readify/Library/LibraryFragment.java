@@ -5,12 +5,24 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
+import com.example.readify.Adapters.BooksGridAdapter;
+import com.example.readify.Adapters.BooksHorizontalAdapter;
+import com.example.readify.FirstTimeForm.GenresFragment;
+import com.example.readify.FirstTimeForm.RecyclerViewAdapterGenres;
+import com.example.readify.MainActivity;
+import com.example.readify.MockupsValues;
+import com.example.readify.Models.Book;
 import com.example.readify.R;
+
+import java.util.ArrayList;
 
 
 /**
@@ -21,15 +33,9 @@ import com.example.readify.R;
  * Use the {@link LibraryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LibraryFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class LibraryFragment extends Fragment implements SearchView.OnQueryTextListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    BooksGridAdapter booksAdapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -37,38 +43,51 @@ public class LibraryFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LibraryFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
-    public static LibraryFragment newInstance(String param1, String param2) {
+    public static LibraryFragment newInstance() {
         LibraryFragment fragment = new LibraryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_library, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_library, container, false);
+        RecyclerView recyclerViewGenres = view.findViewById(R.id.recyclerViewGenres);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
+        recyclerViewGenres.setLayoutManager(gridLayoutManager);
+
+        ArrayList genres = MockupsValues.getGenres();
+
+        //RecyclerViewAdapterGenres adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres, MockupsValues.user);
+        //adapterGenres.setClickListener(GenresFragment.this);
+        booksAdapter = new BooksGridAdapter((MainActivity) getActivity(),getContext(), MockupsValues.user.getLibrary());
+        recyclerViewGenres.setAdapter(booksAdapter);
+
+        SearchView searchView = view.findViewById(R.id.search_bar);
+        searchView.setFocusable(false);
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(this);
+        return view;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        booksAdapter.filter(newText);
+        return false;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

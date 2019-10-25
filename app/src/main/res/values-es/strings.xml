@@ -38,7 +38,7 @@
     <string name="book_summary_text">En una noche de tormenta y barro nace una niña bastarda a la que, creyéndola muerta, bautizan con el nombre de Betsabé. Nadie sabe que en su interior lleva la fuerza de la feminidad, así como la magia y la rebeldía que la harán superar todos los obstáculos. Creará un vínculo indisoluble con su hermana de leche, Capitolina, una pobre niña rica, y ninguno quedará indiferente a su mirada de fuego. Ni siquiera Emmanuel, el revolucionario francés salido del Montparnasse más artístico que, al conocerla, caerá enfermo de amor.</string>
     <string name="reading_text_title">Leyendo</string>
     <string name="book_added_correctly_message"> se ha añadido correctamente a tu Libreria.</string>
-    <string name="pending">Pendientes</string>
+    <string name="pending">Para Leer</string>
 
     <string name="biography_gender">Biografia</string>
     <string name="internet_gender">Computación</string>
@@ -49,4 +49,29 @@
     <string name="romance_gender">Romance</string>
     <string name="fantasy_gender">Fantasía</string>
     <string name="adventure_gender">Aventura</string>
+
+    <string name="feeling_sentecte">¿Cómo te sentiste?</string>
+    <string name="rate_it_sentence">Púntualo!</string>
+    <string name="happy_emoji">CONTENTO</string>
+    <string name="confused_emoji">COONFUNDIDO</string>
+    <string name="sad_emoji">TRISTE</string>
+    <string name="scared_emoji">ASUSTADO</string>
+    <string name="frustrated_emoji">FRUSTRADO</string>
+    <string name="shocked_emoji">EN SHOCK</string>
+    <string name="excited_emoji">EXCITADO</string>
+    <string name="bored_emoji">ABURRIDO</string>
+
+    <string name="bad_review">MALO</string>
+    <string name="ok_review">OK</string>
+    <string name="good_review">BUENO</string>
+    <string name="great_review">GENIAL</string>
+    <string name="wow_review">WOW</string>
+
+    <string name="comments">Reviews</string>
+    <string name="cancel_upper_case">CANCELAR</string>
+    <string name="search_book">Buscar libro</string>
+    <string name="add_comment">Añade un comentario</string>
+    <string name="fake_date">1 Octubre</string>
+    <string name="fake_pages">Paginas</string>
+
 </resources>

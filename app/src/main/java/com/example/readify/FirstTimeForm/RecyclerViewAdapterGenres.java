@@ -24,7 +24,7 @@ public class RecyclerViewAdapterGenres extends RecyclerView.Adapter<RecyclerView
     private User user;
 
     // data is passed into the constructor
-    RecyclerViewAdapterGenres(Context context, ArrayList<Genre> data, User user) {
+    public RecyclerViewAdapterGenres(Context context, ArrayList<Genre> data, User user) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.user = user;

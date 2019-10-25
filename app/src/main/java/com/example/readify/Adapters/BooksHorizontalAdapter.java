@@ -81,9 +81,6 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
                     }
                 });
             }
-
-            //holder.myImageView.setImageResource(holder.myImageView.getContext().getResources()
-             //       .getIdentifier(mViewBooks.get(position).getPicture(), "drawable", holder.myImageView.getContext().getPackageName()));
         }
     }
 

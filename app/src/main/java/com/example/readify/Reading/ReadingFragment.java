@@ -82,10 +82,11 @@ public class ReadingFragment extends Fragment {
         recyclerView.setLayoutManager(verticalLayoutManagaer);
         ArrayList<Book> list = new ArrayList<>();
         //list.add(MockupsValues.getLastAddedBooks().get(0));
-        readingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), list);
+        readingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), list, true, getActivity().getSupportFragmentManager());
         recyclerView.setAdapter(readingBooksAdapter);
         ItemTouchHelper itemTouchHelperReading = new ItemTouchHelper(new SwipeToReadOrDeleteCallback(readingBooksAdapter, false));
         itemTouchHelperReading.attachToRecyclerView(recyclerView);
+
 
         LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerView2 = (RecyclerView) view.findViewById(R.id.pending_books_recycler_view);
@@ -93,6 +94,7 @@ public class ReadingFragment extends Fragment {
         ArrayList<Book> pendingBooksList = new ArrayList<>();
         pendingBooksList.addAll(MockupsValues.getPendingListBooks());
         pendingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), pendingBooksList);
+        pendingBooksAdapter.setIsInPendingList(true);
         recyclerView2.setAdapter(pendingBooksAdapter);
         ItemTouchHelper itemTouchHelperDelete = new ItemTouchHelper(new SwipeToReadOrDeleteCallback(pendingBooksAdapter, true));
         itemTouchHelperDelete.attachToRecyclerView(recyclerView2);

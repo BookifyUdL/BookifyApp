@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.example.readify.Adapters.BooksHorizontalAdapter;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.User;
+import com.example.readify.Popups.ReviewsPopup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +65,18 @@ public class BookViewFragment extends Fragment {
         return fragment;
     }
 
+    private void showReviewsPopup(){
+        ReviewsPopup dialog =  new ReviewsPopup();
+        //dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        //dialog = new ProfileDialog(post.getGuide(), this, post.getPlace());
+        FragmentTransaction ft2 = getFragmentManager().beginTransaction();
+        dialog.show(ft2, "reviews_fragment");
+        //dialog.setW
+        //dialog.setWindow(RelativeLayout.LayoutParams.MATCH_PARENT);
+        //dialog.getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +99,15 @@ public class BookViewFragment extends Fragment {
         if(book != null){
            setContent();
         }
+
+        ImageButton showComments = (ImageButton) view.findViewById(R.id.show_comment_button);
+        showComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showReviewsPopup();
+            }
+        });
+
 
         final ImageButton addBook = (ImageButton) view.findViewById(R.id.add_button);
         if(MockupsValues.getPendingListBooks().contains(book)){
@@ -148,8 +171,6 @@ public class BookViewFragment extends Fragment {
             }
         });
         recyclerView.setAdapter(adapterGender);
-
-
         return view;
     }
 
@@ -184,6 +205,14 @@ public class BookViewFragment extends Fragment {
             //holder.addButton.setImageResource(R.drawable.ic_added_book);
             addBook.setImageDrawable(drawable);
         }
+        TextView genreName = (TextView) view.findViewById(R.id.text_genre_name);
+        ImageView genreIcon = (ImageView) view.findViewById(R.id.genre_icon);
+        genreName.setText(book.getGenre().getName());
+        //Drawable drawable = ContextCompat.getDrawable(getContext(),
+        //        getContext().getResources().getIdentifier(book.getGenre().getPicture(), "drawable", getContext().getPackageName()));
+        genreIcon.setImageResource(getContext().getResources().getIdentifier(book.getGenre().getPicture(), "drawable", getContext().getPackageName()));
+
+
         scrollView.setScrollY(0);
         //scrollView.fullScroll(ScrollView.FOCUS_UP);
         //scrollView.fullScroll(ScrollView.Focus)
