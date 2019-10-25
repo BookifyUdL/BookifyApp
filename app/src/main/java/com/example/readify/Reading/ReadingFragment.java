@@ -94,6 +94,7 @@ public class ReadingFragment extends Fragment {
         ArrayList<Book> pendingBooksList = new ArrayList<>();
         pendingBooksList.addAll(MockupsValues.getPendingListBooks());
         pendingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), pendingBooksList);
+        pendingBooksAdapter.setIsInPendingList(true);
         recyclerView2.setAdapter(pendingBooksAdapter);
         ItemTouchHelper itemTouchHelperDelete = new ItemTouchHelper(new SwipeToReadOrDeleteCallback(pendingBooksAdapter, true));
         itemTouchHelperDelete.attachToRecyclerView(recyclerView2);

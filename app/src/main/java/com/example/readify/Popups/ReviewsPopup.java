@@ -78,7 +78,7 @@ public class ReviewsPopup extends DialogFragment implements Popup {
         editText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
 
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                return hide(v,  actionId,  event);
+                return hide(v,  actionId);
 
             }
         });
@@ -87,6 +87,7 @@ public class ReviewsPopup extends DialogFragment implements Popup {
             @Override
             public void onClick(View view) {
                 addReview(editText.getText().toString());
+                hide(editText, EditorInfo.IME_ACTION_SEND);
 
             }
         });
@@ -94,7 +95,7 @@ public class ReviewsPopup extends DialogFragment implements Popup {
         return view;
     }
 
-    public boolean hide(TextView v, int actionId, KeyEvent event){
+    public boolean hide(TextView v, int actionId ){
         if((actionId == EditorInfo.IME_ACTION_SEND)){
             addReview(v.getText().toString());
             InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);

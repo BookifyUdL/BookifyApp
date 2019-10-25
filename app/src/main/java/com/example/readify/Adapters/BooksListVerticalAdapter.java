@@ -1,15 +1,18 @@
 package com.example.readify.Adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +34,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
     private Context mContext;
     private User user;
     private boolean isInReadingList;
+    private boolean isInPendingList = false;
     private FragmentManager fragmentManager;
 
     // Counstructor for the Class
@@ -79,6 +83,10 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         this.mContext = context;
         this.isInReadingList = false;
 
+    }
+
+    public void setIsInPendingList(boolean bool){
+        this.isInPendingList = bool;
     }
 
     public Context getContext(){
@@ -161,36 +169,41 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         holder.bookCover.setImageResource(
                 mContext.getResources().getIdentifier(book.getPicture(), "drawable", mContext.getPackageName()));
 
+        if(isInReadingList || isInPendingList)
+            holder.addButton.setVisibility(View.INVISIBLE);
+
         if(isInReadingList) {
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     BookReadedPopup dialog =  new BookReadedPopup(fragmentManager);
-                    //dialog = new ProfileDialog(post.getGuide(), this, post.getPlace());
                     FragmentTransaction ft2 = fragmentManager.beginTransaction();
                     dialog.show(ft2, "book_readed_popup");
-                    //dialog.show(ft2, "profile_fragment_popup")
                 }
             });
-        }
-        //if (user != null && user.containsBook(book))
-        //holder.addButton.setText("Remove");
-        //else
-        //holder.addButton.setText("Add");
-        /*holder.addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (user.containsBook(book)) {
-                    user.removeBookToLibrary(book);
-                    Toast.makeText(view.getContext(), "Book removed on your library", Toast.LENGTH_LONG).show();
-                    //holder.addButton.setText("Add");
-                } else {
-                    user.addBookToLibrary(book);
-                    Toast.makeText(view.getContext(), "Book added on your library", Toast.LENGTH_LONG).show();
-                    //holder.addButton.setText("Remove");
-                }
+
+        } else {
+            if(MockupsValues.getPendingListBooks().contains(booksList.get(position))){
+                setAddButtonIcon(holder);
+            } else {
+                holder.addButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        setAddButtonIcon(holder);
+                        Book book = booksList.get(position);
+                        MockupsValues.addPendingBook(book);
+                        activity.notifyPendingListChanged();
+                        Toast.makeText(getContext(), book.getTitle() + " " + getContext().getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
+                    }
+                });
             }
-        });*/
+        }
+    }
+
+    private void setAddButtonIcon(BookHolder holder){
+        Drawable drawable = ContextCompat.getDrawable(holder.addButton.getContext(),
+                holder.addButton.getContext().getResources().getIdentifier("ic_added_book", "drawable", holder.addButton.getContext().getPackageName()));
+        holder.addButton.setImageResource(R.drawable.ic_added_book);
     }
 
     // This is your ViewHolder class that helps to populate data to the view
