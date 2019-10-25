@@ -71,6 +71,7 @@
     <string name="cancel_upper_case">CANCELAR</string>
     <string name="search_book">Buscar libro</string>
     <string name="add_comment">Añade un comentario</string>
-
+    <string name="fake_date">1 Octubre</string>
+    <string name="fake_pages">Paginas</string>
 
 </resources>
