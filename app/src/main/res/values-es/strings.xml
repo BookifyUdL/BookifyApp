@@ -70,6 +70,7 @@
     <string name="comments">Reviews</string>
     <string name="cancel_upper_case">CANCELAR</string>
     <string name="search_book">Buscar libro</string>
+    <string name="add_comment">Añade un comentario</string>
 
 
 </resources>

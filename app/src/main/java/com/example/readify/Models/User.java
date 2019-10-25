@@ -20,6 +20,8 @@ public class User {
         genres = new ArrayList<>();
         interested = new ArrayList<>();
         read = new ArrayList<>();
+        this.name = "Oscar R";
+        this.picture = "userfinale";
     }
 
     public User(ArrayList<Genre> genres, ArrayList<Book> library) {

@@ -94,6 +94,7 @@
                             android:background="@drawable/shape_non_curve"/>
 
                         <ImageButton
+                            android:id="@+id/show_comment_button"
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_comment_white"

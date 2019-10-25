@@ -45,6 +45,11 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         //this.user = user;
     }
 
+    public void addReview(Review newReview){
+        reviewsList.add(newReview);
+        notifyDataSetChanged();
+    }
+
     public Context getContext(){
         return mContext;
     }

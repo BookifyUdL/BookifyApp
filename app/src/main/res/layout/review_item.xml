@@ -12,8 +12,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorGrayCardBackground"
-        app:cardCornerRadius="4dp">
+        android:backgroundTint="@color/colorDarkGrayCardBackground"
+        app:cardCornerRadius="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,16 +47,18 @@
                     android:textStyle="bold"/>
             </LinearLayout>
 
-
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <me.biubiubiu.justifytext.library.JustifyTextView
+                    android:layout_marginStart="@dimen/margin_5dp"
+                    android:layout_marginBottom="@dimen/margin_5dp"
                     android:id="@+id/user_comment"
                     android:text="Este es un comentario de prueba pagado por Adobe Acrobar features."
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/colorBlack"
                     android:textSize="12dp"/>
             </ScrollView>
 
