@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.readify.Discover.DiscoverFragment;
+import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.Library.LibraryFragment;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
@@ -14,6 +15,7 @@ import com.example.readify.Reading.ReadingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.transition.Slide;
@@ -73,6 +75,13 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
     }
 
     public void changeDiscoverFragment(){
+        fragment4.setEnterTransition(new Slide(Gravity.BOTTOM));
+        fragment4.setExitTransition(new Slide(Gravity.TOP));
+        fm.beginTransaction().hide(active).show(fragment4).commit();
+        active = fragment4;
+    }
+
+    public void changeProfileFragment(){
         fragment5.setEnterTransition(new Slide(Gravity.BOTTOM));
         fragment5.setExitTransition(new Slide(Gravity.TOP));
         fm.beginTransaction().hide(active).show(fragment5).commit();
@@ -102,6 +111,12 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         fm.beginTransaction().hide(active).show(fragment1).commit();
         navigation.getMenu().getItem(0).setChecked(true);
         active = fragment1;
+    }
+
+    public void goToFirstForm(){
+        Intent intent = new Intent(MainActivity.this, FirstTimeFormActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
