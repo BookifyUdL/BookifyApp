@@ -44,4 +44,7 @@
     <string name="commentsFeedTitleProfile">comments</string>
     <string name="libraryTitleProfile">LIBRARY</string>
     <string name="readedbooksSubtitleProfile">readed books</string>
+    <string name="readedBooksTitleProfile">Readed books</string>
+    <string name="genrePreferencesTitleProfile">Genre preferences</string>
+    <string name="achievementsTitleProfile">Last achievements</string>
 </resources>

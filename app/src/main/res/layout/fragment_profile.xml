@@ -21,6 +21,17 @@
             android:layout_weight="14"
             android:background="@drawable/profile_banner">
 
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/award"
+                android:scaleType="centerInside"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:padding="10dp"
+                android:background="@drawable/rounded_button"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -79,225 +90,312 @@
 
         </RelativeLayout>
 
-        <!-- Addicional info (num. books readed or type of account) -->
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="6"
-            android:orientation="vertical">
+            android:layout_weight="26">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="11"
-                android:layout_margin="5dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Addicional info (num. books readed or type of account) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="11"
+                        android:layout_margin="5dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp">
+
+                        <!-- Readed books -->
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:layout_margin="5dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_centerInParent="true">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:text="@string/libraryTitleProfile"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center"/>
+
+                                <TextView
+                                    android:id="@+id/numReadedBooksText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:text="@string/numExample"
+                                    android:textSize="22sp"
+                                    android:layout_gravity="center"/>
+
+                                <TextView
+                                    android:text="@string/readedbooksSubtitleProfile"
+                                    style="@style/TextAppearance.AppCompat.Body1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"/>
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                        <!-- Separator -->
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorBlack"
+                                android:layout_centerInParent="true"
+                                android:layout_margin="20dp"/>
+
+                        </RelativeLayout>
+
+                        <!-- Commented books -->
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:layout_margin="5dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_centerInParent="true">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:text="@string/feedbackTitleProfile"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:text="@string/numExample"
+                                    android:textSize="22sp"
+                                    android:layout_gravity="center"/>
+
+                                <TextView
+                                    android:text="@string/commentsFeedTitleProfile"
+                                    style="@style/TextAppearance.AppCompat.Body1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"/>
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                        <!-- Separator -->
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/colorBlack"
+                                android:layout_centerInParent="true"
+                                android:layout_margin="20dp"/>
+
+                        </RelativeLayout>
+
+                        <!-- Type of account -->
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:layout_margin="5dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_centerInParent="true">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:text="@string/accountTitleProfile"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center"/>
+
+                                <TextView
+                                    android:id="@+id/achievementsText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:text="@string/typeAccountExampleText"
+                                    android:layout_gravity="center"/>
+
+                                <TextView
+                                    android:text="@string/periodAccountText"
+                                    style="@style/TextAppearance.AppCompat.Body1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"/>
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Separator horitzontal -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorBlack"
+                        android:layout_centerHorizontal="true"/>
+
+                </RelativeLayout>
+
+                <!-- Genre preferences -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:id="@+id/info_text_genre_preferences"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/genrePreferencesTitleProfile"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_profile_genre_preferences"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="3dp"/>
+
+                </LinearLayout>
 
                 <!-- Readed books -->
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:layout_margin="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <TextView
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:id="@+id/info_text_readed_books"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_centerInParent="true">
+                        android:text="@string/readedBooksTitleProfile"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/TextAppearance.AppCompat.Title"
-                            android:text="@string/libraryTitleProfile"
-                            android:textSize="16sp"
-                            android:layout_gravity="center"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/TextAppearance.AppCompat.Title"
-                            android:text="@string/numExample"
-                            android:textSize="22sp"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal"/>
-
-                        <TextView
-                            android:text="@string/readedbooksSubtitleProfile"
-                            style="@style/TextAppearance.AppCompat.Body1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal"/>
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <!-- Separator -->
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/colorBlack"
-                        android:layout_centerInParent="true"
-                        android:layout_margin="20dp"/>
-
-                </RelativeLayout>
-
-                <!-- Commented books -->
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:layout_margin="5dp">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_profile_favourite_books"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_centerInParent="true">
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"/>
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/TextAppearance.AppCompat.Title"
-                            android:text="@string/feedbackTitleProfile"
-                            android:textSize="16sp"
-                            android:layout_gravity="center"/>
+                <!-- Last achievements -->
+                <LinearLayout
+                    android:id="@+id/linearLayoutAchievements"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/TextAppearance.AppCompat.Title"
-                            android:text="@string/numExample"
-                            android:textSize="22sp"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal"/>
-
-                        <TextView
-                            android:text="@string/commentsFeedTitleProfile"
-                            style="@style/TextAppearance.AppCompat.Body1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal"/>
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <!-- Separator -->
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/colorBlack"
-                        android:layout_centerInParent="true"
-                        android:layout_margin="20dp"/>
-
-                </RelativeLayout>
-
-                <!-- Type of account -->
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:layout_margin="5dp">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/info_text_achievements"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_centerInParent="true">
+                        android:text="@string/achievementsTitleProfile"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorBlack"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/TextAppearance.AppCompat.Title"
-                            android:text="@string/accountTitleProfile"
-                            android:textSize="16sp"
-                            android:layout_gravity="center"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_profile_achievements"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"/>
 
-                        <TextView
-                            android:id="@+id/typeAccountText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/TextAppearance.AppCompat.Title"
-                            android:text="@string/typeAccountExampleText"
-                            android:layout_gravity="center"/>
+                </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/periodPremium"
-                            android:text="@string/periodAccountText"
-                            style="@style/TextAppearance.AppCompat.Body1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:visibility="invisible"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Upgrade account"
+                    android:background="@drawable/rounded_button"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"/>
 
-                    </LinearLayout>
-
-                </RelativeLayout>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Configuration"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:background="@drawable/rounded_button"
+                    android:layout_marginBottom="70dp"/>
 
             </LinearLayout>
 
-        </LinearLayout>
-
-        <!-- Separator horitzontal -->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorBlack"
-                    android:layout_centerHorizontal="true"/>
-
-        </RelativeLayout>
-
-        <!-- Favourite books -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="14"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/TextAppearance.AppCompat.Title"
-                android:id="@+id/info_text_top_rated"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Favourite books"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorBlack"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_profile_favourite_books"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"/>
-
-        </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 

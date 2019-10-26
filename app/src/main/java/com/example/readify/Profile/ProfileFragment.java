@@ -14,15 +14,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.readify.Adapters.AchievementsHoritzontalAdapter;
 import com.example.readify.Adapters.BooksHorizontalAdapter;
+import com.example.readify.Adapters.BooksProfileHoritzontalAdapter;
+import com.example.readify.Adapters.GenresHoritzontalAdapter;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
+import com.example.readify.Models.Achievement;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.Genre;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,7 +41,7 @@ import java.util.List;
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment implements BooksHorizontalAdapter.ItemClickListener {
+public class ProfileFragment extends Fragment implements BooksProfileHoritzontalAdapter.ItemClickListener, GenresHoritzontalAdapter.ItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -83,7 +90,7 @@ public class ProfileFragment extends Fragment implements BooksHorizontalAdapter.
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        user = MockupsValues.getUserProfile();
+        user = MockupsValues.getUser();
 
         // Put the name of the user
         TextView textViewNameUser = (TextView) view.findViewById(R.id.nameUserTextview);
@@ -91,51 +98,59 @@ public class ProfileFragment extends Fragment implements BooksHorizontalAdapter.
 
         // Change the layout accord to the type of account
         ImageView imageViewPremiumBadge = (ImageView) view.findViewById(R.id.premiumBadgeProfile);
-        TextView textViewTypeAccount = (TextView) view.findViewById(R.id.typeAccountText);
-        TextView textViewPeriodAccount = (TextView) view.findViewById(R.id.periodPremium);
-
-        if (user.isPremium()){
+        if (user.isPremium())
             imageViewPremiumBadge.setVisibility(View.VISIBLE);
-            textViewTypeAccount.setTextColor(Color.rgb(219,192,0));
-            textViewTypeAccount.setText(getString(R.string.accountPremiumText));
-            textViewPeriodAccount.setVisibility(View.VISIBLE);
-        } else
-            textViewTypeAccount.setText(getString(R.string.accountFreeText));
+        else
+            imageViewPremiumBadge.setVisibility(View.INVISIBLE);
 
-        // Create a favourite books list on profile
-        LinearLayoutManager favouriteBooksManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView recyclerViewFavouriteBooks = (RecyclerView) view.findViewById(R.id.recycler_view_profile_favourite_books);
-        recyclerViewFavouriteBooks.setLayoutManager(favouriteBooksManager);
+        // Num of readed books by the user
+        TextView readedBooksTextView = (TextView) view.findViewById(R.id.numReadedBooksText);
+        readedBooksTextView.setText(Integer.toString(user.getReadedBooks().size()));
 
-        // set up the RecyclerView
-        List<Book> list = MockupsValues.getLastAddedBooks();
-        LinearLayoutManager horizontalLayoutManager
-                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerViewFavouriteBooks.setLayoutManager(horizontalLayoutManager);
-        BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), list, true);
-        adapter.setClickListener(this);
-        recyclerViewFavouriteBooks.setAdapter(adapter);
+        // Achievements of the user
+        TextView textViewAchievements = (TextView) view.findViewById(R.id.achievementsText);
+        textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + user.getAchievements().size());
+
+        // Create a genre preferences list on profile
+        LinearLayoutManager genrePreferencesManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView recyclerViewGenrePreferences = (RecyclerView) view.findViewById(R.id.recycler_view_profile_genre_preferences);
+        recyclerViewGenrePreferences.setLayoutManager(genrePreferencesManager);
+
+        ArrayList<Genre> listGenresPreferences = user.getGenres();
+        GenresHoritzontalAdapter adapterGenrePreferences = new GenresHoritzontalAdapter(getContext(), listGenresPreferences);
+        adapterGenrePreferences.setClickListener(this);
+        recyclerViewGenrePreferences.setAdapter(adapterGenrePreferences);
+
+        // Create a readed books list on profile
+        LinearLayoutManager readedBooksManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView recyclerViewReadedBooks = (RecyclerView) view.findViewById(R.id.recycler_view_profile_favourite_books);
+        recyclerViewReadedBooks.setLayoutManager(readedBooksManager);
+
+        List<Book> listReadedBooks = user.getReadedBooks();
+        BooksProfileHoritzontalAdapter adapterReaderBooks =
+                new BooksProfileHoritzontalAdapter(getContext(), listReadedBooks);
+        adapterReaderBooks.setClickListener(this);
+        recyclerViewReadedBooks.setAdapter(adapterReaderBooks);
+
+        // Create a achievements list on profile
+        LinearLayoutManager achievementsManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView recyclerViewAchievements = (RecyclerView) view.findViewById(R.id.recycler_view_profile_achievements);
+        recyclerViewAchievements.setLayoutManager(achievementsManager);
+
+        List<Achievement> achievementsCompleted = user.getCompletedAchievements();
+        AchievementsHoritzontalAdapter adapterAchievements = new AchievementsHoritzontalAdapter(getContext(), achievementsCompleted);
+        recyclerViewAchievements.setAdapter(adapterAchievements);
 
         return view;
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        if(position == user.getLibrary().size()-1){
-            showSearchFragment();
-        } else {
-            showBookFragment(user.getLibrary().get(position));
-        }
-    }
-
-    private void showBookFragment(Book book){
         MainActivity activity = (MainActivity) getActivity();
-        activity.goToBookPage(book);
-    }
-
-    private void showSearchFragment(){
-        MainActivity activity = (MainActivity) getActivity();
-        activity.changeDiscoverFragment();
+        if (user.getReadedBooks().size() == position)
+            activity.focusDiscoverFragment();
+        else
+            activity.goToBookPage(user.getReadedBooks().get(position));
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -160,6 +175,12 @@ public class ProfileFragment extends Fragment implements BooksHorizontalAdapter.
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemClick(View view) {
+        MainActivity activity = (MainActivity) getActivity();
+        activity.goToFirstForm();
     }
 
     /**

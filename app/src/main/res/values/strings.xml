@@ -49,12 +49,16 @@
     <string name="pending">Pending</string>
     <string name="accountPremiumText" translatable="false">Premium</string>
     <string name="accountFreeText">Free</string>
-    <string name="typeAccountExampleText">Freemium</string>
-    <string name="accountTitleProfile">ACCOUNT</string>
-    <string name="periodAccountText">1 year</string>
+    <string name="typeAccountExampleText">10/100</string>
+    <string name="accountTitleProfile">PROGRESS</string>
+    <string name="periodAccountText">achievements</string>
     <string name="feedbackTitleProfile">FEEDBACK</string>
     <string name="numExample">103</string>
     <string name="commentsFeedTitleProfile">comments</string>
     <string name="libraryTitleProfile">LIBRARY</string>
     <string name="readedbooksSubtitleProfile">readed books</string>
+    <string name="readedBooksTitleProfile">Readed books</string>
+    <string name="genrePreferencesTitleProfile">Genre preferences</string>
+    <string name="diagonalBar">/</string>
+    <string name="achievementsTitleProfile">Last achievements</string>
 </resources>

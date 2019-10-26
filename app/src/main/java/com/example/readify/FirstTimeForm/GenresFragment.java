@@ -63,7 +63,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
     BooksListFormAdapter adapterBooksList;
     BooksListFormAdapter adapterBooksInterest;
 
-    User user = MockupsValues.user;
+    User user = MockupsValues.getUser();
 
     public GenresFragment() {
         // Required empty public constructor
@@ -204,7 +204,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         recyclerViewInterestBooks.setLayoutManager(linearLayoutManagerInterest);
 
         ArrayList booksInterest = MockupsValues.getLastAddedBooks();
-        adapterBooksInterest = new BooksListFormAdapter(getContext(), booksInterest, MockupsValues.user, false);
+        adapterBooksInterest = new BooksListFormAdapter(getContext(), booksInterest, MockupsValues.getUser(), false);
         adapterBooksInterest.setClickListener(GenresFragment.this);
         recyclerViewInterestBooks.setAdapter(adapterBooksInterest);
 
