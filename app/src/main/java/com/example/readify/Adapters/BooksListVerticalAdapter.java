@@ -1,14 +1,20 @@
 package com.example.readify.Adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readify.MainActivity;
@@ -16,6 +22,7 @@ import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.User;
 
+import com.example.readify.Popups.BookReadedPopup;
 import com.example.readify.R;
 
 import java.util.ArrayList;
@@ -26,6 +33,9 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
     private MainActivity activity;
     private Context mContext;
     private User user;
+    private boolean isInReadingList;
+    private boolean isInPendingList = false;
+    private FragmentManager fragmentManager;
 
     // Counstructor for the Class
     public BooksListVerticalAdapter(MainActivity activity, Context context, ArrayList<Book> booksList, User user) {
@@ -46,12 +56,23 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         this.user = user;
     }
 
+    public BooksListVerticalAdapter(MainActivity activity, Context context, ArrayList<Book> booksList, boolean isInReadingList, FragmentManager manager) {
+        this.booksList = booksList;
+        this.originalSearchList = new ArrayList<>();
+        this.originalSearchList.addAll(booksList);
+        this.mContext = context;
+        this.activity = activity;
+        this.isInReadingList = true;
+        this.fragmentManager = manager;
+    }
+
     public BooksListVerticalAdapter(MainActivity activity, Context context, ArrayList<Book> booksList) {
         this.booksList = booksList;
         this.originalSearchList = new ArrayList<>();
         this.originalSearchList.addAll(booksList);
         this.mContext = context;
         this.activity = activity;
+        this.isInReadingList = false;
     }
 
     // Counstructor for the Class
@@ -60,6 +81,12 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         this.originalSearchList = new ArrayList<>();
         this.originalSearchList.addAll(booksList);
         this.mContext = context;
+        this.isInReadingList = false;
+
+    }
+
+    public void setIsInPendingList(boolean bool){
+        this.isInPendingList = bool;
     }
 
     public Context getContext(){
@@ -142,24 +169,41 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         holder.bookCover.setImageResource(
                 mContext.getResources().getIdentifier(book.getPicture(), "drawable", mContext.getPackageName()));
 
-        //if (user != null && user.containsBook(book))
-        //holder.addButton.setText("Remove");
-        //else
-        //holder.addButton.setText("Add");
-        /*holder.addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (user.containsBook(book)) {
-                    user.removeBookToLibrary(book);
-                    Toast.makeText(view.getContext(), "Book removed on your library", Toast.LENGTH_LONG).show();
-                    //holder.addButton.setText("Add");
-                } else {
-                    user.addBookToLibrary(book);
-                    Toast.makeText(view.getContext(), "Book added on your library", Toast.LENGTH_LONG).show();
-                    //holder.addButton.setText("Remove");
+        if(isInReadingList || isInPendingList)
+            holder.addButton.setVisibility(View.INVISIBLE);
+
+        if(isInReadingList) {
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BookReadedPopup dialog =  new BookReadedPopup(fragmentManager);
+                    FragmentTransaction ft2 = fragmentManager.beginTransaction();
+                    dialog.show(ft2, "book_readed_popup");
                 }
+            });
+
+        } else {
+            if(MockupsValues.getPendingListBooks().contains(booksList.get(position))){
+                setAddButtonIcon(holder);
+            } else {
+                holder.addButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        setAddButtonIcon(holder);
+                        Book book = booksList.get(position);
+                        MockupsValues.addPendingBook(book);
+                        activity.notifyPendingListChanged();
+                        Toast.makeText(getContext(), book.getTitle() + " " + getContext().getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
+                    }
+                });
             }
-        });*/
+        }
+    }
+
+    private void setAddButtonIcon(BookHolder holder){
+        Drawable drawable = ContextCompat.getDrawable(holder.addButton.getContext(),
+                holder.addButton.getContext().getResources().getIdentifier("ic_added_book", "drawable", holder.addButton.getContext().getPackageName()));
+        holder.addButton.setImageResource(R.drawable.ic_added_book);
     }
 
     // This is your ViewHolder class that helps to populate data to the view
@@ -169,6 +213,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         private TextView bookTitle;
         private TextView bookAuthor;
         private ImageButton addButton;
+        private CardView cardView;
 
         public BookHolder(View itemView) {
             super(itemView);
@@ -177,6 +222,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
             bookTitle = (TextView) itemView.findViewById(R.id.book_title);
             bookAuthor = (TextView) itemView.findViewById(R.id.book_author);
             addButton = (ImageButton) itemView.findViewById(R.id.addButton);
+            cardView = (CardView) itemView.findViewById(R.id.card_view);
         }
       
         /*public void setContactName(String name) {

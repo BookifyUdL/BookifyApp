@@ -6,18 +6,29 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 public class User {
-    String name;
-    Boolean premium;
-    ArrayList<Book> library;
-    ArrayList<Genre> genres;
-    ArrayList<Achievement> achievements;
+    private ArrayList<Achievement> achievements;
+    private ArrayList<Book> library;
+    private ArrayList<Genre> genres;
+    private ArrayList<Book> interested;
+    private ArrayList<Book> read;
+    private Boolean premium;
+    private String picture;
+    private String name;
+
+    public User(String name, String picture){
+        this.name = name;
+        this.picture = picture;
+    }
 
     public User() {
-        name = "Empty user";
         library = new ArrayList<>();
         genres = new ArrayList<>();
         premium = false;
         achievements = new ArrayList<>();
+        interested = new ArrayList<>();
+        read = new ArrayList<>();
+        this.name = "Oscar R";
+        this.picture = "userfinale";
     }
 
     public User(String name, Boolean premium, ArrayList<Genre> genres, ArrayList<Book> library) {
@@ -30,13 +41,41 @@ public class User {
         this.achievements = MockupsValues.getAchievementsPersonalized();
     }
 
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
-
     public Boolean isPremium() { return premium; }
 
     public void setPremium(Boolean premium) { this.premium = premium; }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void addBookToInterestedBooks(Book book){
+        interested.add(book);
+    }
+
+    public ArrayList<Book> getReadBooks(){
+        return read;
+    }
+
+    public void addBookToReadBooks(Book book){
+        read.add(book);
+    }
+
+    public ArrayList<Book> getInterestedBooks(){
+        return interested;
+    }
 
     public ArrayList<Genre> getGenres() { return genres; }
 
@@ -122,5 +161,14 @@ public class User {
         }
 
         return results;
+
+    public void booksReSet(){
+        for (Book book : getLibrary()){
+            if(book.isRead()){
+                addBookToReadBooks(book);
+            } else {
+                addBookToInterestedBooks(book);
+            }
+        }
     }
 }

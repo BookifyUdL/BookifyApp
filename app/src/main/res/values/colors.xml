@@ -11,4 +11,6 @@
     <color name="colorBlueLink">#037bfc</color>
     <color name="colorAddedGreen">#00ffa2</color>
     <color name="colorYellowSwipe">#d9c01c</color>
+    <color name="colorDarkGrayCardBackground">#dedfe3</color>
+
 </resources>

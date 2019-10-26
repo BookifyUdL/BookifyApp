@@ -61,4 +61,40 @@
     <string name="genrePreferencesTitleProfile">Genre preferences</string>
     <string name="diagonalBar">/</string>
     <string name="achievementsTitleProfile">Last achievements</string>
+    <string name="pending">To Read</string>
+
+    <string name="biography_gender">Biography</string>
+    <string name="internet_gender">Computing / Internet</string>
+    <string name="education_gender">Education</string>
+    <string name="crime_gender">Crime</string>
+    <string name="literature_gender">Literature</string>
+    <string name="health_gender">Health</string>
+    <string name="romance_gender">Romance</string>
+    <string name="fantasy_gender">Fantasy</string>
+    <string name="adventure_gender">Adventure</string>
+
+    <string name="rate_it_sentence">Rate it!</string>
+    <string name="feeling_sentecte">How did you feel?</string>
+    <string name="happy_emoji">HAPPY</string>
+    <string name="confused_emoji">CONFUSED</string>
+    <string name="sad_emoji">SAD</string>
+    <string name="scared_emoji">SCARED</string>
+    <string name="frustrated_emoji">FRUSTRATED</string>
+    <string name="shocked_emoji">SHOCKED</string>
+    <string name="excited_emoji">EXCITED</string>
+    <string name="bored_emoji">BORED</string>
+
+    <string name="bad_review">BAD</string>
+    <string name="ok_review">OK</string>
+    <string name="good_review">GOOD</string>
+    <string name="great_review">GREAT</string>
+    <string name="wow_review">WOW</string>
+
+    <string name="comments">Reviews</string>
+    <string name="cancel_upper_case">CANCEL</string>
+    <string name="search_book">Search book</string>
+    <string name="add_comment">Add a comment</string>
+    <string name="fake_date">1st October</string>
+    <string name="fake_pages">Pages</string>
+
 </resources>

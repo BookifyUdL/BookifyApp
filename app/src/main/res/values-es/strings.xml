@@ -47,4 +47,40 @@
     <string name="readedBooksTitleProfile">Readed books</string>
     <string name="genrePreferencesTitleProfile">Genre preferences</string>
     <string name="achievementsTitleProfile">Last achievements</string>
+    <string name="pending">Para Leer</string>
+
+    <string name="biography_gender">Biografia</string>
+    <string name="internet_gender">Computación</string>
+    <string name="education_gender">Educación</string>
+    <string name="crime_gender">Crimen</string>
+    <string name="literature_gender">Literatura</string>
+    <string name="health_gender">Salud</string>
+    <string name="romance_gender">Romance</string>
+    <string name="fantasy_gender">Fantasía</string>
+    <string name="adventure_gender">Aventura</string>
+
+    <string name="feeling_sentecte">¿Cómo te sentiste?</string>
+    <string name="rate_it_sentence">Púntualo!</string>
+    <string name="happy_emoji">CONTENTO</string>
+    <string name="confused_emoji">COONFUNDIDO</string>
+    <string name="sad_emoji">TRISTE</string>
+    <string name="scared_emoji">ASUSTADO</string>
+    <string name="frustrated_emoji">FRUSTRADO</string>
+    <string name="shocked_emoji">EN SHOCK</string>
+    <string name="excited_emoji">EXCITADO</string>
+    <string name="bored_emoji">ABURRIDO</string>
+
+    <string name="bad_review">MALO</string>
+    <string name="ok_review">OK</string>
+    <string name="good_review">BUENO</string>
+    <string name="great_review">GENIAL</string>
+    <string name="wow_review">WOW</string>
+
+    <string name="comments">Reviews</string>
+    <string name="cancel_upper_case">CANCELAR</string>
+    <string name="search_book">Buscar libro</string>
+    <string name="add_comment">Añade un comentario</string>
+    <string name="fake_date">1 Octubre</string>
+    <string name="fake_pages">Paginas</string>
+
 </resources>

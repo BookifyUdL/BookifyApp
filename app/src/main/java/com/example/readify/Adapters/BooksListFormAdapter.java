@@ -98,14 +98,14 @@ public class BooksListFormAdapter extends RecyclerView.Adapter<BooksListFormAdap
             public void onClick(View view) {
                 if (user.containsBook(book)) {
                     user.removeBookToLibrary(book);
-                    Toast.makeText(view.getContext(), "Book removed on your library", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), "Book removed from your library", Toast.LENGTH_SHORT).show();
                 } else {
                     if (read)
                         book.setRead(true);
                     else
                         book.setRead(false);
                     user.addBookToLibrary(book);
-                    Toast.makeText(view.getContext(), "Book added on your library", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), "Book added to your library", Toast.LENGTH_SHORT).show();
                 }
                 if (mClickListener != null) mClickListener.onItemClick(view);
             }

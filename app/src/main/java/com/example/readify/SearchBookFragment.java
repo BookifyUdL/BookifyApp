@@ -76,7 +76,7 @@ public class SearchBookFragment extends Fragment implements SearchView.OnQueryTe
         list.addAll(MockupsValues.getLastAddedBooks());
         list.addAll(MockupsValues.getSameAuthorBooks());
         list.addAll(MockupsValues.getSameGenderBooks());
-        adapter = new BooksListVerticalAdapter(getContext(), list);
+        adapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), list);
         recyclerView.setAdapter(adapter);
 
         SearchView searchView = view.findViewById(R.id.search_bar);

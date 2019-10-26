@@ -1,9 +1,12 @@
 package com.example.readify.Discover;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,12 +22,17 @@ import com.example.readify.Adapters.CardPagerAdapter;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.Genre;
 import com.example.readify.R;
 import com.example.readify.Design.ShadowTransformer;
 
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -42,7 +50,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
     private Button mButton;
     private ViewPager mViewPager;
-    List<Book> list;
+    //List<Book> list = MockupsValues.getLastAddedBooks();
     int width, height;
 
     private CardPagerAdapter mCardAdapter;
@@ -122,25 +130,106 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.top_rated_recycler_view);
         recyclerView.setLayoutManager(horizontalLayoutManagaer);
         // set up the RecyclerView
-        list = MockupsValues.getLastAddedBooks();
+        ArrayList<Book> list = MockupsValues.getLastAddedBooks();
+        list.add(MockupsValues.getSameAuthorBooks().get(0));
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
         BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), list, true);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
+        addGenres(view);
 
         width = view.getWidth();
         height = view.getHeight();
         return view;
     }
 
+    private void addGenres(View view){
+        RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relative_layout);
+        boolean isFirst = true;
+        int previousId = 0;
+        int previousCardId = 0;
+        int margin_5dp = (int) getContext().getResources().getDimension(R.dimen.margin_5dp);
+        int margin_10dp = (int) getContext().getResources().getDimension(R.dimen.margin_10dp);
+
+        ArrayList<Book> books = MockupsValues.getLastAddedBooksDiscover();
+        //books.add(MockupsValues.getSameAuthorBooks().get(0));
+
+        for(Genre genre: MockupsValues.user.getGenres()){
+            TextView textView = new TextView(getContext());
+            String text = genre.getName() + " Genre";
+            textView.setText(text);
+            textView.setTextAppearance(R.style.TextAppearance_AppCompat_Title);
+            textView.setTypeface(null, Typeface.BOLD);
+            textView.setTextColor(getContext().getResources().getColor(R.color.colorBlack));
+            textView.setTextSize(25);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(5,5,0,0);
+            if(isFirst){
+                params.addRule(RelativeLayout.BELOW, R.id.card_view_top_rated);
+                isFirst = false;
+            } else {
+                params.addRule(RelativeLayout.BELOW, previousCardId);
+            }
+            textView.setLayoutParams(params);
+            previousId  = ViewCompat.generateViewId();
+            textView.setId(previousId);
+            relativeLayout.addView(textView);
+
+
+            float height = getContext().getResources().getDimension(R.dimen.card_height);
+            CardView cardView = new CardView(getContext());
+            RelativeLayout.LayoutParams cardParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(int) height);
+            cardParams.setMargins(margin_5dp,margin_5dp,margin_5dp,margin_5dp);
+            cardParams.addRule(RelativeLayout.BELOW, previousId);
+            cardParams.addRule(RelativeLayout.ALIGN_TOP);
+            cardView.setLayoutParams(cardParams);
+            previousCardId = ViewCompat.generateViewId();
+            cardView.setId(previousCardId);
+            cardView.setRadius(4);
+            cardView.setBackgroundColor(getContext().getResources().getColor(R.color.colorGrayCardBackground));
+
+
+            RecyclerView recyclerView = new RecyclerView(getContext());
+            RelativeLayout.LayoutParams recyclerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+            recyclerParams.setMargins(margin_10dp, margin_10dp, margin_10dp, margin_10dp);
+            recyclerView.setLayoutParams(recyclerParams);
+
+            //List list = MockupsValues.getLastAddedBooks();
+            LinearLayoutManager horizontalLayoutManager
+                    = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            recyclerView.setLayoutManager(horizontalLayoutManager);
+            BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), books, true);
+            adapter.setClickListener(this);
+            recyclerView.setAdapter(adapter);
+
+            cardView.addView(recyclerView);
+            relativeLayout.addView(cardView);
+
+             /*<androidx.recyclerview.widget.RecyclerView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/top_rated_recycler_view"
+
+        </androidx.cardview.widget.CardView>*/
+        }
+
+        int blankLayoutHeight = (int) getContext().getResources().getDimension(R.dimen.blank_layout);
+        LinearLayout linearLayout = new LinearLayout(getContext());
+        RelativeLayout.LayoutParams linearLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, blankLayoutHeight);
+        linearLayoutParams.addRule(RelativeLayout.BELOW, previousCardId);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.setLayoutParams(linearLayoutParams);
+        relativeLayout.addView(linearLayout);
+
+    }
+
     @Override
     public void onItemClick(View view, int position) {
-        if(position == list.size()-1){
+        if(position == MockupsValues.getLastAddedBooks().size()-1){
             showSearchFragment();
         } else {
-            showBookFragment(list.get(position));
+            showBookFragment(MockupsValues.getLastAddedBooks().get(position));
         }
     }
 
