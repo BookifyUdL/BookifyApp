@@ -30,7 +30,7 @@ public class MockupsValues {
     private static ArrayList<Review> REVIEWS;
     private static Context context;
 
-    private static User user = new User();
+    public static User user = new User();
     private static User userProfile = new User("Connor MacArthur", true, getPersonalizedGenres(), getLastAddedBooksWithReads());
 
     public static User getUserProfile() { return userProfile; }

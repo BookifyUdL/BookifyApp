@@ -161,6 +161,7 @@ public class User {
         }
 
         return results;
+    }
 
     public void booksReSet(){
         for (Book book : getLibrary()){
