@@ -172,4 +172,13 @@ public class User {
             }
         }
     }
+
+    public void setLibraryBookAsRead(Book book){
+        //book.setRead(true);
+        if (this.getLibrary().contains(book)){
+            this.getLibrary().remove(book);
+        }
+        book.setRead(true);
+        this.getLibrary().add(0, book);
+    }
 }

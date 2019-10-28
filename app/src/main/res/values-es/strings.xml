@@ -60,6 +60,7 @@
 
     <string name="feeling_sentecte">¿Cómo te sentiste?</string>
     <string name="rate_it_sentence">Púntualo!</string>
+    <string name="angry_emoji">ENFADADO</string>
     <string name="happy_emoji">CONTENTO</string>
     <string name="confused_emoji">COONFUNDIDO</string>
     <string name="sad_emoji">TRISTE</string>
@@ -77,10 +78,13 @@
 
     <string name="comments">Reviews</string>
     <string name="cancel_upper_case">CANCELAR</string>
+    <string name="accept_upper_case">ACEPTAR</string>
     <string name="search_book">Buscar libro</string>
     <string name="add_comment">Añade un comentario</string>
     <string name="fake_date">1 Octubre</string>
     <string name="fake_pages">Paginas</string>
+    <string name="review_added_correctly">Tu review se ha añadido correctamente!</string>
+    <string name="comment_added_correctly">Tu comentario se ha añadido correctamente!</string>
     <string name="done_text">Listo</string>
     <string name="upgrade_account_text">Mejorar cuenta</string>
     <string name="configuration_text">Configuración</string>

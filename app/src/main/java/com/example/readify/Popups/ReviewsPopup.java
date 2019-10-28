@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.view.ViewCompat;
@@ -121,6 +122,7 @@ public class ReviewsPopup extends DialogFragment implements Popup {
     private void addReview(String message){
         pendingBooksAdapter.addReview(new Review(MockupsValues.getUser(), message));
         ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(pendingBooksAdapter.getItemCount()-1,200);
+        Toast.makeText(getContext(), getContext().getString(R.string.comment_added_correctly), Toast.LENGTH_LONG).show();
         //recyclerView.setScrollY(recyclerView.getHeight());
         //commentLayout.setVisibility(View.INVISIBLE);
         //recyclerView.scrollToPosition(pendingBooksAdapter.getItemCount() - 1);

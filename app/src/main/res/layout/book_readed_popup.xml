@@ -328,7 +328,15 @@
             android:layout_marginTop="@dimen/margin_5dp"
             android:layout_marginBottom="@dimen/margin_20dp">
 
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recylcer_view_emojis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_5dp"
+                android:layout_marginEnd="@dimen/margin_5dp"
+                android:layout_marginBottom="@dimen/margin_5dp"/>
+
+            <!--<LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -336,17 +344,6 @@
                 android:layout_marginBottom="@dimen/margin_20dp"
                 android:layout_marginStart="@dimen/margin_10dp"
                 android:layout_marginEnd="@dimen/margin_10dp">
-
-                <!--<LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center_horizontal"
-                        android:text="-"/>
-                </LinearLayout>-->
 
                 <androidx.cardview.widget.CardView
                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -357,6 +354,38 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginBottom="5dp"
                     card_view:cardCornerRadius="4dp"
+<<<<<<< HEAD
+                    card_view:cardBackgroundColor="@color/colorBlack">
+
+                    <androidx.cardview.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/card_view_copy"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"
+                        card_view:cardCornerRadius="4dp"
+                        card_view:cardElevation="@dimen/margin_10dp"
+                        card_view:cardBackgroundColor="@color/colorGrayCardBackground">
+
+                        <ImageButton
+                            android:backgroundTint="@color/colorGrayCardBackground"
+                            android:layout_width="@dimen/emoji_size"
+                            android:layout_height="@dimen/emoji_size"
+                            android:orientation="horizontal"
+                            android:src="@drawable/angry"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/emoji_text_size"
+                            android:text="@string/angry_emoji"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorBlack"
+                            android:layout_gravity="bottom|center_horizontal"
+                            android:layout_marginBottom="@dimen/margin_5dp"/>
+
+                    </androidx.cardview.widget.CardView>
+=======
                     card_view:cardBackgroundColor="@color/colorGrayCardBackground">
 
                     <ImageButton
@@ -377,6 +406,7 @@
                         android:layout_gravity="bottom|center_horizontal"
                         android:layout_marginBottom="@dimen/margin_5dp"/>
 
+>>>>>>> master
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
@@ -395,14 +425,18 @@
                         android:layout_width="@dimen/emoji_size"
                         android:layout_height="@dimen/emoji_size"
                         android:orientation="horizontal"
+<<<<<<< HEAD
+                        android:src="@drawable/scare"/>
+=======
                         android:src="@drawable/confused"
                         android:contentDescription="@string/imageview_adapter_text" />
+>>>>>>> master
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/emoji_text_size"
-                        android:text="@string/confused_emoji"
+                        android:text="@string/scared_emoji"
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"
                         android:layout_gravity="bottom|center_horizontal"
@@ -457,14 +491,18 @@
                         android:layout_width="@dimen/emoji_size"
                         android:layout_height="@dimen/emoji_size"
                         android:orientation="horizontal"
+<<<<<<< HEAD
+                        android:src="@drawable/confused"/>
+=======
                         android:src="@drawable/scare"
                         android:contentDescription="@string/imageview_adapter_text" />
+>>>>>>> master
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/emoji_text_size"
-                        android:text="@string/scared_emoji"
+                        android:text="@string/confused_emoji"
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"
                         android:layout_gravity="bottom|center_horizontal"
@@ -499,14 +537,18 @@
                         android:layout_width="@dimen/emoji_size"
                         android:layout_height="@dimen/emoji_size"
                         android:orientation="horizontal"
+<<<<<<< HEAD
+                        android:src="@drawable/bored"/>
+=======
                         android:src="@drawable/angry"
                         android:contentDescription="@string/imageview_adapter_text" />
+>>>>>>> master
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/emoji_text_size"
-                        android:text="@string/frustrated_emoji"
+                        android:text="@string/bored_emoji"
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"
                         android:layout_gravity="bottom|center_horizontal"
@@ -561,14 +603,18 @@
                         android:layout_width="@dimen/emoji_size"
                         android:layout_height="@dimen/emoji_size"
                         android:orientation="horizontal"
+<<<<<<< HEAD
+                        android:src="@drawable/happy"/>
+=======
                         android:src="@drawable/excited"
                         android:contentDescription="@string/imageview_adapter_text" />
+>>>>>>> master
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/emoji_text_size"
-                        android:text="@string/excited_emoji"
+                        android:text="@string/happy_emoji"
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"
                         android:layout_gravity="bottom|center_horizontal"
@@ -592,14 +638,18 @@
                         android:layout_width="@dimen/emoji_size"
                         android:layout_height="@dimen/emoji_size"
                         android:orientation="horizontal"
+<<<<<<< HEAD
+                        android:src="@drawable/excited"/>
+=======
                         android:src="@drawable/bored"
                         android:contentDescription="@string/imageview_adapter_text" />
+>>>>>>> master
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/emoji_text_size"
-                        android:text="@string/bored_emoji"
+                        android:text="@string/excited_emoji"
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"
                         android:layout_gravity="bottom|center_horizontal"
@@ -607,8 +657,10 @@
 
                 </androidx.cardview.widget.CardView>
 
-            </LinearLayout>
+<<<<<<< HEAD
 
+
+            </LinearLayout>-->
         </LinearLayout>
 
         <androidx.cardview.widget.CardView
@@ -650,6 +702,39 @@
 
                 </LinearLayout>
 
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/accept_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/colorGrayCardBackground"
+            android:layout_marginTop="@dimen/margin_10dp"
+            app:cardCornerRadius="4dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/accept_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:textSize="25dp"
+                        android:text="@string/accept_upper_case"
+                        android:layout_gravity="center_vertical"/>
+
+                </LinearLayout>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

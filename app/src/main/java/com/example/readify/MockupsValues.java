@@ -3,6 +3,7 @@ package com.example.readify;
 import android.content.Context;
 
 import com.example.readify.Models.Book;
+import com.example.readify.Models.Emoji;
 import com.example.readify.Models.Genre;
 import com.example.readify.Models.Review;
 import com.example.readify.Models.User;
@@ -28,13 +29,14 @@ public class MockupsValues {
   
     private static ArrayList<Book> PENDING_BOOKS_WITH_DISCOVER_BUTTON;
     private static ArrayList<Review> REVIEWS;
+    private static ArrayList<Emoji> EMOJIS;
+    public  static User user = new User();
     private static Context context;
 
-    public static User user = new User();
-    private static User userProfile = new User("Connor MacArthur", true, getPersonalizedGenres(), getLastAddedBooksWithReads());
+    //private static User userProfile = new User("Connor MacArthur", true, getPersonalizedGenres(), getLastAddedBooksWithReads());
 
-    public static User getUserProfile() { return userProfile; }
-  
+    public static User getUserProfile() { return user; }
+
     public static void setContext(Context con){
         context = con;
     }
@@ -45,6 +47,21 @@ public class MockupsValues {
   
 
     //public void setUser(User user) { this.user = user; }
+
+    public static ArrayList<Emoji> getEmojis(){
+        if(EMOJIS == null || EMOJIS.isEmpty()){
+            EMOJIS = new ArrayList<>();
+            EMOJIS.add(new Emoji(context.getResources().getString(R.string.angry_emoji), "angry"));
+            EMOJIS.add(new Emoji(context.getResources().getString(R.string.scared_emoji), "scare"));
+            EMOJIS.add(new Emoji(context.getResources().getString(R.string.sad_emoji), "unhappy"));
+            EMOJIS.add(new Emoji(context.getResources().getString(R.string.confused_emoji), "confused"));
+            EMOJIS.add(new Emoji(context.getResources().getString(R.string.bored_emoji), "bored"));
+            EMOJIS.add(new Emoji(context.getResources().getString(R.string.shocked_emoji), "surprised"));
+            EMOJIS.add(new Emoji(context.getResources().getString(R.string.happy_emoji), "happy"));
+            EMOJIS.add(new Emoji(context.getResources().getString(R.string.excited_emoji), "excited"));
+        }
+        return EMOJIS;
+    }
 
     public static ArrayList<Genre> getGenres() {
         if (GENRE == null || GENRE.isEmpty()) {
@@ -82,9 +99,12 @@ public class MockupsValues {
     }
   
     public static void addPendingBook(Book book){
+        book.setRead(false);
         if(PENDING_LIST_BOOKS == null)
             PENDING_LIST_BOOKS = new ArrayList<>();
         PENDING_LIST_BOOKS.add(book);
+        if(!user.getLibrary().contains(book))
+            user.addBookToLibrary(book);
     }
 
     public static void removePendingListBook(Book book){
@@ -103,6 +123,8 @@ public class MockupsValues {
         if(READING_LIST_BOOKS== null)
             READING_LIST_BOOKS = new ArrayList<>();
         READING_LIST_BOOKS.add(book);
+        if(!user.getLibrary().contains(book))
+            user.addBookToLibrary(book);
     }
 
     public static void setPendingListBooks(ArrayList<Book> books){

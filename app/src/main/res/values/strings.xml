@@ -74,6 +74,7 @@
 
     <string name="rate_it_sentence">Rate it!</string>
     <string name="feeling_sentecte">How did you feel?</string>
+    <string name="angry_emoji">ANGRY</string>
     <string name="happy_emoji">HAPPY</string>
     <string name="confused_emoji">CONFUSED</string>
     <string name="sad_emoji">SAD</string>
@@ -91,10 +92,13 @@
 
     <string name="comments">Reviews</string>
     <string name="cancel_upper_case">CANCEL</string>
+    <string name="accept_upper_case">ACCEPT</string>
     <string name="search_book">Search book</string>
     <string name="add_comment">Add a comment</string>
     <string name="fake_date">1st October</string>
     <string name="fake_pages">Pages</string>
+    <string name="review_added_correctly">Your review was added correctly!</string>
+    <string name="comment_added_correctly">Your comment was added correctly!</string>
     <string name="achievements_image" translatable="false">Achievements image</string>
     <string name="example_text" translatable="false">Example</string>
     <string name="Lorem_ipsum" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum.</string>

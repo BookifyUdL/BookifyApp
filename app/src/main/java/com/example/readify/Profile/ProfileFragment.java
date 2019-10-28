@@ -27,6 +27,7 @@ import com.example.readify.Models.Achievement;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
 import com.example.readify.Models.User;
+import com.example.readify.Pages;
 import com.example.readify.R;
 
 import java.util.ArrayList;
@@ -150,7 +151,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         if (user.getReadedBooks().size() == position)
             activity.focusDiscoverFragment();
         else
-            activity.goToBookPage(user.getReadedBooks().get(position));
+            activity.goToBookPage(user.getReadedBooks().get(position), Pages.PROFILE_PAGE);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

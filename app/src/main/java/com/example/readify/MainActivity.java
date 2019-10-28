@@ -32,7 +32,7 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
 
     private BottomNavigationView navigation;
     private final ReadingFragment fragment1 = new ReadingFragment();
-    private final Fragment fragment2 = new LibraryFragment();
+    private final LibraryFragment fragment2 = new LibraryFragment();
     private  Fragment fragment3 = DiscoverFragment.newInstance();
     private final Fragment fragment4 = new ProfileFragment();
     private Fragment fragment5 = new SearchBookFragment();
@@ -68,10 +68,13 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         }
     };
 
+    public void notifyLibraryListChanged() {fragment2.notifyLibraryChanged();}
+
     public void notifyReadingListChanged() { fragment1.readingBooksChanged();}
 
     public void notifyPendingListChanged(){
         fragment1.pendingListChanged();
+        notifyLibraryListChanged();
     }
 
     public void changeDiscoverFragment(){
@@ -93,8 +96,24 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         active = fragment3;
     }
 
-    public void goToBookPage(Book book){
+    public void backToLibraryFragment(){
+        fm.beginTransaction().hide(active).show(fragment2).commit();
+        active = fragment2;
+    }
+
+    public void backToProfileFragment(){
+        fm.beginTransaction().hide(active).show(fragment4).commit();
+        active = fragment4;
+    }
+
+    public void backToReadingFragment(){
+        fm.beginTransaction().hide(active).show(fragment1).commit();
+        active = fragment1;
+    }
+
+    public void goToBookPage(Book book, Pages fromPage){
         fragment6.setBook(book);
+        fragment6.setParent(fromPage);
         fragment6.setEnterTransition(new Slide(Gravity.BOTTOM));
         fragment6.setExitTransition(new Slide(Gravity.TOP));
         fm.beginTransaction().hide(active).show(fragment6).commit();

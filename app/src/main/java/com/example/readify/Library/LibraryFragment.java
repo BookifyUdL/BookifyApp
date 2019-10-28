@@ -20,6 +20,7 @@ import com.example.readify.FirstTimeForm.RecyclerViewAdapterGenres;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
+import com.example.readify.Pages;
 import com.example.readify.R;
 
 import java.util.ArrayList;
@@ -33,9 +34,10 @@ import java.util.ArrayList;
  * Use the {@link LibraryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LibraryFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class LibraryFragment extends Fragment implements SearchView.OnQueryTextListener, BooksHorizontalAdapter.ItemClickListener {
 
     BooksGridAdapter booksAdapter;
+    GridLayoutManager gridLayoutManager;
 
     private OnFragmentInteractionListener mListener;
 
@@ -50,6 +52,11 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
         return fragment;
     }
 
+    public void notifyLibraryChanged(){
+        booksAdapter.notifyDataSetChanged();
+        //gridLayoutManager.notify();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,21 +69,30 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
 
         View view = inflater.inflate(R.layout.fragment_library, container, false);
         RecyclerView recyclerViewGenres = view.findViewById(R.id.recyclerViewGenres);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
+        gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
         recyclerViewGenres.setLayoutManager(gridLayoutManager);
-
-        ArrayList genres = MockupsValues.getGenres();
 
         //RecyclerViewAdapterGenres adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres, MockupsValues.user);
         //adapterGenres.setClickListener(GenresFragment.this);
         booksAdapter = new BooksGridAdapter((MainActivity) getActivity(),getContext(), MockupsValues.user.getLibrary());
         recyclerViewGenres.setAdapter(booksAdapter);
+        booksAdapter.setClickListener(this);
 
         SearchView searchView = view.findViewById(R.id.search_bar);
         searchView.setFocusable(false);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(this);
         return view;
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        showBookFragment(MockupsValues.user.getLibrary().get(position));
+    }
+
+    private void showBookFragment(Book book){
+        MainActivity activity = (MainActivity) getActivity();
+        activity.goToBookPage(book, Pages.LIBRARY_PAGE);
     }
 
     @Override
