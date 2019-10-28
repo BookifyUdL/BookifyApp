@@ -29,11 +29,14 @@ public class User {
         read = new ArrayList<>();
         this.name = "Oscar R";
         this.picture = "userfinale";
+        this.achievements = new ArrayList<>();
+        //premium = false;
+        //this.achievements = MockupsValues.getAchievementsPersonalized();
     }
 
     public User(String name, Boolean premium, ArrayList<Genre> genres, ArrayList<Book> library) {
         this.name = name;
-        this.premium = premium;
+        //this.premium = premium;
         if (library != null)
             this.library = library;
         if (genres != null)

@@ -77,18 +77,25 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         notifyLibraryListChanged();
     }
 
-    public void changeDiscoverFragment(){
-        fragment4.setEnterTransition(new Slide(Gravity.BOTTOM));
-        fragment4.setExitTransition(new Slide(Gravity.TOP));
-        fm.beginTransaction().hide(active).show(fragment4).commit();
-        active = fragment4;
-    }
-
-    public void changeProfileFragment(){
+    public void changeSearchBookFragment(){
         fragment5.setEnterTransition(new Slide(Gravity.BOTTOM));
         fragment5.setExitTransition(new Slide(Gravity.TOP));
         fm.beginTransaction().hide(active).show(fragment5).commit();
         active = fragment5;
+    }
+
+    public void changeDiscoverFragment(){
+        fragment3.setEnterTransition(new Slide(Gravity.BOTTOM));
+        fragment3.setExitTransition(new Slide(Gravity.TOP));
+        fm.beginTransaction().hide(active).show(fragment3).commit();
+        active = fragment3;
+    }
+
+    public void changeProfileFragment(){
+        fragment4.setEnterTransition(new Slide(Gravity.BOTTOM));
+        fragment4.setExitTransition(new Slide(Gravity.TOP));
+        fm.beginTransaction().hide(active).show(fragment4).commit();
+        active = fragment4;
     }
 
     public void backToDiscoverFragment(){

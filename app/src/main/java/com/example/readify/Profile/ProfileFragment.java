@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ import com.example.readify.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -94,11 +97,15 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         user = MockupsValues.getUser();
 
         // Put the name of the user
+        CircleImageView userImage = (CircleImageView) view.findViewById(R.id.profile_image);
+        userImage.setImageResource(
+                getContext().getResources().getIdentifier(MockupsValues.user.getPicture(), "drawable", getContext().getPackageName()));
+
         TextView textViewNameUser = (TextView) view.findViewById(R.id.nameUserTextview);
         textViewNameUser.setText(user.getName());
 
         // Change the layout accord to the type of account
-        ImageView imageViewPremiumBadge = (ImageView) view.findViewById(R.id.premiumBadgeProfile);
+        final ImageView imageViewPremiumBadge = (ImageView) view.findViewById(R.id.premiumBadgeProfile);
         if (user.isPremium())
             imageViewPremiumBadge.setVisibility(View.VISIBLE);
         else
@@ -134,13 +141,27 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         recyclerViewReadedBooks.setAdapter(adapterReaderBooks);
 
         // Create a achievements list on profile
-        LinearLayoutManager achievementsManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView recyclerViewAchievements = (RecyclerView) view.findViewById(R.id.recycler_view_profile_achievements);
+        final LinearLayoutManager achievementsManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        final RecyclerView recyclerViewAchievements = (RecyclerView) view.findViewById(R.id.recycler_view_profile_achievements);
         recyclerViewAchievements.setLayoutManager(achievementsManager);
 
         List<Achievement> achievementsCompleted = user.getCompletedAchievements();
-        AchievementsHoritzontalAdapter adapterAchievements = new AchievementsHoritzontalAdapter(getContext(), achievementsCompleted);
+        final AchievementsHoritzontalAdapter adapterAchievements = new AchievementsHoritzontalAdapter(getContext(), achievementsCompleted);
         recyclerViewAchievements.setAdapter(adapterAchievements);
+
+        Button button = (Button) view.findViewById(R.id.upgrade_button);
+        button.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //user.setAchievements(MockupsValues.getAchievementsPersonalized());
+                        adapterAchievements.setAchivementsList(MockupsValues.getAchievementsPersonalized());
+                        adapterAchievements.notifyDataSetChanged();
+                        imageViewPremiumBadge.setVisibility(View.VISIBLE);
+                        //recyclerViewAchievements.
+                    }
+                }
+        );
 
         return view;
     }
