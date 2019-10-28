@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="120dp"
     android:layout_height="200dp"
     android:layout_marginTop="5dp"
-    android:layout_marginEnd="10dp">
+    android:layout_marginEnd="10dp"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/relative_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        >
+        android:layout_centerHorizontal="true">
 
         <RelativeLayout
-            android:layout_marginTop="5dp"
             android:id="@+id/image_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/lib1"/>
+            android:layout_marginTop="5dp"
+            android:background="@drawable/lib1" />
 
         <ImageButton
+            android:id="@+id/add_button"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:id="@+id/add_button"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_add_book"
-            android:background="@drawable/roudend_image_button"/>
+            android:background="@drawable/roudend_image_button"
+            android:contentDescription="@string/imageview_adapter_text"
+            android:src="@drawable/ic_add_book" />
 
         <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_button"
@@ -68,24 +66,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/lib1"/>-->
+
     </RelativeLayout>
 
     <LinearLayout
-        android:backgroundTint="@color/cardview_light_background"
         android:id="@+id/coverView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
+        android:backgroundTint="@color/cardview_light_background"
         android:gravity="center_horizontal|center_vertical"
+        android:orientation="horizontal"
         android:visibility="invisible">
 
         <TextView
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:gravity="center_horizontal|center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:gravity="center_horizontal|center_vertical"
             android:text="@string/discover_link"
-            android:textColor="@color/colorBlueLink"/>
+            android:textColor="@color/colorBlueLink" />
 
     </LinearLayout>
 
@@ -102,6 +101,5 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:visibility="invisible"/-->
-
 
 </RelativeLayout>

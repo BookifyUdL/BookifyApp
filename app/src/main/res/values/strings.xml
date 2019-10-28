@@ -7,7 +7,7 @@
     <string name="library">Library</string>
     <string name="discover">Discover</string>
     <string name="profile">Profile</string>
-  
+
     <string name="skip_first_form_message"><u>Skip the form</u></string>
     <string name="description_first_form_text">To improve your experience in this application, we recommend that you waste a part of your time to make this form so that in the future, we can offer you the best book recommendations. This form is not mandatory.</string>
     <string name="select_genres_first_form_title">Select your genres</string>
@@ -24,7 +24,7 @@
     <string name="done_first_form_title">Thank you!</string>
     <string name="done_first_form_text">Finally, we have correctly configured your library and have optimized your searches based on the options that you have chosen. These options can be modified in the future if you wish.</string>
     <string name="done_redirect_first_form_text">To start using the application, press "done" for the changes to take effect.</string>
-  
+
     <string name="last_added">Latest additions</string>
     <string name="search_bar">Discover books</string>
 
@@ -95,5 +95,17 @@
     <string name="add_comment">Add a comment</string>
     <string name="fake_date">1st October</string>
     <string name="fake_pages">Pages</string>
+    <string name="achievements_image" translatable="false">Achievements image</string>
+    <string name="example_text" translatable="false">Example</string>
+    <string name="Lorem_ipsum" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget ligula eu lectus lobortis condimentum.</string>
+    <string name="Card_title_text" translatable="false">Card title</string>
+    <string name="imageview_adapter_text" translatable="false">ImageView adapter</string>
+    <string name="booktitle_text" translatable="false">BookTitle</string>
+    <string name="done_text">Done</string>
+    <string name="example_year" translatable="false">2017</string>
+    <string name="total_rate" translatable="false">/5</string>
+    <string name="rate_example" translatable="false">4.4</string>
+    <string name="upgrade_account_text">Upgrade account</string>
+    <string name="configuration_text">Configuration</string>
 
 </resources>

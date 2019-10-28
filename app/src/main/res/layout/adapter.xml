@@ -36,7 +36,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:id="@+id/contentTextView"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Etiam eget ligula eu lectus lobortis condimentum." />
+                android:text="@string/Lorem_ipsum" />
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Body1"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:id="@+id/titleTextView"
-                android:text="Card title" />
+                android:text="@string/Card_title_text" />
             <!--style="@style/ButtonStyle"-->
             <!--<Button
                 android:layout_width="match_parent"
@@ -58,9 +58,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="-5dp"
-            android:src="@drawable/ic_book_mark" />
+            android:src="@drawable/ic_book_mark"
+            android:contentDescription="@string/imageview_adapter_text" />
 
     </FrameLayout>
 

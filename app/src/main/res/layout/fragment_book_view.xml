@@ -20,10 +20,11 @@
             android:id="@+id/go_back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_go_back_button"/>
+            android:contentDescription="@string/imageview_adapter_text"
+            android:src="@drawable/ic_go_back_button" />
     </LinearLayout>
 
     <ScrollView
@@ -48,6 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|center"
+                    android:contentDescription="@string/imageview_adapter_text"
                     android:src="@drawable/lib1" />
 
                 <TextView
@@ -56,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Card title" />
+                    android:text="@string/Card_title_text" />
 
                 <TextView
                     android:id="@+id/book_author"
@@ -69,10 +71,10 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_vertical|center_horizontal"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp">
+                    android:layout_marginBottom="5dp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -83,33 +85,35 @@
                             android:id="@+id/add_button"
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_add_white"
+                            android:layout_marginEnd="5dp"
                             android:background="@drawable/shape_button_up_left"
-                            android:layout_marginEnd="5dp"/>
+                            android:contentDescription="@string/imageview_adapter_text"
+                            android:src="@drawable/ic_add_white" />
 
                         <ImageButton
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_buy_cart_white"
-                            android:background="@drawable/shape_non_curve"/>
+                            android:background="@drawable/shape_non_curve"
+                            android:contentDescription="@string/imageview_adapter_text"
+                            android:src="@drawable/ic_buy_cart_white" />
 
                         <ImageButton
                             android:id="@+id/show_comment_button"
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_comment_white"
+                            android:layout_marginStart="5dp"
                             android:background="@drawable/shape_button_up_right"
-                            android:layout_marginStart="5dp"/>
+                            android:contentDescription="@string/imageview_adapter_text"
+                            android:src="@drawable/ic_comment_white" />
 
                     </LinearLayout>
 
 
-
                     <androidx.slidingpanelayout.widget.SlidingPaneLayout
-                        android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/colorBlack"/>
+                        android:layout_marginTop="10dp"
+                        android:background="@color/colorBlack" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -121,34 +125,34 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal"
                             android:gravity="center_horizontal"
-                            >
+                            android:orientation="horizontal">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="5dp"
                                 android:layout_gravity="center_horizontal"
-                                android:gravity="center_horizontal">
+                                android:layout_marginEnd="5dp"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical">
 
                                 <TextView
+                                    style="@style/TextAppearance.AppCompat.Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.AppCompat.Title"
-                                    android:text="@string/gender"
-                                    android:textSize="16dp"
                                     android:layout_gravity="center_horizontal"
-                                    android:gravity="center_horizontal"/>
+                                    android:gravity="center_horizontal"
+                                    android:text="@string/gender"
+                                    android:textSize="16sp" />
 
                                 <ImageView
                                     android:id="@+id/genre_icon"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
-                                    android:src="@drawable/mystery"
                                     android:layout_gravity="center_horizontal"
-                                    android:gravity="center_horizontal"/>
+                                    android:contentDescription="@string/imageview_adapter_text"
+                                    android:gravity="center_horizontal"
+                                    android:src="@drawable/mystery" />
 
 
                                 <TextView
@@ -157,44 +161,44 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
-                                    android:gravity="center_horizontal"/>
+                                    android:gravity="center_horizontal" />
                             </LinearLayout>
 
                             <androidx.slidingpanelayout.widget.SlidingPaneLayout
-                                android:layout_marginTop="10dp"
                                 android:layout_width="1dp"
                                 android:layout_height="65dp"
-                                android:background="@color/colorBlack"
-                                android:layout_marginStart="5dp"
-                                android:layout_marginEnd="5dp"
                                 android:layout_gravity="center_horizontal"
-                                android:gravity="center_horizontal"/>
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="5dp"
+                                android:background="@color/colorBlack"
+                                android:gravity="center_horizontal" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginEnd="5dp"
                                 android:layout_marginStart="5dp"
-                                android:gravity="center_horizontal">
+                                android:layout_marginEnd="5dp"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical">
 
                                 <TextView
+                                    style="@style/TextAppearance.AppCompat.Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"
                                     android:text="@string/publication"
-                                    android:textSize="16dp"
-                                    android:layout_gravity="center_horizontal"
-                                    android:gravity="center_horizontal"/>
+                                    android:textSize="16sp" />
 
                                 <TextView
+                                    style="@style/TextAppearance.AppCompat.Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.AppCompat.Title"
-                                    android:text="2017"
-                                    android:textSize="22dp"
                                     android:layout_gravity="center_horizontal"
-                                    android:gravity="center_horizontal"/>
+                                    android:gravity="center_horizontal"
+                                    android:text="@string/example_year"
+                                    android:textSize="22sp" />
                                 <!--<ImageView
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
@@ -204,62 +208,59 @@
 
 
                                 <TextView
-                                    android:text="@string/fake_date"
                                     style="@style/TextAppearance.AppCompat.Body1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
-                                    android:gravity="center_horizontal"/>
+                                    android:gravity="center_horizontal"
+                                    android:text="@string/fake_date" />
                             </LinearLayout>
 
                             <androidx.slidingpanelayout.widget.SlidingPaneLayout
-                                android:layout_marginTop="10dp"
                                 android:layout_width="1dp"
                                 android:layout_height="65dp"
-                                android:background="@color/colorBlack"
-                                android:layout_marginStart="5dp"
-                                android:layout_marginEnd="5dp"
                                 android:layout_gravity="center_horizontal"
-                                android:gravity="center_horizontal"/>
+                                android:layout_marginStart="5dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginEnd="5dp"
+                                android:background="@color/colorBlack"
+                                android:gravity="center_horizontal" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginStart="5dp"
                                 android:layout_gravity="center_horizontal"
-                                android:gravity="center_horizontal">
+                                android:layout_marginStart="5dp"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical">
 
                                 <TextView
+                                    style="@style/TextAppearance.AppCompat.Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.AppCompat.Title"
-                                    android:textSize="16dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:gravity="center_horizontal"
                                     android:text="@string/extension"
-                                    android:layout_gravity="center_horizontal"
-                                    android:gravity="center_horizontal"/>
+                                    android:textSize="16sp" />
 
                                 <TextView
+                                    style="@style/TextAppearance.AppCompat.Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.AppCompat.Title"
-                                    android:text="299"
-                                    android:textSize="22dp"
                                     android:layout_gravity="center_horizontal"
-                                    android:gravity="center_horizontal"/>
-
+                                    android:gravity="center_horizontal"
+                                    android:text="@string/numExample"
+                                    android:textSize="22sp" />
 
 
                                 <TextView
-                                    android:text="@string/paginas"
                                     style="@style/TextAppearance.AppCompat.Body1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
-                                    android:gravity="center_horizontal"/>
+                                    android:gravity="center_horizontal"
+                                    android:text="@string/paginas" />
                             </LinearLayout>
-
-
 
 
                         </LinearLayout>
@@ -267,10 +268,10 @@
                     </LinearLayout>
 
                     <androidx.slidingpanelayout.widget.SlidingPaneLayout
-                        android:layout_marginTop="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/colorBlack"/>
+                        android:layout_marginTop="5dp"
+                        android:background="@color/colorBlack" />
 
                     <TextView
                         android:id="@+id/summaryTextView"
@@ -290,21 +291,21 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_gravity="end">
+                            android:layout_gravity="end"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="4.4"
-                                android:textStyle="bold"
-                                android:textColor="@color/colorBlack"/>
+                                android:text="@string/rate_example"
+                                android:textColor="@color/colorBlack"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="/5"
-                                android:textColor="@color/colorBlack"/>
+                                android:text="@string/total_rate"
+                                android:textColor="@color/colorBlack" />
 
                         </LinearLayout>
 
@@ -313,7 +314,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="end"
-                            android:text="@string/book_summary_text"/>
+                            android:text="@string/book_summary_text" />
                     </LinearLayout>
 
                     <TextView
@@ -326,28 +327,26 @@
                         android:layout_marginBottom="5dp"
                         android:text="@string/more_books_of" />
 
-                    <androidx.cardview.widget.CardView
-                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/card_view_author_rated"
-                        android:layout_gravity="top"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
+                        android:layout_gravity="top"
                         android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
                         android:layout_marginTop="5dp"
+                        android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
-                        card_view:cardCornerRadius="4dp"
-                        card_view:cardBackgroundColor="@color/colorGrayCardBackground">
+                        card_view:cardBackgroundColor="@color/colorGrayCardBackground"
+                        card_view:cardCornerRadius="4dp">
 
                         <androidx.recyclerview.widget.RecyclerView
-                            xmlns:android="http://schemas.android.com/apk/res/android"
                             android:id="@+id/author_books_recycler_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
                             android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"/>
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="10dp" />
                     </androidx.cardview.widget.CardView>
 
                     <TextView
@@ -360,37 +359,35 @@
                         android:layout_marginBottom="5dp"
                         android:text="@string/more_books_genre" />
 
-                    <androidx.cardview.widget.CardView
-                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/card_view_gender"
-                        android:layout_gravity="top"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
+                        android:layout_gravity="top"
                         android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
                         android:layout_marginTop="5dp"
+                        android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
-                        card_view:cardCornerRadius="4dp"
-                        card_view:cardBackgroundColor="@color/colorGrayCardBackground">
+                        card_view:cardBackgroundColor="@color/colorGrayCardBackground"
+                        card_view:cardCornerRadius="4dp">
 
                         <androidx.recyclerview.widget.RecyclerView
-                            xmlns:android="http://schemas.android.com/apk/res/android"
                             android:id="@+id/gender_books_recycler_view"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
                             android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"/>
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="10dp" />
+
                     </androidx.cardview.widget.CardView>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:orientation="horizontal"/>
+                        android:orientation="horizontal" />
 
                 </LinearLayout>
-
 
                 <!--style="@style/ButtonStyle"-->
                 <!--<Button
@@ -401,8 +398,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
     </ScrollView>
-
-
 
 </LinearLayout>

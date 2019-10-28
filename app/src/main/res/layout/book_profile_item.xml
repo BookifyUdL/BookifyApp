@@ -35,7 +35,8 @@
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:viewportWidth="48"
-                    android:viewportHeight="48" />
+                    android:viewportHeight="48"
+                    android:contentDescription="@string/imageview_adapter_text" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -49,7 +50,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:text="Example"
+                    android:text="@string/example_text"
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
                     android:textSize="12sp"
@@ -70,7 +71,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:text="Example"
+                    android:text="@string/example_text"
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
                     android:textSize="10sp"
@@ -80,5 +81,7 @@
             </RelativeLayout>
 
         </LinearLayout>
+
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>

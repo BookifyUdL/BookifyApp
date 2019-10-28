@@ -50,24 +50,24 @@
             android:id="@+id/search_bar_interest_books"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="35dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:iconifiedByDefault="false"
-            android:queryHint="Search books"
-            android:layout_marginEnd="35dp"/>
+            android:queryHint="Search books" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="9"
             android:orientation="vertical"
-            android:layout_marginTop="10dp"
             android:padding="4dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewInterestBooks"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

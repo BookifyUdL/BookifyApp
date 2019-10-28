@@ -130,7 +130,6 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
             genres.add(MockupsValues.getGenres().get(2));
             genres.add(MockupsValues.getGenres().get(4));
             MockupsValues.user.setGenres(genres);
-
         }
 
 

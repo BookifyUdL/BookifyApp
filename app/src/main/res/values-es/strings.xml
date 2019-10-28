@@ -17,7 +17,7 @@
     <string name="done_first_form_text">Finalmente, hemos configurado correctamente su biblioteca y hemos optimizado sus búsquedas en función de las opciones que haya elegido. Estas opciones se pueden modificar en el futuro si lo desea.</string>
     <string name="done_redirect_first_form_text">Para comenzar a usar la aplicación, presione "listo" para que los cambios surtan efecto.</string>
 
-    <string name="last_added">Ultimos añadidos</string>
+    <string name="last_added">Últimos añadidos</string>
     <string name="top_rated">Mejor valorados</string>
     <string name="search_bar">Descubre libros</string>
 
@@ -40,13 +40,13 @@
     <string name="book_added_correctly_message"> se ha añadido correctamente a tu Libreria.</string>
     <string name="pending">Pendientes</string>
     <string name="accountFreeText">Gratuita</string>
-    <string name="accountTitleProfile">ACCOUNT</string>
-    <string name="commentsFeedTitleProfile">comments</string>
-    <string name="libraryTitleProfile">LIBRARY</string>
-    <string name="readedbooksSubtitleProfile">readed books</string>
-    <string name="readedBooksTitleProfile">Readed books</string>
-    <string name="genrePreferencesTitleProfile">Genre preferences</string>
-    <string name="achievementsTitleProfile">Last achievements</string>
+    <string name="accountTitleProfile">CUENTA</string>
+    <string name="commentsFeedTitleProfile">comentarios</string>
+    <string name="libraryTitleProfile">LIBRERÍA</string>
+    <string name="readedbooksSubtitleProfile">Libros leídos</string>
+    <string name="readedBooksTitleProfile">Libros leídos</string>
+    <string name="genrePreferencesTitleProfile">Preferencias de género</string>
+    <string name="achievementsTitleProfile">Últimos logros</string>
 
     <string name="biography_gender">Biografia</string>
     <string name="internet_gender">Computación</string>
@@ -81,5 +81,8 @@
     <string name="add_comment">Añade un comentario</string>
     <string name="fake_date">1 Octubre</string>
     <string name="fake_pages">Paginas</string>
+    <string name="done_text">Listo</string>
+    <string name="upgrade_account_text">Mejorar cuenta</string>
+    <string name="configuration_text">Configuración</string>
 
 </resources>

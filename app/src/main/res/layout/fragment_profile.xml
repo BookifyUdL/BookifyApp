@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profile_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/profile_layout"
     android:tag="profile_fragment"
     tools:context=".Profile.ProfileFragment">
 
@@ -24,13 +24,13 @@
             <ImageButton
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/award"
-                android:scaleType="centerInside"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_button"
                 android:padding="10dp"
-                android:background="@drawable/rounded_button"/>
+                android:scaleType="centerInside"
+                android:src="@drawable/award" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,41 +48,42 @@
                         android:id="@+id/profile_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/profile_photo"
                         android:layout_centerHorizontal="true"
-                        app:civ_border_width="2dp"
-                        app:civ_border_color="#FFF"/>
+                        android:src="@drawable/profile_photo"
+                        app:civ_border_color="#FFF"
+                        app:civ_border_width="2dp" />
 
                     <ImageView
                         android:id="@+id/premiumBadgeProfile"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="@string/imageview_adapter_text"
+                        android:minWidth="17sp"
+                        android:minHeight="17sp"
                         android:scaleType="fitStart"
                         android:src="@drawable/premium_image_icon"
-                        android:minWidth="17sp"
-                        android:adjustViewBounds="true"
-                        android:minHeight="17sp"
-                        android:visibility="invisible"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"/>
+                        android:visibility="invisible" />
 
                 </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:gravity="center"
+                    android:orientation="horizontal"
                     android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/nameUserTextview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@string/example_text"
+                        android:textAlignment="center"
                         android:textColor="@color/colorBlank"
-                        android:text="User unknown"
-                        android:textSize="20sp"
-                        android:textAlignment="center"/>
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -109,49 +110,49 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:weightSum="11"
                         android:layout_margin="5dp"
+                        android:orientation="horizontal"
                         android:paddingStart="10dp"
-                        android:paddingEnd="10dp">
+                        android:paddingEnd="10dp"
+                        android:weightSum="11">
 
                         <!-- Readed books -->
                         <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="3"
-                            android:layout_margin="5dp">
+                            android:layout_margin="5dp"
+                            android:layout_weight="3">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_centerInParent="true">
+                                android:layout_centerInParent="true"
+                                android:orientation="vertical">
 
                                 <TextView
+                                    style="@style/TextAppearance.AppCompat.Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:layout_gravity="center"
                                     android:text="@string/libraryTitleProfile"
-                                    android:textSize="16sp"
-                                    android:layout_gravity="center"/>
+                                    android:textSize="16sp" />
 
                                 <TextView
                                     android:id="@+id/numReadedBooksText"
+                                    style="@style/TextAppearance.AppCompat.Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:layout_gravity="center"
                                     android:text="@string/numExample"
-                                    android:textSize="22sp"
-                                    android:layout_gravity="center"/>
+                                    android:textSize="22sp" />
 
                                 <TextView
-                                    android:text="@string/readedbooksSubtitleProfile"
                                     style="@style/TextAppearance.AppCompat.Body1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
-                                    android:gravity="center_horizontal"/>
+                                    android:gravity="center_horizontal"
+                                    android:text="@string/readedbooksSubtitleProfile" />
 
                             </LinearLayout>
 
@@ -166,9 +167,9 @@
                             <LinearLayout
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="@color/colorBlack"
                                 android:layout_centerInParent="true"
-                                android:layout_margin="20dp"/>
+                                android:layout_margin="20dp"
+                                android:background="@color/colorBlack" />
 
                         </RelativeLayout>
 
@@ -176,38 +177,38 @@
                         <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="3"
-                            android:layout_margin="5dp">
+                            android:layout_margin="5dp"
+                            android:layout_weight="3">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_centerInParent="true">
+                                android:layout_centerInParent="true"
+                                android:orientation="vertical">
 
                                 <TextView
+                                    style="@style/TextAppearance.AppCompat.Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:layout_gravity="center"
                                     android:text="@string/feedbackTitleProfile"
-                                    android:textSize="16sp"
-                                    android:layout_gravity="center"/>
+                                    android:textSize="16sp" />
 
                                 <TextView
+                                    style="@style/TextAppearance.AppCompat.Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:layout_gravity="center"
                                     android:text="@string/numExample"
-                                    android:textSize="22sp"
-                                    android:layout_gravity="center"/>
+                                    android:textSize="22sp" />
 
                                 <TextView
-                                    android:text="@string/commentsFeedTitleProfile"
                                     style="@style/TextAppearance.AppCompat.Body1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
-                                    android:gravity="center_horizontal"/>
+                                    android:gravity="center_horizontal"
+                                    android:text="@string/commentsFeedTitleProfile" />
 
                             </LinearLayout>
 
@@ -222,9 +223,9 @@
                             <LinearLayout
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:background="@color/colorBlack"
                                 android:layout_centerInParent="true"
-                                android:layout_margin="20dp"/>
+                                android:layout_margin="20dp"
+                                android:background="@color/colorBlack" />
 
                         </RelativeLayout>
 
@@ -232,37 +233,37 @@
                         <RelativeLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="3"
-                            android:layout_margin="5dp">
+                            android:layout_margin="5dp"
+                            android:layout_weight="3">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_centerInParent="true">
+                                android:layout_centerInParent="true"
+                                android:orientation="vertical">
 
                                 <TextView
+                                    style="@style/TextAppearance.AppCompat.Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:layout_gravity="center"
                                     android:text="@string/accountTitleProfile"
-                                    android:textSize="16sp"
-                                    android:layout_gravity="center"/>
+                                    android:textSize="16sp" />
 
                                 <TextView
                                     android:id="@+id/achievementsText"
+                                    style="@style/TextAppearance.AppCompat.Title"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    style="@style/TextAppearance.AppCompat.Title"
-                                    android:text="@string/typeAccountExampleText"
-                                    android:layout_gravity="center"/>
+                                    android:layout_gravity="center"
+                                    android:text="@string/typeAccountExampleText" />
 
                                 <TextView
-                                    android:text="@string/periodAccountText"
                                     style="@style/TextAppearance.AppCompat.Body1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center"/>
+                                    android:layout_gravity="center"
+                                    android:text="@string/periodAccountText" />
 
                             </LinearLayout>
 
@@ -281,8 +282,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/colorBlack"
-                        android:layout_centerHorizontal="true"/>
+                        android:layout_centerHorizontal="true"
+                        android:background="@color/colorBlack" />
 
                 </RelativeLayout>
 
@@ -290,26 +291,26 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
-                    android:orientation="vertical"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Title"
                         android:id="@+id/info_text_genre_preferences"
+                        style="@style/TextAppearance.AppCompat.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/genrePreferencesTitleProfile"
-                        android:textSize="25sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorBlack"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"/>
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/genrePreferencesTitleProfile"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view_profile_genre_preferences"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="3dp"/>
+                        android:padding="3dp" />
 
                 </LinearLayout>
 
@@ -317,29 +318,29 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Title"
                         android:id="@+id/info_text_readed_books"
+                        style="@style/TextAppearance.AppCompat.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/readedBooksTitleProfile"
-                        android:textSize="25sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorBlack"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"/>
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/readedBooksTitleProfile"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view_profile_favourite_books"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
                         android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"/>
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="10dp" />
                 </LinearLayout>
 
                 <!-- Last achievements -->
@@ -347,28 +348,28 @@
                     android:id="@+id/linearLayoutAchievements"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/info_text_achievements"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/achievementsTitleProfile"
-                        android:textSize="25sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorBlack"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"/>
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/achievementsTitleProfile"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view_profile_achievements"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
                         android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"/>
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="10dp" />
 
                 </LinearLayout>
 
@@ -376,22 +377,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Upgrade account"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/rounded_button"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="20dp"/>
+                    android:text="@string/upgrade_account_text" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Configuration"
+                    android:layout_marginBottom="70dp"
+                    android:background="@drawable/rounded_button"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
-                    android:background="@drawable/rounded_button"
-                    android:layout_marginBottom="70dp"/>
+                    android:text="@string/configuration_text" />
 
             </LinearLayout>
 
