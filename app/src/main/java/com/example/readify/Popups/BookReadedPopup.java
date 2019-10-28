@@ -182,8 +182,8 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         this.activity.notifyLibraryListChanged();
         MockupsValues.removeReadingListBook(book);
         this.activity.notifyReadingListChanged();
-        close();
         Toast.makeText(getContext(), getContext().getString(R.string.review_added_correctly), Toast.LENGTH_LONG).show();
+        close();
     }
 
     public void close(){

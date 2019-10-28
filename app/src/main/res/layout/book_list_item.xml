@@ -24,7 +24,8 @@
             android:layout_width="100dp"
             android:src="@drawable/lib1"
             android:tag="Image"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:contentDescription="@string/imageview_adapter_text" />
 
         <LinearLayout
             android:layout_gravity="center_vertical"
@@ -66,7 +67,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_height="40dp"
                 android:layout_width="40dp"
-                android:src="@drawable/ic_add_book" />
+                android:src="@drawable/ic_add_book"
+                android:contentDescription="@string/imageview_adapter_text" />
 
             <!--<Button
                 android:id="@+id/addButton"

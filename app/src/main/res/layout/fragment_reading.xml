@@ -18,9 +18,9 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <!--<TextView
                     android:layout_width="match_parent"
@@ -32,25 +32,26 @@
                     android:orientation="vertical">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Title"
                         android:id="@+id/reading_text"
+                        style="@style/TextAppearance.AppCompat.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
                         android:text="@string/reading_text_title"
-                        android:textSize="25dp"
-                        android:textStyle="bold"
                         android:textColor="@color/colorBlack"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginStart="5dp"/>
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+
                     <androidx.slidingpanelayout.widget.SlidingPaneLayout
-                        android:layout_marginTop="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/colorMark"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
                         android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal"/>
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:background="@color/colorMark"
+                        android:gravity="center_horizontal" />
 
                 </LinearLayout>
 
@@ -58,10 +59,10 @@
                     android:id="@+id/reading_books_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"/>
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="10dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -69,39 +70,38 @@
                     android:orientation="vertical">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Title"
                         android:id="@+id/pending_text"
+                        style="@style/TextAppearance.AppCompat.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/pending"
-                        android:textSize="25dp"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorBlack"
+                        android:layout_marginStart="5dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginStart="5dp"/>
+                        android:text="@string/pending"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
 
                     <androidx.slidingpanelayout.widget.SlidingPaneLayout
-                        android:layout_marginTop="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/colorYellowSwipe"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
                         android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal"/>
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:background="@color/colorYellowSwipe"
+                        android:gravity="center_horizontal" />
 
                 </LinearLayout>
-
 
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/pending_books_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"/>
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="10dp" />
 
                 <LinearLayout
                     android:id="@+id/discover_layout"
@@ -109,24 +109,23 @@
                     android:layout_height="40dp"
                     android:orientation="vertical">
 
-                    <androidx.cardview.widget.CardView
-                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/card_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
-                        card_view:cardCornerRadius="4dp"
-                        card_view:cardBackgroundColor="@color/colorGrayCardBackground">
+                        card_view:cardBackgroundColor="@color/colorGrayCardBackground"
+                        card_view:cardCornerRadius="4dp">
 
                         <TextView
-                            android:layout_gravity="center_vertical|center_horizontal"
-                            android:gravity="center_horizontal|center_vertical"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|center_horizontal"
+                            android:gravity="center_horizontal|center_vertical"
                             android:text="@string/discover_link"
-                            android:textColor="@color/colorBlueLink"/>
+                            android:textColor="@color/colorBlueLink" />
                     </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
@@ -135,7 +134,7 @@
                     android:id="@+id/empty_layout"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:orientation="vertical"/>
+                    android:orientation="vertical" />
 
             </LinearLayout>
 

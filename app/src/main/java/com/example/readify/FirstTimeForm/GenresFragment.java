@@ -65,7 +65,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
     BooksListFormAdapter adapterBooksList;
     BooksListFormAdapter adapterBooksInterest;
 
-    User user = MockupsValues.user;
+    User user = MockupsValues.getUser();
 
     public GenresFragment() {
         // Required empty public constructor
@@ -235,6 +235,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         LinearLayoutManager linearLayoutManagerInterest = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerViewInterestBooks = view.findViewById(R.id.recyclerViewInterestBooks);
         recyclerViewInterestBooks.setLayoutManager(linearLayoutManagerInterest);
+
         ArrayList booksInterest = MockupsValues.getAllBooksForTutorial();
         for (Book book : user.getLibrary()){
             booksInterest.remove(book);
