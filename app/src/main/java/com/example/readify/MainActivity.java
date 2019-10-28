@@ -30,7 +30,7 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
 
     private BottomNavigationView navigation;
     private final ReadingFragment fragment1 = new ReadingFragment();
-    private final Fragment fragment2 = new LibraryFragment();
+    private final LibraryFragment fragment2 = new LibraryFragment();
     private  Fragment fragment3 = DiscoverFragment.newInstance();
     private final Fragment fragment4 = new ProfileFragment();
     private Fragment fragment5 = new SearchBookFragment();
@@ -66,10 +66,13 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         }
     };
 
+    public void notifyLibraryListChanged() {fragment2.notifyLibraryChanged();}
+
     public void notifyReadingListChanged() { fragment1.readingBooksChanged();}
 
     public void notifyPendingListChanged(){
         fragment1.pendingListChanged();
+        notifyLibraryListChanged();
     }
 
     public void changeDiscoverFragment(){

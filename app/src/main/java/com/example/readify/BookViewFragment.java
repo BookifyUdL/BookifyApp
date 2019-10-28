@@ -208,14 +208,8 @@ public class BookViewFragment extends Fragment {
         TextView genreName = (TextView) view.findViewById(R.id.text_genre_name);
         ImageView genreIcon = (ImageView) view.findViewById(R.id.genre_icon);
         genreName.setText(book.getGenre().getName());
-        //Drawable drawable = ContextCompat.getDrawable(getContext(),
-        //        getContext().getResources().getIdentifier(book.getGenre().getPicture(), "drawable", getContext().getPackageName()));
         genreIcon.setImageResource(getContext().getResources().getIdentifier(book.getGenre().getPicture(), "drawable", getContext().getPackageName()));
-
-
         scrollView.setScrollY(0);
-        //scrollView.fullScroll(ScrollView.FOCUS_UP);
-        //scrollView.fullScroll(ScrollView.Focus)
     }
 
     private void onGoBackButtonClicked(){

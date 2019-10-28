@@ -16,13 +16,17 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.readify.Adapters.BooksGridAdapter;
 import com.example.readify.Adapters.BooksListVerticalAdapter;
+import com.example.readify.Adapters.EmojisAdapter;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.Emoji;
 import com.example.readify.Models.Genre;
 import com.example.readify.R;
 
@@ -36,12 +40,13 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     private ArrayList<CardView> stars;
     private ArrayList<ImageButton> starsImage;
     private FragmentManager fragmentManager;
-    private int width, height;
+    private Book book;
+    private MainActivity activity;
 
-    public  BookReadedPopup(FragmentManager fragmentManager){
+    public  BookReadedPopup(MainActivity activity, FragmentManager fragmentManager, Book book){
         this.fragmentManager = fragmentManager;
-        //this.width = width;
-        //this.height = height;
+        this.activity = activity;
+        this.book = book;
     }
 
     View.OnClickListener listener = new View.OnClickListener() {
@@ -65,14 +70,8 @@ public class BookReadedPopup extends DialogFragment implements Popup {
 
     private void showReviewsPopup(){
         ReviewsPopup dialog =  new ReviewsPopup();
-        //dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        //dialog = new ProfileDialog(post.getGuide(), this, post.getPlace());
         FragmentTransaction ft2 = fragmentManager.beginTransaction();
         dialog.show(ft2, "reviews_fragment");
-        //dialog.setW
-        //dialog.setWindow(RelativeLayout.LayoutParams.MATCH_PARENT);
-        //dialog.getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
     }
 
     @Override
@@ -120,6 +119,22 @@ public class BookReadedPopup extends DialogFragment implements Popup {
             }
         });
 
+        CardView acceptCardView = view.findViewById(R.id.accept_card_view);
+        acceptCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                acceptButtonClicked();
+            }
+        });
+
+        TextView acceptTextView = view.findViewById(R.id.accept_text_view);
+        acceptTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                acceptButtonClicked();
+            }
+        });
+
 
         CardView star1 = (CardView) view.findViewById(R.id.card_view11);
         CardView star2 = (CardView) view.findViewById(R.id.card_view12);
@@ -149,7 +164,22 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         starsImage.add(starButton4);
         starsImage.add(starButton5);
 
+        RecyclerView recyclerViewGenres = view.findViewById(R.id.recylcer_view_emojis);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 4);
+        recyclerViewGenres.setLayoutManager(gridLayoutManager);
+
+        ArrayList<Emoji> emojis = MockupsValues.getEmojis();
+
+        EmojisAdapter emojisAdapter = new EmojisAdapter(getContext(), emojis);
+        recyclerViewGenres.setAdapter(emojisAdapter);
+
         return view;
+    }
+
+    private void acceptButtonClicked(){
+        MockupsValues.user.setLibraryBookAsRead(book);
+        this.activity.notifyLibraryListChanged();
+        close();
     }
 
     public void close(){

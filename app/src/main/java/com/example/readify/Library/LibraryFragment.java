@@ -36,6 +36,7 @@ import java.util.ArrayList;
 public class LibraryFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     BooksGridAdapter booksAdapter;
+    GridLayoutManager gridLayoutManager;
 
     private OnFragmentInteractionListener mListener;
 
@@ -50,6 +51,11 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
         return fragment;
     }
 
+    public void notifyLibraryChanged(){
+        booksAdapter.notifyDataSetChanged();
+        //gridLayoutManager.notify();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +68,8 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
 
         View view = inflater.inflate(R.layout.fragment_library, container, false);
         RecyclerView recyclerViewGenres = view.findViewById(R.id.recyclerViewGenres);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
+        gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
         recyclerViewGenres.setLayoutManager(gridLayoutManager);
-
-        ArrayList genres = MockupsValues.getGenres();
 
         //RecyclerViewAdapterGenres adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres, MockupsValues.user);
         //adapterGenres.setClickListener(GenresFragment.this);
