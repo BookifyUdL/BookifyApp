@@ -23,6 +23,7 @@ import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
+import com.example.readify.Pages;
 import com.example.readify.R;
 import com.example.readify.Design.ShadowTransformer;
 
@@ -235,7 +236,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
     private void showBookFragment(Book book){
         MainActivity activity = (MainActivity) getActivity();
-        activity.goToBookPage(book);
+        activity.goToBookPage(book, Pages.DISCOVER_PAGE);
     }
 
     private void showSearchFragment(){

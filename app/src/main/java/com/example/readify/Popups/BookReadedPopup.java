@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -179,7 +180,10 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     private void acceptButtonClicked(){
         MockupsValues.user.setLibraryBookAsRead(book);
         this.activity.notifyLibraryListChanged();
+        MockupsValues.removeReadingListBook(book);
+        this.activity.notifyReadingListChanged();
         close();
+        Toast.makeText(getContext(), getContext().getString(R.string.review_added_correctly), Toast.LENGTH_LONG).show();
     }
 
     public void close(){

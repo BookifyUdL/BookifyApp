@@ -13,6 +13,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import com.example.readify.Adapters.CardAdapter;
 import com.example.readify.MainActivity;
 import com.example.readify.Models.Book;
+import com.example.readify.Pages;
 import com.example.readify.R;
 
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
     }
 
     private void  showBook(Book book){
-        activity.goToBookPage(book);
+        activity.goToBookPage(book, Pages.DISCOVER_PAGE);
     }
 
 

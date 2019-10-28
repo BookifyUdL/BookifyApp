@@ -75,5 +75,7 @@
     <string name="add_comment">Añade un comentario</string>
     <string name="fake_date">1 Octubre</string>
     <string name="fake_pages">Paginas</string>
+    <string name="review_added_correctly">Tu review se ha añadido correctamente!</string>
+    <string name="comment_added_correctly">Tu comentario se ha añadido correctamente!</string>
 
 </resources>

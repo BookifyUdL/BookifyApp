@@ -41,14 +41,23 @@ public class BookViewFragment extends Fragment {
 
     private Book book;
     private ArrayList<Book> prevoiusBooks;
+    private ArrayList<Pages> parents;
     private View view;
     private List<Book> sameAuthorBooks;
     private List<Book> sameGenderBooks;
+    private Pages parent;
 
     private OnFragmentInteractionListener mListener;
 
     public BookViewFragment() {
         // Required empty public constructor
+    }
+
+    public void setParent(Pages parent){
+        if(this.parent != null)
+            parents.add(this.parent);
+        this.parent = parent;
+
     }
 
     public void setBook(Book book){
@@ -88,6 +97,7 @@ public class BookViewFragment extends Fragment {
         // Inflate the layout for this fragment
         User user = MockupsValues.getUser();
         prevoiusBooks = new ArrayList<>();
+        parents = new ArrayList<>();
         view = inflater.inflate(R.layout.fragment_book_view, container, false);
         ImageView backButton = (ImageView) view.findViewById(R.id.go_back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -182,7 +192,7 @@ public class BookViewFragment extends Fragment {
 
     private void showBookFragment(Book book){
         MainActivity activity = (MainActivity) getActivity();
-        activity.goToBookPage(book);
+        activity.goToBookPage(book, Pages.BOOK_VIEW_PAGE);
     }
 
     private void setContent(){
@@ -215,13 +225,35 @@ public class BookViewFragment extends Fragment {
     private void onGoBackButtonClicked(){
         if(!prevoiusBooks.isEmpty()) {
             book = prevoiusBooks.get(prevoiusBooks.size() - 1);
+            parent = parents.get(parents.size() - 1);
             setContent();
             prevoiusBooks.remove(prevoiusBooks.size() - 1);
+            parents.remove(parents.size() - 1);
         } else {
             this.book = null;
             prevoiusBooks = new ArrayList<>();
-            MainActivity activity = (MainActivity) getActivity();
-            activity.backToDiscoverFragment();
+            goToParentPage();
+            //activity.backToDiscoverFragment();
+        }
+    }
+
+    public void goToParentPage(){
+        MainActivity activity = (MainActivity) getActivity();
+        switch (parent){
+            case DISCOVER_PAGE:
+                activity.backToDiscoverFragment();
+                break;
+            case LIBRARY_PAGE:
+                activity.backToLibraryFragment();
+                break;
+            case PROFILE_PAGE:
+                activity.backToProfileFragment();
+                break;
+            case READING_PAGE:
+                activity.backToReadingFragment();
+                break;
+            default:
+                break;
         }
     }
 
