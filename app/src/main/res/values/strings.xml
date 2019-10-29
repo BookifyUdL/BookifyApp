@@ -111,5 +111,6 @@
     <string name="rate_example" translatable="false">4.4</string>
     <string name="upgrade_account_text">Upgrade account</string>
     <string name="configuration_text">Configuration</string>
+    <string name="any_book_yet">Any book yet. Click on the button below to discover new ones!</string>
 
 </resources>

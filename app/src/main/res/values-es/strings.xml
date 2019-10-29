@@ -90,5 +90,6 @@
     <string name="configuration_text">Configuración</string>
     <string name="periodAccountText">logros</string>
     <string name="feedbackTitleProfile">APORTAC.</string>
+    <string name="any_book_yet">Todavía no has añadido ningún libro. Haz click en el botón para descubrir nuevos libros!</string>
 
 </resources>
