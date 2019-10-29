@@ -84,6 +84,14 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_library, container, false);
+        LinearLayout discoverButton = view.findViewById(R.id.discover_layout);
+        discoverButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.focusDiscoverFragment();
+            }
+        });
         anyBookLayout = (LinearLayout) view.findViewById(R.id.any_book_layout);
         recyclerViewGenres = view.findViewById(R.id.recyclerViewGenres);
         gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
