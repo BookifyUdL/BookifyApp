@@ -46,6 +46,7 @@
     <string name="book_summary_text">En una noche de tormenta y barro nace una niña bastarda a la que, creyéndola muerta, bautizan con el nombre de Betsabé. Nadie sabe que en su interior lleva la fuerza de la feminidad, así como la magia y la rebeldía que la harán superar todos los obstáculos. Creará un vínculo indisoluble con su hermana de leche, Capitolina, una pobre niña rica, y ninguno quedará indiferente a su mirada de fuego. Ni siquiera Emmanuel, el revolucionario francés salido del Montparnasse más artístico que, al conocerla, caerá enfermo de amor.</string>
     <string name="reading_text_title">Reading</string>
     <string name="book_added_correctly_message"> added correctly to your Library.</string>
+    <string name="book_removed_correctly_message"> removed correctly from your Library.</string>
     <string name="pending">Pending</string>
     <string name="accountPremiumText" translatable="false">Premium</string>
     <string name="accountFreeText">Free</string>

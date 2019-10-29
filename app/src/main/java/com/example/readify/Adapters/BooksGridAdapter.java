@@ -81,28 +81,14 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
         String namePicture = mViewBooks.get(position).getPicture();
         holder.imageLayout.setBackground(ContextCompat.getDrawable(holder.imageLayout.getContext(),
                 holder.imageLayout.getContext().getResources().getIdentifier(namePicture, "drawable", holder.layout.getContext().getPackageName())));
-        if(MockupsValues.getPendingListBooks().contains(mViewBooks.get(position))){
-            setAddButtonIcon(holder);
-        } else {
-            holder.addButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    setAddButtonIcon(holder);
-                    Book book = mViewBooks.get(position);
-                    MockupsValues.addPendingBook(book);
-                    activity.notifyPendingListChanged();
-                    Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
-
-                }
-            });
-        }
+        holder.setAddButtonState(position);
     }
 
-    private void setAddButtonIcon(BooksGridAdapter.ViewHolder holder){
+    /*private void setAddButtonIcon(BooksGridAdapter.ViewHolder holder){
         //Drawable drawable = ContextCompat.getDrawable(holder.addButton.getContext(),
         //        holder.addButton.getContext().getResources().getIdentifier("ic_added_book", "drawable", holder.addButton.getContext().getPackageName()));
         holder.addButton.setImageResource(R.drawable.ic_added_book);
-    }
+    }*/
 
     @Override
     public int getItemCount() {
@@ -126,6 +112,51 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
         @Override
         public void onClick(View view) {
             if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+        }
+
+        private void setAddButtonState(final int position){
+            if(MockupsValues.getPendingListBooks().contains(mViewBooks.get(position))){
+                setAddButtonIconToAdded();
+            } else {
+                setAddButtonIconToAdd();
+            }
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(MockupsValues.getPendingListBooks().contains(mViewBooks.get(position))){
+                        setAddButtonIconToAdded();
+                        removeFromPendingList(position);
+                    } else {
+                        setAddButtonIconToAdd();
+                        toPendingList(position);
+                    }
+                }
+            });
+        }
+
+        private void removeFromPendingList(int position){
+            Book book = mViewBooks.get(position);
+            MockupsValues.removePendingListBook(book);
+            activity.notifyPendingListChanged();
+            Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_removed_correctly_message), Toast.LENGTH_LONG).show();
+
+        }
+
+        private void toPendingList(int position){
+            Book book = mViewBooks.get(position);
+            MockupsValues.addPendingBook(book);
+            activity.notifyPendingListChanged();
+            Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
+        }
+
+        private void setAddButtonIconToAdd(){
+            addButton.setImageResource(R.drawable.ic_add_book);
+        }
+
+        private void setAddButtonIconToAdded(){
+            //Drawable drawable = ContextCompat.getDrawable(holder.addButton.getContext(),
+            //        holder.addButton.getContext().getResources().getIdentifier("ic_added_book", "drawable", holder.addButton.getContext().getPackageName()));
+            addButton.setImageResource(R.drawable.ic_added_book);
         }
     }
 
