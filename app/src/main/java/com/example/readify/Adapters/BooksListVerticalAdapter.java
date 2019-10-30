@@ -28,6 +28,8 @@ import com.example.readify.R;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
+import tyrantgit.explosionfield.ExplosionField;
+
 public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVerticalAdapter.BookHolder> {
     private ArrayList<Book> booksList, originalSearchList;
     private MainActivity activity;
@@ -176,7 +178,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    BookReadedPopup dialog =  new BookReadedPopup(activity, fragmentManager, book);
+                    BookReadedPopup dialog =  new BookReadedPopup(activity, holder, fragmentManager, book);
                     FragmentTransaction ft2 = fragmentManager.beginTransaction();
                     dialog.show(ft2, "book_readed_popup");
                 }
@@ -209,6 +211,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
     // This is your ViewHolder class that helps to populate data to the view
     public class BookHolder extends RecyclerView.ViewHolder {
 
+        private View itemView;
         private ImageView bookCover;
         private TextView bookTitle;
         private TextView bookAuthor;
@@ -217,12 +220,17 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
 
         public BookHolder(View itemView) {
             super(itemView);
-
+            this.itemView = itemView;
             bookCover = (ImageView) itemView.findViewById(R.id.book_cover_image_view);
             bookTitle = (TextView) itemView.findViewById(R.id.book_title);
             bookAuthor = (TextView) itemView.findViewById(R.id.book_author);
             addButton = (ImageButton) itemView.findViewById(R.id.addButton);
             cardView = (CardView) itemView.findViewById(R.id.card_view);
+        }
+
+        public void destroyView(){
+            ExplosionField explosionField = ExplosionField.attach2Window(activity);
+            explosionField.explode(itemView);
         }
       
         /*public void setContactName(String name) {

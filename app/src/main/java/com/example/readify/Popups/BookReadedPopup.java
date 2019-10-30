@@ -43,11 +43,13 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     private FragmentManager fragmentManager;
     private Book book;
     private MainActivity activity;
+    private BooksListVerticalAdapter.BookHolder bookHolder;
 
-    public  BookReadedPopup(MainActivity activity, FragmentManager fragmentManager, Book book){
+    public  BookReadedPopup(MainActivity activity, BooksListVerticalAdapter.BookHolder bookHolder, FragmentManager fragmentManager, Book book){
         this.fragmentManager = fragmentManager;
         this.activity = activity;
         this.book = book;
+        this.bookHolder = bookHolder;
     }
 
     View.OnClickListener listener = new View.OnClickListener() {
@@ -184,6 +186,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         this.activity.notifyReadingListChanged();
         Toast.makeText(getContext(), getContext().getString(R.string.review_added_correctly), Toast.LENGTH_LONG).show();
         close();
+        bookHolder.destroyView();
     }
 
     public void close(){
