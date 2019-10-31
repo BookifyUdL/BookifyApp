@@ -1,11 +1,14 @@
 package com.example.readify.Popups;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -81,8 +84,11 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //view = inflater.inflate(R.layout.book_readed_popup, container);
+        //this.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         view = inflater.inflate(R.layout.book_readed_popup, container);
-        CardView cardView = view.findViewById(R.id.card_reviews);
+        this.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        /*CardView cardView = view.findViewById(R.id.card_reviews);
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,7 +102,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
             public void onClick(View view) {
                 showReviewsPopup();
             }
-        });
+        });*/
 
         ImageButton closeArrow = (ImageButton) view.findViewById(R.id.close_arrow);
         closeArrow.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +112,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
             }
         });
 
-        CardView cancelCardView = view.findViewById(R.id.cancel_card_view);
+        /*CardView cancelCardView = view.findViewById(R.id.cancel_card_view);
         cancelCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,7 +126,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
             public void onClick(View view) {
                 close();
             }
-        });
+        });*/
 
         CardView acceptCardView = view.findViewById(R.id.accept_card_view);
         acceptCardView.setOnClickListener(new View.OnClickListener() {
@@ -191,5 +197,15 @@ public class BookReadedPopup extends DialogFragment implements Popup {
 
     public void close(){
         this.dismiss();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        float dim = ViewGroup.LayoutParams.WRAP_CONTENT - getContext().getResources().getDimension(R.dimen.margin_10dp);
+        Window window = getDialog().getWindow();
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, Math.round(dim));
+        window.setGravity(Gravity.CENTER);
+        //TODO:
     }
 }
