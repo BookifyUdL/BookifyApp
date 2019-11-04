@@ -2,7 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="100dp"
-    android:layout_height="100dp">
+    android:layout_height="100dp"
+    android:layout_marginTop="@dimen/emoji_2dp"
+    android:layout_marginBottom="@dimen/emoji_2dp"
+    android:layout_marginStart="@dimen/emoji_2dp"
+    android:layout_marginEnd="@dimen/emoji_2dp">
 
     <androidx.cardview.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"

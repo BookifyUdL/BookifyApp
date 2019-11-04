@@ -1,6 +1,7 @@
 package com.example.readify.Popups;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -25,11 +26,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readify.Adapters.BooksListVerticalAdapter;
 import com.example.readify.Adapters.ReviewsVerticalAdapter;
+import com.example.readify.CommentActivity;
+import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Review;
 import com.example.readify.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -66,8 +70,17 @@ public class ReviewsPopup extends DialogFragment implements Popup {
                 close();
             }
         });
+        FloatingActionButton addCommentButton = (FloatingActionButton) view.findViewById(R.id.add_comment_button);
+        addCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), CommentActivity.class);
+                startActivity(intent);
+                //finish();
+            }
+        });
 
-        TextView userName = (TextView) view.findViewById(R.id.user_name);
+        /*TextView userName = (TextView) view.findViewById(R.id.user_name);
         userName.setText(MockupsValues.user.getName());
         CircleImageView userPicture = (CircleImageView) view.findViewById(R.id.profile_image);
         userPicture.setImageResource(
@@ -91,7 +104,7 @@ public class ReviewsPopup extends DialogFragment implements Popup {
                 hide(editText, EditorInfo.IME_ACTION_SEND);
 
             }
-        });
+        });*/
         //this.dismiss();
         return view;
     }

@@ -1,11 +1,13 @@
 package com.example.readify.Adapters;
 
 import android.content.Context;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -91,6 +93,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
 
         // Inflate the layout view you have created for the list rows here
         View view = layoutInflater.inflate(R.layout.review_item, parent, false);
+        //View view = layoutInflater.inflate(R.layout.comment_final_design, parent, false);
         return new ReviewsVerticalAdapter.BookHolder(view);
     }
 
@@ -126,15 +129,23 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         final Review review = reviewsList.get(position);
 
 
-        //
         holder.userName.setText(review.getUser().getName());
         holder.userComment.setText(review.getComment());
         //String aux = mContext.getPackageName();
         holder.userImage.setImageResource(
                 mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
 
+        /*if(position == 0){
+            holder.commentLayout.setVisibility(View.VISIBLE);
+            holder.commentItem.setVisibility(View.INVISIBLE);
+        } else {
+            holder.userName.setText(review.getUser().getName());
+            holder.userComment.setText(review.getComment());
+            //String aux = mContext.getPackageName();
+            holder.userImage.setImageResource(
+                    mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
 
-
+        }*/
     }
 
     // This is your ViewHolder class that helps to populate data to the view
@@ -143,10 +154,14 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         private CircleImageView userImage;
         private TextView userName;
         private JustifyTextView userComment;
+        private LinearLayout commentLayout;
+        private CardView commentItem;
 
         public BookHolder(View itemView) {
             super(itemView);
 
+            //commentLayout =  (LinearLayout) itemView.findViewById(R.id.comment_item);
+            commentItem = (CardView) itemView.findViewById(R.id.reviewed_comment);
             userImage = (CircleImageView) itemView.findViewById(R.id.profile_image);
             userName = (TextView) itemView.findViewById(R.id.user_name);
             userComment =  itemView.findViewById(R.id.user_comment);

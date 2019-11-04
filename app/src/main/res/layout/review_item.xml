@@ -9,7 +9,16 @@
     android:layout_marginBottom="@dimen/margin_5dp"
     android:orientation="vertical">
 
+    <!--include
+        android:id="@+id/comment_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/add_comment_item"
+        android:layout_marginBottom="@dimen/margin_5dp"
+        android:visibility="invisible"/-->
+
     <androidx.cardview.widget.CardView
+        android:id="@+id/reviewed_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorDarkGrayCardBackground"

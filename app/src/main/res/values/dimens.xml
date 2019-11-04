@@ -16,5 +16,6 @@
     <dimen name="emoji_text_size">10sp</dimen>
     <dimen name="rate_popup_subtitles_size">15sp</dimen>
     <dimen name="card_view_dimen">1dp</dimen>
+    <dimen name="emoji_2dp">2dp</dimen>
 
 </resources>

@@ -321,7 +321,6 @@
                             android:id="@+id/recylcer_view_emojis"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_5dp"
                             android:layout_marginEnd="@dimen/margin_5dp"
                             android:layout_marginBottom="@dimen/margin_5dp"/>
                     </LinearLayout>
