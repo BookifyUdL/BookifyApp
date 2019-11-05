@@ -1,5 +1,6 @@
 package com.example.readify;
 
+import android.content.ClipDescription;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -71,9 +72,22 @@ public class RichEditText extends AppCompatEditText {
                 public boolean onCommitContent(InputContentInfoCompat inputContentInfo,
                                                int flags, Bundle opts) {
 
+
                     // read and display inputContentInfo asynchronously
+                    ClipDescription description = inputContentInfo.getDescription();
+                    //image/gif
+                    //image/png
+
+                    //CharSequence la = description.getLabel();
+                    //int mimeTipeCount = description.getMimeTypeCount();
                     this.uri = inputContentInfo.getContentUri();
-                    activity.setWebView(this.uri);
+                    if(description.toString().contains("image/gif")){
+                        activity.setWebView(this.uri);
+                    } else {
+                        activity.setImageView(this.uri);
+                    }
+
+
                     //textView.setText(this.uri.toString());
                     if (BuildCompat.isAtLeastNMR1() && (flags &
                             InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION) != 0) {

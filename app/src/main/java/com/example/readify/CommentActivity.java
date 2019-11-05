@@ -7,6 +7,8 @@ import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 
 import android.content.ClipDescription;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.gsconrad.richcontentedittext.RichContentEditText;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -57,6 +60,27 @@ public class CommentActivity extends AppCompatActivity {
         .asGif()
         .error(R.drawable.angry) // show error drawable if the image is not a gif
         .into(img);
+    }
+
+    public void setImageView(Uri uri){
+        ImageView img = findViewById(R.id.imageView);
+        Glide.with(getApplicationContext())
+                .load(uri.toString())
+                .asBitmap()
+                .error(R.drawable.angry)
+                .into(img);
+        /*Picasso.with(getApplicationContext())
+                .load(uri.toString())
+                .into(img);
+        //.resize(width,height).
+        /*try {
+            URL url = new URL(uri.toString());
+            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            ImageView imageView = findViewById(R.id.imageView);
+            imageView.setImageBitmap(bmp);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }*/
     }
 
     private void setupRichContentEditText(){
