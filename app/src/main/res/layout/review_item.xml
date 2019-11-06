@@ -220,14 +220,16 @@
                 app:el_expanded="false"
                 app:el_parallax="0.5">
 
-                <androidx.recyclerview.widget.RecyclerView
+                <LinearLayout
                     android:id="@+id/sub_comments_recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="500dp"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="10dp" />
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+                </LinearLayout>
 
             </net.cachapa.expandablelayout.ExpandableLayout>
 

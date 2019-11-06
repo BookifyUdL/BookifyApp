@@ -79,8 +79,8 @@ public class ReviewWithOutOptionAdapter extends RecyclerView.Adapter<ReviewWithO
 
     public class ReviewHolder extends RecyclerView.ViewHolder {
 
-        private ExpandableLayout expandableLayout;
-        private ImageView expandButton;
+        //private ExpandableLayout expandableLayout;
+        //private ImageView expandButton;
         private CircleImageView userImage;
         private TextView userName;
         private JustifyTextView userComment;

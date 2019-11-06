@@ -127,6 +127,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         notifyDataSetChanged();
     }*/
 
+
     // This method is called when binding the data to the views being created in RecyclerView
     @Override
     public void onBindViewHolder(@NonNull final ReviewsVerticalAdapter.BookHolder holder, final int position) {
@@ -159,7 +160,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         private CircleImageView userImage;
         private TextView userName;
         private JustifyTextView userComment;
-        private RecyclerView recyclerView;
+        private LinearLayout recyclerView;
         private LinearLayout commentLayout;
         private CardView commentItem;
 
@@ -177,9 +178,8 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             expandableLayout.setOnExpansionUpdateListener(this);
             expandButton = itemView.findViewById(R.id.see_comments_button);
             recyclerView = itemView.findViewById(R.id.sub_comments_recycler_view);
-            expandableLayout.collapse();
-            ReviewWithOutOptionAdapter adapter = new ReviewWithOutOptionAdapter(mContext, reviewsList);
-            recyclerView.setAdapter(adapter);
+            //setRecyclerAdapter();
+            //expandableLayout.collapse();
             expandButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -187,6 +187,18 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
                         //recyclerView.setAdapter(null);
                         expandableLayout.collapse();
                     } else {
+                        //String[] options = activity.getResources().getStringArray(R.array.options);
+                        LayoutInflater layoutInflater = LayoutInflater.from(recyclerView.getContext());
+                        for (int i = 0; i < reviewsList.size(); i++) {
+                            View to_add = layoutInflater.inflate(R.layout.review_item_without_options,
+                                    recyclerView,false);
+
+                            //TextView text = (TextView) to_add.findViewById(R.id.text);
+                            //text.setText(options[i]);
+                            //text.setTypeface(FontSelector.getBold(getActivity()));
+                            recyclerView.addView(to_add);
+                        }
+
                         expandableLayout.expand();
                     }
                 }
