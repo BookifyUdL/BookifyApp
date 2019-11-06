@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Readify</string>
+    <string name="app_name" translatable="false">Bookify</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
@@ -114,4 +114,14 @@
     <string name="configuration_text">Configuration</string>
     <string name="any_book_yet">Any book yet. Click on the button below to discover new ones!</string>
 
+
+    <string name="booki">Bookify</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="read_it_together">Improve your reading experience</string>
+    <string name="skip">Skip</string>
+    <string name="login">Login</string>
+    <string name="email">Sign In via Facebook or Gmail</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="forget_password">Forget Password.?</string>
 </resources>
