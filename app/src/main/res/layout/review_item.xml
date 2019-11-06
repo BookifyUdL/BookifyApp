@@ -72,6 +72,120 @@
 
             </ScrollView>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_5dp"
+                android:orientation="horizontal"
+                android:background="@drawable/layout_border"
+                android:gravity="center_horizontal">
+
+                <!--de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/user1"
+                    app:civ_border_color="#FFF"
+                    app:civ_border_width="2dp" /-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal">
+
+                    <com.like.LikeButton
+                        app:icon_type="heart"
+                        app:icon_size="25dp"
+                        android:id="@+id/star_button"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        app:circle_start_color="@color/colorBlank"
+                        app:like_drawable="@drawable/like_filled"
+                        app:unlike_drawable="@drawable/like_unfilled"
+                        app:anim_scale_factor="1.5"/>
+
+                    <TextView
+                        android:id="@+id/likes_number"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/margin_5dp"
+                        android:text="120"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold"
+                        android:textSize="14dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/layout_border"
+                    android:gravity="center_horizontal">
+
+                    <com.like.LikeButton
+                        app:icon_type="heart"
+                        app:icon_size="25dp"
+                        android:id="@+id/star_button1"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        app:circle_start_color="@color/colorBlank"
+                        app:like_drawable="@drawable/like_filled"
+                        app:unlike_drawable="@drawable/like_unfilled"
+                        app:anim_scale_factor="1.5"/>
+
+                    <TextView
+                        android:id="@+id/likes_number1"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/margin_5dp"
+                        android:text="120"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold"
+                        android:textSize="14dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/layout_border"
+                    android:gravity="center_horizontal">
+
+                    <com.like.LikeButton
+                        app:icon_type="heart"
+                        app:icon_size="25dp"
+                        android:id="@+id/star_button2"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        app:circle_start_color="@color/colorBlank"
+                        app:like_drawable="@drawable/like_filled"
+                        app:unlike_drawable="@drawable/like_unfilled"
+                        app:anim_scale_factor="1.5"/>
+
+                    <TextView
+                        android:id="@+id/likes_number2"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/margin_5dp"
+                        android:text="120"
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold"
+                        android:textSize="14dp"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
             <!--TextView
                 android:id="@+id/user_comment"
                 android:text="Este es un comentario de prueba pagado por Adobe Acrobar features."
