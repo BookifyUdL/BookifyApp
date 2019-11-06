@@ -5,6 +5,7 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,6 +24,8 @@ import com.example.readify.Models.Review;
 import com.example.readify.Models.User;
 import com.example.readify.Popups.BookReadedPopup;
 import com.example.readify.R;
+
+import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -149,8 +152,10 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
     }
 
     // This is your ViewHolder class that helps to populate data to the view
-    public class BookHolder extends RecyclerView.ViewHolder {
+    public class BookHolder extends RecyclerView.ViewHolder implements ExpandableLayout.OnExpansionUpdateListener {
 
+        private ExpandableLayout expandableLayout;
+        private ImageView expandButton;
         private CircleImageView userImage;
         private TextView userName;
         private JustifyTextView userComment;
@@ -165,6 +170,53 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             userImage = (CircleImageView) itemView.findViewById(R.id.profile_image);
             userName = (TextView) itemView.findViewById(R.id.user_name);
             userComment =  itemView.findViewById(R.id.user_comment);
+
+            expandableLayout = itemView.findViewById(R.id.expandable_layout);
+            expandableLayout.setInterpolator(new OvershootInterpolator());
+            expandableLayout.setOnExpansionUpdateListener(this);
+            expandButton = itemView.findViewById(R.id.see_comments_button);
+            expandableLayout.collapse();
+            expandButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(expandableLayout.isExpanded()) {
+                        expandableLayout.collapse();
+                    } else {
+                        expandableLayout.expand();
+                    }
+                }
+            });
+        }
+
+        /*@Override
+        public void onClick(View view) {
+            if(expandableLayout.isExpanded()) {
+                expandableLayout.collapse();
+            } else {
+                expandableLayout.expand();
+            }
+            /*ViewHolder holder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(selectedItem);
+            if (holder != null) {
+                holder.expandButton.setSelected(false);
+                holder.expandableLayout.collapse();
+            }
+
+            int position = getAdapterPosition();
+            if (position == selectedItem) {
+                selectedItem = UNSELECTED;
+            } else {
+                expandButton.setSelected(true);
+                expandableLayout.expand();
+                selectedItem = position;
+            }
+        }*/
+
+        @Override
+        public void onExpansionUpdate(float expansionFraction, int state) {
+            /*Log.d("ExpandableLayout", "State: " + state);
+            if (state == ExpandableLayout.State.EXPANDING) {
+                recyclerView.smoothScrollToPosition(getAdapterPosition());
+            }*/
         }
     }
 
