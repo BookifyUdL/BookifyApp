@@ -39,6 +39,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
     private ArrayList<Review> reviewsList;
     private MainActivity activity;
     private Context mContext;
+    //private ReviewWithOutOptionAdapter adapter;
 
     // Counstructor for the Class
     public ReviewsVerticalAdapter(MainActivity activity, Context context, ArrayList<Review> reviews) {
@@ -137,7 +138,6 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         //String aux = mContext.getPackageName();
         holder.userImage.setImageResource(
                 mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
-
         /*if(position == 0){
             holder.commentLayout.setVisibility(View.VISIBLE);
             holder.commentItem.setVisibility(View.INVISIBLE);
@@ -159,6 +159,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         private CircleImageView userImage;
         private TextView userName;
         private JustifyTextView userComment;
+        private RecyclerView recyclerView;
         private LinearLayout commentLayout;
         private CardView commentItem;
 
@@ -175,11 +176,15 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             expandableLayout.setInterpolator(new OvershootInterpolator());
             expandableLayout.setOnExpansionUpdateListener(this);
             expandButton = itemView.findViewById(R.id.see_comments_button);
+            recyclerView = itemView.findViewById(R.id.sub_comments_recycler_view);
             expandableLayout.collapse();
+            ReviewWithOutOptionAdapter adapter = new ReviewWithOutOptionAdapter(mContext, reviewsList);
+            recyclerView.setAdapter(adapter);
             expandButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(expandableLayout.isExpanded()) {
+                        //recyclerView.setAdapter(null);
                         expandableLayout.collapse();
                     } else {
                         expandableLayout.expand();
