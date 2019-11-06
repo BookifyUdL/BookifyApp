@@ -88,5 +88,7 @@
     <string name="done_text">Listo</string>
     <string name="upgrade_account_text">Mejorar cuenta</string>
     <string name="configuration_text">Configuración</string>
+    <string name="see_comments">Comentarios</string>
+    <string name="share">Compartir</string>
 
 </resources>

@@ -95,6 +95,8 @@
     <string name="accept_upper_case">ACCEPT</string>
     <string name="search_book">Search book</string>
     <string name="add_comment">Add a comment</string>
+    <string name="see_comments">Comments</string>
+    <string name="share">Share</string>
     <string name="fake_date">1st October</string>
     <string name="fake_pages">Pages</string>
     <string name="review_added_correctly">Your review was added correctly!</string>
