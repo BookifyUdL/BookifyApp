@@ -210,6 +210,11 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
                             recyclerView.addView(to_add);
                         }
 
+                        View add_comment = layoutInflater.inflate(R.layout.add_comment_layout,
+                                recyclerView,false);
+                        recyclerView.addView(add_comment);
+
+
                         expandableLayout.expand();
                     }
                 }
