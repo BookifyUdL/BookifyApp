@@ -193,6 +193,17 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
                             View to_add = layoutInflater.inflate(R.layout.review_item_without_options,
                                     recyclerView,false);
 
+                            CircleImageView image = (CircleImageView) to_add.findViewById(R.id.profile_image);
+                            TextView name = (TextView) to_add.findViewById(R.id.user_name);
+                            TextView comment =  to_add.findViewById(R.id.user_comment);
+                            Review review = reviewsList.get(i);
+                            image.setImageResource(
+                                    mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
+
+                            name.setText(review.getUser().getName());
+                            comment.setText(review.getComment());
+
+
                             //TextView text = (TextView) to_add.findViewById(R.id.text);
                             //text.setText(options[i]);
                             //text.setTypeface(FontSelector.getBold(getActivity()));
