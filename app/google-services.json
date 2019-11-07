@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "941380181228",
+    "firebase_url": "https://bookify-ece77.firebaseio.com",
+    "project_id": "bookify-ece77",
+    "storage_bucket": "bookify-ece77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941380181228:android:14fcd5acd47614175cd9c9",
+        "android_client_info": {
+          "package_name": "com.example.readify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "941380181228-ieefhip9homlgmq304d3krrceql8ordm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.readify",
+            "certificate_hash": "c3dcb8c19903b669825229b82eb48ef570ef4bc1"
+          }
+        },
+        {
+          "client_id": "941380181228-t3bgpj9d7ktkjc9hhasf7110sq9ntjmr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABJ-q2Z7XW7T4ervteIYHatOeEOo0jAPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "941380181228-t3bgpj9d7ktkjc9hhasf7110sq9ntjmr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

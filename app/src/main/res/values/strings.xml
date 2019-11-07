@@ -113,7 +113,9 @@
     <string name="upgrade_account_text">Upgrade account</string>
     <string name="configuration_text">Configuration</string>
     <string name="any_book_yet">Any book yet. Click on the button below to discover new ones!</string>
-
+    <string name="facebook_app_id" translatable="false">2457878697756823</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb2457878697756823</string>
+    <string name="or_text">or</string>
 
     <string name="booki">Bookify</string>
     <string name="welcome_back">Welcome Back</string>
@@ -122,6 +124,9 @@
     <string name="login">Login</string>
     <string name="email">Sign In via Facebook or Gmail</string>
     <string name="password">Password</string>
-    <string name="sign_up">Sign up</string>
+    <string name="sign_up">or</string>
     <string name="forget_password">Forget Password.?</string>
+    <string name="facebook_status_fmt">Facebook User: %s</string>
+    <string name="firebase_status_fmt">Firebase User: %s</string>
+    <string name="disconnect_text">Disconnect</string>
 </resources>
