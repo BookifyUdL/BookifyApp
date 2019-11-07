@@ -1,21 +1,38 @@
 package com.example.readify.Models;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Base64;
+
 import com.example.readify.MockupsValues;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.concurrent.ExecutionException;
 
 public class User {
+    private String uid;
+    private String name;
+    private String email;
+    private String picture;
+    private Boolean premium;
     private ArrayList<Achievement> achievements;
     private ArrayList<Book> library;
     private ArrayList<Genre> genres;
     private ArrayList<Book> interested;
     private ArrayList<Book> read;
-    private Boolean premium;
-    private String picture;
-    private String name;
+    private boolean firstForm;
 
-    public User(String name, String picture){
+    public User(String name, String picture) {
         this.name = name;
         this.picture = picture;
     }
@@ -27,9 +44,13 @@ public class User {
         achievements = new ArrayList<>();
         interested = new ArrayList<>();
         read = new ArrayList<>();
-        this.name = "Oscar R";
+
+        this.uid = "0000";
+        this.name = "User Unknown";
+        this.email = "user@unknown.com";
         this.picture = "userfinale";
         this.achievements = new ArrayList<>();
+        this.firstForm = false;
         //premium = false;
         //this.achievements = MockupsValues.getAchievementsPersonalized();
     }
@@ -44,9 +65,29 @@ public class User {
         this.achievements = MockupsValues.getAchievementsPersonalized();
     }
 
-    public Boolean isPremium() { return premium; }
+    public String getUid() {
+        return uid;
+    }
 
-    public void setPremium(Boolean premium) { this.premium = premium; }
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Boolean isPremium() {
+        return premium;
+    }
+
+    public void setPremium(Boolean premium) {
+        this.premium = premium;
+    }
 
     public String getPicture() {
         return picture;
@@ -64,29 +105,35 @@ public class User {
         this.name = name;
     }
 
-    public void addBookToInterestedBooks(Book book){
+    public void addBookToInterestedBooks(Book book) {
         interested.add(book);
     }
 
-    public ArrayList<Book> getReadBooks(){
+    public ArrayList<Book> getReadBooks() {
         return read;
     }
 
-    public void addBookToReadBooks(Book book){
+    public void addBookToReadBooks(Book book) {
         read.add(book);
     }
 
-    public ArrayList<Book> getInterestedBooks(){
+    public ArrayList<Book> getInterestedBooks() {
         return interested;
     }
 
-    public ArrayList<Genre> getGenres() { return genres; }
+    public ArrayList<Genre> getGenres() {
+        return genres;
+    }
 
-    public void setGenres(ArrayList<Genre> genres) { this.genres = genres; }
+    public void setGenres(ArrayList<Genre> genres) {
+        this.genres = genres;
+    }
 
-    public void addGenreToGenres(Genre genre){ genres.add(genre); }
+    public void addGenreToGenres(Genre genre) {
+        genres.add(genre);
+    }
 
-    public void removeGenreToGenres(Genre genre){
+    public void removeGenreToGenres(Genre genre) {
         library.remove(genre);
     }
 
@@ -105,11 +152,11 @@ public class User {
         this.library = library;
     }
 
-    public void addBookToLibrary(Book book){
+    public void addBookToLibrary(Book book) {
         library.add(book);
     }
 
-    public void removeBookToLibrary(Book book){
+    public void removeBookToLibrary(Book book) {
         library.remove(book);
     }
 
@@ -166,9 +213,9 @@ public class User {
         return results;
     }
 
-    public void booksReSet(){
-        for (Book book : getLibrary()){
-            if(book.isRead()){
+    public void booksReSet() {
+        for (Book book : getLibrary()) {
+            if (book.isRead()) {
                 addBookToReadBooks(book);
             } else {
                 addBookToInterestedBooks(book);
@@ -176,12 +223,28 @@ public class User {
         }
     }
 
-    public void setLibraryBookAsRead(Book book){
+    public void setLibraryBookAsRead(Book book) {
         //book.setRead(true);
-        if (this.getLibrary().contains(book)){
+        if (this.getLibrary().contains(book)) {
             this.getLibrary().remove(book);
         }
         book.setRead(true);
         this.getLibrary().add(0, book);
     }
+
+    public void setFirstForm(boolean value) {
+        this.firstForm = value;
+    }
+
+    public boolean getFirstForm() {
+        return firstForm;
+    }
+
+    public void writeOnSharedPreferences(SharedPreferences pref){
+        pref.edit().putString("com.example.readify.uid", uid).apply();
+        pref.edit().putString("com.example.readify.name", name).apply();
+        pref.edit().putString("com.example.readify.email", email).apply();
+        pref.edit().putBoolean("com.example.readify.firstform", firstForm).apply();
+    }
+
 }

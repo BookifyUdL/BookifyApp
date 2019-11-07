@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,6 +38,11 @@ import com.example.readify.Models.Genre;
 import com.example.readify.Models.User;
 import com.example.readify.Pages;
 import com.example.readify.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,11 +68,13 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String USERS = "users";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private User user;
+    CircleImageView userImage;
 
     private OnFragmentInteractionListener mListener;
     private SharedPreferences prefs;
@@ -110,16 +118,12 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
         user = MockupsValues.getUserProfile();
 
-        // Put the name of the user
-        CircleImageView userImage = (CircleImageView) view.findViewById(R.id.profile_image);
-        byte[] imageAsBytes = Base64.decode(prefs.getString("com.example.readify.photo", "").getBytes(), Base64.DEFAULT);
+        // Change an user image
+        userImage = (CircleImageView) view.findViewById(R.id.profile_image);
+        byte[] imageAsBytes = Base64.decode(prefs.getString("com.example.readify.photo", "userfinale").getBytes(), Base64.DEFAULT);
         userImage.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
-        //String image = prefs.getString("com.example.readify.photo", MockupsValues.user.getPicture());
-        //userImage.setImageBitmap(getBitmapFromURL(image));
-            //userImage.setImageResource(
-             //       getContext().getResources().getIdentifier(image, "drawable", getContext().getPackageName()));
 
-
+        // Put the name of the user
         TextView textViewNameUser = (TextView) view.findViewById(R.id.nameUserTextview);
         textViewNameUser.setText(prefs.getString("com.example.readify.name", "User Unknown"));
 

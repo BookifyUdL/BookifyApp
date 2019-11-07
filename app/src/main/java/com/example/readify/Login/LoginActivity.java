@@ -35,6 +35,7 @@ import static android.view.View.VISIBLE;
 import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
+import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -58,6 +59,12 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.apache.commons.io.IOUtils;
 
@@ -66,10 +73,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "FacebookLogin";
+    private static final String USERS = "users";
     private static final int RC_SIGN_IN = 9001;
     private static final int GOOGLE_SIGN_OUT = 4001;
     private static final int FB_SIGN_OUT = 4002;
@@ -84,6 +93,10 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private SharedPreferences pref;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private User userLogin;
+    private boolean userExists;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -158,7 +171,11 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         callbackManager = CallbackManager.Factory.create();
         loginFacebook = findViewById(R.id.login_button);
+        userLogin = new User();
+
         pref = getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference(USERS);
     }
 
     @Override
@@ -195,6 +212,7 @@ public class LoginActivity extends AppCompatActivity {
     // Function to login with Google
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        afterAnimationView.setVisibility(GONE);
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -206,17 +224,28 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            //Put the information about google to sharedpreferences
-                            pref.edit().putString("com.example.readify.uid", user.getUid()).apply();
-                            pref.edit().putString("com.example.readify.name", user.getDisplayName()).apply();
-                            pref.edit().putString("com.example.readify.email", user.getEmail()).apply();
-                            new DownloadImagesTask().execute(user.getPhotoUrl().toString());
+                            //Put the information about google
+                            userLogin.setUid(user.getUid());
+                            userLogin.setName(user.getDisplayName());
+                            userLogin.setEmail(user.getEmail());
+                            userLogin.writeOnSharedPreferences(pref);
+
+                            try {
+                                new DownloadImagesTask().execute(user.getPhotoUrl().toString()).get();
+                            } catch (ExecutionException | InterruptedException e) {
+                                e.printStackTrace();
+                            }
 
                             MockupsValues.setContext(LoginActivity.this);
 
                             //Start activity with a Google logOut
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            Intent intent;
+                            if (!task.getResult().getAdditionalUserInfo().isNewUser())
+                                intent = new Intent(LoginActivity.this, MainActivity.class);
+                            else
+                                intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
                             startActivityForResult(intent, GOOGLE_SIGN_OUT);
+
                             loadingProgressBar.setVisibility(GONE);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -259,13 +288,28 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            pref.edit().putString("com.example.readify.name", user.getDisplayName()).apply();
-                            pref.edit().putString("com.example.readify.uid", user.getUid()).apply();
-                            pref.edit().putString("com.example.readify.email", user.getEmail()).apply();
-                            new DownloadImagesTask().execute((user.getPhotoUrl().toString() + "?type=large"));
+                            //Put the information about Facebook
+                            userLogin.setUid(user.getUid());
+                            userLogin.setName(user.getDisplayName());
+                            userLogin.setEmail(user.getEmail());
+                            userLogin.writeOnSharedPreferences(pref);
 
-                            Intent intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+                            try {
+                                new DownloadImagesTask().execute((user.getPhotoUrl().toString() + "?type=large")).get();
+                            } catch (ExecutionException | InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            MockupsValues.setContext(LoginActivity.this);
+
+                            //Start activity with a Facebook logOut
+                            Intent intent;
+                            if (!task.getResult().getAdditionalUserInfo().isNewUser())
+                                intent = new Intent(LoginActivity.this, MainActivity.class);
+                            else
+                                intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
                             startActivityForResult(intent, FB_SIGN_OUT);
+
                             loadingProgressBar.setVisibility(GONE);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -328,6 +372,8 @@ public class LoginActivity extends AppCompatActivity {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             result.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
             byte[] b = baos.toByteArray();
+            userLogin.setPicture(Base64.encodeToString(b, Base64.DEFAULT));
+            databaseReference.child(userLogin.getUid()).setValue(userLogin);
             pref.edit().putString("com.example.readify.photo", Base64.encodeToString(b, Base64.DEFAULT)).apply();
         }
 
@@ -346,5 +392,39 @@ public class LoginActivity extends AppCompatActivity {
                 return null;
             }
         }
+    }
+
+    private boolean checkIfUserExists(final String uid){
+
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        rootRef.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                userExists = snapshot.hasChild(uid);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+
+        return userExists;
+
+        /*databaseReference.equalTo(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    intentApp = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivityForResult(intentApp, result);
+                } else {
+                    intentApp = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+                    databaseReference.child(userLogin.getUid()).setValue(userLogin);
+                    startActivityForResult(intentApp, result);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });*/
     }
 }
