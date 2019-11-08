@@ -386,6 +386,7 @@
                     android:text="@string/upgrade_account_text" />
 
                 <Button
+                    android:id="@+id/logOutButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -393,7 +394,7 @@
                     android:background="@drawable/rounded_button"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
-                    android:text="@string/configuration_text" />
+                    android:text="@string/disconnect_text" />
 
             </LinearLayout>
 

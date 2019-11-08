@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.readify.Discover.DiscoverFragment;
 import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.Library.LibraryFragment;
+import com.example.readify.Login.LoginActivity;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
 import com.example.readify.Profile.ProfileFragment;
@@ -15,6 +16,7 @@ import com.example.readify.Reading.ReadingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ ReadingFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInterac
 LibraryFragment.OnFragmentInteractionListener, DiscoverFragment.OnFragmentInteractionListener,
 SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInteractionListener{
 
+    private static final int SIGN_OUT = 4001;
 
     private BottomNavigationView navigation;
     private final ReadingFragment fragment1 = new ReadingFragment();
@@ -142,6 +145,13 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
     public void goToFirstForm(){
         Intent intent = new Intent(MainActivity.this, FirstTimeFormActivity.class);
         startActivity(intent);
+        finish();
+    }
+
+    public void logOut(){
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.putExtra("result", SIGN_OUT);
+        setResult(Activity.RESULT_OK, intent);
         finish();
     }
 

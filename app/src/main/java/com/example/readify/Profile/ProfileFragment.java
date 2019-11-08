@@ -1,15 +1,22 @@
 package com.example.readify.Profile;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +29,7 @@ import com.example.readify.Adapters.AchievementsHoritzontalAdapter;
 import com.example.readify.Adapters.BooksHorizontalAdapter;
 import com.example.readify.Adapters.BooksProfileHoritzontalAdapter;
 import com.example.readify.Adapters.GenresHoritzontalAdapter;
+import com.example.readify.Login.LoginActivity;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Achievement;
@@ -30,7 +38,17 @@ import com.example.readify.Models.Genre;
 import com.example.readify.Models.User;
 import com.example.readify.Pages;
 import com.example.readify.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,13 +68,16 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String USERS = "users";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private User user;
+    CircleImageView userImage;
 
     private OnFragmentInteractionListener mListener;
+    private SharedPreferences prefs;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -94,13 +115,17 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        user = MockupsValues.getUser();
+        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+
+        user = MockupsValues.getUserProfile();
+        user.readFromSharedPreferences(prefs);
+
+        // Change an user image
+        userImage = (CircleImageView) view.findViewById(R.id.profile_image);
+        byte[] imageAsBytes = Base64.decode(user.getPicture().getBytes(), Base64.DEFAULT);
+        userImage.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
 
         // Put the name of the user
-        CircleImageView userImage = (CircleImageView) view.findViewById(R.id.profile_image);
-        userImage.setImageResource(
-                getContext().getResources().getIdentifier(MockupsValues.user.getPicture(), "drawable", getContext().getPackageName()));
-
         TextView textViewNameUser = (TextView) view.findViewById(R.id.nameUserTextview);
         textViewNameUser.setText(user.getName());
 
@@ -149,8 +174,9 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         final AchievementsHoritzontalAdapter adapterAchievements = new AchievementsHoritzontalAdapter(getContext(), achievementsCompleted);
         recyclerViewAchievements.setAdapter(adapterAchievements);
 
-        Button button = (Button) view.findViewById(R.id.upgrade_button);
-        button.setOnClickListener(
+        //Upgrade account button
+        Button buttonUpgrade = (Button) view.findViewById(R.id.upgrade_button);
+        buttonUpgrade.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -162,6 +188,15 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
                     }
                 }
         );
+
+        Button disconnectButton = (Button) view.findViewById(R.id.logOutButton);
+        disconnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity activity = (MainActivity) getActivity();
+                activity.logOut();
+            }
+        });
 
         return view;
     }
