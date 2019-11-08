@@ -65,6 +65,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import org.apache.commons.io.IOUtils;
 
@@ -90,13 +91,12 @@ public class LoginActivity extends AppCompatActivity {
     private GifImageView gifImageView;
     private CallbackManager callbackManager;
     private LoginButton loginFacebook;
-    private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private SharedPreferences pref;
+    private FirebaseAuth mAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    private User userLogin;
-    private boolean userExists;
+    //private User userLogin;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -168,12 +168,12 @@ public class LoginActivity extends AppCompatActivity {
         rootView = findViewById(R.id.rootView);
         afterAnimationView = findViewById(R.id.afterAnimationView);
         gifImageView = findViewById(R.id.gifImageView);
-        mAuth = FirebaseAuth.getInstance();
         callbackManager = CallbackManager.Factory.create();
         loginFacebook = findViewById(R.id.login_button);
-        userLogin = new User();
+        //userLogin = new User();
 
         pref = getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference(USERS);
     }
@@ -225,10 +225,12 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             //Put the information about google
-                            userLogin.setUid(user.getUid());
+                            /*userLogin.setUid(user.getUid());
                             userLogin.setName(user.getDisplayName());
-                            userLogin.setEmail(user.getEmail());
-                            userLogin.writeOnSharedPreferences(pref);
+                            userLogin.setEmail(user.getEmail());*/
+                            pref.edit().putString("com.example.readify.uid", user.getUid()).apply();
+                            pref.edit().putString("com.example.readify.name", user.getDisplayName()).apply();
+                            pref.edit().putString("com.example.readify.email", user.getEmail()).apply();
 
                             try {
                                 new DownloadImagesTask().execute(user.getPhotoUrl().toString()).get();
@@ -289,11 +291,12 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             //Put the information about Facebook
-                            userLogin.setUid(user.getUid());
+                            /*userLogin.setUid(user.getUid());
                             userLogin.setName(user.getDisplayName());
-                            userLogin.setEmail(user.getEmail());
-                            userLogin.writeOnSharedPreferences(pref);
-
+                            userLogin.setEmail(user.getEmail());*/
+                            pref.edit().putString("com.example.readify.uid", user.getUid()).apply();
+                            pref.edit().putString("com.example.readify.name", user.getDisplayName()).apply();
+                            pref.edit().putString("com.example.readify.email", user.getEmail()).apply();
                             try {
                                 new DownloadImagesTask().execute((user.getPhotoUrl().toString() + "?type=large")).get();
                             } catch (ExecutionException | InterruptedException e) {
@@ -306,8 +309,10 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent;
                             if (!task.getResult().getAdditionalUserInfo().isNewUser())
                                 intent = new Intent(LoginActivity.this, MainActivity.class);
-                            else
+                            else {
+                                readDataFromFirebase(user.getUid());
                                 intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+                            }
                             startActivityForResult(intent, FB_SIGN_OUT);
 
                             loadingProgressBar.setVisibility(GONE);
@@ -358,6 +363,31 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void readDataFromFirebase(String uid){
+        databaseReference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                pref.edit().putBoolean("com.example.readify.premium", false).apply();
+
+                String genresToPref = new Gson().toJson(user.getGenres());
+                pref.edit().putString("com.example.readify.genres", genresToPref).apply();
+
+                String libraryToPref = new Gson().toJson(user.getLibrary());
+                pref.edit().putString("com.example.readify.library", libraryToPref).apply();
+
+                String interestedToPref = new Gson().toJson(user.getInterested());
+                pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     // Class to provide a Bitmap from URL (Public access)
     public class DownloadImagesTask extends AsyncTask<String, Void, Bitmap> {
 
@@ -372,8 +402,8 @@ public class LoginActivity extends AppCompatActivity {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             result.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
             byte[] b = baos.toByteArray();
-            userLogin.setPicture(Base64.encodeToString(b, Base64.DEFAULT));
-            databaseReference.child(userLogin.getUid()).setValue(userLogin);
+            //userLogin.setPicture(Base64.encodeToString(b, Base64.DEFAULT));
+            //databaseReference.child(user.getUid()).setValue(userLogin);
             pref.edit().putString("com.example.readify.photo", Base64.encodeToString(b, Base64.DEFAULT)).apply();
         }
 
@@ -392,39 +422,5 @@ public class LoginActivity extends AppCompatActivity {
                 return null;
             }
         }
-    }
-
-    private boolean checkIfUserExists(final String uid){
-
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        rootRef.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                userExists = snapshot.hasChild(uid);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });
-
-        return userExists;
-
-        /*databaseReference.equalTo(uid)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    intentApp = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivityForResult(intentApp, result);
-                } else {
-                    intentApp = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
-                    databaseReference.child(userLogin.getUid()).setValue(userLogin);
-                    startActivityForResult(intentApp, result);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
-        });*/
     }
 }

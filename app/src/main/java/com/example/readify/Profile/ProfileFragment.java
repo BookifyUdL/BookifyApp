@@ -116,16 +116,18 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+
         user = MockupsValues.getUserProfile();
+        user.readFromSharedPreferences(prefs);
 
         // Change an user image
         userImage = (CircleImageView) view.findViewById(R.id.profile_image);
-        byte[] imageAsBytes = Base64.decode(prefs.getString("com.example.readify.photo", "userfinale").getBytes(), Base64.DEFAULT);
+        byte[] imageAsBytes = Base64.decode(user.getPicture().getBytes(), Base64.DEFAULT);
         userImage.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
 
         // Put the name of the user
         TextView textViewNameUser = (TextView) view.findViewById(R.id.nameUserTextview);
-        textViewNameUser.setText(prefs.getString("com.example.readify.name", "User Unknown"));
+        textViewNameUser.setText(user.getName());
 
         // Change the layout accord to the type of account
         final ImageView imageViewPremiumBadge = (ImageView) view.findViewById(R.id.premiumBadgeProfile);
