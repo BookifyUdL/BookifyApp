@@ -61,15 +61,6 @@ public class ReviewsPopup extends DialogFragment implements Popup {
         recyclerView.setLayoutManager(vlm);
         ArrayList<Review> pendingBooksList = new ArrayList<>();
         pendingBooksList.addAll(MockupsValues.getReviews());
-        pendingBooksAdapter = new ReviewsVerticalAdapter((MainActivity) getActivity(), getContext(), pendingBooksList);
-        recyclerView.setAdapter(pendingBooksAdapter);
-        ImageButton closeArrow = (ImageButton) view.findViewById(R.id.close_arrow);
-        closeArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                close();
-            }
-        });
         FloatingActionButton addCommentButton = (FloatingActionButton) view.findViewById(R.id.add_comment_button);
         addCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +68,15 @@ public class ReviewsPopup extends DialogFragment implements Popup {
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
                 startActivity(intent);
                 //finish();
+            }
+        });
+        pendingBooksAdapter = new ReviewsVerticalAdapter((MainActivity) getActivity(), getContext(), pendingBooksList, addCommentButton);
+        recyclerView.setAdapter(pendingBooksAdapter);
+        ImageButton closeArrow = (ImageButton) view.findViewById(R.id.close_arrow);
+        closeArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                close();
             }
         });
 

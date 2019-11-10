@@ -28,6 +28,7 @@ import com.example.readify.Models.User;
 import com.example.readify.Popups.BookReadedPopup;
 import com.example.readify.R;
 import com.example.readify.RichEditText;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -43,6 +44,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
     private ArrayList<Review> reviewsList;
     private MainActivity activity;
     private Context mContext;
+    private FloatingActionButton floatingActionButton;
     //private ReviewWithOutOptionAdapter adapter;
 
     // Counstructor for the Class
@@ -52,6 +54,16 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         //this.originalSearchList.addAll(booksList);
         this.activity = activity;
         this.mContext = context;
+        //this.user = user;
+    }
+
+    public ReviewsVerticalAdapter(MainActivity activity, Context context, ArrayList<Review> reviews, FloatingActionButton go) {
+        this.reviewsList = reviews;
+        //this.originalSearchList = new ArrayList<>();
+        //this.originalSearchList.addAll(booksList);
+        this.activity = activity;
+        this.mContext = context;
+        this.floatingActionButton = go;
         //this.user = user;
     }
 
@@ -226,11 +238,18 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
                             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                             editText.setGravity(Gravity.CENTER_VERTICAL);
-                            //editText.setBackground(R.color.colorBlank);
                             editText.setLayoutParams(params);
-                            //RelativeLayout relativeLayout = findViewById(R.id.edit_text_lay);
-                            //relativeLayout.addView(editText);
+                            editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                                @Override
+                                public void onFocusChange(View view, boolean b) {
+                                    if(!b)
+                                        floatingActionButton.setVisibility(View.VISIBLE);
+                                    if(b)
+                                        floatingActionButton.setVisibility(View.INVISIBLE);
+                                }
+                            });
                             scrollView.addView(editText);
+
 
                             recyclerView.addView(add_comment);
                             expandableLayout.expand();
