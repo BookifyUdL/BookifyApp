@@ -2,6 +2,7 @@ package com.example.readify.Adapters;
 
 import android.content.Context;
 import android.text.Layout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,6 +27,7 @@ import com.example.readify.Models.Review;
 import com.example.readify.Models.User;
 import com.example.readify.Popups.BookReadedPopup;
 import com.example.readify.R;
+import com.example.readify.RichEditText;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -209,6 +213,25 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
 
                             View add_comment = layoutInflater.inflate(R.layout.add_comment_layout,
                                     recyclerView,false);
+                            ImageView imageView = add_comment.findViewById(R.id.profile_image);
+                            imageView.setImageResource(
+                                    mContext.getResources().getIdentifier(MockupsValues.user.getPicture(), "drawable", mContext.getPackageName()));
+                            RelativeLayout relativeLayout = add_comment.findViewById(R.id.relative_layout);
+                            int height = relativeLayout.getHeight();
+                            ScrollView scrollView = add_comment.findViewById(R.id.scroll_view);
+                            scrollView.setMinimumHeight(height);
+
+                            RichEditText editText = new RichEditText(mContext);
+                            editText.setHint(R.string.add_comment);
+                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                            editText.setGravity(Gravity.CENTER_VERTICAL);
+                            //editText.setBackground(R.color.colorBlank);
+                            editText.setLayoutParams(params);
+                            //RelativeLayout relativeLayout = findViewById(R.id.edit_text_lay);
+                            //relativeLayout.addView(editText);
+                            scrollView.addView(editText);
+
                             recyclerView.addView(add_comment);
                             expandableLayout.expand();
                         }
