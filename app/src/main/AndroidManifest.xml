@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CommentActivity"></activity>
+        <activity
+            android:name=".CommentActivity"
+            android:windowSoftInputMode="stateAlwaysVisible">
+
+        </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".FirstTimeForm.FirstTimeFormActivity">
             <intent-filter>

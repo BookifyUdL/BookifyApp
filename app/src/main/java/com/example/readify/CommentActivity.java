@@ -54,8 +54,9 @@ public class CommentActivity extends AppCompatActivity {
         setOnCloseButtonClicked();
         setupRichContentEditText();
         editText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+        InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        imm.toggleSoftInput(0, 0);
         /*editText.requestFocus();
         if(editText.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -110,6 +111,18 @@ public class CommentActivity extends AppCompatActivity {
 
         LinearLayout linearLayout= findViewById(R.id.comment_layout);
         linearLayout.addView(editText);
+
+        /*editText.requestFocus();
+        final  InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        editText.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                editText.requestFocus();
+                imm.showSoftInput(editText, 0);
+            }
+        }, 100);*/
 
 
         /*EditText editText = findViewById(R.id.edit_text);
