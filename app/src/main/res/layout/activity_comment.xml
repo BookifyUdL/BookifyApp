@@ -107,13 +107,13 @@
 
                     </ScrollView>
 
-                    <TextView
+                    <!--EditText
                         android:id="@+id/textamen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Añade un comentario"
                         android:inputType="text"
-                        />
+                        />-->
 
 
                 </LinearLayout>

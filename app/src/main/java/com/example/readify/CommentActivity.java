@@ -83,8 +83,9 @@ public class CommentActivity extends AppCompatActivity {
     }
 
     private void setupRichContentEditText(){
-        TextView textView = findViewById(R.id.textamen);
+        //EditText textView = findViewById(R.id.textamen);
         RichEditText editText = new RichEditText(getApplicationContext(), this);
+        editText.setHint(R.string.add_comment);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         //editText.setBackground(R.color.colorBlank);

@@ -161,6 +161,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         private TextView userName;
         private JustifyTextView userComment;
         private LinearLayout recyclerView;
+        private boolean areSubCommentsLoaded = false;
         private LinearLayout commentLayout;
         private CardView commentItem;
 
@@ -187,35 +188,30 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
                         //recyclerView.setAdapter(null);
                         expandableLayout.collapse();
                     } else {
-                        //String[] options = activity.getResources().getStringArray(R.array.options);
-                        LayoutInflater layoutInflater = LayoutInflater.from(recyclerView.getContext());
-                        for (int i = 0; i < reviewsList.size(); i++) {
-                            View to_add = layoutInflater.inflate(R.layout.review_item_without_options,
+                        if(!areSubCommentsLoaded)
+                        {
+                            LayoutInflater layoutInflater = LayoutInflater.from(recyclerView.getContext());
+                            for (int i = 0; i < reviewsList.size(); i++) {
+                                View to_add = layoutInflater.inflate(R.layout.review_item_without_options,
+                                        recyclerView,false);
+
+                                CircleImageView image = (CircleImageView) to_add.findViewById(R.id.profile_image);
+                                TextView name = (TextView) to_add.findViewById(R.id.user_name);
+                                TextView comment =  to_add.findViewById(R.id.user_comment);
+                                Review review = reviewsList.get(i);
+                                image.setImageResource(
+                                        mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
+
+                                name.setText(review.getUser().getName());
+                                comment.setText(review.getComment());
+                                recyclerView.addView(to_add);
+                            }
+
+                            View add_comment = layoutInflater.inflate(R.layout.add_comment_layout,
                                     recyclerView,false);
-
-                            CircleImageView image = (CircleImageView) to_add.findViewById(R.id.profile_image);
-                            TextView name = (TextView) to_add.findViewById(R.id.user_name);
-                            TextView comment =  to_add.findViewById(R.id.user_comment);
-                            Review review = reviewsList.get(i);
-                            image.setImageResource(
-                                    mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
-
-                            name.setText(review.getUser().getName());
-                            comment.setText(review.getComment());
-
-
-                            //TextView text = (TextView) to_add.findViewById(R.id.text);
-                            //text.setText(options[i]);
-                            //text.setTypeface(FontSelector.getBold(getActivity()));
-                            recyclerView.addView(to_add);
+                            recyclerView.addView(add_comment);
+                            expandableLayout.expand();
                         }
-
-                        View add_comment = layoutInflater.inflate(R.layout.add_comment_layout,
-                                recyclerView,false);
-                        recyclerView.addView(add_comment);
-
-
-                        expandableLayout.expand();
                     }
                 }
             });
