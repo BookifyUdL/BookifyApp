@@ -7,6 +7,7 @@ import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 
 import android.content.ClipDescription;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -16,12 +17,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,58 +44,73 @@ import java.net.URL;
 public class CommentActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    RichEditText editText;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
+        setOnCloseButtonClicked();
         setupRichContentEditText();
+        editText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+        /*editText.requestFocus();
+        if(editText.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }*/
 
+    }
+
+    private void setOnCloseButtonClicked(){
+        ImageView closeButton = findViewById(R.id.close_arrow);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finishActivity();
+            }
+        });
+    }
+
+    private void finishActivity(){
+        this.finish();
     }
 
     public void setWebView(Uri uri){
         //WebView webView = findViewById(R.id.webView);
         //webView.loadUrl(uri.toString());
-        ImageView img = findViewById(R.id.imageView);
+        /*ImageView img = findViewById(R.id.imageView);
         Glide.with(getApplicationContext()) // replace with 'this' if it's in activity
         .load(uri.toString())
         .asGif()
         .error(R.drawable.angry) // show error drawable if the image is not a gif
-        .into(img);
+        .into(img);*/
     }
 
     public void setImageView(Uri uri){
-        ImageView img = findViewById(R.id.imageView);
+        /*ImageView img = findViewById(R.id.imageView);
         Glide.with(getApplicationContext())
                 .load(uri.toString())
                 .asBitmap()
                 .error(R.drawable.angry)
-                .into(img);
-        /*Picasso.with(getApplicationContext())
-                .load(uri.toString())
-                .into(img);
-        //.resize(width,height).
-        /*try {
-            URL url = new URL(uri.toString());
-            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            ImageView imageView = findViewById(R.id.imageView);
-            imageView.setImageBitmap(bmp);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }*/
+                .into(img);*/
+
+
     }
 
     private void setupRichContentEditText(){
         //EditText textView = findViewById(R.id.textamen);
-        RichEditText editText = new RichEditText(getApplicationContext(), this);
+        editText = new RichEditText(getApplicationContext(), this);
         editText.setHint(R.string.add_comment);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        //editText.setBackground(R.color.colorBlank);
         editText.setLayoutParams(params);
-        RelativeLayout relativeLayout = findViewById(R.id.edit_text_lay);
-        relativeLayout.addView(editText);
+        //editText.setFocusedByDefault(true);
+
+        LinearLayout linearLayout= findViewById(R.id.comment_layout);
+        linearLayout.addView(editText);
+
 
         /*EditText editText = findViewById(R.id.edit_text);
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {

@@ -13,4 +13,7 @@
     <color name="colorYellowSwipe">#d9c01c</color>
     <color name="colorDarkGrayCardBackground">#dedfe3</color>
 
+    <color name="colorNotPublished">#21ffae</color>
+    <color name="colorPublished">#00ed1c</color>
+
 </resources>

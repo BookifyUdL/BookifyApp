@@ -90,5 +90,6 @@
     <string name="configuration_text">Configuración</string>
     <string name="see_comments">Comentarios</string>
     <string name="share">Compartir</string>
+    <string name="publish_title">PUBLICAR</string>
 
 </resources>
