@@ -45,6 +45,7 @@ public class ReviewsPopup extends DialogFragment implements Popup {
     private ScrollView scrollView;
     private LinearLayout commentLayout;
     private RecyclerView recyclerView;
+    FloatingActionButton addCommentButton;
 
     public ReviewsPopup(){
 
@@ -54,14 +55,10 @@ public class ReviewsPopup extends DialogFragment implements Popup {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.reviews_layout, container);
-        LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.comments_recyclerView);
         scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
         commentLayout = (LinearLayout) view.findViewById(R.id.comment_layout);
-        recyclerView.setLayoutManager(vlm);
-        ArrayList<Review> pendingBooksList = new ArrayList<>();
-        pendingBooksList.addAll(MockupsValues.getReviews());
-        FloatingActionButton addCommentButton = (FloatingActionButton) view.findViewById(R.id.add_comment_button);
+        addCommentButton = (FloatingActionButton) view.findViewById(R.id.add_comment_button);
         addCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,8 +67,6 @@ public class ReviewsPopup extends DialogFragment implements Popup {
                 //finish();
             }
         });
-        pendingBooksAdapter = new ReviewsVerticalAdapter((MainActivity) getActivity(), getContext(), pendingBooksList, addCommentButton);
-        recyclerView.setAdapter(pendingBooksAdapter);
         ImageButton closeArrow = (ImageButton) view.findViewById(R.id.close_arrow);
         closeArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +124,13 @@ public class ReviewsPopup extends DialogFragment implements Popup {
         Window window = getDialog().getWindow();
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         window.setGravity(Gravity.CENTER);
-        //TODO:
+
+        LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(vlm);
+        ArrayList<Review> pendingBooksList = new ArrayList<>();
+        pendingBooksList.addAll(MockupsValues.getReviews());
+        pendingBooksAdapter = new ReviewsVerticalAdapter((MainActivity) getActivity(), getContext(), pendingBooksList, addCommentButton);
+        recyclerView.setAdapter(pendingBooksAdapter);
     }
 
     private void addReview(String message){

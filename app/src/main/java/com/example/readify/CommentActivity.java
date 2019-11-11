@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.readify.Models.Review;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.gsconrad.richcontentedittext.RichContentEditText;
 
@@ -54,7 +55,10 @@ public class CommentActivity extends AppCompatActivity {
     LinearLayout linearLayout;
     RichEditText editText;
     ImageView imageView;
+    ImageView deleteButton;
+    Button publish;
     Uri commentUri;
+    CommentType commentType;
     //RichEditText editText;
 
 
@@ -82,22 +86,26 @@ public class CommentActivity extends AppCompatActivity {
 
     public void setWebView(Uri uri){
         commentUri = uri;
+        commentType = CommentType.COMMENT_AND_GIF;
         checkIfImageViewIsAdded();
         Glide.with(getApplicationContext()) // replace with 'this' if it's in activity
         .load(uri.toString())
         .asGif()
         .error(R.drawable.angry) // show error drawable if the image is not a gif
         .into(imageView);
+        enablePublishButton();
     }
 
     public void setImageView(Uri uri){
         commentUri = uri;
+        commentType = CommentType.COMMENT_AND_IMAGE;
         checkIfImageViewIsAdded();
         Glide.with(getApplicationContext())
                 .load(uri.toString())
                 .asBitmap()
                 .error(R.drawable.angry)
                 .into(imageView);
+        enablePublishButton();
 
 
     }
@@ -118,21 +126,34 @@ public class CommentActivity extends AppCompatActivity {
             relativeLayout.addView(imageView);
             linearLayout.addView(relativeLayout);
             addDeleteImageGifButton(relativeLayout);
+        } else if (imageView.getVisibility() == View.INVISIBLE) {
+            imageView.setVisibility(View.VISIBLE);
+            deleteButton.setVisibility(View.VISIBLE);
         }
     }
 
     private void addDeleteImageGifButton(RelativeLayout relativeLayout){
-        ImageView deleteButton = new ImageView(getApplicationContext());
+        deleteButton = new ImageView(getApplicationContext());
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deleteButton.setVisibility(View.INVISIBLE);
+                imageView.setVisibility(View.INVISIBLE);
+                commentUri = null;
+                commentType = CommentType.COMMENT;
+                disablePublishButton();
+            }
+        });
         deleteButton.setImageResource(R.drawable.ic_close_button);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         // ALign right per ficar-lo a sobre
-        layoutParams.addRule(RelativeLayout.ALIGN_END, imageView.getId());
+        layoutParams.addRule(RelativeLayout.RIGHT_OF, imageView.getId());
         deleteButton.setLayoutParams(layoutParams);
         relativeLayout.addView(deleteButton);
     }
 
     private void setupRichContentEditText(){
-        final Button publish = findViewById(R.id.info_text);
+        publish = findViewById(R.id.info_text);
         editText = new RichEditText(this.getApplicationContext(), this);
         editText.setHint(R.string.add_comment);
         editText.setId(View.generateViewId());
@@ -152,17 +173,9 @@ public class CommentActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(charSequence.length() > 0){
-                    //getApplicationContext().getResources().getIdentifier("rounded_button_publish_enabled", "drawable", getApplicationContext().getPackageName())
-                    publish.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rounded_button_publish_enabled));
-                    publish.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Toast.makeText(getApplicationContext(), "DE PUTS", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                   enablePublishButton();
                 } else {
-                    publish.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rounded_button_publish));
-                    publish.setOnClickListener(null);
+                   disablePublishButton();
                 }
             }
 
@@ -174,6 +187,32 @@ public class CommentActivity extends AppCompatActivity {
         linearLayout= findViewById(R.id.comment_layout);
         linearLayout.addView(editText);
     }
+
+    private void enablePublishButton(){
+        publish.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rounded_button_publish_enabled));
+        publish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(getApplicationContext(), "DE PUTS", Toast.LENGTH_SHORT).show();
+                String comment = editText.getText().toString();
+                Review review;
+                if(commentType == CommentType.COMMENT && commentUri == null){
+                    review  = new Review(MockupsValues.user, comment);
+                } else {
+                    review = new Review(MockupsValues.user, comment, commentType, commentUri);
+                }
+                MockupsValues.addReview(review);
+                finishActivity();
+            }
+        });
+    }
+
+    private void disablePublishButton(){
+        publish.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rounded_button_publish));
+        publish.setOnClickListener(null);
+    }
+
+
 
     /*private void setupRichContentEditText() {
         RichContentEditText editText = findViewById(R.id.edit_text);
@@ -208,7 +247,7 @@ public class CommentActivity extends AppCompatActivity {
         });
     }*/
 
-    public boolean writeToFileFromContentUri(File file, Uri uri) {
+    /*public boolean writeToFileFromContentUri(File file, Uri uri) {
         if (file == null || uri == null) return false;
         try {
             InputStream stream = getContentResolver().openInputStream(uri);
@@ -227,6 +266,6 @@ public class CommentActivity extends AppCompatActivity {
             Log.e(TAG, "IOException on stream: " + e.getMessage());
         }
         return false;
-    }
+    }*/
 }
 
