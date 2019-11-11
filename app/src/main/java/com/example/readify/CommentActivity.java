@@ -1,6 +1,7 @@
 package com.example.readify;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.os.BuildCompat;
 import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.core.view.inputmethod.InputConnectionCompat;
@@ -14,7 +15,10 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -23,6 +27,7 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,7 +49,7 @@ import java.net.URL;
 public class CommentActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    RichEditText editText;
+    //RichEditText editText;
 
 
     @Override
@@ -53,15 +58,6 @@ public class CommentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_comment);
         setOnCloseButtonClicked();
         setupRichContentEditText();
-        editText.requestFocus();
-        InputMethodManager imm = (InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        imm.toggleSoftInput(0, 0);
-        /*editText.requestFocus();
-        if(editText.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }*/
-
     }
 
     private void setOnCloseButtonClicked(){
@@ -101,74 +97,46 @@ public class CommentActivity extends AppCompatActivity {
     }
 
     private void setupRichContentEditText(){
-        //EditText textView = findViewById(R.id.textamen);
-        editText = new RichEditText(getApplicationContext(), this);
+        final Button publish = findViewById(R.id.info_text);
+        RichEditText editText = new RichEditText(this.getApplicationContext());
         editText.setHint(R.string.add_comment);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        editText.setGravity(Gravity.CENTER_VERTICAL);
         editText.setLayoutParams(params);
-        //editText.setFocusedByDefault(true);
-
-        LinearLayout linearLayout= findViewById(R.id.comment_layout);
-        linearLayout.addView(editText);
-
-        /*editText.requestFocus();
-        final  InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        editText.postDelayed(new Runnable()
-        {
+        editText.setFocusableInTouchMode(true);
+        editText.setFocusable(true);
+        editText.requestFocus();
+        editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void run()
-            {
-                editText.requestFocus();
-                imm.showSoftInput(editText, 0);
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
             }
-        }, 100);*/
 
-
-        /*EditText editText = findViewById(R.id.edit_text);
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    InputConnection ic = editText.onCreateInputConnection(new EditorInfo());
-                    keyboard.setInputConnection(ic); // custom keyboard method
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.length() > 0){
+                    //getApplicationContext().getResources().getIdentifier("rounded_button_publish_enabled", "drawable", getApplicationContext().getPackageName())
+                    publish.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rounded_button_publish_enabled));
+                    publish.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Toast.makeText(getApplicationContext(), "DE PUTS", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    publish.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rounded_button_publish));
+                    publish.setOnClickListener(null);
                 }
             }
-        });
-        //editText.onCreateInputConnection()
-        /*editText = new EditText(this) {
+
             @Override
-            public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
-                final InputConnection ic = super.onCreateInputConnection(editorInfo);
-                EditorInfoCompat.setContentMimeTypes(editorInfo,
-                        new String [] {"image/png"});
+            public void afterTextChanged(Editable editable) {
 
-                final InputConnectionCompat.OnCommitContentListener callback =
-                        new InputConnectionCompat.OnCommitContentListener() {
-                            @Override
-                            public boolean onCommitContent(InputContentInfoCompat inputContentInfo,
-                                                           int flags, Bundle opts) {
-                                // read and display inputContentInfo asynchronously
-                                if (BuildCompat.isAtLeastNMR1() && (flags &
-                                        InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION) != 0) {
-                                    try {
-                                        inputContentInfo.requestPermission();
-                                    }
-                                    catch (Exception e) {
-                                        return false; // return false if failed
-                                    }
-                                }
-
-                                // read and display inputContentInfo asynchronously.
-                                // call inputContentInfo.releasePermission() as needed.
-
-                                return true;  // return true if succeeded
-                            }
-                        };
-                return InputConnectionCompat.createWrapper(ic, editorInfo, callback);
             }
-        };*/
-
+        });
+        LinearLayout linearLayout= findViewById(R.id.comment_layout);
+        linearLayout.addView(editText);
     }
 
     /*private void setupRichContentEditText() {
