@@ -40,11 +40,16 @@ import com.example.readify.R;
 import com.example.readify.RichEditText;
 import com.example.readify.RichEditTextInterface;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.biubiubiu.justifytext.library.JustifyTextView;
@@ -180,32 +185,40 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
                 setImageView(review.getUri());
             holder.gifContainer.addView(imageView);
         }
+
+        holder.likeButton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                review.setLikes(review.getLikes() + 1);
+                String aux = Integer.toString(review.getLikes());
+                holder.likesNumber.setText(aux);
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                review.setLikes(review.getLikes() - 1);
+                String aux = Integer.toString(review.getLikes());
+                holder.likesNumber.setText(aux);
+            }
+        });
+        String aux = Integer.toString(review.getLikes());
+        holder.likesNumber.setText(aux);
     }
 
     public void setGifView(Uri uri){
-        //commentUri = uri;
-        //commentType = CommentType.COMMENT_AND_GIF;
-        //checkIfImageViewIsAdded();
         Glide.with(getContext()) // replace with 'this' if it's in activity
                 .load(uri.toString())
                 .asGif()
                 .error(R.drawable.angry) // show error drawable if the image is not a gif
                 .into(imageView);
-        //enablePublishButton();
     }
 
     public void setImageView(Uri uri){
-        //commentUri = uri;
-        //commentType = CommentType.COMMENT_AND_IMAGE;
-        //checkIfImageViewIsAdded();
         Glide.with(getContext())
                 .load(uri.toString())
                 .asBitmap()
                 .error(R.drawable.angry)
                 .into(imageView);
-        //enablePublishButton();
-
-
     }
 
     // This is your ViewHolder class that helps to populate data to the view
@@ -223,6 +236,8 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         private CardView commentItem;
         private ImageView gif;
         private EditText editText;
+        private LikeButton likeButton;
+        private TextView likesNumber;
 
         public BookHolder(View itemView) {
             super(itemView);
@@ -246,6 +261,9 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
                 }
 
             });
+
+            likeButton = itemView.findViewById(R.id.star_button);
+            likesNumber = itemView.findViewById(R.id.likes_number);
         }
 
         private void onExpandButtonClicked(){
@@ -306,45 +324,6 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
                 }
             });
 
-
-            //ScrollView scrollView = add_comment.findViewById(R.id.scroll_view);
-            //scrollView.setMinimumHeight(height);
-
-            //RichEditText editText = new RichEditText(mContext);
-            /*EditText editText = new EditText(getContext());
-            editText.setHint(R.string.add_comment);
-            editText.setImeOptions(EditorInfo.IME_ACTION_SEND);
-            editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                    boolean handled = false;
-                    if (actionId == EditorInfo.IME_ACTION_SEND) {
-                        //sendMessage();
-                        handled = true;
-                    }
-                    return handled;
-                }
-            });
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            editText.setGravity(Gravity.CENTER_VERTICAL);
-            editText.setLayoutParams(params);
-
-            linearLayout.addView(editText);*/
-
-           /* //relativeLayout.setLayoutParams(params);
-            gif = new ImageView(getContext());
-            gif.setId(View.generateViewId());
-            int dimension = (int) getContext().getResources().getDimension(R.dimen.image_gif_height);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimension, dimension);
-            layoutParams.setMargins(0, (int) getContext().getResources().getDimension(R.dimen.margin_5dp), 0, 0 );
-            //layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-            gif.setLayoutParams(layoutParams);
-            //relativeLayout.addView(gif);
-            //linearLayout.addView(relativeLayout);
-            //addDeleteImageGifButton(relativeLayout);
-            linearLayout.addView(gif);*/
-
             addCommentLayout.addView(add_comment);
         }
 
@@ -362,6 +341,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
                 InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(to_add.getWindowToken(), 0);
                 editText.setText("");
+                editText.setHint(getContext().getResources().getString(R.string.add_comment));
                 editText.clearFocus();
 
             }

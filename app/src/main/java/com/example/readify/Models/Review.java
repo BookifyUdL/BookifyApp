@@ -12,11 +12,13 @@ public class Review {
     private User user;
     private CommentType commentType;
     private Uri uri;
+    private int likes;
 
     public Review(User user, String comment){
         this.user = user;
         this.comment = comment;
         this.commentType = CommentType.COMMENT;
+        this.likes = 0;
     }
 
     public Review(User user, String comment, CommentType commentType, Uri uri){
@@ -24,6 +26,15 @@ public class Review {
         this.comment = comment;
         this.commentType = commentType;
         this.uri = uri;
+        this.likes = 0;
+    }
+
+    public int getLikes(){
+        return this.likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
     }
 
     public Uri getUri() {
