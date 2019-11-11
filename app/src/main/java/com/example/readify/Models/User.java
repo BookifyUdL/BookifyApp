@@ -8,7 +8,14 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Base64;
 
+import androidx.annotation.NonNull;
+
 import com.example.readify.MockupsValues;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,11 +44,6 @@ public class User {
     private ArrayList<Book> interested;
     private ArrayList<Book> read;
 
-    public User(String name, String picture) {
-        this.name = name;
-        this.picture = picture;
-    }
-
     public User() {
         this.uid = "0000";
         this.name = "User Unknown";
@@ -54,6 +56,11 @@ public class User {
         this.genres = new ArrayList<>();
         this.achievements = new ArrayList<>();
         //this.achievements = MockupsValues.getAchievementsPersonalized();
+    }
+
+    public User(String name, String picture) {
+        this.name = name;
+        this.picture = picture;
     }
 
     public User(String name, Boolean premium, ArrayList<Genre> genres, ArrayList<Book> library) {
@@ -128,6 +135,14 @@ public class User {
 
     public void setGenres(ArrayList<Genre> genres) {
         this.genres = genres;
+    }
+
+    public ArrayList<Book> getRead() {
+        return read;
+    }
+
+    public void setRead(ArrayList<Book> read) {
+        this.read = read;
     }
 
     public void addGenreToGenres(Genre genre) {
@@ -261,6 +276,11 @@ public class User {
         String interestedPref = pref.getString("com.example.readify.interested", "");
         Type type2 = new TypeToken<List<Book>>() {}.getType();
         this.interested = new Gson().fromJson(interestedPref, type2);
+
+        //Achievements
+        String achievementsPref = pref.getString("com.example.readify.achievements", "");
+        Type type3 = new TypeToken<List<Achievement>>() {}.getType();
+        this.achievements = new Gson().fromJson(achievementsPref, type3);
     }
 
     /* Method to update information on database */
@@ -278,6 +298,13 @@ public class User {
         result.put("achievements", this.achievements);
 
         return result;
+    }
+
+    public void saveToFirebase(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(this.uid, this.toMap());
+        database.getReference("users").updateChildren(childUpdates);
     }
 
 }

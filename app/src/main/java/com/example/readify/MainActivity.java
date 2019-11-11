@@ -161,13 +161,6 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         setContentView(R.layout.activity_main);
 
         MockupsValues.setPendingListBooks(MockupsValues.user.getInterestedBooks());
-        if(MockupsValues.user.getGenres() == null || MockupsValues.user.getGenres().isEmpty()){
-            ArrayList<Genre> genres = new ArrayList<>();
-            genres.add(MockupsValues.getGenres().get(2));
-            genres.add(MockupsValues.getGenres().get(4));
-            MockupsValues.user.setGenres(genres);
-        }
-
 
         fm.beginTransaction().add(R.id.main_container, fragment6, "6").hide(fragment6).commit();
         fm.beginTransaction().add(R.id.main_container, fragment5, "5").hide(fragment5).commit();

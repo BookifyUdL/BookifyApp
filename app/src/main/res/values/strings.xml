@@ -54,7 +54,7 @@
     <string name="accountTitleProfile">PROGRESS</string>
     <string name="periodAccountText">achievements</string>
     <string name="feedbackTitleProfile">FEEDBACK</string>
-    <string name="numExample" translatable="false">103</string>
+    <string name="numExample" translatable="false">0</string>
     <string name="commentsFeedTitleProfile">comments</string>
     <string name="libraryTitleProfile">LIBRARY</string>
     <string name="readedbooksSubtitleProfile">books read</string>
@@ -129,4 +129,5 @@
     <string name="facebook_status_fmt">Facebook User: %s</string>
     <string name="firebase_status_fmt">Firebase User: %s</string>
     <string name="disconnect_text">Disconnect</string>
+    <string name="achievements_text">Achievements</string>
 </resources>
