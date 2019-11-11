@@ -9,6 +9,7 @@ import androidx.core.view.inputmethod.InputContentInfoCompat;
 
 import android.content.ClipDescription;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -36,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.gsconrad.richcontentedittext.RichContentEditText;
 
 import java.io.File;
@@ -49,6 +51,10 @@ import java.net.URL;
 public class CommentActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    LinearLayout linearLayout;
+    RichEditText editText;
+    ImageView imageView;
+    Uri commentUri;
     //RichEditText editText;
 
 
@@ -75,33 +81,63 @@ public class CommentActivity extends AppCompatActivity {
     }
 
     public void setWebView(Uri uri){
-        //WebView webView = findViewById(R.id.webView);
-        //webView.loadUrl(uri.toString());
-        /*ImageView img = findViewById(R.id.imageView);
+        commentUri = uri;
+        checkIfImageViewIsAdded();
         Glide.with(getApplicationContext()) // replace with 'this' if it's in activity
         .load(uri.toString())
         .asGif()
         .error(R.drawable.angry) // show error drawable if the image is not a gif
-        .into(img);*/
+        .into(imageView);
     }
 
     public void setImageView(Uri uri){
-        /*ImageView img = findViewById(R.id.imageView);
+        commentUri = uri;
+        checkIfImageViewIsAdded();
         Glide.with(getApplicationContext())
                 .load(uri.toString())
                 .asBitmap()
                 .error(R.drawable.angry)
-                .into(img);*/
+                .into(imageView);
 
 
     }
 
+    private void checkIfImageViewIsAdded(){
+        if(imageView == null){
+            RelativeLayout relativeLayout  = new RelativeLayout(getApplicationContext());
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            relativeLayout.setLayoutParams(params);
+            imageView = new ImageView(getApplicationContext());
+            imageView.setId(View.generateViewId());
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams((int) getResources().getDimension(R.dimen.image_gif_height), (int) getResources().getDimension(R.dimen.image_gif_height));
+            layoutParams.setMargins(0, (int) getResources().getDimension(R.dimen.margin_5dp), 0, 0 );
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            //layoutParams.addRule(Gravity.CENTER_HORIZONTAL);
+            //layoutParams.addRule(RelativeLayout.BELOW, editText.getId());
+            imageView.setLayoutParams(layoutParams);
+            relativeLayout.addView(imageView);
+            linearLayout.addView(relativeLayout);
+            addDeleteImageGifButton(relativeLayout);
+        }
+    }
+
+    private void addDeleteImageGifButton(RelativeLayout relativeLayout){
+        ImageView deleteButton = new ImageView(getApplicationContext());
+        deleteButton.setImageResource(R.drawable.ic_close_button);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        // ALign right per ficar-lo a sobre
+        layoutParams.addRule(RelativeLayout.ALIGN_END, imageView.getId());
+        deleteButton.setLayoutParams(layoutParams);
+        relativeLayout.addView(deleteButton);
+    }
+
     private void setupRichContentEditText(){
         final Button publish = findViewById(R.id.info_text);
-        RichEditText editText = new RichEditText(this.getApplicationContext());
+        editText = new RichEditText(this.getApplicationContext(), this);
         editText.setHint(R.string.add_comment);
+        editText.setId(View.generateViewId());
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         editText.setGravity(Gravity.CENTER_VERTICAL);
         editText.setLayoutParams(params);
         editText.setFocusableInTouchMode(true);
@@ -135,7 +171,7 @@ public class CommentActivity extends AppCompatActivity {
 
             }
         });
-        LinearLayout linearLayout= findViewById(R.id.comment_layout);
+        linearLayout= findViewById(R.id.comment_layout);
         linearLayout.addView(editText);
     }
 
