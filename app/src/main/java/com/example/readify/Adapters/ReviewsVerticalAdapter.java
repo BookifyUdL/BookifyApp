@@ -202,14 +202,15 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
     }
 
     // This is your ViewHolder class that helps to populate data to the view
-    public class BookHolder extends RecyclerView.ViewHolder implements ExpandableLayout.OnExpansionUpdateListener {
+    public class BookHolder extends RecyclerView.ViewHolder implements ExpandableLayout.OnExpansionUpdateListener, RichEditTextInterface {
 
         private ExpandableLayout expandableLayout;
         private ImageView expandButton;
         private CircleImageView userImage;
         private TextView userName;
         private JustifyTextView userComment;
-        private LinearLayout recyclerView;
+        private LinearLayout subCommentsRecyclerView;
+        private LinearLayout addCommentLayout;
         private boolean areSubCommentsLoaded = false;
         private LinearLayout gifContainer;
         private CardView commentItem;
@@ -227,69 +228,103 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             expandableLayout.setInterpolator(new OvershootInterpolator());
             expandableLayout.setOnExpansionUpdateListener(this);
             expandButton = itemView.findViewById(R.id.see_comments_button);
-            recyclerView = itemView.findViewById(R.id.sub_comments_recycler_view);
-            //setRecyclerAdapter();
-            //expandableLayout.collapse();
+            subCommentsRecyclerView = itemView.findViewById(R.id.sub_comments_recycler_view);
+            addCommentLayout = itemView.findViewById(R.id.add_comment_layout);
             expandButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(expandableLayout.isExpanded()) {
-                        //recyclerView.setAdapter(null);
-                        expandableLayout.collapse();
-                    } else {
-                        if(!areSubCommentsLoaded)
-                        {
-                            LayoutInflater layoutInflater = LayoutInflater.from(recyclerView.getContext());
-                            for (int i = 0; i < reviewsList.size(); i++) {
-                                View to_add = layoutInflater.inflate(R.layout.review_item_without_options,
-                                        recyclerView,false);
-
-                                CircleImageView image = (CircleImageView) to_add.findViewById(R.id.profile_image);
-                                TextView name = (TextView) to_add.findViewById(R.id.user_name);
-                                TextView comment =  to_add.findViewById(R.id.user_comment);
-                                Review review = reviewsList.get(i);
-                                image.setImageResource(
-                                        mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
-
-                                name.setText(review.getUser().getName());
-                                comment.setText(review.getComment());
-                                recyclerView.addView(to_add);
-                            }
-
-                            View add_comment = layoutInflater.inflate(R.layout.add_comment_layout,
-                                    recyclerView,false);
-                            ImageView imageView = add_comment.findViewById(R.id.profile_image);
-                            imageView.setImageResource(
-                                    mContext.getResources().getIdentifier(MockupsValues.user.getPicture(), "drawable", mContext.getPackageName()));
-                            RelativeLayout relativeLayout = add_comment.findViewById(R.id.relative_layout);
-                            int height = relativeLayout.getHeight();
-                            ScrollView scrollView = add_comment.findViewById(R.id.scroll_view);
-                            scrollView.setMinimumHeight(height);
-
-                            RichEditText editText = new RichEditText(mContext);
-                            editText.setHint(R.string.add_comment);
-                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                            editText.setGravity(Gravity.CENTER_VERTICAL);
-                            editText.setLayoutParams(params);
-                            editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                                @Override
-                                public void onFocusChange(View view, boolean b) {
-                                    if(!b)
-                                        floatingActionButton.setVisibility(View.VISIBLE);
-                                    if(b)
-                                        floatingActionButton.setVisibility(View.INVISIBLE);
-                                }
-                            });
-                            scrollView.addView(editText);
-
-
-                            recyclerView.addView(add_comment);
-                            expandableLayout.expand();
-                        }
-                    }
+                    onExpandButtonClicked();
                 }
+
             });
+        }
+
+        private void onExpandButtonClicked(){
+            if(expandableLayout.isExpanded()) {
+                expandableLayout.collapse();
+            } else {
+                if(!areSubCommentsLoaded)
+                {
+                    LayoutInflater layoutInflater = LayoutInflater.from(subCommentsRecyclerView.getContext());
+                    addCommentSubComments(layoutInflater);
+                    addSubComment(layoutInflater);
+                    expandableLayout.expand();
+                }
+            }
+        }
+
+        private void addSubComment(LayoutInflater layoutInflater){
+            View add_comment = layoutInflater.inflate(R.layout.add_comment_layout,
+                            addCommentLayout,false);
+                    ImageView imageView = add_comment.findViewById(R.id.profile_image);
+                    imageView.setImageResource(
+                            mContext.getResources().getIdentifier(MockupsValues.user.getPicture(), "drawable", mContext.getPackageName()));
+                    RelativeLayout relativeLayout = add_comment.findViewById(R.id.relative_layout);
+                    int height = relativeLayout.getHeight();
+                    ScrollView scrollView = add_comment.findViewById(R.id.scroll_view);
+                    scrollView.setMinimumHeight(height);
+
+                    RichEditText editText = new RichEditText(mContext, this);
+                    editText.setHint(R.string.add_comment);
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    editText.setGravity(Gravity.CENTER_VERTICAL);
+                    editText.setLayoutParams(params);
+                    editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View view, boolean b) {
+                            if(!b)
+                                floatingActionButton.setVisibility(View.VISIBLE);
+                            if(b)
+                                floatingActionButton.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                    scrollView.addView(editText);
+
+
+            addCommentLayout.addView(add_comment);
+        }
+
+        public void setGifView(Uri uri){
+            /*commentUri = uri;
+            commentType = CommentType.COMMENT_AND_GIF;
+            checkIfImageViewIsAdded();
+            Glide.with(getApplicationContext()) // replace with 'this' if it's in activity
+                    .load(uri.toString())
+                    .asGif()
+                    .error(R.drawable.angry) // show error drawable if the image is not a gif
+                    .into(imageView);
+            enablePublishButton();*/
+        }
+
+        public void setImageView(Uri uri){
+            /*commentUri = uri;
+            commentType = CommentType.COMMENT_AND_IMAGE;
+            checkIfImageViewIsAdded();
+            Glide.with(getApplicationContext())
+                    .load(uri.toString())
+                    .asBitmap()
+                    .error(R.drawable.angry)
+                    .into(imageView);
+            enablePublishButton();*/
+        }
+
+        private void addCommentSubComments(LayoutInflater layoutInflater){
+            for (int i = 0; i < reviewsList.size(); i++) {
+                View to_add = layoutInflater.inflate(R.layout.review_item_without_options,
+                        subCommentsRecyclerView,false);
+
+                CircleImageView image = (CircleImageView) to_add.findViewById(R.id.profile_image);
+                TextView name = (TextView) to_add.findViewById(R.id.user_name);
+                TextView comment =  to_add.findViewById(R.id.user_comment);
+                Review review = reviewsList.get(i);
+                image.setImageResource(
+                        mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
+
+                name.setText(review.getUser().getName());
+                comment.setText(review.getComment());
+                subCommentsRecyclerView.addView(to_add);
+            }
         }
 
         /*@Override

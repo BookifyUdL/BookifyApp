@@ -15,23 +15,27 @@ import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 
-public class RichEditText extends AppCompatEditText {
+public class RichEditText<T extends RichEditTextInterface> extends AppCompatEditText {
     private String[] imgTypeString;
     private KeyBoardInputCallbackListener keyBoardInputCallbackListener;
-    private CommentActivity activity;
+    //private CommentActivity activity;
+    private T activity;
 
-    public RichEditText(Context context) {
+    /*public RichEditText(Context context) {
         super(context);
         initView();
-    }
+    }*/
 
-    public RichEditText(Context context, CommentActivity activity) {
+    /*public RichEditText(Context context, CommentActivity activity) {
+        super(context);
+        //this.activity = activity;
+        initView();
+    }*/
+
+    public RichEditText(Context context, T activity){
+        //RichEditText(context);
         super(context);
         this.activity = activity;
-        initView();
-
-
-
     }
 
     public RichEditText(Context context, AttributeSet attrs) {
