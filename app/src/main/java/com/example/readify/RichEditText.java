@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.os.BuildCompat;
@@ -15,28 +16,28 @@ import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 
-public class RichEditText<T extends RichEditTextInterface> extends AppCompatEditText {
+public class RichEditText extends AppCompatEditText {
     private String[] imgTypeString;
     private KeyBoardInputCallbackListener keyBoardInputCallbackListener;
-    //private CommentActivity activity;
-    private T activity;
+    private CommentActivity activity;
+    //private T activity;
 
-    /*public RichEditText(Context context) {
+    public RichEditText(Context context) {
         super(context);
         initView();
-    }*/
+    }
 
-    /*public RichEditText(Context context, CommentActivity activity) {
+    public RichEditText(Context context, CommentActivity activity) {
         super(context);
-        //this.activity = activity;
+        this.activity = activity;
         initView();
-    }*/
+    }
 
-    public RichEditText(Context context, T activity){
+    /*public RichEditText(Context context, T activity){
         //RichEditText(context);
         super(context);
         this.activity = activity;
-    }
+    }*/
 
     public RichEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -85,10 +86,14 @@ public class RichEditText<T extends RichEditTextInterface> extends AppCompatEdit
                     //CharSequence la = description.getLabel();
                     //int mimeTipeCount = description.getMimeTypeCount();
                     this.uri = inputContentInfo.getContentUri();
-                    if(description.toString().contains("image/gif")){
-                        activity.setGifView(this.uri);
+                    if(activity != null){
+                        if(description.toString().contains("image/gif")){
+                            activity.setGifView(this.uri);
+                        } else {
+                            activity.setImageView(this.uri);
+                        }
                     } else {
-                        activity.setImageView(this.uri);
+                        Toast.makeText(getContext(), "Bookify doesn't allow rich text here!", Toast.LENGTH_SHORT).show();
                     }
 
 

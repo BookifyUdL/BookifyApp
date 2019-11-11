@@ -1,19 +1,26 @@
 package com.example.readify.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.text.Editable;
 import android.text.Layout;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -214,6 +221,8 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         private boolean areSubCommentsLoaded = false;
         private LinearLayout gifContainer;
         private CardView commentItem;
+        private ImageView gif;
+        private EditText editText;
 
         public BookHolder(View itemView) {
             super(itemView);
@@ -253,78 +262,134 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             }
         }
 
-        private void addSubComment(LayoutInflater layoutInflater){
+        private void addSubComment(final LayoutInflater layoutInflater){
             View add_comment = layoutInflater.inflate(R.layout.add_comment_layout,
                             addCommentLayout,false);
-                    ImageView imageView = add_comment.findViewById(R.id.profile_image);
-                    imageView.setImageResource(
-                            mContext.getResources().getIdentifier(MockupsValues.user.getPicture(), "drawable", mContext.getPackageName()));
-                    RelativeLayout relativeLayout = add_comment.findViewById(R.id.relative_layout);
-                    int height = relativeLayout.getHeight();
-                    ScrollView scrollView = add_comment.findViewById(R.id.scroll_view);
-                    scrollView.setMinimumHeight(height);
+            ImageView imageView = add_comment.findViewById(R.id.profile_image);
+            imageView.setImageResource(
+                    mContext.getResources().getIdentifier(MockupsValues.user.getPicture(), "drawable", mContext.getPackageName()));
+            RelativeLayout relativeLayout = add_comment.findViewById(R.id.relative_layout);
+            int height = relativeLayout.getHeight();
 
-                    RichEditText editText = new RichEditText(mContext, this);
-                    editText.setHint(R.string.add_comment);
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                    editText.setGravity(Gravity.CENTER_VERTICAL);
-                    editText.setLayoutParams(params);
-                    editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View view, boolean b) {
-                            if(!b)
-                                floatingActionButton.setVisibility(View.VISIBLE);
-                            if(b)
-                                floatingActionButton.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                    scrollView.addView(editText);
+            LinearLayout linearLayout = add_comment.findViewById(R.id.edit_text_gif_layout);
+            linearLayout.setMinimumHeight(height);
 
+            editText = add_comment.findViewById(R.id.comment_box);
+            editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if(!b)
+                        floatingActionButton.setVisibility(View.VISIBLE);
+                    if(b)
+                        floatingActionButton.setVisibility(View.INVISIBLE);
+                }
+            });
+
+            editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    boolean handled = false;
+                    if (actionId == EditorInfo.IME_ACTION_SEND) {
+                        checkSubComment(layoutInflater);
+                        //sendMessage();
+                        handled = true;
+                    }
+                    return handled;
+                }
+            });
+
+            ImageView sendButton = add_comment.findViewById(R.id.send_button);
+            sendButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    checkSubComment(layoutInflater);
+                }
+            });
+
+
+            //ScrollView scrollView = add_comment.findViewById(R.id.scroll_view);
+            //scrollView.setMinimumHeight(height);
+
+            //RichEditText editText = new RichEditText(mContext);
+            /*EditText editText = new EditText(getContext());
+            editText.setHint(R.string.add_comment);
+            editText.setImeOptions(EditorInfo.IME_ACTION_SEND);
+            editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    boolean handled = false;
+                    if (actionId == EditorInfo.IME_ACTION_SEND) {
+                        //sendMessage();
+                        handled = true;
+                    }
+                    return handled;
+                }
+            });
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            editText.setGravity(Gravity.CENTER_VERTICAL);
+            editText.setLayoutParams(params);
+
+            linearLayout.addView(editText);*/
+
+           /* //relativeLayout.setLayoutParams(params);
+            gif = new ImageView(getContext());
+            gif.setId(View.generateViewId());
+            int dimension = (int) getContext().getResources().getDimension(R.dimen.image_gif_height);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dimension, dimension);
+            layoutParams.setMargins(0, (int) getContext().getResources().getDimension(R.dimen.margin_5dp), 0, 0 );
+            //layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            gif.setLayoutParams(layoutParams);
+            //relativeLayout.addView(gif);
+            //linearLayout.addView(relativeLayout);
+            //addDeleteImageGifButton(relativeLayout);
+            linearLayout.addView(gif);*/
 
             addCommentLayout.addView(add_comment);
         }
 
-        public void setGifView(Uri uri){
-            /*commentUri = uri;
-            commentType = CommentType.COMMENT_AND_GIF;
-            checkIfImageViewIsAdded();
-            Glide.with(getApplicationContext()) // replace with 'this' if it's in activity
-                    .load(uri.toString())
-                    .asGif()
-                    .error(R.drawable.angry) // show error drawable if the image is not a gif
-                    .into(imageView);
-            enablePublishButton();*/
+        private void checkSubComment(LayoutInflater inflater){
+            String text = editText.getText().toString();
+            if(text.isEmpty()){
+                Toast.makeText(getContext(), "Text can't be empty!", Toast.LENGTH_SHORT).show();
+            } else {
+                Review reviewToAdd = new Review(MockupsValues.user, text);
+                View to_add = inflater.inflate(R.layout.review_item_without_options,
+                        subCommentsRecyclerView,false);
+                addSubComment(to_add, reviewToAdd);
+                subCommentsRecyclerView.addView(to_add);
+
+                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(to_add.getWindowToken(), 0);
+                editText.setText("");
+                editText.clearFocus();
+
+            }
         }
 
-        public void setImageView(Uri uri){
-            /*commentUri = uri;
-            commentType = CommentType.COMMENT_AND_IMAGE;
-            checkIfImageViewIsAdded();
-            Glide.with(getApplicationContext())
-                    .load(uri.toString())
-                    .asBitmap()
-                    .error(R.drawable.angry)
-                    .into(imageView);
-            enablePublishButton();*/
-        }
+        public void setGifView(Uri uri){ }
+
+        public void setImageView(Uri uri){ }
 
         private void addCommentSubComments(LayoutInflater layoutInflater){
             for (int i = 0; i < reviewsList.size(); i++) {
                 View to_add = layoutInflater.inflate(R.layout.review_item_without_options,
                         subCommentsRecyclerView,false);
-
-                CircleImageView image = (CircleImageView) to_add.findViewById(R.id.profile_image);
-                TextView name = (TextView) to_add.findViewById(R.id.user_name);
-                TextView comment =  to_add.findViewById(R.id.user_comment);
-                Review review = reviewsList.get(i);
-                image.setImageResource(
-                        mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
-
-                name.setText(review.getUser().getName());
-                comment.setText(review.getComment());
+                addSubComment(to_add, reviewsList.get(i));
                 subCommentsRecyclerView.addView(to_add);
             }
+        }
+
+        private void addSubComment(View to_add, Review review){
+            CircleImageView image = (CircleImageView) to_add.findViewById(R.id.profile_image);
+            TextView name = (TextView) to_add.findViewById(R.id.user_name);
+            TextView comment =  to_add.findViewById(R.id.user_comment);
+            image.setImageResource(
+                    mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
+
+            name.setText(review.getUser().getName());
+            comment.setText(review.getComment());
+            //return to_add;
         }
 
         /*@Override
