@@ -165,8 +165,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
     @Override
     public void onBindViewHolder(@NonNull final ReviewsVerticalAdapter.BookHolder holder, final int position) {
         final Review review = reviewsList.get(position);
-
-
+        holder.position = position;
         holder.userName.setText(review.getUser().getName());
         String comment = review.getComment();
         if(!comment.isEmpty())
@@ -238,6 +237,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         private EditText editText;
         private LikeButton likeButton;
         private TextView likesNumber;
+        private int position;
 
         public BookHolder(View itemView) {
             super(itemView);
@@ -336,6 +336,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
                 View to_add = inflater.inflate(R.layout.review_item_without_options,
                         subCommentsRecyclerView,false);
                 addSubComment(to_add, reviewToAdd);
+                reviewsList.get(position).addSubReview(reviewToAdd);
                 subCommentsRecyclerView.addView(to_add);
 
                 InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -352,10 +353,11 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         public void setImageView(Uri uri){ }
 
         private void addCommentSubComments(LayoutInflater layoutInflater){
-            for (int i = 0; i < reviewsList.size(); i++) {
+            ArrayList<Review> reviews = reviewsList.get(position).getSubReviews();
+            for (int i = 0; i < reviews.size(); i++) {
                 View to_add = layoutInflater.inflate(R.layout.review_item_without_options,
                         subCommentsRecyclerView,false);
-                addSubComment(to_add, reviewsList.get(i));
+                addSubComment(to_add, reviews.get(i));
                 subCommentsRecyclerView.addView(to_add);
             }
         }

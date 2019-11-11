@@ -5,6 +5,7 @@ import android.net.Uri;
 import com.example.readify.CommentType;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 public class Review {
 
@@ -13,12 +14,22 @@ public class Review {
     private CommentType commentType;
     private Uri uri;
     private int likes;
+    private ArrayList<Review> subReviews;
 
     public Review(User user, String comment){
         this.user = user;
         this.comment = comment;
         this.commentType = CommentType.COMMENT;
         this.likes = 0;
+        this.subReviews = new ArrayList<>();
+    }
+
+    public Review(User user, String comment, ArrayList<Review> subReviews){
+        this.user = user;
+        this.comment = comment;
+        this.commentType = CommentType.COMMENT;
+        this.likes = 0;
+        this.subReviews = subReviews;
     }
 
     public Review(User user, String comment, CommentType commentType, Uri uri){
@@ -27,6 +38,20 @@ public class Review {
         this.commentType = commentType;
         this.uri = uri;
         this.likes = 0;
+        this.subReviews = new ArrayList<>();
+
+    }
+
+    public ArrayList<Review> getSubReviews() {
+        return subReviews;
+    }
+
+    public void setSubReviews(ArrayList<Review> subReviews) {
+        this.subReviews = subReviews;
+    }
+
+    public void addSubReview(Review review){
+        this.subReviews.add(review);
     }
 
     public int getLikes(){
