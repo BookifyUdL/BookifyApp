@@ -59,16 +59,12 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final String USERS = "users";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private FirebaseAuth mAuth;
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
 
     private View view;
     private Activity activity;
@@ -129,6 +125,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         user.setName(pref.getString("com.example.readify.name", "Unknown"));
         user.setEmail(pref.getString("com.example.readify.email", "email@unknown.com"));
         user.setPicture(pref.getString("com.example.readify.photo", "userfinale"));
+        user.setPremium(false);
 
         //Initialize carouselView
         CirclePageIndicator indicator = view.findViewById(R.id.indicator);
@@ -188,6 +185,8 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
                     buttonDone.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            pref.edit().putBoolean("com.example.readify.premium", user.isPremium()).apply();
+
                             String genresToPref = new Gson().toJson(user.getGenres());
                             pref.edit().putString("com.example.readify.genres", genresToPref).apply();
 
@@ -196,6 +195,11 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
 
                             String interestedToPref = new Gson().toJson(user.getInterested());
                             pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+
+                            String achievementsToPref = new Gson().toJson(MockupsValues.getAchievements());
+                            pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
+
+                            user.setAchievements(MockupsValues.getAchievements());
 
                             comunicateFragmentsFirstForm.doneForm(user);
                         }
@@ -209,6 +213,8 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
                 skipForm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        pref.edit().putBoolean("com.example.readify.premium", user.isPremium()).apply();
+
                         String genresToPref = new Gson().toJson(user.getGenres());
                         pref.edit().putString("com.example.readify.genres", genresToPref).apply();
 
@@ -217,6 +223,11 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
 
                         String interestedToPref = new Gson().toJson(user.getInterested());
                         pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+
+                        String achievementsToPref = new Gson().toJson(MockupsValues.getAchievements());
+                        pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
+
+                        user.setAchievements(MockupsValues.getAchievements());
 
                         comunicateFragmentsFirstForm.exitForm(user);
                     }

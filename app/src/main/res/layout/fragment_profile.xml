@@ -22,6 +22,7 @@
             android:background="@drawable/profile_banner">
 
             <ImageButton
+                android:id="@+id/buttonAchievementsProfile"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"

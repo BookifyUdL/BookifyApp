@@ -4,6 +4,8 @@ public class Genre {
     String name;
     String picture;
 
+    public Genre() { }
+
     public Genre(String name, String picture) {
         this.name = name;
         this.picture = picture;

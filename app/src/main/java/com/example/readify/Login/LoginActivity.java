@@ -96,7 +96,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    //private User userLogin;
+    private Intent intent;
+    private int platform;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,14 +130,14 @@ public class LoginActivity extends AppCompatActivity {
             byte[] bytes = IOUtils.toByteArray(inputStream);
             gifImageView.setBytes(bytes);
             gifImageView.startAnimation();
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
 
         // Initialize Google Login button
         findViewById(R.id.logingoogle).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signInGoogle();
-                loadingProgressBar.setVisibility(VISIBLE);
             }
         });
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -154,10 +155,12 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancel() {}
+            public void onCancel() {
+            }
 
             @Override
-            public void onError(FacebookException error) {}
+            public void onError(FacebookException error) {
+            }
         });
     }
 
@@ -170,12 +173,13 @@ public class LoginActivity extends AppCompatActivity {
         gifImageView = findViewById(R.id.gifImageView);
         callbackManager = CallbackManager.Factory.create();
         loginFacebook = findViewById(R.id.login_button);
-        //userLogin = new User();
 
         pref = getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference(USERS);
+
+        platform = -1;
     }
 
     @Override
@@ -194,7 +198,8 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
-            } catch (ApiException ignored) {}
+            } catch (ApiException ignored) {
+            }
 
         } else if (requestCode == GOOGLE_SIGN_OUT) {
             logOutGoogle();
@@ -213,6 +218,7 @@ public class LoginActivity extends AppCompatActivity {
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         afterAnimationView.setVisibility(GONE);
+        loadingProgressBar.setVisibility(VISIBLE);
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -222,12 +228,8 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
 
-                            //Put the information about google
-                            /*userLogin.setUid(user.getUid());
-                            userLogin.setName(user.getDisplayName());
-                            userLogin.setEmail(user.getEmail());*/
+                            FirebaseUser user = mAuth.getCurrentUser();
                             pref.edit().putString("com.example.readify.uid", user.getUid()).apply();
                             pref.edit().putString("com.example.readify.name", user.getDisplayName()).apply();
                             pref.edit().putString("com.example.readify.email", user.getEmail()).apply();
@@ -241,13 +243,14 @@ public class LoginActivity extends AppCompatActivity {
                             MockupsValues.setContext(LoginActivity.this);
 
                             //Start activity with a Google logOut
-                            Intent intent;
-                            if (!task.getResult().getAdditionalUserInfo().isNewUser())
+                            if (!task.getResult().getAdditionalUserInfo().isNewUser()) {
                                 intent = new Intent(LoginActivity.this, MainActivity.class);
-                            else
+                                platform = 0;
+                                readDataFromFirebase(user.getUid());
+                            }else {
                                 intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
-                            startActivityForResult(intent, GOOGLE_SIGN_OUT);
-
+                                startActivityForResult(intent, GOOGLE_SIGN_OUT);
+                            }
                             loadingProgressBar.setVisibility(GONE);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -269,7 +272,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // Facebook SignIn
-    private void signInFacebook(LoginResult loginResult){
+    private void signInFacebook(LoginResult loginResult) {
         Log.d(TAG, "facebook:onSuccess:" + loginResult);
         handleFacebookAccessToken(loginResult.getAccessToken());
     }
@@ -288,12 +291,8 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
 
-                            //Put the information about Facebook
-                            /*userLogin.setUid(user.getUid());
-                            userLogin.setName(user.getDisplayName());
-                            userLogin.setEmail(user.getEmail());*/
+                            FirebaseUser user = mAuth.getCurrentUser();
                             pref.edit().putString("com.example.readify.uid", user.getUid()).apply();
                             pref.edit().putString("com.example.readify.name", user.getDisplayName()).apply();
                             pref.edit().putString("com.example.readify.email", user.getEmail()).apply();
@@ -306,15 +305,14 @@ public class LoginActivity extends AppCompatActivity {
                             MockupsValues.setContext(LoginActivity.this);
 
                             //Start activity with a Facebook logOut
-                            Intent intent;
-                            if (!task.getResult().getAdditionalUserInfo().isNewUser())
+                            if (!task.getResult().getAdditionalUserInfo().isNewUser()) {
                                 intent = new Intent(LoginActivity.this, MainActivity.class);
-                            else {
+                                platform = 1;
                                 readDataFromFirebase(user.getUid());
+                            } else {
                                 intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+                                startActivityForResult(intent, FB_SIGN_OUT);
                             }
-                            startActivityForResult(intent, FB_SIGN_OUT);
-
                             loadingProgressBar.setVisibility(GONE);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -328,7 +326,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // Facebook LogOut
-    private void logOutFacebook(){
+    private void logOutFacebook() {
         // Firebase LogOut
         mAuth.signOut();
 
@@ -363,13 +361,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void readDataFromFirebase(String uid){
+    private void readDataFromFirebase(String uid) {
         databaseReference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
 
-                pref.edit().putBoolean("com.example.readify.premium", false).apply();
+                pref.edit().putBoolean("com.example.readify.premium", user.isPremium()).apply();
 
                 String genresToPref = new Gson().toJson(user.getGenres());
                 pref.edit().putString("com.example.readify.genres", genresToPref).apply();
@@ -379,6 +377,11 @@ public class LoginActivity extends AppCompatActivity {
 
                 String interestedToPref = new Gson().toJson(user.getInterested());
                 pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+
+                String achievementsToPref = new Gson().toJson(user.getAchievements());
+                pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
+
+                goToApp();
             }
 
             @Override
@@ -386,6 +389,17 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    void goToApp(){
+        switch (platform){
+            case 0: //Google
+                startActivityForResult(intent, GOOGLE_SIGN_OUT);
+                break;
+            case 1: //Facebook
+                startActivityForResult(intent, FB_SIGN_OUT);
+                break;
+        }
     }
 
     // Class to provide a Bitmap from URL (Public access)
@@ -402,8 +416,6 @@ public class LoginActivity extends AppCompatActivity {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             result.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
             byte[] b = baos.toByteArray();
-            //userLogin.setPicture(Base64.encodeToString(b, Base64.DEFAULT));
-            //databaseReference.child(user.getUid()).setValue(userLogin);
             pref.edit().putString("com.example.readify.photo", Base64.encodeToString(b, Base64.DEFAULT)).apply();
         }
 

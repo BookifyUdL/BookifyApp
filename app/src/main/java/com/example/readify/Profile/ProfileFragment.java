@@ -13,6 +13,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,12 +39,18 @@ import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
 import com.example.readify.Models.User;
 import com.example.readify.Pages;
+import com.example.readify.Popups.AchievementsPopup;
+import com.example.readify.Popups.BookReadedPopup;
 import com.example.readify.R;
+import com.facebook.AccessToken;
+import com.facebook.Profile;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,7 +82,10 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     private String mParam1;
     private String mParam2;
     private User user;
-    CircleImageView userImage;
+    private CircleImageView userImage;
+    private TextView textViewAchievements;
+    private TextView readedBooksTextView;
+    private ImageView imageViewPremiumBadge;
 
     private OnFragmentInteractionListener mListener;
     private SharedPreferences prefs;
@@ -111,13 +122,30 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        //Update the stadistics
+        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        user = new User();
+        user.readFromSharedPreferences(prefs);
+        readedBooksTextView.setText(Integer.toString(user.getReadedBooks().size()));
+        textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + user.getAchievements().size());
+
+        // Change the layout accord to the type of account
+        if (user.isPremium())
+            imageViewPremiumBadge.setVisibility(View.VISIBLE);
+        else
+            imageViewPremiumBadge.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-
-        user = MockupsValues.getUserProfile();
+        user = new User();
         user.readFromSharedPreferences(prefs);
 
         // Change an user image
@@ -129,19 +157,15 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         TextView textViewNameUser = (TextView) view.findViewById(R.id.nameUserTextview);
         textViewNameUser.setText(user.getName());
 
-        // Change the layout accord to the type of account
-        final ImageView imageViewPremiumBadge = (ImageView) view.findViewById(R.id.premiumBadgeProfile);
-        if (user.isPremium())
-            imageViewPremiumBadge.setVisibility(View.VISIBLE);
-        else
-            imageViewPremiumBadge.setVisibility(View.INVISIBLE);
+        //Initialize the badge of the premium user
+        imageViewPremiumBadge = (ImageView) view.findViewById(R.id.premiumBadgeProfile);
 
         // Num of readed books by the user
-        TextView readedBooksTextView = (TextView) view.findViewById(R.id.numReadedBooksText);
+        readedBooksTextView = (TextView) view.findViewById(R.id.numReadedBooksText);
         readedBooksTextView.setText(Integer.toString(user.getReadedBooks().size()));
 
         // Achievements of the user
-        TextView textViewAchievements = (TextView) view.findViewById(R.id.achievementsText);
+        textViewAchievements = (TextView) view.findViewById(R.id.achievementsText);
         textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + user.getAchievements().size());
 
         // Create a genre preferences list on profile
@@ -174,17 +198,38 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         final AchievementsHoritzontalAdapter adapterAchievements = new AchievementsHoritzontalAdapter(getContext(), achievementsCompleted);
         recyclerViewAchievements.setAdapter(adapterAchievements);
 
+        //Achievements button
+        ImageButton buttonAchievements = (ImageButton) view.findViewById(R.id.buttonAchievementsProfile);
+        buttonAchievements.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AchievementsPopup achievementsPopup = new AchievementsPopup(getActivity().getSupportFragmentManager());
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                achievementsPopup.show(fragmentTransaction, "achievements_popup");
+            }
+        });
+
         //Upgrade account button
         Button buttonUpgrade = (Button) view.findViewById(R.id.upgrade_button);
         buttonUpgrade.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        //user.setAchievements(MockupsValues.getAchievementsPersonalized());
-                        adapterAchievements.setAchivementsList(MockupsValues.getAchievementsPersonalized());
+                        user.setPremium(true);
+
+                        //For every achievement
+                        user.getAchievements().get(4).incrementValue(1);
+                        textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + user.getAchievements().size());
+
+                        String achievementsToPref = new Gson().toJson(user.getAchievements());
+                        prefs.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
+
+                        user.saveToFirebase();
+                        //--
+
+                        adapterAchievements.setAchivementsList(user.getCompletedAchievements());
                         adapterAchievements.notifyDataSetChanged();
                         imageViewPremiumBadge.setVisibility(View.VISIBLE);
-                        //recyclerViewAchievements.
                     }
                 }
         );
