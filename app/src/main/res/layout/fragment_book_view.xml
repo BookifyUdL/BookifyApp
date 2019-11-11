@@ -310,7 +310,8 @@
                         </LinearLayout>
 
 
-                        <me.biubiubiu.justifytext.library.JustifyTextView
+                        <TextView
+                            android:justificationMode="inter_word"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="end"

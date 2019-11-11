@@ -19,7 +19,6 @@ import com.example.readify.R;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import me.biubiubiu.justifytext.library.JustifyTextView;
 
 public class EmojisAdapter extends RecyclerView.Adapter<EmojisAdapter.EmojiHolder> {
 

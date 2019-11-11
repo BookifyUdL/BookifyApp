@@ -70,11 +70,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <me.biubiubiu.justifytext.library.JustifyTextView
+                    <TextView
+                        android:justificationMode="inter_word"
                         android:id="@+id/user_comment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_5dp"
+                        android:layout_marginEnd="@dimen/margin_5dp"
                         android:layout_marginBottom="@dimen/margin_5dp"
                         android:text="@string/Lorem_ipsum"
                         android:textColor="@color/colorBlack"

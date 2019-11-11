@@ -13,14 +13,15 @@ public class Review {
     private User user;
     private CommentType commentType;
     private Uri uri;
-    private int likes;
+    //private int likes;
     private ArrayList<Review> subReviews;
+    private ArrayList<User> userLiked;
 
     public Review(User user, String comment){
         this.user = user;
         this.comment = comment;
         this.commentType = CommentType.COMMENT;
-        this.likes = 0;
+        this.userLiked = new ArrayList<>();
         this.subReviews = new ArrayList<>();
     }
 
@@ -28,7 +29,7 @@ public class Review {
         this.user = user;
         this.comment = comment;
         this.commentType = CommentType.COMMENT;
-        this.likes = 0;
+        this.userLiked = new ArrayList<>();
         this.subReviews = subReviews;
     }
 
@@ -37,7 +38,8 @@ public class Review {
         this.comment = comment;
         this.commentType = commentType;
         this.uri = uri;
-        this.likes = 0;
+        //this.likes = 0;
+        this.userLiked = new ArrayList<>();
         this.subReviews = new ArrayList<>();
 
     }
@@ -55,11 +57,19 @@ public class Review {
     }
 
     public int getLikes(){
-        return this.likes;
+        return this.userLiked.size();
     }
 
-    public void setLikes(int likes) {
-        this.likes = likes;
+    public boolean likedComment(User user){
+        return this.userLiked.contains(user);
+    }
+
+    public void addLike(User user){
+        userLiked.add(user);
+    }
+
+    public void removeLike(User user){
+        userLiked.remove(user);
     }
 
     public Uri getUri() {

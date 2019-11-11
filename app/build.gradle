@@ -33,7 +33,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'com.google.android.material:material:1.1.0-beta01'
-    implementation 'me.biubiubiu.justifytext:library:1.1'
+    //implementation 'me.biubiubiu.justifytext:library:1.1'
     implementation 'com.wdullaer:swipeactionadapter:2.0.0'
     implementation 'de.hdodenhof:circleimageview:3.0.1'
     implementation 'tyrantgit:explosionfield:1.0.1'

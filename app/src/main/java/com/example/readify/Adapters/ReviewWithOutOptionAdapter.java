@@ -22,7 +22,6 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import me.biubiubiu.justifytext.library.JustifyTextView;
 
 public class ReviewWithOutOptionAdapter extends RecyclerView.Adapter<ReviewWithOutOptionAdapter.ReviewHolder> {
 
@@ -83,7 +82,7 @@ public class ReviewWithOutOptionAdapter extends RecyclerView.Adapter<ReviewWithO
         //private ImageView expandButton;
         private CircleImageView userImage;
         private TextView userName;
-        private JustifyTextView userComment;
+        private TextView userComment;
         private LinearLayout commentLayout;
         private CardView commentItem;
 

@@ -4,6 +4,7 @@ public class Book {
     private String title;
     private String author;
     private String picture;
+    private String summary;
     private boolean read;
     private int year;
     private int extension;

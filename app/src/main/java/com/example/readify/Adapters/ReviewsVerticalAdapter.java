@@ -52,7 +52,6 @@ import java.util.ListIterator;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import me.biubiubiu.justifytext.library.JustifyTextView;
 
 
 public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVerticalAdapter.BookHolder> implements RichEditTextInterface {
@@ -185,17 +184,22 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             holder.gifContainer.addView(imageView);
         }
 
+        if(review.likedComment(MockupsValues.user))
+            holder.likeButton.setLiked(true);
+
         holder.likeButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
-                review.setLikes(review.getLikes() + 1);
+                //review.setLikes(review.getLikes() + 1);
+                review.addLike(MockupsValues.user);
                 String aux = Integer.toString(review.getLikes());
                 holder.likesNumber.setText(aux);
             }
 
             @Override
             public void unLiked(LikeButton likeButton) {
-                review.setLikes(review.getLikes() - 1);
+                //review.setLikes(review.getLikes() - 1);
+                review.removeLike(MockupsValues.user);
                 String aux = Integer.toString(review.getLikes());
                 holder.likesNumber.setText(aux);
             }
@@ -227,7 +231,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         private ImageView expandButton;
         private CircleImageView userImage;
         private TextView userName;
-        private JustifyTextView userComment;
+        private TextView userComment;
         private LinearLayout subCommentsRecyclerView;
         private LinearLayout addCommentLayout;
         private boolean areSubCommentsLoaded = false;
@@ -275,8 +279,9 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
                     LayoutInflater layoutInflater = LayoutInflater.from(subCommentsRecyclerView.getContext());
                     addCommentSubComments(layoutInflater);
                     addSubComment(layoutInflater);
-                    expandableLayout.expand();
+                    areSubCommentsLoaded = true;
                 }
+                expandableLayout.expand();
             }
         }
 
