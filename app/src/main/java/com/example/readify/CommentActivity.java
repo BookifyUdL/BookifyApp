@@ -49,7 +49,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 
-public class CommentActivity extends AppCompatActivity {
+public class CommentActivity extends AppCompatActivity implements RichEditTextInterface {
 
     private static final String TAG = "MainActivity";
     LinearLayout linearLayout;
@@ -84,7 +84,7 @@ public class CommentActivity extends AppCompatActivity {
         this.finish();
     }
 
-    public void setWebView(Uri uri){
+    public void setGifView(Uri uri){
         commentUri = uri;
         commentType = CommentType.COMMENT_AND_GIF;
         checkIfImageViewIsAdded();

@@ -82,7 +82,7 @@ public class RichEditText extends AppCompatEditText {
                     //int mimeTipeCount = description.getMimeTypeCount();
                     this.uri = inputContentInfo.getContentUri();
                     if(description.toString().contains("image/gif")){
-                        activity.setWebView(this.uri);
+                        activity.setGifView(this.uri);
                     } else {
                         activity.setImageView(this.uri);
                     }

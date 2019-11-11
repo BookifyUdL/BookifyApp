@@ -1,6 +1,7 @@
 package com.example.readify.Adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.text.Layout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.readify.CommentType;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
@@ -28,6 +31,7 @@ import com.example.readify.Models.User;
 import com.example.readify.Popups.BookReadedPopup;
 import com.example.readify.R;
 import com.example.readify.RichEditText;
+import com.example.readify.RichEditTextInterface;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
@@ -39,12 +43,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import me.biubiubiu.justifytext.library.JustifyTextView;
 
 
-public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVerticalAdapter.BookHolder> {
+public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVerticalAdapter.BookHolder> implements RichEditTextInterface {
 
     private ArrayList<Review> reviewsList;
     private MainActivity activity;
     private Context mContext;
     private FloatingActionButton floatingActionButton;
+    private ImageView imageView;
     //private ReviewWithOutOptionAdapter adapter;
 
     // Counstructor for the Class
@@ -151,21 +156,49 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
 
 
         holder.userName.setText(review.getUser().getName());
-        holder.userComment.setText(review.getComment());
-        //String aux = mContext.getPackageName();
+        String comment = review.getComment();
+        if(!comment.isEmpty())
+            holder.userComment.setText(comment);
+
         holder.userImage.setImageResource(
                 mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
-        /*if(position == 0){
-            holder.commentLayout.setVisibility(View.VISIBLE);
-            holder.commentItem.setVisibility(View.INVISIBLE);
-        } else {
-            holder.userName.setText(review.getUser().getName());
-            holder.userComment.setText(review.getComment());
-            //String aux = mContext.getPackageName();
-            holder.userImage.setImageResource(
-                    mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
 
-        }*/
+        if(review.getCommentType() != CommentType.COMMENT){
+            imageView = new ImageView(getContext());
+            LinearLayout.LayoutParams params = new  LinearLayout.LayoutParams((int) getContext().getResources().getDimension(R.dimen.image_gif_height), (int) getContext().getResources().getDimension(R.dimen.image_gif_height));
+            imageView.setLayoutParams(params);
+            if(review.getCommentType() == CommentType.COMMENT_AND_GIF)
+                setGifView(review.getUri());
+            if(review.getCommentType() == CommentType.COMMENT_AND_IMAGE)
+                setImageView(review.getUri());
+            holder.gifContainer.addView(imageView);
+        }
+    }
+
+    public void setGifView(Uri uri){
+        //commentUri = uri;
+        //commentType = CommentType.COMMENT_AND_GIF;
+        //checkIfImageViewIsAdded();
+        Glide.with(getContext()) // replace with 'this' if it's in activity
+                .load(uri.toString())
+                .asGif()
+                .error(R.drawable.angry) // show error drawable if the image is not a gif
+                .into(imageView);
+        //enablePublishButton();
+    }
+
+    public void setImageView(Uri uri){
+        //commentUri = uri;
+        //commentType = CommentType.COMMENT_AND_IMAGE;
+        //checkIfImageViewIsAdded();
+        Glide.with(getContext())
+                .load(uri.toString())
+                .asBitmap()
+                .error(R.drawable.angry)
+                .into(imageView);
+        //enablePublishButton();
+
+
     }
 
     // This is your ViewHolder class that helps to populate data to the view
@@ -178,13 +211,13 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         private JustifyTextView userComment;
         private LinearLayout recyclerView;
         private boolean areSubCommentsLoaded = false;
-        private LinearLayout commentLayout;
+        private LinearLayout gifContainer;
         private CardView commentItem;
 
         public BookHolder(View itemView) {
             super(itemView);
 
-            //commentLayout =  (LinearLayout) itemView.findViewById(R.id.comment_item);
+            gifContainer =  (LinearLayout) itemView.findViewById(R.id.gif_container);
             commentItem = (CardView) itemView.findViewById(R.id.reviewed_comment);
             userImage = (CircleImageView) itemView.findViewById(R.id.profile_image);
             userName = (TextView) itemView.findViewById(R.id.user_name);

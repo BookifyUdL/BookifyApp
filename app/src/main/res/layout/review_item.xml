@@ -60,16 +60,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <me.biubiubiu.justifytext.library.JustifyTextView
-                    android:id="@+id/user_comment"
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_5dp"
-                    android:layout_marginBottom="@dimen/margin_5dp"
-                    android:text="@string/Lorem_ipsum"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="12sp" />
+                    android:layout_height="wrap_content">
 
+                    <me.biubiubiu.justifytext.library.JustifyTextView
+                        android:id="@+id/user_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_5dp"
+                        android:layout_marginBottom="@dimen/margin_5dp"
+                        android:text="@string/Lorem_ipsum"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:id="@+id/gif_container"
+                        android:layout_marginEnd="@dimen/margin_5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="end">
+                    </LinearLayout>
+
+                </LinearLayout>
             </ScrollView>
 
             <LinearLayout

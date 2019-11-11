@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import com.example.readify.CommentType;
 
+import java.net.URI;
+
 public class Review {
 
     private String comment;
@@ -21,6 +23,14 @@ public class Review {
         this.user = user;
         this.comment = comment;
         this.commentType = commentType;
+        this.uri = uri;
+    }
+
+    public Uri getUri() {
+        return uri;
+    }
+
+    public void setUri(Uri uri){
         this.uri = uri;
     }
 

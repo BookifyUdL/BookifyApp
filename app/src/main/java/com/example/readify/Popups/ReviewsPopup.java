@@ -33,13 +33,14 @@ import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Review;
 import com.example.readify.R;
+import com.example.readify.RichEditTextInterface;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ReviewsPopup extends DialogFragment implements Popup {
+public class ReviewsPopup extends DialogFragment implements Popup{
 
     private ReviewsVerticalAdapter pendingBooksAdapter;
     private ScrollView scrollView;
