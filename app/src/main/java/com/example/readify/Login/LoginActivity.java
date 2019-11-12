@@ -41,6 +41,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -233,12 +234,12 @@ public class LoginActivity extends AppCompatActivity {
                             pref.edit().putString("com.example.readify.uid", user.getUid()).apply();
                             pref.edit().putString("com.example.readify.name", user.getDisplayName()).apply();
                             pref.edit().putString("com.example.readify.email", user.getEmail()).apply();
-
-                            try {
+                            pref.edit().putString("com.example.readify.photo", user.getPhotoUrl().toString()).apply();
+                            /*try {
                                 new DownloadImagesTask().execute(user.getPhotoUrl().toString()).get();
                             } catch (ExecutionException | InterruptedException e) {
                                 e.printStackTrace();
-                            }
+                            }*/
 
                             MockupsValues.setContext(LoginActivity.this);
 
@@ -278,12 +279,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // Function to login with Facebook
-    private void handleFacebookAccessToken(AccessToken token) {
+    private void handleFacebookAccessToken(final AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
         afterAnimationView.setVisibility(GONE);
         loadingProgressBar.setVisibility(VISIBLE);
 
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        final AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -296,11 +297,12 @@ public class LoginActivity extends AppCompatActivity {
                             pref.edit().putString("com.example.readify.uid", user.getUid()).apply();
                             pref.edit().putString("com.example.readify.name", user.getDisplayName()).apply();
                             pref.edit().putString("com.example.readify.email", user.getEmail()).apply();
-                            try {
+                            pref.edit().putString("com.example.readify.photo", user.getPhotoUrl().toString() + "?type=large").apply();
+                            /*try {
                                 new DownloadImagesTask().execute((user.getPhotoUrl().toString() + "?type=large")).get();
                             } catch (ExecutionException | InterruptedException e) {
                                 e.printStackTrace();
-                            }
+                            }*/
 
                             MockupsValues.setContext(LoginActivity.this);
 
@@ -399,40 +401,6 @@ public class LoginActivity extends AppCompatActivity {
             case 1: //Facebook
                 startActivityForResult(intent, FB_SIGN_OUT);
                 break;
-        }
-    }
-
-    // Class to provide a Bitmap from URL (Public access)
-    public class DownloadImagesTask extends AsyncTask<String, Void, Bitmap> {
-
-        @Override
-        protected Bitmap doInBackground(String... strings) {
-            return getBitmapFromURL(strings[0]);
-        }
-
-        @SuppressLint("WrongThread")
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            result.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
-            byte[] b = baos.toByteArray();
-            pref.edit().putString("com.example.readify.photo", Base64.encodeToString(b, Base64.DEFAULT)).apply();
-        }
-
-
-        private Bitmap getBitmapFromURL(String src) {
-            try {
-                URL url = new URL(src);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                return myBitmap;
-            } catch (IOException e) {
-                // Log exception
-                return null;
-            }
         }
     }
 }

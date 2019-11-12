@@ -1,5 +1,6 @@
 package com.example.readify.Profile;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -52,13 +53,17 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -150,8 +155,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
 
         // Change an user image
         userImage = (CircleImageView) view.findViewById(R.id.profile_image);
-        byte[] imageAsBytes = Base64.decode(user.getPicture().getBytes(), Base64.DEFAULT);
-        userImage.setImageBitmap(BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
+        getProfileImage();
 
         // Put the name of the user
         TextView textViewNameUser = (TextView) view.findViewById(R.id.nameUserTextview);
@@ -246,6 +250,35 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         return view;
     }
 
+    private void getProfileImage() {
+        @SuppressLint("StaticFieldLeak")
+        AsyncTask<Void, Void, Bitmap> t = new AsyncTask<Void, Void, Bitmap>() {
+            protected Bitmap doInBackground(Void... p) {
+                Bitmap bmp = null;
+                try {
+                    URL aURL = new URL(user.getPicture());
+                    URLConnection conn = aURL.openConnection();
+                    conn.setUseCaches(true);
+                    conn.connect();
+                    InputStream is = conn.getInputStream();
+                    BufferedInputStream bis = new BufferedInputStream(is);
+                    bmp = BitmapFactory.decodeStream(bis);
+                    bis.close();
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return bmp;
+            }
+
+            protected void onPostExecute(Bitmap bmp) {
+                userImage.setImageBitmap(bmp);
+            }
+        };
+
+        t.execute();
+    }
+
     @Override
     public void onItemClick(View view, int position) {
         MainActivity activity = (MainActivity) getActivity();
@@ -300,3 +333,4 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         void onFragmentInteraction(Uri uri);
     }
 }
+

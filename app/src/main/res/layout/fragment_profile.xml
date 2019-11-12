@@ -51,6 +51,7 @@
                         android:layout_height="match_parent"
                         android:layout_centerHorizontal="true"
                         android:src="@drawable/profile_photo"
+                        app:background="@color/colorBlank"
                         app:civ_border_color="#FFF"
                         app:civ_border_width="2dp" />
 
