@@ -65,7 +65,6 @@ public class ReviewsPopup extends DialogFragment implements Popup{
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
                 startActivity(intent);
-                //finish();
             }
         });
         ImageButton closeArrow = (ImageButton) view.findViewById(R.id.close_arrow);
@@ -75,33 +74,6 @@ public class ReviewsPopup extends DialogFragment implements Popup{
                 close();
             }
         });
-
-        /*TextView userName = (TextView) view.findViewById(R.id.user_name);
-        userName.setText(MockupsValues.user.getName());
-        CircleImageView userPicture = (CircleImageView) view.findViewById(R.id.profile_image);
-        userPicture.setImageResource(
-                getContext().getResources().getIdentifier(MockupsValues.user.getPicture(), "drawable", getContext().getPackageName()));
-
-
-
-        final EditText editText = (EditText) view.findViewById(R.id.edit_text);
-        editText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
-
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                return hide(v,  actionId);
-
-            }
-        });
-        ImageButton sendButton = (ImageButton) view.findViewById(R.id.send_comment);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addReview(editText.getText().toString());
-                hide(editText, EditorInfo.IME_ACTION_SEND);
-
-            }
-        });*/
-        //this.dismiss();
         return view;
     }
 
@@ -110,9 +82,6 @@ public class ReviewsPopup extends DialogFragment implements Popup{
             addReview(v.getText().toString());
             InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            //InputMethodManager inputManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            //inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
-
             return true;
 
         }
@@ -138,11 +107,6 @@ public class ReviewsPopup extends DialogFragment implements Popup{
         pendingBooksAdapter.addReview(new Review(MockupsValues.getUser(), message));
         ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(pendingBooksAdapter.getItemCount()-1,200);
         Toast.makeText(getContext(), getContext().getString(R.string.comment_added_correctly), Toast.LENGTH_LONG).show();
-        //recyclerView.setScrollY(recyclerView.getHeight());
-        //commentLayout.setVisibility(View.INVISIBLE);
-        //recyclerView.scrollToPosition(pendingBooksAdapter.getItemCount() - 1);
-        //recyclerView.smoothScrollToPosition(pendingBooksAdapter.getItemCount());
-        //scrollView.setScrollY(scrollView.getHeight());
     }
 
     public void close(){

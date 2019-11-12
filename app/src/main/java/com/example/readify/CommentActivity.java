@@ -214,7 +214,7 @@ public class CommentActivity extends AppCompatActivity implements RichEditTextIn
 
                 String comment = editText.getText().toString();
                 Review review;
-                if(commentType == CommentType.COMMENT && commentUri == null){
+                if(commentUri == null){
                     review  = new Review(MockupsValues.user, comment);
                 } else {
                     review = new Review(MockupsValues.user, comment, commentType, commentUri);
