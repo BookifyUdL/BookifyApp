@@ -13,6 +13,10 @@
     <color name="colorYellowSwipe">#d9c01c</color>
     <color name="colorDarkGrayCardBackground">#dedfe3</color>
 
+    <color name="colorNotPublished">#ccffd2</color>
+    <color name="colorPublished">#00e31b</color>
+
+
     <color name="colorBackground">#333C46</color>
     <color name="colorSplashText">#F0F0F0</color>
     <color name="colorProgressBar">#FFCE511C</color>

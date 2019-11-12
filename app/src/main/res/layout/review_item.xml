@@ -9,7 +9,16 @@
     android:layout_marginBottom="@dimen/margin_5dp"
     android:orientation="vertical">
 
+    <!--include
+        android:id="@+id/comment_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/add_comment_item"
+        android:layout_marginBottom="@dimen/margin_5dp"
+        android:visibility="invisible"/-->
+
     <androidx.cardview.widget.CardView
+        android:id="@+id/reviewed_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorDarkGrayCardBackground"
@@ -45,23 +54,251 @@
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold" />
 
+                <LinearLayout
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end"
+                    android:id="@+id/edit_delete_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_5dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
+
+                    <ImageButton
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/edit_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_5dp"
+                        android:backgroundTint="@color/colorDarkGrayCardBackground"
+                        android:src="@drawable/ic_edit_button"/>
+
+                    <ImageButton
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/delete_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_5dp"
+                        android:backgroundTint="@color/colorDarkGrayCardBackground"
+                        android:src="@drawable/ic_delete_button"/>
+                </LinearLayout>
+
             </LinearLayout>
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <me.biubiubiu.justifytext.library.JustifyTextView
-                    android:id="@+id/user_comment"
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:justificationMode="inter_word"
+                        android:id="@+id/user_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_5dp"
+                        android:layout_marginBottom="@dimen/margin_5dp"
+                        android:layout_marginEnd="@dimen/margin_5dp"
+                        android:text="@string/Lorem_ipsum"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:id="@+id/gif_container"
+                        android:layout_marginEnd="@dimen/margin_5dp"
+                        android:layout_marginTop="@dimen/margin_5dp"
+                        android:layout_marginBottom="@dimen/margin_5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal">
+                    </LinearLayout>
+
+                </LinearLayout>
+            </ScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+
+                <!--de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/user1"
+                    app:civ_border_color="#FFF"
+                    app:civ_border_width="2dp" /-->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/colorBlank">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_view2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="@color/colorDarkGrayCardBackground"
+                        android:background="@drawable/layout_border"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        app:cardCornerRadius="2dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/margin_5dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginEnd="1dp"
+                                android:gravity="center_horizontal">
+
+                                <com.like.LikeButton
+                                    app:icon_type="heart"
+                                    app:icon_size="25dp"
+                                    android:id="@+id/star_button"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginTop="1dp"
+                                    android:layout_marginBottom="1dp"
+                                    app:circle_start_color="@color/colorBlank"
+                                    app:like_drawable="@drawable/like_filled"
+                                    app:unlike_drawable="@drawable/like_unfilled"
+                                    app:anim_scale_factor="1.5"/>
+
+                                <TextView
+                                    android:id="@+id/likes_number"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="@dimen/margin_5dp"
+                                    android:text="120"
+                                    android:textColor="@color/colorBlack"
+                                    android:textStyle="bold"
+                                    android:textSize="14dp"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginEnd="1dp"
+                                android:gravity="center_horizontal">
+
+                                <ImageView
+                                    android:id="@+id/see_comments_button"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginTop="1dp"
+                                    android:layout_marginBottom="1dp"
+                                    android:src="@drawable/chat"/>
+
+                                <TextView
+                                    android:id="@+id/likes_number1"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="@dimen/margin_5dp"
+                                    android:text="@string/see_comments"
+                                    android:textColor="@color/colorBlack"
+                                    android:textStyle="bold"
+                                    android:textSize="14dp"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginEnd="1dp"
+                                android:gravity="center_horizontal">
+
+                                <ImageView
+                                    android:id="@+id/star_button2"
+                                    android:layout_width="25dp"
+                                    android:layout_height="25dp"
+                                    android:layout_marginTop="1dp"
+                                    android:layout_marginBottom="1dp"
+                                    android:src="@drawable/share"/>
+
+                                <TextView
+                                    android:id="@+id/likes_number2"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_margin="@dimen/margin_5dp"
+                                    android:text="@string/share"
+                                    android:textColor="@color/colorBlack"
+                                    android:textStyle="bold"
+                                    android:textSize="14dp"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <net.cachapa.expandablelayout.ExpandableLayout
+                android:id="@+id/expandable_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:el_duration="1000"
+                app:el_expanded="false"
+                app:el_parallax="0.5">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_5dp"
-                    android:layout_marginBottom="@dimen/margin_5dp"
-                    android:text="@string/Lorem_ipsum"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="12sp" />
+                    android:orientation="vertical">
 
-            </ScrollView>
+                    <LinearLayout
+                        android:id="@+id/sub_comments_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="vertical"
+                        android:animateLayoutChanges="true">
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/add_comment_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="@dimen/margin_5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="10dp">
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </net.cachapa.expandablelayout.ExpandableLayout>
 
             <!--TextView
                 android:id="@+id/user_comment"

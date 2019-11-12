@@ -96,6 +96,8 @@
     <string name="accept_upper_case">ACCEPT</string>
     <string name="search_book">Search book</string>
     <string name="add_comment">Add a comment</string>
+    <string name="see_comments">Comments</string>
+    <string name="share">Share</string>
     <string name="fake_date">1st October</string>
     <string name="fake_pages">Pages</string>
     <string name="review_added_correctly">Your review was added correctly!</string>
@@ -112,10 +114,18 @@
     <string name="rate_example" translatable="false">4.4</string>
     <string name="upgrade_account_text">Upgrade account</string>
     <string name="configuration_text">Configuration</string>
+
+    <string name="publish_title">PUBLISH</string>
+    <string name="delete">Delete Comment</string>
+    <string name="delete_comment_alert_dialog">Are you sure you want to delete the comment ?</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_correct">Review deleted correctly!</string>
     <string name="any_book_yet">Any book yet. Click on the button below to discover new ones!</string>
     <string name="facebook_app_id" translatable="false">2457878697756823</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb2457878697756823</string>
     <string name="or_text">or</string>
+
 
     <string name="booki">Bookify</string>
     <string name="welcome_back">Welcome Back</string>

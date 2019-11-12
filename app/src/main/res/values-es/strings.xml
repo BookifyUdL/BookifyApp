@@ -89,10 +89,17 @@
     <string name="done_text">Listo</string>
     <string name="upgrade_account_text">Mejorar cuenta</string>
     <string name="configuration_text">Configuración</string>
+    <string name="see_comments">Comentarios</string>
+    <string name="share">Compartir</string>
+    <string name="publish_title">PUBLICAR</string>
+    <string name="delete">Eliminar Comentario</string>
+    <string name="delete_comment_alert_dialog">Estás seguro que quieres eliminar el comentario?</string>
+    <string name="accept">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete_correct">El comentario se ha borrado correctamente!</string>
     <string name="periodAccountText">logros</string>
     <string name="feedbackTitleProfile">APORTAC.</string>
     <string name="any_book_yet">Todavía no has añadido ningún libro. Haz click en el botón para descubrir nuevos libros!</string>
     <string name="disconnect_text">Disconnect</string>
     <string name="achievements_text">Achievements</string>
-
 </resources>
