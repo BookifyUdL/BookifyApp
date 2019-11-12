@@ -88,7 +88,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         //this.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         view = inflater.inflate(R.layout.book_readed_popup, container);
         this.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        /*CardView cardView = view.findViewById(R.id.card_reviews);
+        CardView cardView = view.findViewById(R.id.card_reviews);
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,7 +96,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
             }
         });
 
-        TextView bookTitle = (TextView) view.findViewById(R.id.book_title);
+        TextView bookTitle = (TextView) view.findViewById(R.id.info_text);
         bookTitle.setText(book.getTitle());
 
         ImageButton imageButton = (ImageButton) view.findViewById(R.id.reviews_image_button);
@@ -105,7 +105,10 @@ public class BookReadedPopup extends DialogFragment implements Popup {
             public void onClick(View view) {
                 showReviewsPopup();
             }
-        });*/
+        });
+
+        //TextView bookTitle = (TextView) view.findViewById(R.id.info_text);
+        //bookTitle.setText(book.getTitle());
 
         ImageButton closeArrow = (ImageButton) view.findViewById(R.id.close_arrow);
         closeArrow.setOnClickListener(new View.OnClickListener() {
@@ -205,9 +208,9 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     @Override
     public void onResume() {
         super.onResume();
-        float dim = ViewGroup.LayoutParams.WRAP_CONTENT - getContext().getResources().getDimension(R.dimen.margin_10dp);
+        //float dim = ViewGroup.LayoutParams.WRAP_CONTENT - getContext().getResources().getDimension(R.dimen.margin_10dp);
         Window window = getDialog().getWindow();
-        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, Math.round(dim));
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         window.setGravity(Gravity.CENTER);
         //TODO:
     }

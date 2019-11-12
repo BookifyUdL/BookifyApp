@@ -1,5 +1,7 @@
 package com.example.readify.Models;
 
+import java.util.ArrayList;
+
 public class Achievement {
     private int id;
     private String title;
@@ -7,6 +9,8 @@ public class Achievement {
     private String image;
     private int progressValue;
     private int totalValue;
+    //private Genre genere;
+    //private ArrayList<Genre> genres;
 
     public Achievement(int id, String title, String description, String image, int progressValue, int totalValue) {
         this.id = id;
