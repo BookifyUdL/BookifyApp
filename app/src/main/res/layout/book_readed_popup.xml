@@ -324,7 +324,7 @@
                             android:layout_marginBottom="@dimen/margin_5dp"/>
                     </LinearLayout>
 
-                    <!--<androidx.cardview.widget.CardView
+                    <androidx.cardview.widget.CardView
                         android:id="@+id/card_reviews"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -358,7 +358,7 @@
                                     android:layout_gravity="center_vertical"/>
                             </LinearLayout>
                         </LinearLayout>
-                    </androidx.cardview.widget.CardView>-->
+                    </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/accept_card_view"
