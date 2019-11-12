@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.Editable;
@@ -32,6 +33,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.readify.CommentActivity;
 import com.example.readify.CommentType;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
@@ -289,7 +291,14 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Review review = reviewsList.get(position);
+                    Intent intent = new Intent(activity, CommentActivity.class);
+                    intent.putExtra(Review.COMMENT_PARAMETER, review.getComment());
+                    intent.putExtra(Review.COMMENT_TYPE_PARAMETER, review.getCommentType());
+                    intent.putExtra(Review.POSITION_PARAMETER, position);
+                    intent.putExtra(Review.URI_PARAMETER, review.getUri());
+                    activity.startActivity(intent);
+                    //startActivity(intent);
                 }
             });
         }
@@ -435,10 +444,6 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
 
         @Override
         public void onExpansionUpdate(float expansionFraction, int state) {
-            /*Log.d("ExpandableLayout", "State: " + state);
-            if (state == ExpandableLayout.State.EXPANDING) {
-                recyclerView.smoothScrollToPosition(getAdapterPosition());
-            }*/
         }
     }
 

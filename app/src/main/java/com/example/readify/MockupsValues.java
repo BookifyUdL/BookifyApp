@@ -88,6 +88,12 @@ public class MockupsValues {
         REVIEWS.add(review);
     }
 
+    public static void setReview(Review review, int position){
+        if(REVIEWS == null || REVIEWS.isEmpty())
+            REVIEWS = new ArrayList<>();
+        REVIEWS.set(position, review);
+    }
+
     public static void deleteReview(Review review){
         if(REVIEWS == null || REVIEWS.isEmpty())
             REVIEWS = new ArrayList<>();

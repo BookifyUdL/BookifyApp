@@ -9,11 +9,15 @@ import java.util.ArrayList;
 
 public class Review {
 
+    public static String COMMENT_PARAMETER = "COMMENT_PARAMETER";
+    public static String COMMENT_TYPE_PARAMETER = "COMMENT_TYPE_PARAMETER";
+    public static String POSITION_PARAMETER = "POSITION_PARMAETER";
+    public static String URI_PARAMETER = "URI";
+
     private String comment;
     private User user;
     private CommentType commentType;
     private Uri uri;
-    //private int likes;
     private ArrayList<Review> subReviews;
     private ArrayList<User> userLiked;
 

@@ -9,6 +9,7 @@ import androidx.core.view.inputmethod.InputContentInfoCompat;
 
 import android.content.ClipDescription;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -59,15 +60,32 @@ public class CommentActivity extends AppCompatActivity implements RichEditTextIn
     Button publish;
     Uri commentUri;
     CommentType commentType;
+    boolean isEditMode = false;
+    int position;
     //RichEditText editText;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_comment);
         setOnCloseButtonClicked();
         setupRichContentEditText();
+        Intent intent =getIntent();
+        Bundle extrasBundle = intent.getExtras();
+        if(extrasBundle != null){
+            isEditMode = true;
+            String comment = extrasBundle.getString(Review.COMMENT_PARAMETER);
+            position = extrasBundle.getInt(Review.POSITION_PARAMETER);
+            commentType = (CommentType) extrasBundle.get(Review.COMMENT_TYPE_PARAMETER);
+            Uri uri = (Uri) extrasBundle.get(Review.URI_PARAMETER);
+            if(commentType == CommentType.COMMENT_AND_IMAGE)
+                setImageView(uri);
+            if(commentType == CommentType.COMMENT_AND_GIF)
+                setGifView(uri);
+            editText.setText(comment);
+        }
     }
 
     private void setOnCloseButtonClicked(){
@@ -193,7 +211,7 @@ public class CommentActivity extends AppCompatActivity implements RichEditTextIn
         publish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(getApplicationContext(), "DE PUTS", Toast.LENGTH_SHORT).show();
+
                 String comment = editText.getText().toString();
                 Review review;
                 if(commentType == CommentType.COMMENT && commentUri == null){
@@ -201,7 +219,12 @@ public class CommentActivity extends AppCompatActivity implements RichEditTextIn
                 } else {
                     review = new Review(MockupsValues.user, comment, commentType, commentUri);
                 }
-                MockupsValues.addReview(review);
+
+                if(!isEditMode){
+                    MockupsValues.addReview(review);
+                } else {
+                    MockupsValues.setReview(review, position);
+                }
                 finishActivity();
             }
         });
