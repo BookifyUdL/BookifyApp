@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.readify.Discover.DiscoverFragment;
 import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.Library.LibraryFragment;
+import com.example.readify.Login.LoginActivity;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
 import com.example.readify.Profile.ProfileFragment;
@@ -15,6 +16,7 @@ import com.example.readify.Reading.ReadingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ ReadingFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInterac
 LibraryFragment.OnFragmentInteractionListener, DiscoverFragment.OnFragmentInteractionListener,
 SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInteractionListener{
 
+    private static final int SIGN_OUT = 4001;
 
     private BottomNavigationView navigation;
     private final ReadingFragment fragment1 = new ReadingFragment();
@@ -77,18 +80,25 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         notifyLibraryListChanged();
     }
 
-    public void changeDiscoverFragment(){
-        fragment4.setEnterTransition(new Slide(Gravity.BOTTOM));
-        fragment4.setExitTransition(new Slide(Gravity.TOP));
-        fm.beginTransaction().hide(active).show(fragment4).commit();
-        active = fragment4;
-    }
-
-    public void changeProfileFragment(){
+    public void changeSearchBookFragment(){
         fragment5.setEnterTransition(new Slide(Gravity.BOTTOM));
         fragment5.setExitTransition(new Slide(Gravity.TOP));
         fm.beginTransaction().hide(active).show(fragment5).commit();
         active = fragment5;
+    }
+
+    public void changeDiscoverFragment(){
+        fragment3.setEnterTransition(new Slide(Gravity.BOTTOM));
+        fragment3.setExitTransition(new Slide(Gravity.TOP));
+        fm.beginTransaction().hide(active).show(fragment3).commit();
+        active = fragment3;
+    }
+
+    public void changeProfileFragment(){
+        fragment4.setEnterTransition(new Slide(Gravity.BOTTOM));
+        fragment4.setExitTransition(new Slide(Gravity.TOP));
+        fm.beginTransaction().hide(active).show(fragment4).commit();
+        active = fragment4;
     }
 
     public void backToDiscoverFragment(){
@@ -138,19 +148,19 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         finish();
     }
 
+    public void logOut(){
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.putExtra("result", SIGN_OUT);
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         MockupsValues.setPendingListBooks(MockupsValues.user.getInterestedBooks());
-        if(MockupsValues.user.getGenres() == null || MockupsValues.user.getGenres().isEmpty()){
-            ArrayList<Genre> genres = new ArrayList<>();
-            genres.add(MockupsValues.getGenres().get(2));
-            genres.add(MockupsValues.getGenres().get(4));
-            MockupsValues.user.setGenres(genres);
-        }
-
 
         fm.beginTransaction().add(R.id.main_container, fragment6, "6").hide(fragment6).commit();
         fm.beginTransaction().add(R.id.main_container, fragment5, "5").hide(fragment5).commit();

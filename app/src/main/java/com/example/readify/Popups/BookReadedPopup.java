@@ -96,6 +96,9 @@ public class BookReadedPopup extends DialogFragment implements Popup {
             }
         });
 
+        TextView bookTitle = (TextView) view.findViewById(R.id.book_title);
+        bookTitle.setText(book.getTitle());
+
         ImageButton imageButton = (ImageButton) view.findViewById(R.id.reviews_image_button);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override

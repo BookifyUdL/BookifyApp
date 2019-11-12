@@ -178,7 +178,7 @@ public class MockupsValues {
     }
 
     public static ArrayList<Book> getAllBooksForTutorial(){
-        if(ALL_BOOKS_FOR_TUTORIAL == null || ALL_BOOKS_FOR_TUTORIAL.isEmpty()){
+        if(ALL_BOOKS_FOR_TUTORIAL == null || ALL_BOOKS_FOR_TUTORIAL.isEmpty() || ALL_BOOKS_FOR_TUTORIAL.size() != 15){
             ALL_BOOKS_FOR_TUTORIAL = new ArrayList<>();
             ALL_BOOKS_FOR_TUTORIAL.addAll(getLastAddedBooks());
             ALL_BOOKS_FOR_TUTORIAL.addAll(getSameAuthorBooks());
@@ -272,8 +272,11 @@ public class MockupsValues {
     public static ArrayList<Achievement> getAchievements(){
         if (ACHIEVEMENTS == null || ACHIEVEMENTS.isEmpty()){
             ACHIEVEMENTS = new ArrayList<>();
-            ACHIEVEMENTS.add(new Achievement("Reading teacher", "Read 20 books of any genre", "achiev1", 0, 20));
-            ACHIEVEMENTS.add(new Achievement("Golden user", "Upgrade your account to premium", "premium_image_icon", 0, 1));
+            ACHIEVEMENTS.add(new Achievement(0,"Bronze reader", "Read 1 books of any genre", "achiev1_bronze", 0, 1));
+            ACHIEVEMENTS.add(new Achievement(1,"Silver reader", "Read 10 books of any genre", "achiev1_plata", 0, 10));
+            ACHIEVEMENTS.add(new Achievement(2,"Gold reader", "Read 20 books of any genre", "achiev1", 0, 20));
+            ACHIEVEMENTS.add(new Achievement(3,"Diamond reader", "Read 100 books of any genre", "achiev1_diamond", 0, 100));
+            ACHIEVEMENTS.add(new Achievement(4,"Golden user", "Upgrade your account to premium", "premium_image_icon", 0, 1));
         }
         return ACHIEVEMENTS;
     }
@@ -281,11 +284,11 @@ public class MockupsValues {
     public static ArrayList<Achievement> getAchievementsPersonalized(){
         if (PROFILE_ACHIEVEMENTS_PERSONALIZED == null || PROFILE_ACHIEVEMENTS_PERSONALIZED.isEmpty()){
             PROFILE_ACHIEVEMENTS_PERSONALIZED = new ArrayList<>();
-            Achievement achievement = new Achievement("Reading teacher", "Read 20 books of any genre", "achiev1", 0, 20);
+            Achievement achievement = new Achievement(3,"Reading teacher", "Read 20 books of any genre", "achiev1", 0, 20);
             achievement.incrementValue(20);
             PROFILE_ACHIEVEMENTS_PERSONALIZED.add(achievement);
 
-            achievement = new Achievement("Golden user", "Upgrade your account to premium", "premium_image_icon", 0, 1);
+            achievement = new Achievement(4,"Golden user", "Upgrade your account to premium", "premium_image_icon", 0, 1);
             achievement.incrementValue(1);
             PROFILE_ACHIEVEMENTS_PERSONALIZED.add(achievement);
         }

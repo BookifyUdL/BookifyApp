@@ -241,7 +241,8 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
     private void showSearchFragment(){
         MainActivity activity = (MainActivity) getActivity();
-        activity.changeDiscoverFragment();
+        activity.changeSearchBookFragment();
+        //activity.changeDiscoverFragment();
     }
 
     public static float dpToPixels(int dp, Context context) {

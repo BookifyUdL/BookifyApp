@@ -22,11 +22,28 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <!--<TextView
+                <LinearLayout
+                    android:id="@+id/any_book_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/hello_blank_fragment" />-->
+                    android:orientation="vertical"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:visibility="invisible">
+
+                    <TextView
+                        android:id="@+id/any_book_text"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/any_book_yet"
+                        />
+
+                </LinearLayout>
+
                 <LinearLayout
+                    android:id="@+id/reading_text_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -65,6 +82,7 @@
                     android:layout_marginBottom="10dp" />
 
                 <LinearLayout
+                    android:id="@+id/pending_text_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.readify.Models.Achievement;
 import com.example.readify.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AchievementsHoritzontalAdapter extends RecyclerView.Adapter<AchievementsHoritzontalAdapter.ViewHolder> {
@@ -25,7 +26,12 @@ public class AchievementsHoritzontalAdapter extends RecyclerView.Adapter<Achieve
         this.mData = data;
 
         if (this.mData.size() == 0)
-            mData.add(new Achievement("Empty", "Complete an achievements to add", "empty", 0, 9999));
+            mData.add(new Achievement(0,"Empty", "Complete an achievements to add", "empty", 0, 9999));
+    }
+
+    public void setAchivementsList(ArrayList<Achievement> data){
+        this.mData = data;
+        this.notifyDataSetChanged();
     }
 
     @NonNull

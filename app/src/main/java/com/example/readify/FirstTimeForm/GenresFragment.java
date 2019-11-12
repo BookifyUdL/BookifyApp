@@ -2,9 +2,11 @@ package com.example.readify.FirstTimeForm;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -24,14 +26,25 @@ import android.widget.Toast;
 import com.example.readify.Adapters.BooksListFormAdapter;
 import com.example.readify.Adapters.BooksListVerticalAdapter;
 import com.example.readify.MockupsValues;
+import com.example.readify.Models.Achievement;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.Genre;
 import com.example.readify.Models.User;
 import com.example.readify.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.CirclePageIndicator;
 import com.synnapps.carouselview.ViewListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,19 +66,21 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
 
     private OnFragmentInteractionListener mListener;
 
-    View view;
-    Activity activity;
-    ComunicateFragmentsFirstForm comunicateFragmentsFirstForm;
+    private View view;
+    private Activity activity;
+    private ComunicateFragmentsFirstForm comunicateFragmentsFirstForm;
 
     //CarouselView
-    CarouselView carouselView;
-    int NUMBER_OF_FORMS = 4;
+    private CarouselView carouselView;
+    private int NUMBER_OF_FORMS = 4;
 
-    RecyclerViewAdapterGenres adapterGenres;
-    BooksListFormAdapter adapterBooksList;
-    BooksListFormAdapter adapterBooksInterest;
+    private RecyclerViewAdapterGenres adapterGenres;
+    private BooksListFormAdapter adapterBooksList;
+    private BooksListFormAdapter adapterBooksInterest;
+    private SharedPreferences pref;
 
-    User user = MockupsValues.getUser();
+    private User user;
+    //User user = MockupsValues.getUser();
 
     public GenresFragment() {
         // Required empty public constructor
@@ -102,6 +117,17 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_genres, container, false);
+        pref = getContext().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+
+        //Create a new user with the information about the facebook or google
+        user = new User();
+        user.setUid(pref.getString("com.example.readify.uid", "0"));
+        user.setName(pref.getString("com.example.readify.name", "Unknown"));
+        user.setEmail(pref.getString("com.example.readify.email", "email@unknown.com"));
+        user.setPicture(pref.getString("com.example.readify.photo", "userfinale"));
+        user.setPremium(false);
+
+        //Initialize carouselView
         CirclePageIndicator indicator = view.findViewById(R.id.indicator);
         indicator.setFillColor(R.color.default_circle_indicator_stroke_color);
 
@@ -111,25 +137,16 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         carouselView.setViewListener(viewListener);
         carouselView.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(int position) {
-                if(position == 2){
+                if (position == 2)
                     changeInterestedBooks();
-                    //viewListener.setViewForPosition(2);
-                    //viewListener.
-                    //viewListener.notifyAll();
-                    //createBookInterestDinamically(view);
-                }
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
+            public void onPageScrollStateChanged(int state) {}
         });
 
         // Inflate the layout for this fragment
@@ -168,6 +185,22 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
                     buttonDone.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            pref.edit().putBoolean("com.example.readify.premium", user.isPremium()).apply();
+
+                            String genresToPref = new Gson().toJson(user.getGenres());
+                            pref.edit().putString("com.example.readify.genres", genresToPref).apply();
+
+                            String libraryToPref = new Gson().toJson(user.getLibrary());
+                            pref.edit().putString("com.example.readify.library", libraryToPref).apply();
+
+                            String interestedToPref = new Gson().toJson(user.getInterested());
+                            pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+
+                            String achievementsToPref = new Gson().toJson(MockupsValues.getAchievements());
+                            pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
+
+                            user.setAchievements(MockupsValues.getAchievements());
+
                             comunicateFragmentsFirstForm.doneForm(user);
                         }
                     });
@@ -180,7 +213,23 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
                 skipForm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        comunicateFragmentsFirstForm.exitForm();
+                        pref.edit().putBoolean("com.example.readify.premium", user.isPremium()).apply();
+
+                        String genresToPref = new Gson().toJson(user.getGenres());
+                        pref.edit().putString("com.example.readify.genres", genresToPref).apply();
+
+                        String libraryToPref = new Gson().toJson(user.getLibrary());
+                        pref.edit().putString("com.example.readify.library", libraryToPref).apply();
+
+                        String interestedToPref = new Gson().toJson(user.getInterested());
+                        pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+
+                        String achievementsToPref = new Gson().toJson(MockupsValues.getAchievements());
+                        pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
+
+                        user.setAchievements(MockupsValues.getAchievements());
+
+                        comunicateFragmentsFirstForm.exitForm(user);
                     }
                 });
             }
@@ -221,9 +270,9 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         searchViewBooksRead.setOnQueryTextListener(GenresFragment.this);
     }
 
-    private void changeInterestedBooks(){
+    private void changeInterestedBooks() {
         ArrayList booksInterest = MockupsValues.getAllBooksForTutorial();
-        for (Book book : user.getLibrary()){
+        for (Book book : user.getLibrary()) {
             booksInterest.remove(book);
         }
         adapterBooksInterest.setBooksList(booksInterest);
@@ -237,11 +286,9 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         recyclerViewInterestBooks.setLayoutManager(linearLayoutManagerInterest);
 
         ArrayList booksInterest = MockupsValues.getAllBooksForTutorial();
-        for (Book book : user.getLibrary()){
-            booksInterest.remove(book);
-        }
+
         //ArrayList booksInterest = MockupsValues.getLastAddedBooks();
-        adapterBooksInterest = new BooksListFormAdapter(getContext(), booksInterest, MockupsValues.user, false);
+        adapterBooksInterest = new BooksListFormAdapter(getContext(), booksInterest, user, false);
         adapterBooksInterest.setClickListener(GenresFragment.this);
         recyclerViewInterestBooks.setAdapter(adapterBooksInterest);
 

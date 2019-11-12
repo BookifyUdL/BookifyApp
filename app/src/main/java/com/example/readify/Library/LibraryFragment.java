@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import com.example.readify.Adapters.BooksGridAdapter;
@@ -36,8 +37,11 @@ import java.util.ArrayList;
  */
 public class LibraryFragment extends Fragment implements SearchView.OnQueryTextListener, BooksHorizontalAdapter.ItemClickListener {
 
-    BooksGridAdapter booksAdapter;
-    GridLayoutManager gridLayoutManager;
+    private BooksGridAdapter booksAdapter;
+    private GridLayoutManager gridLayoutManager;
+    private RecyclerView recyclerViewGenres;
+    private LinearLayout anyBookLayout;
+    private SearchView searchView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -52,9 +56,21 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
         return fragment;
     }
 
+    private void shouldShowEmptyMessage(){
+        if(booksAdapter.getItemCount() == 0){
+            anyBookLayout.setVisibility(View.VISIBLE);
+            searchView.setVisibility(View.INVISIBLE);
+            recyclerViewGenres.setVisibility(View.INVISIBLE);
+        } else {
+            anyBookLayout.setVisibility(View.INVISIBLE);
+            searchView.setVisibility(View.VISIBLE);
+            recyclerViewGenres.setVisibility(View.VISIBLE);
+        }
+    }
+
     public void notifyLibraryChanged(){
         booksAdapter.notifyDataSetChanged();
-        //gridLayoutManager.notify();
+        shouldShowEmptyMessage();
     }
 
     @Override
@@ -68,7 +84,16 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_library, container, false);
-        RecyclerView recyclerViewGenres = view.findViewById(R.id.recyclerViewGenres);
+        LinearLayout discoverButton = view.findViewById(R.id.discover_layout);
+        discoverButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.focusDiscoverFragment();
+            }
+        });
+        anyBookLayout = (LinearLayout) view.findViewById(R.id.any_book_layout);
+        recyclerViewGenres = view.findViewById(R.id.recyclerViewGenres);
         gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
         recyclerViewGenres.setLayoutManager(gridLayoutManager);
 
@@ -78,10 +103,11 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
         recyclerViewGenres.setAdapter(booksAdapter);
         booksAdapter.setClickListener(this);
 
-        SearchView searchView = view.findViewById(R.id.search_bar);
+        searchView = view.findViewById(R.id.search_bar);
         searchView.setFocusable(false);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(this);
+        shouldShowEmptyMessage();
         return view;
     }
 

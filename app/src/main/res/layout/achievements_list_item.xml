@@ -1,0 +1,73 @@
+<androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
+    android:layout_height="100dp"
+    android:layout_margin="5dp"
+    android:layout_width="match_parent"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="8dp">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutCardView"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="@color/colorGrayCardBackground"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/achievement_image"
+            android:layout_height="60dp"
+            android:layout_width="60dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/premium_image_icon"
+            android:tag="Image"
+            android:layout_gravity="center"
+            android:contentDescription="@string/imageview_adapter_text" />
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_margin="10dp">
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:id="@+id/achievement_title"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Title of achievement"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:textSize="18sp" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:id="@+id/achievement_description"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Description of achievement"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="15sp"
+                android:ellipsize="end"
+                android:maxLines="2"/>
+
+            <com.daimajia.numberprogressbar.NumberProgressBar
+                android:id="@+id/achievement_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="5dp"
+                custom:progress_unreached_color="#2196F3"
+                custom:progress_reached_color="#4CAF50"
+                custom:progress_text_color="#000000"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
