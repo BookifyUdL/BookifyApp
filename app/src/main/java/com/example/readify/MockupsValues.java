@@ -81,10 +81,17 @@ public class MockupsValues {
         return GENRE;
     }
 
+
     public static void addReview(Review review){
         if(REVIEWS == null || REVIEWS.isEmpty())
             REVIEWS = new ArrayList<>();
         REVIEWS.add(review);
+    }
+
+    public static void deleteReview(Review review){
+        if(REVIEWS == null || REVIEWS.isEmpty())
+            REVIEWS = new ArrayList<>();
+        REVIEWS.remove(review);
     }
 
     public static ArrayList<Review> getReviews(){

@@ -114,5 +114,10 @@
     <string name="upgrade_account_text">Upgrade account</string>
     <string name="configuration_text">Configuration</string>
     <string name="publish_title">PUBLISH</string>
+    <string name="delete">Delete Comment</string>
+    <string name="delete_comment_alert_dialog">Are you sure you want to delete the comment ?</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_correct">Review deleted correctly!</string>
 
 </resources>

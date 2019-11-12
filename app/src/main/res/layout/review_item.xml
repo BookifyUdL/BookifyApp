@@ -54,6 +54,35 @@
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold" />
 
+                <LinearLayout
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end"
+                    android:id="@+id/edit_delete_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_5dp"
+                    android:orientation="horizontal"
+                    android:visibility="invisible">
+
+                    <ImageButton
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/edit_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_5dp"
+                        android:backgroundTint="@color/colorDarkGrayCardBackground"
+                        android:src="@drawable/ic_edit_button"/>
+
+                    <ImageButton
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/delete_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_5dp"
+                        android:backgroundTint="@color/colorDarkGrayCardBackground"
+                        android:src="@drawable/ic_delete_button"/>
+                </LinearLayout>
+
             </LinearLayout>
 
             <ScrollView

@@ -91,5 +91,9 @@
     <string name="see_comments">Comentarios</string>
     <string name="share">Compartir</string>
     <string name="publish_title">PUBLICAR</string>
-
+    <string name="delete">Eliminar Comentario</string>
+    <string name="delete_comment_alert_dialog">Estás seguro que quieres eliminar el comentario?</string>
+    <string name="accept">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="delete_correct">El comentario se ha borrado correctamente!</string>
 </resources>

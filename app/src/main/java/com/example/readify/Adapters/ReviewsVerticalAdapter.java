@@ -1,7 +1,10 @@
 package com.example.readify.Adapters;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.Layout;
@@ -206,6 +209,12 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         });
         String aux = Integer.toString(review.getLikes());
         holder.likesNumber.setText(aux);
+
+        if(review.getUser().equals(MockupsValues.getUser())){
+            holder.editDeleteLayout.setVisibility(View.VISIBLE);
+            holder.onDeleteButtonClicked();
+            holder.onEditButtonClicked();
+        }
     }
 
     public void setGifView(Uri uri){
@@ -225,7 +234,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
     }
 
     // This is your ViewHolder class that helps to populate data to the view
-    public class BookHolder extends RecyclerView.ViewHolder implements ExpandableLayout.OnExpansionUpdateListener, RichEditTextInterface {
+    public class BookHolder extends RecyclerView.ViewHolder implements ExpandableLayout.OnExpansionUpdateListener {
 
         private ExpandableLayout expandableLayout;
         private ImageView expandButton;
@@ -242,6 +251,9 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         private LikeButton likeButton;
         private TextView likesNumber;
         private int position;
+        private LinearLayout editDeleteLayout;
+        private ImageView deleteButton;
+        private ImageView editButton;
 
         public BookHolder(View itemView) {
             super(itemView);
@@ -251,6 +263,9 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             userImage = (CircleImageView) itemView.findViewById(R.id.profile_image);
             userName = (TextView) itemView.findViewById(R.id.user_name);
             userComment =  itemView.findViewById(R.id.user_comment);
+            editDeleteLayout = itemView.findViewById(R.id.edit_delete_layout);
+            deleteButton = itemView.findViewById(R.id.delete_button);
+            editButton = itemView.findViewById(R.id.edit_button);
 
             expandableLayout = itemView.findViewById(R.id.expandable_layout);
             expandableLayout.setInterpolator(new OvershootInterpolator());
@@ -268,6 +283,49 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
 
             likeButton = itemView.findViewById(R.id.star_button);
             likesNumber = itemView.findViewById(R.id.likes_number);
+        }
+
+        private void onEditButtonClicked(){
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+        }
+
+        private void onDeleteButtonClicked(){
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+                    dialogBuilder.setTitle(R.string.delete);
+                    dialogBuilder.setMessage(R.string.delete_comment_alert_dialog);
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if(i == DialogInterface.BUTTON_POSITIVE){
+                                Review review = reviewsList.get(position);
+                                MockupsValues.deleteReview(review);
+                                reviewsList.remove(position);
+                                notifyDataSetChanged();
+                                Toast.makeText(getContext(), getContext().getResources().getString(R.string.delete_correct), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    };
+                    dialogBuilder.setPositiveButton(R.string.accept, dialogClickListener);
+                    dialogBuilder.setNegativeButton(R.string.cancel, dialogClickListener);
+                    final AlertDialog dialog = dialogBuilder.create();
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialogInterface) {
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE);
+                        }
+                    });
+                    dialog.show();
+                }
+            });
         }
 
         private void onExpandButtonClicked(){
@@ -353,10 +411,6 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             }
         }
 
-        public void setGifView(Uri uri){ }
-
-        public void setImageView(Uri uri){ }
-
         private void addCommentSubComments(LayoutInflater layoutInflater){
             ArrayList<Review> reviews = reviewsList.get(position).getSubReviews();
             for (int i = 0; i < reviews.size(); i++) {
@@ -378,29 +432,6 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             comment.setText(review.getComment());
             //return to_add;
         }
-
-        /*@Override
-        public void onClick(View view) {
-            if(expandableLayout.isExpanded()) {
-                expandableLayout.collapse();
-            } else {
-                expandableLayout.expand();
-            }
-            /*ViewHolder holder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(selectedItem);
-            if (holder != null) {
-                holder.expandButton.setSelected(false);
-                holder.expandableLayout.collapse();
-            }
-
-            int position = getAdapterPosition();
-            if (position == selectedItem) {
-                selectedItem = UNSELECTED;
-            } else {
-                expandButton.setSelected(true);
-                expandableLayout.expand();
-                selectedItem = position;
-            }
-        }*/
 
         @Override
         public void onExpansionUpdate(float expansionFraction, int state) {
