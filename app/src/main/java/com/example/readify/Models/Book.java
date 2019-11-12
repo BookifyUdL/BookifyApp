@@ -1,5 +1,7 @@
 package com.example.readify.Models;
 
+import java.util.ArrayList;
+
 public class Book {
     private String title;
     private String author;
@@ -9,6 +11,7 @@ public class Book {
     private int year;
     private int extension;
     private Genre genre;
+    private ArrayList<Review> comments;
 
     public Book(String title, String author, String picture, int year, int extension, Genre genre) {
         this.title = title;

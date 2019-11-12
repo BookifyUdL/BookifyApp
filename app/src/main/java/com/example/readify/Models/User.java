@@ -41,6 +41,7 @@ public class User {
     private ArrayList<Achievement> achievements;
     private ArrayList<Book> library;
     private ArrayList<Genre> genres;
+
     private ArrayList<Book> interested;
     private ArrayList<Book> read;
 
