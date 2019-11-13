@@ -102,4 +102,8 @@
     <string name="any_book_yet">Todavía no has añadido ningún libro. Haz click en el botón para descubrir nuevos libros!</string>
     <string name="disconnect_text">Disconnect</string>
     <string name="achievements_text">Achievements</string>
+
+    <string name="facebook_app_id">2457878697756823</string>
+    <string name="fb_login_protocol_scheme">fb2457878697756823</string>
+
 </resources>

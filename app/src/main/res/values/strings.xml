@@ -122,8 +122,9 @@
     <string name="cancel">Cancel</string>
     <string name="delete_correct">Review deleted correctly!</string>
     <string name="any_book_yet">Any book yet. Click on the button below to discover new ones!</string>
-    <string name="facebook_app_id" translatable="false">2457878697756823</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb2457878697756823</string>
+    <string name="facebook_app_id">2457878697756823</string>
+    <string name="fb_login_protocol_scheme">fb2457878697756823</string>
+
     <string name="or_text">or</string>
 
 

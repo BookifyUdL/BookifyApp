@@ -1,69 +1,53 @@
 package com.example.readify.Profile;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.readify.Adapters.AchievementsHoritzontalAdapter;
-import com.example.readify.Adapters.BooksHorizontalAdapter;
 import com.example.readify.Adapters.BooksProfileHoritzontalAdapter;
 import com.example.readify.Adapters.GenresHoritzontalAdapter;
-import com.example.readify.Login.LoginActivity;
+import com.example.readify.MainActivityLogOut;
 import com.example.readify.MainActivity;
-import com.example.readify.MockupsValues;
 import com.example.readify.Models.Achievement;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
 import com.example.readify.Models.User;
 import com.example.readify.Pages;
 import com.example.readify.Popups.AchievementsPopup;
-import com.example.readify.Popups.BookReadedPopup;
 import com.example.readify.R;
-import com.facebook.AccessToken;
-import com.facebook.Profile;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -92,6 +76,10 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     private TextView readedBooksTextView;
     private ImageView imageViewPremiumBadge;
 
+    private FirebaseAuth mAuth;
+
+    private MainActivityLogOut exitActivity;
+    private Activity activity;
     private OnFragmentInteractionListener mListener;
     private SharedPreferences prefs;
 
@@ -127,6 +115,19 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null)
+            updateUI();
+    }
+
+    private void updateUI() {
+        Toast.makeText(getContext(), "You're logged out", Toast.LENGTH_SHORT).show();
+        exitActivity.exitAccount();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -149,8 +150,10 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+
+        mAuth = FirebaseAuth.getInstance();
         user = new User();
+        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
         user.readFromSharedPreferences(prefs);
 
         // Change an user image
@@ -242,8 +245,9 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         disconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity activity = (MainActivity) getActivity();
-                activity.logOut();
+                mAuth.signOut();
+                LoginManager.getInstance().logOut();
+                updateUI();
             }
         });
 
@@ -298,6 +302,10 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof Activity) {
+            activity = (Activity) context;
+            exitActivity = (MainActivityLogOut) activity;
+        }
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {

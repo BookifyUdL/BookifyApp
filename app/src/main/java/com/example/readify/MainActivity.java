@@ -10,7 +10,6 @@ import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.Library.LibraryFragment;
 import com.example.readify.Login.LoginActivity;
 import com.example.readify.Models.Book;
-import com.example.readify.Models.Genre;
 import com.example.readify.Profile.ProfileFragment;
 import com.example.readify.Reading.ReadingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,12 +23,11 @@ import android.transition.Slide;
 import android.view.Gravity;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity implements
 ReadingFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
 LibraryFragment.OnFragmentInteractionListener, DiscoverFragment.OnFragmentInteractionListener,
-SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInteractionListener{
+SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInteractionListener,
+ MainActivityLogOut {
 
     private static final int SIGN_OUT = 4001;
 
@@ -177,5 +175,12 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void exitAccount() {
+        Intent accountIntent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(accountIntent);
+        finish();
     }
 }
