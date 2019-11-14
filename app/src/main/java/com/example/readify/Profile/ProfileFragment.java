@@ -245,7 +245,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         disconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAuth.signOut();
+                FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
                 updateUI();
             }

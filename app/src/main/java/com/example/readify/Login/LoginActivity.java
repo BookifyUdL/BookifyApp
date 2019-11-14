@@ -39,9 +39,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.LoggingBehavior;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginBehavior;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.felipecsl.gifimageview.library.GifImageView;
@@ -49,6 +46,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -74,6 +72,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String USERS = "users";
     private static final String TAG_F = "FACELOG";
+    private static final String TAG_G = "GOOGLOG";
+    private static final int RC_SIGN_IN = 1001;
 
     private ImageView bookIconImageView;
     private TextView bookITextView;
@@ -89,6 +89,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private CallbackManager mCallbackManager;
 
+    private GoogleSignInClient mGoogleSignInClient;
+    private SignInButton signInButton;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,104 +100,37 @@ public class LoginActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
 
-        //Facebook
+        // Fix a Facebook bug (token)
         if (BuildConfig.DEBUG) {
             FacebookSdk.setIsDebugEnabled(true);
             FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
         }
 
+        // Initialize all components in Login Layout
         initViews();
 
         // Create an initial animation
-        new CountDownTimer(2000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-            }
-
-            @Override
-            public void onFinish() {
-                bookITextView.setVisibility(GONE);
-                loadingProgressBar.setVisibility(GONE);
-                rootView.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.colorSplashText));
-                bookIconImageView.setImageResource(R.drawable.bookify_icon_only);
-                startAnimation();
-            }
-        }.start();
+        initializeAnimation();
 
         // Create an animated background with gif
-        try {
-            InputStream inputStream = getAssets().open("book_background.gif");
-            byte[] bytes = IOUtils.toByteArray(inputStream);
-            gifImageView.setBytes(bytes);
-            gifImageView.startAnimation();
-        } catch (IOException ignored) {
-        }
+        initializeBackgroundGif();
 
         // Initialize Facebook Login button
-        mCallbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = (LoginButton) findViewById(R.id.loginfacebook);
-        loginButton.setPermissions("email", "public_profile");
-        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG_F, "facebook:onSuccess:" + loginResult);
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
+        initializeSignInFacebook();
 
-            @Override
-            public void onCancel() {
-                Log.d(TAG_F, "facebook:onCancel");
-                // ...
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Log.d(TAG_F, "facebook:onError", error);
-                // ...
-            }
-        });
-
+        // Initialize Google login button
+        initializeSignInGoogle();
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if (currentUser != null)
             updateUI(currentUser);
-    }
-
-    private void updateUI(FirebaseUser currentUser) {
-        MockupsValues.setContext(this);
-
-        pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
-        pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
-        pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
-        pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString()).apply();
-
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        readDataFromFirebase(currentUser.getUid(), intent);
-    }
-
-    private void updateUI(FirebaseUser currentUser, Task<AuthResult> task) {
-        MockupsValues.setContext(this);
-
-        pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
-        pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
-        pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
-        pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString() + "?type=large").apply();
-
-        Intent intent;
-        if (!task.getResult().getAdditionalUserInfo().isNewUser()) {
-            intent = new Intent(LoginActivity.this, MainActivity.class);
-            readDataFromFirebase(currentUser.getUid(), intent);
-        }else {
-            intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
-            startActivity(intent);
-            finish();
-        }
     }
 
     private void initViews() {
@@ -210,18 +146,49 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference(USERS);
+
+        signInButton = findViewById(R.id.logingoogle);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         // Pass the activity result back to the Facebook SDK
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
-
-        super.onActivityResult(requestCode, resultCode, data);
 
         // Show the login components when the user returns to start
         afterAnimationView.setVisibility(VISIBLE);
 
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(TAG_G, "Google sign in failed", e);
+            }
+        }
+    }
+
+    private void initializeAnimation() {
+        new CountDownTimer(2000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+
+            @Override
+            public void onFinish() {
+                bookITextView.setVisibility(GONE);
+                loadingProgressBar.setVisibility(GONE);
+                rootView.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.colorSplashText));
+                bookIconImageView.setImageResource(R.drawable.bookify_icon_only);
+                startAnimation();
+            }
+        }.start();
     }
 
     // Animation when the app is open
@@ -251,6 +218,19 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //Method to init a background gif
+    private void initializeBackgroundGif() {
+        try {
+            InputStream inputStream = getAssets().open("book_background.gif");
+            byte[] bytes = IOUtils.toByteArray(inputStream);
+            gifImageView.setBytes(bytes);
+            gifImageView.startAnimation();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Method to read from database a different params that will use in app after
     private void readDataFromFirebase(String uid, final Intent intent) {
         databaseReference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -278,11 +258,36 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(LoginActivity.this, "Error to read the data from database", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    //Initialize a methods to do login on facebook
+    private void initializeSignInFacebook() {
+        mCallbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) findViewById(R.id.loginfacebook);
+        loginButton.setPermissions("email", "public_profile");
+        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d(TAG_F, "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG_F, "facebook:onCancel");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG_F, "facebook:onError", error);
+            }
+        });
+    }
+
+    //Method to obtain the access token from facebook
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG_F, "handleFacebookAccessToken:" + token);
         afterAnimationView.setVisibility(GONE);
@@ -312,5 +317,89 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    //Initialize a methods to do login on Google
+    private void initializeSignInGoogle() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                afterAnimationView.setVisibility(GONE);
+                loadingProgressBar.setVisibility(VISIBLE);
+
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+        });
+    }
+
+    //Method to obtain a credential from Google
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(TAG_G, "firebaseAuthWithGoogle:" + acct.getId());
+        afterAnimationView.setVisibility(GONE);
+        loadingProgressBar.setVisibility(VISIBLE);
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG_G, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            if (user != null)
+                                updateUI(user, task);
+
+                            loadingProgressBar.setVisibility(GONE);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG_G, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication Failed.", Toast.LENGTH_SHORT).show();
+                            afterAnimationView.setVisibility(VISIBLE);
+                            loadingProgressBar.setVisibility(GONE);
+                        }
+                    }
+                });
+    }
+
+    //Methods to update an app after to do a login
+    private void updateUI(FirebaseUser currentUser) {
+        MockupsValues.setContext(this);
+
+        pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
+        pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
+        pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
+        pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString()).apply();
+
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        readDataFromFirebase(currentUser.getUid(), intent);
+    }
+
+    private void updateUI(FirebaseUser currentUser, Task<AuthResult> task) {
+        MockupsValues.setContext(this);
+
+        pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
+        pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
+        pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
+        pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString() + "?type=large").apply();
+
+        Intent intent;
+        if (!task.getResult().getAdditionalUserInfo().isNewUser()) {
+            intent = new Intent(LoginActivity.this, MainActivity.class);
+            readDataFromFirebase(currentUser.getUid(), intent);
+        } else {
+            intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
