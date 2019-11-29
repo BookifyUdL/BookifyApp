@@ -100,8 +100,6 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
     }
 
     public void deleteItem(int position){
-        //MockupsValues.getPendingListBooks().remove(position);
-        //MockupsValues.removePendingListBook(booksList.get(position));
         if(!booksList.isEmpty())
             booksList.remove(position);
         notifyDataSetChanged();

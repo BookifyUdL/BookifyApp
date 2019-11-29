@@ -10,6 +10,7 @@ import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.Library.LibraryFragment;
 import com.example.readify.Login.LoginActivity;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.User;
 import com.example.readify.Profile.ProfileFragment;
 import com.example.readify.Reading.ReadingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -74,6 +75,13 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
     public void notifyReadingListChanged() { fragment1.readingBooksChanged();}
 
     public void notifyPendingListChanged(){
+        fragment1.pendingListChanged();
+        notifyLibraryListChanged();
+    }
+
+    public void notifyPendingListChanged(User user){
+        user.saveToFirebase();
+
         fragment1.pendingListChanged();
         notifyLibraryListChanged();
     }
@@ -158,7 +166,7 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MockupsValues.setPendingListBooks(MockupsValues.user.getInterestedBooks());
+        MockupsValues.setPendingListBooks(MockupsValues.user.getInterested());
 
         fm.beginTransaction().add(R.id.main_container, fragment6, "6").hide(fragment6).commit();
         fm.beginTransaction().add(R.id.main_container, fragment5, "5").hide(fragment5).commit();

@@ -235,6 +235,8 @@ public class LoginActivity extends AppCompatActivity {
         databaseReference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //TODO Improve if the user didn't make the first form
+
                 User user = dataSnapshot.getValue(User.class);
 
                 pref.edit().putBoolean("com.example.readify.premium", user.isPremium()).apply();
@@ -247,6 +249,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 String interestedToPref = new Gson().toJson(user.getInterested());
                 pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+
+                String readingToPref = new Gson().toJson(user.getReading());
+                pref.edit().putString("com.example.readify.reading", readingToPref).apply();
 
                 String achievementsToPref = new Gson().toJson(user.getAchievements());
                 pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();

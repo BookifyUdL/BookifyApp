@@ -117,7 +117,10 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     @Override
     public void onStart() {
         super.onStart();
+
+        mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
         if (currentUser == null)
             updateUI();
     }
@@ -151,7 +154,6 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        mAuth = FirebaseAuth.getInstance();
         user = new User();
         prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
         user.readFromSharedPreferences(prefs);

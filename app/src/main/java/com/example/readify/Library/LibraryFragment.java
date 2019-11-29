@@ -1,6 +1,7 @@
 package com.example.readify.Library;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -21,6 +22,7 @@ import com.example.readify.FirstTimeForm.RecyclerViewAdapterGenres;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.User;
 import com.example.readify.Pages;
 import com.example.readify.R;
 
@@ -42,6 +44,9 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
     private RecyclerView recyclerViewGenres;
     private LinearLayout anyBookLayout;
     private SearchView searchView;
+
+    private User user;
+    private SharedPreferences prefs;
 
     private OnFragmentInteractionListener mListener;
 
@@ -84,6 +89,11 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_library, container, false);
+
+        user = new User();
+        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        user.readFromSharedPreferences(prefs);
+
         LinearLayout discoverButton = view.findViewById(R.id.discover_layout);
         discoverButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +109,7 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
 
         //RecyclerViewAdapterGenres adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres, MockupsValues.user);
         //adapterGenres.setClickListener(GenresFragment.this);
-        booksAdapter = new BooksGridAdapter((MainActivity) getActivity(),getContext(), MockupsValues.user.getLibrary());
+        booksAdapter = new BooksGridAdapter((MainActivity) getActivity(),getContext(), user);
         recyclerViewGenres.setAdapter(booksAdapter);
         booksAdapter.setClickListener(this);
 
