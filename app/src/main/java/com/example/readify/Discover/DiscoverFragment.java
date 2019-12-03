@@ -1,6 +1,7 @@
 package com.example.readify.Discover;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
+import com.example.readify.Models.User;
 import com.example.readify.Pages;
 import com.example.readify.R;
 import com.example.readify.Design.ShadowTransformer;
@@ -60,7 +62,8 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
     private ShadowTransformer mFragmentCardShadowTransformer;
     private boolean mShowingFragments = false;
 
-
+    private SharedPreferences prefs;
+    private User user;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -80,10 +83,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
     public static DiscoverFragment newInstance(/*String param1, String param2*/) {
         DiscoverFragment fragment = new DiscoverFragment();
-        /*Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);*/
+
         return fragment;
     }
 
@@ -101,6 +101,11 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_discover, container, false);
+
+        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        user = new User();
+        user.readFromSharedPreferences(prefs);
+
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
 
         final ImageView searchButton = (ImageView) view.findViewById(R.id.searchIcon);
@@ -130,13 +135,14 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.top_rated_recycler_view);
         recyclerView.setLayoutManager(horizontalLayoutManagaer);
+
         // set up the RecyclerView
         ArrayList<Book> list = MockupsValues.getLastAddedBooks();
         list.add(MockupsValues.getSameAuthorBooks().get(0));
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManager);
-        BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), list, true);
+        BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), list, true, user);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
         addGenres(view);
@@ -157,7 +163,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         ArrayList<Book> books = MockupsValues.getLastAddedBooksDiscover();
         //books.add(MockupsValues.getSameAuthorBooks().get(0));
 
-        for(Genre genre: MockupsValues.user.getGenres()){
+        for(Genre genre: user.getGenres()){
             TextView textView = new TextView(getContext());
             String text = genre.getName() + " Genre";
             textView.setText(text);
@@ -201,7 +207,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
             LinearLayoutManager horizontalLayoutManager
                     = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
             recyclerView.setLayoutManager(horizontalLayoutManager);
-            BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), books, true);
+            BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), books, true, user);
             adapter.setClickListener(this);
             recyclerView.setAdapter(adapter);
 

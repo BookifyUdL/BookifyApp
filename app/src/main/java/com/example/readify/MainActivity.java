@@ -15,7 +15,6 @@ import com.example.readify.Profile.ProfileFragment;
 import com.example.readify.Reading.ReadingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -70,20 +69,32 @@ SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInt
         }
     };
 
-    public void notifyLibraryListChanged() {fragment2.notifyLibraryChanged();}
+    //public void notifyLibraryListChanged() {fragment2.notifyLibraryChanged();}
 
-    public void notifyReadingListChanged() { fragment1.readingBooksChanged();}
+    public void notifyLibraryListChanged(User user) {
+        user.saveToFirebase();
+        fragment2.notifyLibraryChanged();
+    }
 
-    public void notifyPendingListChanged(){
+    /*public void notifyReadingListChanged() {
+        fragment1.readingBooksChanged();
+    }*/
+
+    public void notifyReadingListChanged(User user) {
+        user.saveToFirebase();
+        fragment1.readingBooksChanged();
+    }
+
+    /*public void notifyPendingListChanged(){
         fragment1.pendingListChanged();
         notifyLibraryListChanged();
-    }
+    }*/
 
     public void notifyPendingListChanged(User user){
         user.saveToFirebase();
 
         fragment1.pendingListChanged();
-        notifyLibraryListChanged();
+        notifyLibraryListChanged(user);
     }
 
     public void changeSearchBookFragment(){

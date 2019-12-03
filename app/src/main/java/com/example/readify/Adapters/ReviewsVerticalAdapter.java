@@ -1,12 +1,16 @@
 package com.example.readify.Adapters;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.text.Editable;
 import android.text.Layout;
 import android.view.Gravity;
@@ -52,6 +56,11 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 
 import org.w3c.dom.Text;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Locale;
@@ -66,26 +75,14 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
     private Context mContext;
     private FloatingActionButton floatingActionButton;
     private ImageView imageView;
-    //private ReviewWithOutOptionAdapter adapter;
+    private User user;
 
-    // Counstructor for the Class
-    public ReviewsVerticalAdapter(MainActivity activity, Context context, ArrayList<Review> reviews) {
+    public ReviewsVerticalAdapter(MainActivity activity, Context context, ArrayList<Review> reviews, FloatingActionButton go, User user) {
         this.reviewsList = reviews;
-        //this.originalSearchList = new ArrayList<>();
-        //this.originalSearchList.addAll(booksList);
-        this.activity = activity;
-        this.mContext = context;
-        //this.user = user;
-    }
-
-    public ReviewsVerticalAdapter(MainActivity activity, Context context, ArrayList<Review> reviews, FloatingActionButton go) {
-        this.reviewsList = reviews;
-        //this.originalSearchList = new ArrayList<>();
-        //this.originalSearchList.addAll(booksList);
         this.activity = activity;
         this.mContext = context;
         this.floatingActionButton = go;
-        //this.user = user;
+        this.user = user;
     }
 
     public void addReview(Review newReview){
@@ -97,35 +94,6 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         return mContext;
     }
 
-    /*public void setBooksList(ArrayList<Book> books){
-        this.booksList = books;
-    }*/
-
-    /*public void deleteItem(int position){
-        //MockupsValues.getPendingListBooks().remove(position);
-        MockupsValues.removePendingListBook(booksList.get(position));
-        if(!booksList.isEmpty())
-            booksList.remove(position);
-        notifyDataSetChanged();
-    }
-
-    public void readingListChanged(int position){
-        Book book  = booksList.get(position);
-        MockupsValues.addReadingBook(book);
-        MockupsValues.removePendingListBook(book);
-        activity.notifyPendingListChanged();
-        activity.notifyReadingListChanged();
-        //MockupsValues
-    }
-
-    public void pendingListChanged(int position){
-        Book book  = booksList.get(position);
-        MockupsValues.addPendingBook(book);
-        MockupsValues.removeReadingListBook(book);
-        activity.notifyReadingListChanged();
-        activity.notifyPendingListChanged();
-    }*/
-
     // This method creates views for the RecyclerView by inflating the layout
     // Into the viewHolders which helps to display the items in the RecyclerView
     @Override
@@ -134,7 +102,6 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
 
         // Inflate the layout view you have created for the list rows here
         View view = layoutInflater.inflate(R.layout.review_item, parent, false);
-        //View view = layoutInflater.inflate(R.layout.comment_final_design, parent, false);
         return new ReviewsVerticalAdapter.BookHolder(view);
     }
 
@@ -142,28 +109,6 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
     public int getItemCount() {
         return reviewsList == null ? 0 : reviewsList.size();
     }
-
-    /*public void filter(String newText) {
-        String toSearch = newText.toLowerCase();
-
-        booksList = new ArrayList<>();
-        booksList.addAll(originalSearchList);
-
-        if (toSearch.length() == 0) {
-            notifyDataSetChanged();
-            return;
-        }
-
-        ListIterator<Book> itr = booksList.listIterator();
-        while (itr.hasNext()) {
-            if (itr.next().getTitle().toLowerCase().contains(toSearch))
-                continue;
-
-            itr.remove();
-        }
-        notifyDataSetChanged();
-    }*/
-
 
     // This method is called when binding the data to the views being created in RecyclerView
     @Override
@@ -177,6 +122,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
 
         holder.userImage.setImageResource(
                 mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
+        getProfileImage(review.getUser(), holder.userImage);
 
         if(review.getCommentType() != CommentType.COMMENT){
             imageView = new ImageView(getContext());
@@ -189,14 +135,14 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             holder.gifContainer.addView(imageView);
         }
 
-        if(review.likedComment(MockupsValues.user))
+        if(review.likedComment(user))
             holder.likeButton.setLiked(true);
 
         holder.likeButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
                 //review.setLikes(review.getLikes() + 1);
-                review.addLike(MockupsValues.user);
+                review.addLike(user);
                 String aux = Integer.toString(review.getLikes());
                 holder.likesNumber.setText(aux);
             }
@@ -204,7 +150,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             @Override
             public void unLiked(LikeButton likeButton) {
                 //review.setLikes(review.getLikes() - 1);
-                review.removeLike(MockupsValues.user);
+                review.removeLike(user);
                 String aux = Integer.toString(review.getLikes());
                 holder.likesNumber.setText(aux);
             }
@@ -212,7 +158,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         String aux = Integer.toString(review.getLikes());
         holder.likesNumber.setText(aux);
 
-        if(review.getUser().equals(MockupsValues.getUser())){
+        if(review.getUser().equals(user)){
             holder.editDeleteLayout.setVisibility(View.VISIBLE);
             holder.onDeleteButtonClicked();
             holder.onEditButtonClicked();
@@ -247,8 +193,6 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         private LinearLayout addCommentLayout;
         private boolean areSubCommentsLoaded = false;
         private LinearLayout gifContainer;
-        private CardView commentItem;
-        private ImageView gif;
         private EditText editText;
         private LikeButton likeButton;
         private TextView likesNumber;
@@ -261,7 +205,6 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             super(itemView);
 
             gifContainer =  (LinearLayout) itemView.findViewById(R.id.gif_container);
-            commentItem = (CardView) itemView.findViewById(R.id.reviewed_comment);
             userImage = (CircleImageView) itemView.findViewById(R.id.profile_image);
             userName = (TextView) itemView.findViewById(R.id.user_name);
             userComment =  itemView.findViewById(R.id.user_comment);
@@ -285,6 +228,8 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
 
             likeButton = itemView.findViewById(R.id.star_button);
             likesNumber = itemView.findViewById(R.id.likes_number);
+            user = new User();
+            user.readFromSharedPreferences(getContext().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE));
         }
 
         private void onEditButtonClicked(){
@@ -298,7 +243,6 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
                     intent.putExtra(Review.POSITION_PARAMETER, position);
                     intent.putExtra(Review.URI_PARAMETER, review.getUri());
                     activity.startActivity(intent);
-                    //startActivity(intent);
                 }
             });
         }
@@ -355,9 +299,11 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         private void addSubComment(final LayoutInflater layoutInflater){
             View add_comment = layoutInflater.inflate(R.layout.add_comment_layout,
                             addCommentLayout,false);
-            ImageView imageView = add_comment.findViewById(R.id.profile_image);
-            imageView.setImageResource(
-                    mContext.getResources().getIdentifier(MockupsValues.user.getPicture(), "drawable", mContext.getPackageName()));
+            CircleImageView imageView = (CircleImageView) add_comment.findViewById(R.id.profile_image);
+            /*imageView.setImageResource(
+                    mContext.getResources().getIdentifier(MockupsValues.user.getPicture(), "drawable", mContext.getPackageName()));*/
+            getProfileImage(user, imageView);
+
             RelativeLayout relativeLayout = add_comment.findViewById(R.id.relative_layout);
             int height = relativeLayout.getHeight();
 
@@ -404,7 +350,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             if(text.isEmpty()){
                 Toast.makeText(getContext(), "Text can't be empty!", Toast.LENGTH_SHORT).show();
             } else {
-                Review reviewToAdd = new Review(MockupsValues.user, text);
+                Review reviewToAdd = new Review(user, text);
                 View to_add = inflater.inflate(R.layout.review_item_without_options,
                         subCommentsRecyclerView,false);
                 addSubComment(to_add, reviewToAdd);
@@ -434,8 +380,9 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             CircleImageView image = (CircleImageView) to_add.findViewById(R.id.profile_image);
             TextView name = (TextView) to_add.findViewById(R.id.user_name);
             TextView comment =  to_add.findViewById(R.id.user_comment);
-            image.setImageResource(
-                    mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
+            /*image.setImageResource(
+                    mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));*/
+            getProfileImage(review.getUser(), image);
 
             name.setText(review.getUser().getName());
             comment.setText(review.getComment());
@@ -447,4 +394,32 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
         }
     }
 
+    private void getProfileImage(final User user, final CircleImageView circleImageView) {
+        @SuppressLint("StaticFieldLeak")
+        AsyncTask<Void, Void, Bitmap> t = new AsyncTask<Void, Void, Bitmap>() {
+            protected Bitmap doInBackground(Void... p) {
+                Bitmap bmp = null;
+                try {
+                    URL aURL = new URL(user.getPicture());
+                    URLConnection conn = aURL.openConnection();
+                    conn.setUseCaches(true);
+                    conn.connect();
+                    InputStream is = conn.getInputStream();
+                    BufferedInputStream bis = new BufferedInputStream(is);
+                    bmp = BitmapFactory.decodeStream(bis);
+                    bis.close();
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return bmp;
+            }
+
+            protected void onPostExecute(Bitmap bmp) {
+                circleImageView.setImageBitmap(bmp);
+            }
+        };
+
+        t.execute();
+    }
 }

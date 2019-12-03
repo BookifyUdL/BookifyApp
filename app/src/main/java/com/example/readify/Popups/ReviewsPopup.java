@@ -2,6 +2,7 @@ package com.example.readify.Popups;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -32,6 +33,7 @@ import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Review;
+import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.example.readify.RichEditTextInterface;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -46,7 +48,9 @@ public class ReviewsPopup extends DialogFragment implements Popup{
     private ScrollView scrollView;
     private LinearLayout commentLayout;
     private RecyclerView recyclerView;
-    FloatingActionButton addCommentButton;
+    private FloatingActionButton addCommentButton;
+    private User user;
+    private SharedPreferences prefs;
 
     public ReviewsPopup(){
 
@@ -95,16 +99,20 @@ public class ReviewsPopup extends DialogFragment implements Popup{
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         window.setGravity(Gravity.CENTER);
 
+        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        user = new User();
+        user.readFromSharedPreferences(prefs);
+
         LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(vlm);
         ArrayList<Review> pendingBooksList = new ArrayList<>();
         pendingBooksList.addAll(MockupsValues.getReviews());
-        pendingBooksAdapter = new ReviewsVerticalAdapter((MainActivity) getActivity(), getContext(), pendingBooksList, addCommentButton);
+        pendingBooksAdapter = new ReviewsVerticalAdapter((MainActivity) getActivity(), getContext(), pendingBooksList, addCommentButton, user);
         recyclerView.setAdapter(pendingBooksAdapter);
     }
 
     private void addReview(String message){
-        pendingBooksAdapter.addReview(new Review(MockupsValues.getUser(), message));
+        pendingBooksAdapter.addReview(new Review(user, message));
         ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(pendingBooksAdapter.getItemCount()-1,200);
         Toast.makeText(getContext(), getContext().getString(R.string.comment_added_correctly), Toast.LENGTH_LONG).show();
     }

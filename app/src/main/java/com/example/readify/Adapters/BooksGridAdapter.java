@@ -36,15 +36,19 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
     private SharedPreferences pref;
 
 
-    public BooksGridAdapter(MainActivity activity, Context context, User user) {
+    public BooksGridAdapter(MainActivity activity, Context context, ArrayList<Book> library, User user) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.user = user;
-        this.mViewBooks = user.getLibrary();
+        this.mViewBooks = library;
         this.originalSearchList = new ArrayList<>();
         this.originalSearchList.addAll(user.getLibrary());
         this.activity = activity;
 
+    }
+
+    public void setBooksList(ArrayList<Book> books){
+        this.mViewBooks = books;
     }
 
     public void filter(String newText) {
@@ -171,11 +175,7 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
             addButton.setImageResource(R.drawable.ic_add_book);
         }
 
-        private void setAddButtonIconToAdded(){
-            //Drawable drawable = ContextCompat.getDrawable(holder.addButton.getContext(),
-            //        holder.addButton.getContext().getResources().getIdentifier("ic_added_book", "drawable", holder.addButton.getContext().getPackageName()));
-            addButton.setImageResource(R.drawable.ic_added_book);
-        }
+        private void setAddButtonIconToAdded(){ addButton.setImageResource(R.drawable.ic_added_book); }
     }
 
     public void setClickListener(BooksHorizontalAdapter.ItemClickListener itemClickListener) {

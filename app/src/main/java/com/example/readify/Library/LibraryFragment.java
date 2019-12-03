@@ -61,8 +61,8 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
         return fragment;
     }
 
-    private void shouldShowEmptyMessage(){
-        if(booksAdapter.getItemCount() == 0){
+    private void shouldShowEmptyMessage() {
+        if (booksAdapter.getItemCount() == 0) {
             anyBookLayout.setVisibility(View.VISIBLE);
             searchView.setVisibility(View.INVISIBLE);
             recyclerViewGenres.setVisibility(View.INVISIBLE);
@@ -73,7 +73,9 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
         }
     }
 
-    public void notifyLibraryChanged(){
+    public void notifyLibraryChanged() {
+        user.readFromSharedPreferences(prefs);
+        booksAdapter.setBooksList(user.getLibrary());
         booksAdapter.notifyDataSetChanged();
         shouldShowEmptyMessage();
     }
@@ -109,7 +111,7 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
 
         //RecyclerViewAdapterGenres adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres, MockupsValues.user);
         //adapterGenres.setClickListener(GenresFragment.this);
-        booksAdapter = new BooksGridAdapter((MainActivity) getActivity(),getContext(), user);
+        booksAdapter = new BooksGridAdapter((MainActivity) getActivity(), getContext(), user.getLibrary(), user);
         recyclerViewGenres.setAdapter(booksAdapter);
         booksAdapter.setClickListener(this);
 
@@ -123,10 +125,10 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
 
     @Override
     public void onItemClick(View view, int position) {
-        showBookFragment(MockupsValues.user.getLibrary().get(position));
+        showBookFragment(user.getLibrary().get(position));
     }
 
-    private void showBookFragment(Book book){
+    private void showBookFragment(Book book) {
         MainActivity activity = (MainActivity) getActivity();
         activity.goToBookPage(book, Pages.LIBRARY_PAGE);
     }

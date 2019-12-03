@@ -1,6 +1,7 @@
 package com.example.readify;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -16,6 +17,7 @@ import android.widget.SearchView;
 
 import com.example.readify.Adapters.BooksListVerticalAdapter;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.User;
 
 import java.util.ArrayList;
 
@@ -33,6 +35,9 @@ public class SearchBookFragment extends Fragment implements SearchView.OnQueryTe
     private OnFragmentInteractionListener mListener;
     private BooksListVerticalAdapter adapter;
     private ImageView goBackButton;
+
+    private SharedPreferences prefs;
+    private User user;
 
     public SearchBookFragment() {
         // Required empty public constructor
@@ -62,6 +67,11 @@ public class SearchBookFragment extends Fragment implements SearchView.OnQueryTe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search_book, container, false);
+
+        prefs = view.getContext().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        user = new User();
+        user.readFromSharedPreferences(prefs);
+
         goBackButton = (ImageView) view.findViewById(R.id.go_back_button);
         goBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,20 +79,25 @@ public class SearchBookFragment extends Fragment implements SearchView.OnQueryTe
                 onGoBackButtonClicked();
             }
         });
-        LinearLayoutManager verticalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+
+        LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.books_recycler_view);
-        recyclerView.setLayoutManager(verticalLayoutManagaer);
+        recyclerView.setLayoutManager(verticalLayoutManager);
+
         ArrayList<Book> list  = new ArrayList<>();
+        //TODO Change for obtain all books from database?
         list.addAll(MockupsValues.getLastAddedBooks());
         list.addAll(MockupsValues.getSameAuthorBooks());
         list.addAll(MockupsValues.getSameGenderBooks());
-        adapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), list);
+
+        adapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), list, user);
         recyclerView.setAdapter(adapter);
 
         SearchView searchView = view.findViewById(R.id.search_bar);
         searchView.setFocusable(false);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(this);
+
         return view;
     }
 
