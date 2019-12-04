@@ -1,6 +1,7 @@
 package com.example.readify;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.example.readify.Adapters.BooksHorizontalAdapter;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.User;
 import com.example.readify.Popups.ReviewsPopup;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,9 @@ public class BookViewFragment extends Fragment {
     private List<Book> sameAuthorBooks;
     private List<Book> sameGenderBooks;
     private Pages parent;
+
+    private User user;
+    private SharedPreferences prefs;
 
     private OnFragmentInteractionListener mListener;
 
@@ -95,7 +100,11 @@ public class BookViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        User user = MockupsValues.getUser();
+        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        user = new User();
+        user.readFromSharedPreferences(prefs);
+        //User user = MockupsValues.getUser();
+
         prevoiusBooks = new ArrayList<>();
         parents = new ArrayList<>();
         view = inflater.inflate(R.layout.fragment_book_view, container, false);
@@ -120,7 +129,7 @@ public class BookViewFragment extends Fragment {
 
 
         final ImageButton addBook = (ImageButton) view.findViewById(R.id.add_button);
-        if(MockupsValues.getPendingListBooks().contains(book)){
+        if(user.getInterested().contains(book)){
             Drawable drawable = ContextCompat.getDrawable(getContext(),
                     getContext().getResources().getIdentifier("ic_reading_white", "drawable", getContext().getPackageName()));
             //holder.addButton.setImageResource(R.drawable.ic_added_book);
@@ -129,15 +138,22 @@ public class BookViewFragment extends Fragment {
         addBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!MockupsValues.getPendingListBooks().contains(book)){
+                if(!user.getInterested().contains(book)){
                     Drawable drawable = ContextCompat.getDrawable(getContext(),
                             getContext().getResources().getIdentifier("ic_reading_white", "drawable", getContext().getPackageName()));
                     //holder.addButton.setImageResource(R.drawable.ic_added_book);
                     addBook.setImageDrawable(drawable);
                     //Book book = mViewBooks.get(position);
-                    MockupsValues.addPendingBook(book);
+
+                    ArrayList<Book> pending = user.getInterested();
+                    pending.add(book);
+                    user.setInterested(pending);
+                    //MockupsValues.addPendingBook(book);
+                    String interestedToPref = new Gson().toJson(user.getInterested());
+                    prefs.edit().putString("com.example.readify.interested", interestedToPref).apply();
+
                     MainActivity activity = (MainActivity) getActivity();
-                    activity.notifyPendingListChanged();
+                    activity.notifyPendingListChanged(user);
                     Toast.makeText(getContext(), book.getTitle() + " " + getContext().getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
 
                 } else {
@@ -155,7 +171,7 @@ public class BookViewFragment extends Fragment {
         LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
-        BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), sameAuthorBooks, false);
+        BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), sameAuthorBooks, false, user);
         adapterAuth.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
            @Override
            public void onItemClick(View view, int position) {
@@ -172,7 +188,7 @@ public class BookViewFragment extends Fragment {
         LinearLayoutManager horizontalLayoutManagerGender
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(horizontalLayoutManagerGender);
-        BooksHorizontalAdapter adapterGender = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), sameGenderBooks, false);
+        BooksHorizontalAdapter adapterGender = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), sameGenderBooks, false, user);
         //adapterGender.setClickListener(this);
         adapterGender.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
             @Override
@@ -209,7 +225,7 @@ public class BookViewFragment extends Fragment {
         String aux  = getString(R.string.more_books_of) + " " + book.getAuthor() + " :";
         textView.setText(aux);
         ImageButton addBook = (ImageButton) view.findViewById(R.id.add_button);
-        if(MockupsValues.getPendingListBooks().contains(book)){
+        if(user.getInterested().contains(book)){
             Drawable drawable = ContextCompat.getDrawable(getContext(),
                     getContext().getResources().getIdentifier("ic_reading_white", "drawable", getContext().getPackageName()));
             //holder.addButton.setImageResource(R.drawable.ic_added_book);

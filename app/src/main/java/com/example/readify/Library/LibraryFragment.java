@@ -1,6 +1,7 @@
 package com.example.readify.Library;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -21,6 +22,7 @@ import com.example.readify.FirstTimeForm.RecyclerViewAdapterGenres;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.User;
 import com.example.readify.Pages;
 import com.example.readify.R;
 
@@ -43,6 +45,9 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
     private LinearLayout anyBookLayout;
     private SearchView searchView;
 
+    private User user;
+    private SharedPreferences prefs;
+
     private OnFragmentInteractionListener mListener;
 
     public LibraryFragment() {
@@ -56,8 +61,8 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
         return fragment;
     }
 
-    private void shouldShowEmptyMessage(){
-        if(booksAdapter.getItemCount() == 0){
+    private void shouldShowEmptyMessage() {
+        if (booksAdapter.getItemCount() == 0) {
             anyBookLayout.setVisibility(View.VISIBLE);
             searchView.setVisibility(View.INVISIBLE);
             recyclerViewGenres.setVisibility(View.INVISIBLE);
@@ -68,7 +73,9 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
         }
     }
 
-    public void notifyLibraryChanged(){
+    public void notifyLibraryChanged() {
+        user.readFromSharedPreferences(prefs);
+        booksAdapter.setBooksList(user.getLibrary());
         booksAdapter.notifyDataSetChanged();
         shouldShowEmptyMessage();
     }
@@ -84,6 +91,11 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_library, container, false);
+
+        user = new User();
+        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        user.readFromSharedPreferences(prefs);
+
         LinearLayout discoverButton = view.findViewById(R.id.discover_layout);
         discoverButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +111,7 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
 
         //RecyclerViewAdapterGenres adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres, MockupsValues.user);
         //adapterGenres.setClickListener(GenresFragment.this);
-        booksAdapter = new BooksGridAdapter((MainActivity) getActivity(),getContext(), MockupsValues.user.getLibrary());
+        booksAdapter = new BooksGridAdapter((MainActivity) getActivity(), getContext(), user.getLibrary(), user);
         recyclerViewGenres.setAdapter(booksAdapter);
         booksAdapter.setClickListener(this);
 
@@ -113,10 +125,10 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
 
     @Override
     public void onItemClick(View view, int position) {
-        showBookFragment(MockupsValues.user.getLibrary().get(position));
+        showBookFragment(user.getLibrary().get(position));
     }
 
-    private void showBookFragment(Book book){
+    private void showBookFragment(Book book) {
         MainActivity activity = (MainActivity) getActivity();
         activity.goToBookPage(book, Pages.LIBRARY_PAGE);
     }

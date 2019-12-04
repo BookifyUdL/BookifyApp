@@ -1,5 +1,7 @@
 package com.example.readify.Popups;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -32,7 +34,9 @@ import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Emoji;
 import com.example.readify.Models.Genre;
+import com.example.readify.Models.User;
 import com.example.readify.R;
+import com.google.gson.Gson;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -48,11 +52,15 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     private MainActivity activity;
     private BooksListVerticalAdapter.BookHolder bookHolder;
 
-    public  BookReadedPopup(MainActivity activity, BooksListVerticalAdapter.BookHolder bookHolder, FragmentManager fragmentManager, Book book){
+    private User user;
+    private SharedPreferences pref;
+
+    public  BookReadedPopup(MainActivity activity, BooksListVerticalAdapter.BookHolder bookHolder, FragmentManager fragmentManager, Book book, User user){
         this.fragmentManager = fragmentManager;
         this.activity = activity;
         this.book = book;
         this.bookHolder = bookHolder;
+        this.user = user;
     }
 
     View.OnClickListener listener = new View.OnClickListener() {
@@ -84,9 +92,10 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //view = inflater.inflate(R.layout.book_readed_popup, container);
-        //this.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         view = inflater.inflate(R.layout.book_readed_popup, container);
+
+        pref = view.getContext().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+
         this.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         CardView cardView = view.findViewById(R.id.card_reviews);
         cardView.setOnClickListener(new View.OnClickListener() {
@@ -107,9 +116,6 @@ public class BookReadedPopup extends DialogFragment implements Popup {
             }
         });
 
-        //TextView bookTitle = (TextView) view.findViewById(R.id.info_text);
-        //bookTitle.setText(book.getTitle());
-
         ImageButton closeArrow = (ImageButton) view.findViewById(R.id.close_arrow);
         closeArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,22 +123,6 @@ public class BookReadedPopup extends DialogFragment implements Popup {
                 close();
             }
         });
-
-        /*CardView cancelCardView = view.findViewById(R.id.cancel_card_view);
-        cancelCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                close();
-            }
-        });
-
-        TextView cancelTextView = view.findViewById(R.id.cancel_text_view);
-        cancelTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                close();
-            }
-        });*/
 
         CardView acceptCardView = view.findViewById(R.id.accept_card_view);
         acceptCardView.setOnClickListener(new View.OnClickListener() {
@@ -150,29 +140,32 @@ public class BookReadedPopup extends DialogFragment implements Popup {
             }
         });
 
-
         CardView star1 = (CardView) view.findViewById(R.id.card_view11);
         CardView star2 = (CardView) view.findViewById(R.id.card_view12);
         CardView star3 = (CardView) view.findViewById(R.id.card_view13);
         CardView star4 = (CardView) view.findViewById(R.id.card_view14);
         CardView star5 = (CardView) view.findViewById(R.id.card_view15);
+
         ImageButton starButton1 = (ImageButton) view.findViewById(R.id.star1);
         ImageButton starButton2 = (ImageButton) view.findViewById(R.id.star2);
         ImageButton starButton3 = (ImageButton) view.findViewById(R.id.star3);
         ImageButton starButton4 = (ImageButton) view.findViewById(R.id.star4);
         ImageButton starButton5 = (ImageButton) view.findViewById(R.id.star5);
+
         starButton1.setOnClickListener(listener);
         starButton2.setOnClickListener(listener);
         starButton3.setOnClickListener(listener);
         starButton4.setOnClickListener(listener);
         starButton5.setOnClickListener(listener);
+
         stars = new ArrayList<>();
-        starsImage = new ArrayList<>();
         stars.add(star1);
         stars.add(star2);
         stars.add(star3);
         stars.add(star4);
         stars.add(star5);
+
+        starsImage = new ArrayList<>();
         starsImage.add(starButton1);
         starsImage.add(starButton2);
         starsImage.add(starButton3);
@@ -192,10 +185,25 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     }
 
     private void acceptButtonClicked(){
-        MockupsValues.user.setLibraryBookAsRead(book);
-        this.activity.notifyLibraryListChanged();
-        MockupsValues.removeReadingListBook(book);
-        this.activity.notifyReadingListChanged();
+        ArrayList<Book> library = user.getLibrary();
+        book.setRead(true);
+        library.add(0, book);
+        user.setLibrary(library);
+        //MockupsValues.user.setLibraryBookAsRead(book);
+        String libraryToPref = new Gson().toJson(user.getLibrary());
+        pref.edit().putString("com.example.readify.library", libraryToPref).apply();
+
+        this.activity.notifyLibraryListChanged(user);
+
+        ArrayList<Book> reading = user.getReading();
+        reading.remove(book);
+        user.setReading(reading);
+        //MockupsValues.removeReadingListBook(book);
+        String readingToPref = new Gson().toJson(user.getReading());
+        pref.edit().putString("com.example.readify.reading", readingToPref).apply();
+
+        this.activity.notifyReadingListChanged(user);
+
         Toast.makeText(getContext(), getContext().getString(R.string.review_added_correctly), Toast.LENGTH_LONG).show();
         close();
         bookHolder.destroyView();
@@ -212,6 +220,5 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         Window window = getDialog().getWindow();
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         window.setGravity(Gravity.CENTER);
-        //TODO:
     }
 }

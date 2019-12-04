@@ -1,6 +1,7 @@
 package com.example.readify.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.User;
 import com.example.readify.R;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,20 +30,25 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
     private List<Book> mViewBooks, originalSearchList;
     private LayoutInflater mInflater;
     private BooksHorizontalAdapter.ItemClickListener mClickListener;
-    //private boolean mHasDiscoverButtons;
     private Context context;
     private MainActivity activity;
-    private boolean added = false;
+    private User user;
+    private SharedPreferences pref;
 
 
-    public BooksGridAdapter(MainActivity activity, Context context, List<Book> books) {
+    public BooksGridAdapter(MainActivity activity, Context context, ArrayList<Book> library, User user) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
-        this.mViewBooks = books;
+        this.user = user;
+        this.mViewBooks = library;
         this.originalSearchList = new ArrayList<>();
-        this.originalSearchList.addAll(books);
+        this.originalSearchList.addAll(user.getLibrary());
         this.activity = activity;
 
+    }
+
+    public void setBooksList(ArrayList<Book> books){
+        this.mViewBooks = books;
     }
 
     public void filter(String newText) {
@@ -102,6 +110,7 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
 
         ViewHolder(View itemView) {
             super(itemView);
+            pref = itemView.getContext().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
             lastView = itemView.findViewById(R.id.coverView);
             layout = itemView.findViewById(R.id.relative_layout);
             imageLayout = itemView.findViewById(R.id.image_layout);
@@ -115,7 +124,7 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
         }
 
         private void setAddButtonState(final int position){
-            if(MockupsValues.getPendingListBooks().contains(mViewBooks.get(position))){
+            if(user.getInterested().contains(mViewBooks.get(position))){
                 setAddButtonIconToAdded();
             } else {
                 setAddButtonIconToAdd();
@@ -123,7 +132,7 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(MockupsValues.getPendingListBooks().contains(mViewBooks.get(position))){
+                    if(user.getInterested().contains(mViewBooks.get(position))){
                         setAddButtonIconToAdded();
                         removeFromPendingList(position);
                     } else {
@@ -136,16 +145,29 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
 
         private void removeFromPendingList(int position){
             Book book = mViewBooks.get(position);
-            MockupsValues.removePendingListBook(book);
-            activity.notifyPendingListChanged();
-            Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_removed_correctly_message), Toast.LENGTH_LONG).show();
 
+            ArrayList<Book> pending = user.getInterested();
+            pending.remove(book);
+            user.setInterested(pending);
+
+            String interestedToPref = new Gson().toJson(user.getInterested());
+            pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+
+            activity.notifyPendingListChanged(user);
+            Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_removed_correctly_message), Toast.LENGTH_LONG).show();
         }
 
         private void toPendingList(int position){
             Book book = mViewBooks.get(position);
-            MockupsValues.addPendingBook(book);
-            activity.notifyPendingListChanged();
+
+            ArrayList<Book> pending = user.getInterested();
+            pending.add(book);
+            user.setInterested(pending);
+
+            String interestedToPref = new Gson().toJson(user.getInterested());
+            pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+
+            activity.notifyPendingListChanged(user);
             Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
         }
 
@@ -153,11 +175,7 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
             addButton.setImageResource(R.drawable.ic_add_book);
         }
 
-        private void setAddButtonIconToAdded(){
-            //Drawable drawable = ContextCompat.getDrawable(holder.addButton.getContext(),
-            //        holder.addButton.getContext().getResources().getIdentifier("ic_added_book", "drawable", holder.addButton.getContext().getPackageName()));
-            addButton.setImageResource(R.drawable.ic_added_book);
-        }
+        private void setAddButtonIconToAdded(){ addButton.setImageResource(R.drawable.ic_added_book); }
     }
 
     public void setClickListener(BooksHorizontalAdapter.ItemClickListener itemClickListener) {

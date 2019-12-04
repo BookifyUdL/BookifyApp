@@ -43,7 +43,7 @@ public class User {
     private ArrayList<Genre> genres;
 
     private ArrayList<Book> interested;
-    private ArrayList<Book> read;
+    private ArrayList<Book> reading;
 
     public User() {
         this.uid = "0000";
@@ -52,7 +52,7 @@ public class User {
         this.picture = "userfinale";
         this.premium = false;
         this.library = new ArrayList<>();
-        this.read = new ArrayList<>();
+        this.reading = new ArrayList<>();
         this.interested = new ArrayList<>();
         this.genres = new ArrayList<>();
         this.achievements = new ArrayList<>();
@@ -61,6 +61,12 @@ public class User {
 
     public User(String name, String picture) {
         this.name = name;
+        this.picture = picture;
+    }
+
+    public User(String name, String email, String picture) {
+        this.name = name;
+        this.email = email;
         this.picture = picture;
     }
 
@@ -114,20 +120,20 @@ public class User {
         this.name = name;
     }
 
+    public void removeBookInterestedBooks(Book book) {
+        interested.remove(book);
+    }
+
     public void addBookToInterestedBooks(Book book) {
         interested.add(book);
     }
 
-    public ArrayList<Book> getReadBooks() {
-        return read;
+    public ArrayList<Book> getReadingBooks() {
+        return reading;
     }
 
-    public void addBookToReadBooks(Book book) {
-        read.add(book);
-    }
-
-    public ArrayList<Book> getInterestedBooks() {
-        return interested;
+    public void addBookToReadingBooks(Book book) {
+        reading.add(book);
     }
 
     public ArrayList<Genre> getGenres() {
@@ -138,12 +144,12 @@ public class User {
         this.genres = genres;
     }
 
-    public ArrayList<Book> getRead() {
-        return read;
+    public ArrayList<Book> getReading() {
+        return reading;
     }
 
-    public void setRead(ArrayList<Book> read) {
-        this.read = read;
+    public void setReading(ArrayList<Book> read) {
+        this.reading = read;
     }
 
     public void addGenreToGenres(Genre genre) {
@@ -282,10 +288,15 @@ public class User {
         String achievementsPref = pref.getString("com.example.readify.achievements", "");
         Type type3 = new TypeToken<List<Achievement>>() {}.getType();
         this.achievements = new Gson().fromJson(achievementsPref, type3);
+
+        //Reading
+        String readingPref = pref.getString("com.example.readify.reading", "");
+        Type type4 = new TypeToken<List<Book>>() {}.getType();
+        this.reading = new Gson().fromJson(readingPref, type4);
     }
 
     /* Method to update information on database */
-    public Map<String, Object> toMap() {
+    private Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("uid", this.uid);
         result.put("name", this.name);
@@ -293,8 +304,8 @@ public class User {
         result.put("picture", this.picture);
         result.put("premium", this.premium);
         result.put("library", this.library);
-        result.put("read", this.read);
         result.put("interested", this.interested);
+        result.put("reading", this.reading);
         result.put("genres", this.genres);
         result.put("achievements", this.achievements);
 

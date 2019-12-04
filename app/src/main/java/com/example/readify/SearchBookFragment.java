@@ -1,12 +1,13 @@
 package com.example.readify;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +16,11 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 
 import com.example.readify.Adapters.BooksListVerticalAdapter;
-import com.example.readify.Models.Book;
-
-import java.util.ArrayList;
+import com.example.readify.Discover.BooksSectionFragment;
+import com.example.readify.Discover.UsersSectionFragment;
+import com.example.readify.Discover.ViewPageAdapter;
+import com.example.readify.Models.User;
+import com.google.android.material.tabs.TabLayout;
 
 
 /**
@@ -30,9 +33,20 @@ import java.util.ArrayList;
  */
 public class SearchBookFragment extends Fragment implements SearchView.OnQueryTextListener {
 
+    private static final int BOOK_FRAGMENT_ACTIVE = 0;
+    private static final int USER_FRAGMENT_ACTIVE = 1;
+
     private OnFragmentInteractionListener mListener;
-    private BooksListVerticalAdapter adapter;
     private ImageView goBackButton;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ViewPageAdapter viewPageAdapter;
+    private ComunicateFragments comunicateFragments;
+    private int active;
+    private String actualText;
+
+    private SharedPreferences prefs;
+    private User user;
 
     public SearchBookFragment() {
         // Required empty public constructor
@@ -62,6 +76,14 @@ public class SearchBookFragment extends Fragment implements SearchView.OnQueryTe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search_book, container, false);
+
+        active = 0;
+        actualText = "";
+
+        prefs = view.getContext().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        user = new User();
+        user.readFromSharedPreferences(prefs);
+
         goBackButton = (ImageView) view.findViewById(R.id.go_back_button);
         goBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,24 +91,51 @@ public class SearchBookFragment extends Fragment implements SearchView.OnQueryTe
                 onGoBackButtonClicked();
             }
         });
-        LinearLayoutManager verticalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.books_recycler_view);
-        recyclerView.setLayoutManager(verticalLayoutManagaer);
-        ArrayList<Book> list  = new ArrayList<>();
-        list.addAll(MockupsValues.getLastAddedBooks());
-        list.addAll(MockupsValues.getSameAuthorBooks());
-        list.addAll(MockupsValues.getSameGenderBooks());
-        adapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), list);
-        recyclerView.setAdapter(adapter);
+
+        tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
+        viewPager = (ViewPager) view.findViewById(R.id.view_pager);
+        viewPageAdapter = new ViewPageAdapter(getActivity().getSupportFragmentManager(), 0);
+
+        viewPageAdapter.addFragment(new BooksSectionFragment(), "Books");
+        viewPageAdapter.addFragment(new UsersSectionFragment(), "Users");
+        viewPager.setAdapter(viewPageAdapter);
+
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        active = BOOK_FRAGMENT_ACTIVE;
+                        onQueryTextChange(actualText);
+                        break;
+                    case 1:
+                        active = USER_FRAGMENT_ACTIVE;
+                        onQueryTextChange(actualText);
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         SearchView searchView = view.findViewById(R.id.search_bar);
         searchView.setFocusable(false);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(this);
+
         return view;
     }
 
-    private void onGoBackButtonClicked(){
+    private void onGoBackButtonClicked() {
         MainActivity activity = (MainActivity) getActivity();
         activity.backToDiscoverFragment();
     }
@@ -101,6 +150,13 @@ public class SearchBookFragment extends Fragment implements SearchView.OnQueryTe
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        try {
+            comunicateFragments = (ComunicateFragments) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Error in retrieving data. Please try again");
+        }
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -113,6 +169,7 @@ public class SearchBookFragment extends Fragment implements SearchView.OnQueryTe
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        comunicateFragments = null;
     }
 
     /**
@@ -137,8 +194,18 @@ public class SearchBookFragment extends Fragment implements SearchView.OnQueryTe
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        adapter.filter(newText);
+        if (active == BOOK_FRAGMENT_ACTIVE)
+            comunicateFragments.sendWord(newText, viewPageAdapter.getItem(0), active);
+        else
+            comunicateFragments.sendWord(newText, viewPageAdapter.getItem(1), active);
+
+        actualText = newText;
         return false;
+    }
+
+    // Interface to send a data
+    public interface ComunicateFragments {
+        void sendWord(String word, Fragment fragment, int active);
     }
 
 }

@@ -97,8 +97,10 @@ public class BooksListFormAdapter extends RecyclerView.Adapter<BooksListFormAdap
             @Override
             public void onClick(View view) {
                 if (user.containsBook(book)) {
-                    user.removeBookToLibrary(book);
-                    Toast.makeText(view.getContext(), "Book removed from your library", Toast.LENGTH_SHORT).show();
+                    if (read)
+                        user.removeBookToLibrary(book);
+                    else
+                        user.removeBookInterestedBooks(book);
                 } else {
                     if (read) {
                         book.setRead(true);
@@ -107,7 +109,6 @@ public class BooksListFormAdapter extends RecyclerView.Adapter<BooksListFormAdap
                         book.setRead(false);
                         user.addBookToInterestedBooks(book);
                     }
-                    Toast.makeText(view.getContext(), "Book added to your library", Toast.LENGTH_SHORT).show();
                 }
                 if (mClickListener != null) mClickListener.onItemClick(view);
             }

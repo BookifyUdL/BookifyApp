@@ -28,7 +28,6 @@ public class EmojisAdapter extends RecyclerView.Adapter<EmojisAdapter.EmojiHolde
     public EmojisAdapter(Context context, ArrayList<Emoji> list){
         recylcerList = list;
         this.context = context;
-
     }
 
     @Override
@@ -45,27 +44,6 @@ public class EmojisAdapter extends RecyclerView.Adapter<EmojisAdapter.EmojiHolde
         return recylcerList == null ? 0 : recylcerList.size();
     }
 
-    /*public void filter(String newText) {
-        String toSearch = newText.toLowerCase();
-
-        booksList = new ArrayList<>();
-        booksList.addAll(originalSearchList);
-
-        if (toSearch.length() == 0) {
-            notifyDataSetChanged();
-            return;
-        }
-
-        ListIterator<Book> itr = booksList.listIterator();
-        while (itr.hasNext()) {
-            if (itr.next().getTitle().toLowerCase().contains(toSearch))
-                continue;
-
-            itr.remove();
-        }
-        notifyDataSetChanged();
-    }*/
-
     // This method is called when binding the data to the views being created in RecyclerView
     @Override
     public void onBindViewHolder(@NonNull final EmojisAdapter.EmojiHolder holder, final int position) {
@@ -78,15 +56,6 @@ public class EmojisAdapter extends RecyclerView.Adapter<EmojisAdapter.EmojiHolde
                 emojiClicked(holder);
             }
         });
-        /*
-        holder.userName.setText(review.getUser().getName());
-        holder.userComment.setText(review.getComment());
-        //String aux = mContext.getPackageName();
-        holder.userImage.setImageResource(
-                mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
-
-        */
-
     }
 
     public void emojiClicked(EmojisAdapter.EmojiHolder holder){
