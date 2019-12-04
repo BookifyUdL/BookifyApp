@@ -385,7 +385,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //Methods to update an app after to do a login
     private void updateUI(FirebaseUser currentUser) {
-        MockupsValues.setContext(this);
+        /*MockupsValues.setContext(this);
 
         pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
         pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
@@ -393,25 +393,29 @@ public class LoginActivity extends AppCompatActivity {
         pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString()).apply();
 
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        readDataFromFirebase(currentUser.getUid(), intent);
+        readDataFromFirebase(currentUser.getUid(), intent);*/
+
+        Intent intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void updateUI(FirebaseUser currentUser, Task<AuthResult> task) {
         MockupsValues.setContext(this);
-
-        pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
+        Intent intent;
+        /*pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
         pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
         pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
         pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString() + "?type=large").apply();
 
-        Intent intent;
+
         if (!task.getResult().getAdditionalUserInfo().isNewUser()) {
             intent = new Intent(LoginActivity.this, MainActivity.class);
             readDataFromFirebase(currentUser.getUid(), intent);
-        } else {
+        } else {*/
             intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
             startActivity(intent);
             finish();
-        }
+        //}
     }
 }
