@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 import com.example.readify.BuildConfig;
@@ -239,25 +240,31 @@ public class LoginActivity extends AppCompatActivity {
 
                 User user = dataSnapshot.getValue(User.class);
 
-                pref.edit().putBoolean("com.example.readify.premium", user.isPremium()).apply();
+                if (user == null){
+                    //If we don't complete de first form, it appear again
+                    Intent firstFormAgain = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+                    startActivity(firstFormAgain);
+                } else {
+                    pref.edit().putBoolean("com.example.readify.premium", user.isPremium()).apply();
 
-                String genresToPref = new Gson().toJson(user.getGenres());
-                pref.edit().putString("com.example.readify.genres", genresToPref).apply();
+                    String genresToPref = new Gson().toJson(user.getGenres());
+                    pref.edit().putString("com.example.readify.genres", genresToPref).apply();
 
-                String libraryToPref = new Gson().toJson(user.getLibrary());
-                pref.edit().putString("com.example.readify.library", libraryToPref).apply();
+                    String libraryToPref = new Gson().toJson(user.getLibrary());
+                    pref.edit().putString("com.example.readify.library", libraryToPref).apply();
 
-                String interestedToPref = new Gson().toJson(user.getInterested());
-                pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+                    String interestedToPref = new Gson().toJson(user.getInterested());
+                    pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
 
-                String readingToPref = new Gson().toJson(user.getReading());
-                pref.edit().putString("com.example.readify.reading", readingToPref).apply();
+                    String readingToPref = new Gson().toJson(user.getReading());
+                    pref.edit().putString("com.example.readify.reading", readingToPref).apply();
 
-                String achievementsToPref = new Gson().toJson(user.getAchievements());
-                pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
+                    String achievementsToPref = new Gson().toJson(user.getAchievements());
+                    pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
 
-                //Go to app
-                startActivity(intent);
+                    //Go to app
+                    startActivity(intent);
+                }
                 finish();
             }
 
@@ -295,7 +302,7 @@ public class LoginActivity extends AppCompatActivity {
     //Method to obtain the access token from facebook
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG_F, "handleFacebookAccessToken:" + token);
-        afterAnimationView.setVisibility(GONE);
+        afterAnimationView.setVisibility(INVISIBLE);
         loadingProgressBar.setVisibility(VISIBLE);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -311,14 +318,14 @@ public class LoginActivity extends AppCompatActivity {
                             if (user != null)
                                 updateUI(user, task);
 
-                            loadingProgressBar.setVisibility(GONE);
+                            loadingProgressBar.setVisibility(INVISIBLE);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG_F, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             afterAnimationView.setVisibility(VISIBLE);
-                            loadingProgressBar.setVisibility(GONE);
+                            loadingProgressBar.setVisibility(INVISIBLE);
                         }
                     }
                 });
