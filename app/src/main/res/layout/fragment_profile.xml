@@ -137,6 +137,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="@string/libraryTitleProfile"
+                                    android:textColor="@color/primaryText"
                                     android:textSize="16sp" />
 
                                 <TextView
@@ -146,6 +147,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="@string/numExample"
+                                    android:textColor="@color/primaryText"
                                     android:textSize="22sp" />
 
                                 <TextView
@@ -154,7 +156,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
                                     android:gravity="center_horizontal"
-                                    android:text="@string/readedbooksSubtitleProfile" />
+                                    android:text="@string/readedbooksSubtitleProfile"
+                                    android:textColor="@color/secondaryText" />
 
                             </LinearLayout>
 
@@ -171,7 +174,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_centerInParent="true"
                                 android:layout_margin="20dp"
-                                android:background="@color/colorBlack" />
+                                android:background="@color/divider" />
 
                         </RelativeLayout>
 
@@ -194,6 +197,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="@string/feedbackTitleProfile"
+                                    android:textColor="@color/primaryText"
                                     android:textSize="16sp" />
 
                                 <TextView
@@ -202,6 +206,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="@string/numExample"
+                                    android:textColor="@color/primaryText"
                                     android:textSize="22sp" />
 
                                 <TextView
@@ -210,7 +215,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
                                     android:gravity="center_horizontal"
-                                    android:text="@string/commentsFeedTitleProfile" />
+                                    android:text="@string/commentsFeedTitleProfile"
+                                    android:textColor="@color/secondaryText" />
 
                             </LinearLayout>
 
@@ -227,7 +233,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_centerInParent="true"
                                 android:layout_margin="20dp"
-                                android:background="@color/colorBlack" />
+                                android:background="@color/divider" />
 
                         </RelativeLayout>
 
@@ -250,6 +256,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="@string/accountTitleProfile"
+                                    android:textColor="@color/primaryText"
                                     android:textSize="16sp" />
 
                                 <TextView
@@ -258,14 +265,16 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="@string/typeAccountExampleText" />
+                                    android:text="@string/typeAccountExampleText"
+                                    android:textColor="@color/primaryText" />
 
                                 <TextView
                                     style="@style/TextAppearance.AppCompat.Body1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="@string/periodAccountText" />
+                                    android:text="@string/periodAccountText"
+                                    android:textColor="@color/secondaryText" />
 
                             </LinearLayout>
 
@@ -285,7 +294,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_centerHorizontal="true"
-                        android:background="@color/colorBlack" />
+                        android:background="@color/divider" />
 
                 </RelativeLayout>
 
@@ -304,7 +313,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:text="@string/genrePreferencesTitleProfile"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/primaryText"
                         android:textSize="25sp"
                         android:textStyle="bold" />
 
@@ -331,7 +340,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:text="@string/readedBooksTitleProfile"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/primaryText"
                         android:textSize="25sp"
                         android:textStyle="bold" />
 
@@ -360,7 +369,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:text="@string/achievementsTitleProfile"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/primaryText"
                         android:textSize="25sp"
                         android:textStyle="bold" />
 
@@ -375,7 +384,7 @@
 
                 </LinearLayout>
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/upgrade_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -385,9 +394,10 @@
                     android:background="@drawable/rounded_button"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
-                    android:text="@string/upgrade_account_text" />
+                    android:text="@string/upgrade_account_text"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Button" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/logOutButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -396,7 +406,8 @@
                     android:background="@drawable/rounded_button"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
-                    android:text="@string/disconnect_text" />
+                    android:text="@string/disconnect_text"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Button" />
 
             </LinearLayout>
 
