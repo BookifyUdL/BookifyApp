@@ -34,8 +34,15 @@ public class ShopsPopup extends DialogFragment implements Popup {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.book_readed_popup, container);
-
+        View view = inflater.inflate(R.layout.shops_popup, container);
+        this.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        ImageButton closeArrow = (ImageButton) view.findViewById(R.id.close_arrow);
+        closeArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                close();
+            }
+        });
 
         return view;
     }

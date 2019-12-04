@@ -88,7 +88,7 @@ public class BookViewFragment extends Fragment {
         dialog.show(ft2, "book_readed_popup");*/
         ShopsPopup dialog = new ShopsPopup();
         FragmentTransaction ft2 = getFragmentManager().beginTransaction();
-        dialog.show(ft2, "book_readed_popup");
+        dialog.show(ft2, "shops_popup");
     }
 
     private void showReviewsPopup(){
