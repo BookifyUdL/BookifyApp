@@ -91,7 +91,8 @@
                 android:textColor="@color/colorBlank"
                 android:textColorHint="@color/colorBlank"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textAlignment="center"/>
 
             <!-- Facebook -->
             <com.facebook.login.widget.LoginButton
@@ -108,7 +109,8 @@
                 android:text="@string/or_text"
                 android:textColor="@color/colorBlank"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textAlignment="center"/>
 
             <!-- Google -->
             <!--<Button
