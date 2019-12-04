@@ -64,6 +64,12 @@ public class User {
         this.picture = picture;
     }
 
+    public User(String name, String email, String picture) {
+        this.name = name;
+        this.email = email;
+        this.picture = picture;
+    }
+
     public User(String name, Boolean premium, ArrayList<Genre> genres, ArrayList<Book> library) {
         this.name = name;
         //this.premium = premium;

@@ -1,6 +1,7 @@
 package com.example.readify;
 
 import android.content.Context;
+import android.widget.ArrayAdapter;
 
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Emoji;
@@ -31,6 +32,7 @@ public class MockupsValues {
     private static ArrayList<Review> REVIEWS;
     private static ArrayList<Review> SUB_REVIEWS;
     private static ArrayList<Emoji> EMOJIS;
+    private static ArrayList<User> USERS;
     public  static User user = new User();
     private static Context context;
 
@@ -49,6 +51,17 @@ public class MockupsValues {
   
 
     //public void setUser(User user) { this.user = user; }
+
+    public static ArrayList<User> getUsers(){
+        if(USERS == null || USERS.isEmpty()){
+            USERS = new ArrayList<>();
+            USERS.add(new User("Núria Gonzalez", "nuria@gmail.com" ,"user3"));
+            USERS.add(new User("Alicia Carrasco", "carrasco@hotmail.es","user3"));
+            USERS.add(new User("Joan Pérez", "perez2004@outlook.com", "user1"));
+            USERS.add(new User("Arnau Roca", "arnau23@gmail.com","user2"));
+        }
+        return USERS;
+    }
 
     public static ArrayList<Emoji> getEmojis(){
         if(EMOJIS == null || EMOJIS.isEmpty()){
