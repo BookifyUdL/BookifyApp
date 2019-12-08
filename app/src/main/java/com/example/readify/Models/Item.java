@@ -1,6 +1,6 @@
 package com.example.readify.Models;
 
-public class Item {
+public class Item implements Comparable {
 
     private String id;
     private String url;
@@ -28,6 +28,21 @@ public class Item {
     public Item(double price, Shop shop){
         this.price = price;
         this.shop = shop;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Item compareItem = (Item) o;
+        if(this.getPrice() < compareItem.getPrice())
+            return -1;
+        else if (this.getPrice() > compareItem.getPrice())
+            return 1;
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return this.getShop().getName();
     }
 
     public String getId() {
@@ -77,4 +92,5 @@ public class Item {
     public void setShop(Shop shop) {
         this.shop = shop;
     }
+
 }
