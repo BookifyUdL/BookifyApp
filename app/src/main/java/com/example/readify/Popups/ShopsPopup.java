@@ -15,11 +15,14 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readify.Adapters.EmojisAdapter;
+import com.example.readify.Adapters.ShopsItemsVerticalAdapter;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Emoji;
+import com.example.readify.Models.Item;
 import com.example.readify.R;
 
 import java.util.ArrayList;
@@ -43,6 +46,18 @@ public class ShopsPopup extends DialogFragment implements Popup {
                 close();
             }
         });
+
+        RecyclerView recyclerViewShops = view.findViewById(R.id.shops_recycler_view);
+        LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerViewShops.setLayoutManager(vlm);
+        //GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 4);
+        //recyclerViewShops.setLayoutManager(gridLayoutManager);
+
+        ArrayList<Item> items= MockupsValues.getItems();
+
+        //EmojisAdapter emojisAdapter = new EmojisAdapter(getContext(), emojis);
+        ShopsItemsVerticalAdapter adapter = new ShopsItemsVerticalAdapter(getContext(), items);
+        recyclerViewShops.setAdapter(adapter);
 
         return view;
     }
