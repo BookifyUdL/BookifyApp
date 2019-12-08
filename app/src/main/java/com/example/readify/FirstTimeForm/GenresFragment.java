@@ -1,7 +1,9 @@
 package com.example.readify.FirstTimeForm;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +33,7 @@ import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
 import com.example.readify.Models.User;
 import com.example.readify.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -72,7 +75,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
 
     //CarouselView
     private CarouselView carouselView;
-    private int NUMBER_OF_FORMS = 4;
+    private int NUMBER_OF_FORMS = 3;
 
     private RecyclerViewAdapterGenres adapterGenres;
     private BooksListFormAdapter adapterBooksList;
@@ -163,22 +166,43 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
                 case 0:
                     //Selección de géneros
                     view = getLayoutInflater().inflate(R.layout.first_form_genres, null);
+                    FloatingActionButton next = view.findViewById(R.id.next);
+                    next.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            goNextCarousselItem();
+                        }
+                    });
                     createBookGenresDinamically(view);
                     break;
 
                 case 1:
                     //Libros leídos
                     view = getLayoutInflater().inflate(R.layout.first_form_books_read, null);
+                    FloatingActionButton next2 = view.findViewById(R.id.next);
+                    next2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            goNextCarousselItem();
+                        }
+                    });
                     createBookReadDinamically(view);
                     break;
 
                 case 2:
                     //Libros por interés
                     view = getLayoutInflater().inflate(R.layout.first_form_books_interest, null);
+                    FloatingActionButton done = view.findViewById(R.id.next);
+                    done.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showTutorialDonePopup();
+                        }
+                    });
                     createBookInterestDinamically(view);
                     break;
 
-                case 3:
+                /*case 3:
                     //Finalización del formulario
                     view = getLayoutInflater().inflate(R.layout.first_form_done, null);
                     Button buttonDone = view.findViewById(R.id.buttonFirstFormDone);
@@ -203,7 +227,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
 
                             comunicateFragmentsFirstForm.doneForm(user);
                         }
-                    });
+                    });*/
             }
 
             //Defining a skip button
@@ -237,6 +261,56 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
             return view;
         }
     };
+
+    private void showTutorialDonePopup(){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+
+        String message = getString(R.string.done_first_form_text) + "\n\n" + getString(R.string.done_redirect_first_form_text);
+        builder1.setMessage(message);
+        builder1.setCancelable(false);
+
+        builder1.setTitle(getString(R.string.done_first_form_title));
+
+        builder1.setPositiveButton(
+                getString(R.string.done_end),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        pref.edit().putBoolean("com.example.readify.premium", user.isPremium()).apply();
+
+                        String genresToPref = new Gson().toJson(user.getGenres());
+                        pref.edit().putString("com.example.readify.genres", genresToPref).apply();
+
+                        String libraryToPref = new Gson().toJson(user.getLibrary());
+                        pref.edit().putString("com.example.readify.library", libraryToPref).apply();
+
+                        String interestedToPref = new Gson().toJson(user.getInterested());
+                        pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+
+                        String achievementsToPref = new Gson().toJson(MockupsValues.getAchievements());
+                        pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
+
+                        user.setAchievements(MockupsValues.getAchievements());
+
+                        dialog.cancel();
+                        comunicateFragmentsFirstForm.doneForm(user);
+                    }
+                });
+
+        /*builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });*/
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
+    private void goNextCarousselItem(){
+        carouselView.setCurrentItem(carouselView.getCurrentItem() + 1);
+    }
 
     private void createBookGenresDinamically(View view) {
         //Defining every genre

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -89,10 +90,46 @@
             android:orientation="vertical"
             android:padding="4dp">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewGenres"
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewGenres"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="5dp"/>
+
+                <LinearLayout
+                    android:layout_below="@+id/recyclerViewGenres"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"/>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:id="@+id/next"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:paddingBottom="@dimen/margin_10dp"
+                    app:backgroundTint="@color/cardview_light_background"
+                    android:src="@drawable/ic_action_next"
+                    android:paddingEnd="@dimen/margin_10dp"/>
+
+            </RelativeLayout>
+
+
+
+            <!--<LinearLayout
+                android:id="@+id/RestofScreen"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:orientation="vertical" />-->
+
+
+
+
 
         </LinearLayout>
 

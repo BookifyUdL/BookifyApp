@@ -16,6 +16,7 @@
     <string name="done_first_form_title">Gracias!</string>
     <string name="done_first_form_text">Finalmente, hemos configurado correctamente su biblioteca y hemos optimizado sus búsquedas en función de las opciones que haya elegido. Estas opciones se pueden modificar en el futuro si lo desea.</string>
     <string name="done_redirect_first_form_text">Para comenzar a usar la aplicación, presione "listo" para que los cambios surtan efecto.</string>
+    <string name="done_end">Listo</string>
 
     <string name="last_added">Últimos añadidos</string>
     <string name="top_rated">Mejor valorados</string>
