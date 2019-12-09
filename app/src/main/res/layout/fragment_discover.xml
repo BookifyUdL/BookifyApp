@@ -71,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/last_added"
                 android:textColor="@color/primaryText"
                 android:textSize="@dimen/text_size"
@@ -128,9 +128,9 @@
                     android:id="@+id/top_rated_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/margin_5dp"
+                    android:layout_marginStart="@dimen/margin_10dp"
                     android:layout_marginTop="@dimen/margin_10dp"
-                    android:layout_marginEnd="@dimen/margin_5dp"
+                    android:layout_marginEnd="@dimen/margin_10dp"
                     android:layout_marginBottom="@dimen/margin_10dp" />
 
             </androidx.cardview.widget.CardView>

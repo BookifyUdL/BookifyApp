@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:background="@color/colorPrimaryDark">
 
         <ImageButton
             android:id="@+id/close_achievements_popup"
@@ -19,7 +20,7 @@
             android:scaleType="centerInside"
             android:background="@android:color/transparent"
             android:contentDescription="@string/imageview_adapter_text"
-            android:padding="15dp"/>
+            android:padding="18dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,7 +28,7 @@
             android:text="@string/achievements_text"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:textColor="@color/primaryText"
+            android:textColor="@color/colorPrimaryLight"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="20dp"/>
 
@@ -37,9 +38,7 @@
         android:id="@+id/recycler_view_achievements_popup"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_margin="15dp"/>
 
 
 </LinearLayout>

@@ -169,7 +169,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
             TextView textView = new TextView(getContext());
             String text = genre.getName() + " genre";
             textView.setText(text);
-            textView.setTextAppearance(R.style.TextAppearance_AppCompat_Title);
+            textView.setTextAppearance(R.style.TextAppearance_AppCompat_Body1);
             textView.setTypeface(null, Typeface.BOLD);
             textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryText));
             textView.setTextSize(25);
@@ -202,7 +202,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
             RecyclerView recyclerView = new RecyclerView(getContext());
             RelativeLayout.LayoutParams recyclerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-            recyclerParams.setMargins(margin_5dp, margin_10dp, margin_5dp, margin_10dp);
+            recyclerParams.setMargins(margin_10dp, margin_10dp, margin_10dp, margin_10dp);
             recyclerView.setLayoutParams(recyclerParams);
 
             //List list = MockupsValues.getLastAddedBooks();
