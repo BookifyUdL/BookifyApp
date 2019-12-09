@@ -106,7 +106,7 @@ public class MockupsValues {
     }
 
     public static ArrayList<Genre> getGenres() {
-        if (GENRE == null || GENRE.isEmpty()) {
+        /*if (GENRE == null || GENRE.isEmpty()) {
             GENRE = new ArrayList<>();
             GENRE.add(new Genre( context.getResources().getString(R.string.biography_gender), "genre1"));
             GENRE.add(new Genre( context.getResources().getString(R.string.internet_gender), "genre2"));
@@ -117,8 +117,14 @@ public class MockupsValues {
             GENRE.add(new Genre( context.getResources().getString(R.string.romance_gender), "genre7"));
             GENRE.add(new Genre( context.getResources().getString(R.string.fantasy_gender), "genre8"));
             GENRE.add(new Genre( context.getResources().getString(R.string.adventure_gender), "genre9"));
-        }
+        }*/
+        if(GENRE == null)
+            GENRE = new ArrayList<>();
         return GENRE;
+    }
+
+    public static void setGenres(ArrayList<Genre> genres){
+        GENRE = genres;
     }
 
 

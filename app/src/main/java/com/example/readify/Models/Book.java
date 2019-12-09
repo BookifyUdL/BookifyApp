@@ -1,5 +1,8 @@
 package com.example.readify.Models;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class Book {
@@ -12,6 +15,58 @@ public class Book {
     private int extension;
     private Genre genre;
     private ArrayList<Review> comments;
+    private String id;
+    private int sumRatings;
+    private int numRatings;
+    private boolean isNew;
+
+
+    public Book(String title, String author){
+        //this.id = id;
+        this.title = title;
+        this.author = author;
+    }
+
+    public Book(JSONObject jsonobject){
+        try{
+            this.title = jsonobject.getString("title");
+            this.summary = jsonobject.getString("summary");
+            this.id = jsonobject.getString("_id");
+            this.picture = jsonobject.getString("cover_image");
+            this.sumRatings = jsonobject.getInt("rating");
+            this.numRatings = jsonobject.getInt("num_rating");
+            this.isNew = jsonobject.getBoolean("is_new");
+            //String aux = jsonobject.get("genre").toString();
+            this.genre = new Genre(jsonobject.getJSONObject("genre"));
+            //missing author
+            //missing comments
+
+           /* "publication_date": "2019-01-01T00:00:00.000Z",
+                    "author": {
+                "_id": "5ddd69ac99439a0f2d99edc9",
+                        "name": "DEFREDS JOSE. A. GOMEZ IGLESIAS"
+            },
+            "genre": [
+            {
+                "_id": "5de7fb595a66a02fe3c39ead",
+                    "picture": "genre2",
+                    "name": "Computing / Interenet"
+            }
+            ],
+            "cover_image": "https://imagessl6.casadellibro.com/a/l/t1/16/9788467056716.jpg",
+                    "comments": [],
+            "rating": 5,
+                    "num_rating": 1,
+                    "is_new": true,
+                    "request": {
+                "type": "GET",
+                        "url": "http://localhost:3000/books/5de7fb655a66a02fe3c39ebc"
+            }*/
+        } catch (JSONException e) {
+            //this.name = "Error";
+            //this.picture = "Error";
+        }
+    }
 
     public Book(String title, String author, String picture, int year, int extension, Genre genre) {
         this.title = title;

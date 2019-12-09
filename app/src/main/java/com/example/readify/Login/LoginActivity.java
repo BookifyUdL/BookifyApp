@@ -196,7 +196,7 @@ public class LoginActivity extends AppCompatActivity {
     private void startAnimation() {
         ViewPropertyAnimator viewPropertyAnimator = bookIconImageView.animate();
         viewPropertyAnimator.y(100f);
-        viewPropertyAnimator.setDuration(1000);
+        viewPropertyAnimator.setDuration(3000);
         viewPropertyAnimator.setListener(new Animator.AnimatorListener() {
 
             @Override
