@@ -2,10 +2,13 @@ package com.example.readify.Profile;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,8 +22,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,6 +80,10 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     private TextView textViewAchievements;
     private TextView readedBooksTextView;
     private ImageView imageViewPremiumBadge;
+    private Dialog dialog;
+    private CheckBox checkBox;
+    private RadioButton radioButtonWifi;
+    private RadioButton radioButtonData;
 
     private FirebaseAuth mAuth;
 
@@ -207,6 +216,16 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         final AchievementsHoritzontalAdapter adapterAchievements = new AchievementsHoritzontalAdapter(getContext(), achievementsCompleted);
         recyclerViewAchievements.setAdapter(adapterAchievements);
 
+        //Settings button
+        ImageButton buttonSettings = (ImageButton) view.findViewById(R.id.buttonSettingsProfile);
+        dialog = new Dialog(getContext());
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSettings(view);
+            }
+        });
+
         //Achievements button
         ImageButton buttonAchievements = (ImageButton) view.findViewById(R.id.buttonAchievementsProfile);
         buttonAchievements.setOnClickListener(new View.OnClickListener() {
@@ -254,6 +273,46 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         });
 
         return view;
+    }
+
+    private void openSettings(View view){
+        dialog.setContentView(R.layout.settings_popup);
+        checkBox = (CheckBox) dialog.findViewById(R.id.checkbox_notifiactions);
+        radioButtonWifi = (RadioButton) dialog.findViewById(R.id.wifiOnly);
+        radioButtonData = (RadioButton) dialog.findViewById(R.id.wifiAndData);
+
+        ImageButton buttonClose = (ImageButton) dialog.findViewById(R.id.close_achievements_popup);
+        buttonClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        Button buttonSave = (Button) dialog.findViewById(R.id.saveSettingsButton);
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                prefs.edit().putBoolean("com.example.readify.notifications", checkBox.isChecked()).apply();
+                prefs.edit().putBoolean("com.example.readify.wifiAndData", radioButtonData.isChecked()).apply();
+                Toast.makeText(getContext(), "The changes had been saved", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        loadValues();
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        dialog.show();
+    }
+
+    private void loadValues() {
+        boolean notifications = prefs.getBoolean("com.example.readify.notifications", true);
+        boolean connectivity = prefs.getBoolean("com.example.readify.wifiAndData", true);
+
+        checkBox.setChecked(notifications);
+        radioButtonWifi.setChecked(!connectivity);
+        radioButtonData.setChecked(connectivity);
     }
 
     private void getProfileImage() {
