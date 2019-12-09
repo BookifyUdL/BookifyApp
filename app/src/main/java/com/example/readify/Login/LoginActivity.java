@@ -141,14 +141,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     @Override
     public void onStart() {
         super.onStart();
-
-        if (connectionEnabled) {
-            // Check if user is signed in (non-null) and update UI accordingly.
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-
-            if (currentUser != null)
-                updateUI(currentUser);
-        }
     }
 
     @Override
@@ -452,19 +444,44 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         Boolean connectivityFull = pref.getBoolean("com.example.readify.wifiAndData", false);
 
         if (status.equals(getResources().getString(R.string.wifi_ok))) {
+            connectionEnabled = true;
+
+            // Check if user is signed in (non-null) and update UI accordingly.
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+
+            if (currentUser != null)
+                updateUI(currentUser);
 
         } else if (status.equals(getResources().getString(R.string.mobile_ok)) && connectivityFull) {
-        } else {
+            connectionEnabled = true;
+
+            // Check if user is signed in (non-null) and update UI accordingly.
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+
+            if (currentUser != null)
+                updateUI(currentUser);
+
+        } else if (status.equals(getResources().getString(R.string.mobile_ok)) && !connectivityFull) {
+            connectionEnabled = false;
             AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();
             alertDialog.setTitle("Alert");
-            alertDialog.setMessage("An error has ocurred to connect to the server");
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Restart app",
+            alertDialog.setMessage("Mobile data is disabled. Please try to connect with Wifi or change the configuration.");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            Intent intentRestart = new Intent(LoginActivity.this, LoginActivity.class);
-                            startActivity(intentRestart);
-                            finish();
+                        }
+                    });
+            alertDialog.show();
+        } else {
+            connectionEnabled = false;
+            AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();
+            alertDialog.setTitle("Alert");
+            alertDialog.setMessage("An error has ocurred to connect to the server. Check your internet connection.");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
                         }
                     });
             alertDialog.show();

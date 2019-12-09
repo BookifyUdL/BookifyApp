@@ -16,8 +16,16 @@ import com.example.readify.Models.User;
 import com.example.readify.Profile.ProfileFragment;
 import com.example.readify.Reading.ReadingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseUser;
 
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.transition.Slide;
@@ -28,7 +36,8 @@ public class MainActivity extends AppCompatActivity implements
         ReadingFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
         LibraryFragment.OnFragmentInteractionListener, DiscoverFragment.OnFragmentInteractionListener,
         SearchBookFragment.OnFragmentInteractionListener, BookViewFragment.OnFragmentInteractionListener,
-        MainActivityLogOut, SearchBookFragment.ComunicateFragments {
+        MainActivityLogOut, SearchBookFragment.ComunicateFragments,
+        ConnectivityReceiver.ConnectivityReceiverListener{
 
     private BottomNavigationView navigation;
     private final ReadingFragment fragment1 = new ReadingFragment();
@@ -39,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements
     private BookViewFragment fragment6 = new BookViewFragment();
     private BooksSectionFragment fragment7 = new BooksSectionFragment();
     private final FragmentManager fm = getSupportFragmentManager();
+    private BroadcastReceiver connectivityReceiver = null;
+    private SharedPreferences pref;
 
     private Fragment active = fragment1;
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -158,6 +169,8 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        pref = getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+
         MockupsValues.setPendingListBooks(MockupsValues.user.getInterested());
 
         fm.beginTransaction().add(R.id.main_container, fragment7, "7").hide(fragment7).commit();
@@ -170,8 +183,22 @@ public class MainActivity extends AppCompatActivity implements
         navigation = findViewById(R.id.navigation);
         //changeIcons(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        connectivityReceiver = new ConnectivityReceiver();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ConnectivityReceiver.connectivityReceiverListener = this;
+        registerReceiver(connectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(connectivityReceiver);
+    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -193,6 +220,21 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             UsersSectionFragment usersSectionFragment = (UsersSectionFragment) fragment;
             usersSectionFragment.displayReceivedData(word);
+        }
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(String status) {
+        Boolean connectivityFull = pref.getBoolean("com.example.readify.wifiAndData", false);
+
+        if (status.equals(getResources().getString(R.string.wifi_ok))) {
+
+        } else if (status.equals(getResources().getString(R.string.mobile_ok)) && connectivityFull) {
+            
+        } else {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 }
