@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -49,7 +50,7 @@ import java.util.List;
  */
 public class DiscoverFragment extends Fragment implements View.OnClickListener,
         BooksHorizontalAdapter.ItemClickListener
-        /*CompoundButton.OnCheckedChangeListener*/{
+        /*CompoundButton.OnCheckedChangeListener*/ {
 
     private Button mButton;
     private ViewPager mViewPager;
@@ -118,7 +119,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
 
         mCardAdapter = new CardPagerAdapter((MainActivity) getActivity());
-        for (int i=0; i < MockupsValues.getLastAddedBooks().size(); i++){
+        for (int i = 0; i < MockupsValues.getLastAddedBooks().size(); i++) {
             mCardAdapter.addCardItem(MockupsValues.getLastAddedBooks().get(i));
         }
         mFragmentCardAdapter = new CardFragmentPagerAdapter(getFragmentManager(),
@@ -152,55 +153,56 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         return view;
     }
 
-    private void addGenres(View view){
+    private void addGenres(View view) {
         RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relative_layout);
         boolean isFirst = true;
         int previousId = 0;
         int previousCardId = 0;
         int margin_5dp = (int) getContext().getResources().getDimension(R.dimen.margin_5dp);
         int margin_10dp = (int) getContext().getResources().getDimension(R.dimen.margin_10dp);
+        int margin_15dp = (int) getContext().getResources().getDimension(R.dimen.margin_15dp);
 
         ArrayList<Book> books = MockupsValues.getLastAddedBooksDiscover();
         //books.add(MockupsValues.getSameAuthorBooks().get(0));
 
-        for(Genre genre: user.getGenres()){
+        for (Genre genre : user.getGenres()) {
             TextView textView = new TextView(getContext());
-            String text = genre.getName() + " Genre";
+            String text = genre.getName() + " genre";
             textView.setText(text);
             textView.setTextAppearance(R.style.TextAppearance_AppCompat_Title);
             textView.setTypeface(null, Typeface.BOLD);
-            textView.setTextColor(getContext().getResources().getColor(R.color.colorBlack));
+            textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryText));
             textView.setTextSize(25);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(5,5,0,0);
-            if(isFirst){
+            params.setMargins(margin_15dp, margin_15dp, 0, 0);
+            if (isFirst) {
                 params.addRule(RelativeLayout.BELOW, R.id.card_view_top_rated);
                 isFirst = false;
             } else {
                 params.addRule(RelativeLayout.BELOW, previousCardId);
             }
             textView.setLayoutParams(params);
-            previousId  = ViewCompat.generateViewId();
+            previousId = ViewCompat.generateViewId();
             textView.setId(previousId);
             relativeLayout.addView(textView);
 
 
             float height = getContext().getResources().getDimension(R.dimen.card_height);
             CardView cardView = new CardView(getContext());
-            RelativeLayout.LayoutParams cardParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,(int) height);
-            cardParams.setMargins(margin_5dp,margin_5dp,margin_5dp,margin_5dp);
+            cardView.setRadius(4);
+            RelativeLayout.LayoutParams cardParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int) height);
+            cardParams.setMargins(margin_15dp, margin_15dp, margin_15dp, margin_15dp);
             cardParams.addRule(RelativeLayout.BELOW, previousId);
             cardParams.addRule(RelativeLayout.ALIGN_TOP);
             cardView.setLayoutParams(cardParams);
             previousCardId = ViewCompat.generateViewId();
             cardView.setId(previousCardId);
-            cardView.setRadius(4);
-            cardView.setBackgroundColor(getContext().getResources().getColor(R.color.colorGrayCardBackground));
+            cardView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryLight));
 
 
             RecyclerView recyclerView = new RecyclerView(getContext());
             RelativeLayout.LayoutParams recyclerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-            recyclerParams.setMargins(margin_10dp, margin_10dp, margin_10dp, margin_10dp);
+            recyclerParams.setMargins(margin_5dp, margin_10dp, margin_5dp, margin_10dp);
             recyclerView.setLayoutParams(recyclerParams);
 
             //List list = MockupsValues.getLastAddedBooks();
@@ -213,12 +215,6 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
             cardView.addView(recyclerView);
             relativeLayout.addView(cardView);
-
-             /*<androidx.recyclerview.widget.RecyclerView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/top_rated_recycler_view"
-
-        </androidx.cardview.widget.CardView>*/
         }
 
         int blankLayoutHeight = (int) getContext().getResources().getDimension(R.dimen.blank_layout);
@@ -233,19 +229,19 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onItemClick(View view, int position) {
-        if(position == MockupsValues.getLastAddedBooks().size()-1){
+        if (position == MockupsValues.getLastAddedBooks().size() - 1) {
             showSearchFragment();
         } else {
             showBookFragment(MockupsValues.getLastAddedBooks().get(position));
         }
     }
 
-    private void showBookFragment(Book book){
+    private void showBookFragment(Book book) {
         MainActivity activity = (MainActivity) getActivity();
         activity.goToBookPage(book, Pages.DISCOVER_PAGE);
     }
 
-    private void showSearchFragment(){
+    private void showSearchFragment() {
         MainActivity activity = (MainActivity) getActivity();
         activity.changeSearchBookFragment();
         //activity.changeDiscoverFragment();
@@ -308,10 +304,4 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
-   /* @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        mCardShadowTransformer.enableScaling(b);
-        mFragmentCardShadowTransformer.enableScaling(b);
-    }*/
 }

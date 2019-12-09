@@ -12,7 +12,6 @@
         android:id="@+id/linearLayoutCardView"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:background="@color/colorGrayCardBackground"
         android:orientation="horizontal">
 
         <ImageView
@@ -40,7 +39,8 @@
                 android:text="Title of achievement"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="@color/primaryText"/>
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Body1"
@@ -53,7 +53,8 @@
                 android:layout_marginBottom="5dp"
                 android:textSize="15sp"
                 android:ellipsize="end"
-                android:maxLines="2"/>
+                android:maxLines="2"
+                android:textColor="@color/secondaryText"/>
 
             <com.daimajia.numberprogressbar.NumberProgressBar
                 android:id="@+id/achievement_progress_bar"
@@ -64,7 +65,7 @@
                 android:layout_marginStart="5dp"
                 custom:progress_unreached_color="#2196F3"
                 custom:progress_reached_color="#4CAF50"
-                custom:progress_text_color="#000000"/>
+                custom:progress_text_color="@color/secondaryText"/>
 
         </LinearLayout>
 
