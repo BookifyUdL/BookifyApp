@@ -23,7 +23,7 @@
 
     <style name="AppSearchView" parent="Widget.AppCompat.SearchView">
         <item name="android:textColorPrimary">@color/colorPrimaryLight</item>
-        <item name="android:textColorHint">@color/colorAccent</item>
+        <item name="android:textColorHint">@color/divider</item>
         <item name="queryBackground">@color/colorPrimaryLight</item>
         <item name="android:drawableEnd">@drawable/ic_search_button</item>
         <item name="android:searchIcon">@null</item>
