@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/comment_top_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/comment_top_linear_layout"
-    android:backgroundTint="@color/cardview_light_background">
+    android:backgroundTint="@color/colorPrimary"
+    android:layout_margin="@dimen/margin_5dp"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/comment_layout"
@@ -17,15 +18,15 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorBlack"
-            app:cardCornerRadius="5dp">
+            android:backgroundTint="@color/colorPrimaryDark"
+            app:cardCornerRadius="8dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
-                android:backgroundTint="@color/colorDarkGrayCardBackground"
-                app:cardCornerRadius="4dp"
+                android:backgroundTint="@color/colorPrimaryLight"
+                app:cardCornerRadius="8dp"
                 app:cardElevation="20dp">
 
                 <LinearLayout
@@ -36,7 +37,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_5dp"
+                        android:layout_margin="@dimen/margin_10dp"
                         android:orientation="horizontal">
 
                         <de.hdodenhof.circleimageview.CircleImageView
@@ -44,7 +45,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:src="@drawable/user1"
-                            app:civ_border_color="#FFF"
+                            app:civ_border_color="@color/colorPrimary"
                             app:civ_border_width="2dp" />
 
                         <TextView
@@ -53,35 +54,30 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_margin="@dimen/margin_5dp"
-                            android:textColor="@color/colorBlack"
+                            android:layout_marginStart="@dimen/margin_15dp"
+                            android:text="@string/example_text"
+                            android:textColor="@color/primaryText"
                             android:textStyle="bold" />
-
                     </LinearLayout>
 
                     <ScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <RelativeLayout
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <!--me.biubiubiu.justifytext.library.JustifyTextView
-                                android:layout_marginStart="@dimen/margin_5dp"
-                                android:layout_marginBottom="@dimen/margin_5dp"
-                                android:id="@+id/user_comment"
-                                android:text="Este es un comentario de prueba pagado por Adobe Acrobar features."
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/colorBlack"
-                                android:textSize="12dp"/-->
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginStart="@dimen/margin_15dp"
+                            android:layout_marginEnd="@dimen/margin_15dp"
+                            android:weightSum="10">
 
                             <EditText
                                 android:id="@+id/edit_text"
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="25dp"
+                                android:layout_marginEnd="15dp"
+                                android:layout_weight="9"
                                 android:gravity="center_horizontal"
                                 android:hint="Añade un comentario"
                                 android:imeOptions="actionSend"
@@ -89,27 +85,16 @@
 
                             <ImageButton
                                 android:id="@+id/send_comment"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_alignEnd="@+id/edit_text"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentBottom="true"
-                                android:layout_marginStart="@dimen/margin_5dp"
-                                android:layout_marginEnd="@dimen/margin_5dp"
-                                android:layout_marginBottom="@dimen/margin_5dp"
-                                android:background="@color/colorDarkGrayCardBackground"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@color/colorPrimaryLight"
                                 android:src="@drawable/send_arrow_icon" />
 
-                        </RelativeLayout>
+                        </LinearLayout>
 
                     </ScrollView>
-
-                    <!--TextView
-                        android:id="@+id/user_comment"
-                        android:text="Este es un comentario de prueba pagado por Adobe Acrobar features."
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="12dp"/-->
 
                 </LinearLayout>
 
@@ -118,20 +103,5 @@
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
-
-    <!--RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"-->
-
-    <!--me.biubiubiu.justifytext.library.JustifyTextView
-        android:layout_marginStart="@dimen/margin_5dp"
-        android:layout_marginBottom="@dimen/margin_5dp"
-        android:id="@+id/user_comment"
-        android:text="Este es un comentario de prueba pagado por Adobe Acrobar features."
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorBlack"
-        android:textSize="12dp"/-->
-
 
 </LinearLayout>
