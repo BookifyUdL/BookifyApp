@@ -22,16 +22,28 @@
             android:background="@drawable/profile_banner">
 
             <ImageButton
+                android:id="@+id/buttonSettingsProfile"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@color/colorTransparent"
+                android:padding="5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/settings" />
+
+            <ImageButton
                 android:id="@+id/buttonAchievementsProfile"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/rounded_button"
-                android:padding="10dp"
+                android:layout_marginEnd="5dp"
+                android:background="@color/colorTransparent"
+                android:padding="5dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/award" />
+                android:src="@drawable/chevron" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -107,7 +119,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:background="@color/colorPrimaryLight">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -137,6 +150,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="@string/libraryTitleProfile"
+                                    android:textColor="@color/primaryText"
                                     android:textSize="16sp" />
 
                                 <TextView
@@ -146,6 +160,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="@string/numExample"
+                                    android:textColor="@color/primaryText"
                                     android:textSize="22sp" />
 
                                 <TextView
@@ -154,7 +169,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
                                     android:gravity="center_horizontal"
-                                    android:text="@string/readedbooksSubtitleProfile" />
+                                    android:text="@string/readedbooksSubtitleProfile"
+                                    android:textColor="@color/secondaryText" />
 
                             </LinearLayout>
 
@@ -171,7 +187,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_centerInParent="true"
                                 android:layout_margin="20dp"
-                                android:background="@color/colorBlack" />
+                                android:background="@color/divider" />
 
                         </RelativeLayout>
 
@@ -194,6 +210,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="@string/feedbackTitleProfile"
+                                    android:textColor="@color/primaryText"
                                     android:textSize="16sp" />
 
                                 <TextView
@@ -202,6 +219,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="@string/numExample"
+                                    android:textColor="@color/primaryText"
                                     android:textSize="22sp" />
 
                                 <TextView
@@ -210,7 +228,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal"
                                     android:gravity="center_horizontal"
-                                    android:text="@string/commentsFeedTitleProfile" />
+                                    android:text="@string/commentsFeedTitleProfile"
+                                    android:textColor="@color/secondaryText" />
 
                             </LinearLayout>
 
@@ -227,7 +246,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_centerInParent="true"
                                 android:layout_margin="20dp"
-                                android:background="@color/colorBlack" />
+                                android:background="@color/divider" />
 
                         </RelativeLayout>
 
@@ -250,6 +269,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:text="@string/accountTitleProfile"
+                                    android:textColor="@color/primaryText"
                                     android:textSize="16sp" />
 
                                 <TextView
@@ -258,14 +278,16 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="@string/typeAccountExampleText" />
+                                    android:text="@string/typeAccountExampleText"
+                                    android:textColor="@color/primaryText" />
 
                                 <TextView
                                     style="@style/TextAppearance.AppCompat.Body1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="@string/periodAccountText" />
+                                    android:text="@string/periodAccountText"
+                                    android:textColor="@color/secondaryText" />
 
                             </LinearLayout>
 
@@ -285,7 +307,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_centerHorizontal="true"
-                        android:background="@color/colorBlack" />
+                        android:background="@color/divider" />
 
                 </RelativeLayout>
 
@@ -293,18 +315,18 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/info_text_genre_preferences"
-                        style="@style/TextAppearance.AppCompat.Title"
+                        style="@style/TextAppearance.AppCompat.Body1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
                         android:text="@string/genrePreferencesTitleProfile"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/primaryText"
                         android:textSize="25sp"
                         android:textStyle="bold" />
 
@@ -312,7 +334,9 @@
                         android:id="@+id/recycler_view_profile_genre_preferences"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="3dp" />
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="@dimen/margin_15dp"
+                        android:layout_marginEnd="@dimen/margin_15dp" />
 
                 </LinearLayout>
 
@@ -320,18 +344,18 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/info_text_readed_books"
-                        style="@style/TextAppearance.AppCompat.Title"
+                        style="@style/TextAppearance.AppCompat.Body1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
                         android:text="@string/readedBooksTitleProfile"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/primaryText"
                         android:textSize="25sp"
                         android:textStyle="bold" />
 
@@ -339,10 +363,9 @@
                         android:id="@+id/recycler_view_profile_favourite_books"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginBottom="10dp" />
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="@dimen/margin_15dp"
+                        android:layout_marginEnd="@dimen/margin_15dp" />
                 </LinearLayout>
 
                 <!-- Last achievements -->
@@ -350,17 +373,17 @@
                     android:id="@+id/linearLayoutAchievements"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/info_text_achievements"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
                         android:text="@string/achievementsTitleProfile"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/primaryText"
                         android:textSize="25sp"
                         android:textStyle="bold" />
 
@@ -368,35 +391,48 @@
                         android:id="@+id/recycler_view_profile_achievements"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginBottom="10dp" />
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="15dp"/>
 
                 </LinearLayout>
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/upgrade_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginTop="15dp"
                     android:background="@drawable/rounded_button"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/upgrade_account_text" />
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:text="@string/upgrade_account_text"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                    app:icon="@drawable/upgrade"
+                    app:iconSize="24dp"
+                    app:iconPadding="@dimen/margin_15dp"/>
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/logOutButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="70dp"
                     android:background="@drawable/rounded_button"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="@string/disconnect_text" />
+                    android:layout_marginTop="@dimen/margin_15dp"
+                    android:layout_marginBottom="@dimen/margin_15dp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:text="@string/disconnect_text"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                    app:icon="@drawable/logout_sign"
+                    app:iconSize="24dp"
+                    app:iconPadding="@dimen/margin_15dp"/>
+
+                <LinearLayout
+                    android:id="@+id/empty_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="vertical" />
 
             </LinearLayout>
 

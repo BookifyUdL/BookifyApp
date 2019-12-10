@@ -4,9 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 
@@ -14,11 +19,14 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,6 +37,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 import com.example.readify.BuildConfig;
+import com.example.readify.ConnectivityReceiver;
 import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
@@ -69,7 +78,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
     private static final String USERS = "users";
     private static final String TAG_F = "FACELOG";
@@ -93,6 +102,9 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButton;
 
+    private BroadcastReceiver connectivityReceiver = null;
+    private Boolean connectionEnabled;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +112,9 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
+
+        connectionEnabled = true;
+        connectivityReceiver = new ConnectivityReceiver();
 
         // Fix a Facebook bug (token)
         if (BuildConfig.DEBUG) {
@@ -126,12 +141,19 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+    }
 
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ConnectivityReceiver.connectivityReceiverListener = this;
+        registerReceiver(connectivityReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
 
-        if (currentUser != null)
-            updateUI(currentUser);
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(connectivityReceiver);
     }
 
     private void initViews() {
@@ -183,11 +205,13 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                bookITextView.setVisibility(GONE);
-                loadingProgressBar.setVisibility(GONE);
-                rootView.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.colorSplashText));
-                bookIconImageView.setImageResource(R.drawable.bookify_icon_only);
-                startAnimation();
+                if (connectionEnabled) {
+                    bookITextView.setVisibility(GONE);
+                    loadingProgressBar.setVisibility(GONE);
+                    rootView.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.colorSplashText));
+                    bookIconImageView.setImageResource(R.drawable.bookify_icon_only);
+                    startAnimation();
+                }
             }
         }.start();
     }
@@ -240,7 +264,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 User user = dataSnapshot.getValue(User.class);
 
-                if (user == null){
+                if (user == null) {
                     //If we don't complete de first form, it appear again
                     Intent firstFormAgain = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
                     startActivity(firstFormAgain);
@@ -385,7 +409,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //Methods to update an app after to do a login
     private void updateUI(FirebaseUser currentUser) {
-        /*MockupsValues.setContext(this);
+        MockupsValues.setContext(this);
 
         pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
         pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
@@ -393,29 +417,66 @@ public class LoginActivity extends AppCompatActivity {
         pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString()).apply();
 
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        readDataFromFirebase(currentUser.getUid(), intent);*/
-
-        Intent intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
-        startActivity(intent);
-        finish();
+        readDataFromFirebase(currentUser.getUid(), intent);
     }
 
     private void updateUI(FirebaseUser currentUser, Task<AuthResult> task) {
         MockupsValues.setContext(this);
-        Intent intent;
-        /*pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
+
+        pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
         pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
         pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
         pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString() + "?type=large").apply();
 
-
+        Intent intent;
         if (!task.getResult().getAdditionalUserInfo().isNewUser()) {
             intent = new Intent(LoginActivity.this, MainActivity.class);
             readDataFromFirebase(currentUser.getUid(), intent);
-        } else {*/
+        } else {
             intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
             startActivity(intent);
             finish();
-        //}
+        }
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(String status) {
+        Boolean connectivityFull = pref.getBoolean("com.example.readify.wifiAndData", false);
+
+        if (status.equals(getResources().getString(R.string.wifi_ok))) {
+            connectionEnabled = true;
+
+            // Check if user is signed in (non-null) and update UI accordingly.
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+
+            if (currentUser != null)
+                updateUI(currentUser);
+
+            initializeAnimation();
+
+        } else if (status.equals(getResources().getString(R.string.mobile_ok)) && connectivityFull) {
+            connectionEnabled = true;
+
+            // Check if user is signed in (non-null) and update UI accordingly.
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+
+            if (currentUser != null)
+                updateUI(currentUser);
+
+            initializeAnimation();
+
+        } else {
+            connectionEnabled = false;
+            AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();
+            alertDialog.setTitle("Alert");
+            alertDialog.setMessage("An error has ocurred to connect to the server. Check your internet connection.");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+        }
     }
 }

@@ -3,35 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="15dp"
-    android:layout_marginTop="@dimen/margin_5dp"
-    android:layout_marginEnd="@dimen/margin_5dp"
-    android:layout_marginBottom="@dimen/margin_5dp"
+    android:layout_margin="5dp"
     android:orientation="vertical">
 
-    <!--include
-        android:id="@+id/comment_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/add_comment_item"
-        android:layout_marginBottom="@dimen/margin_5dp"
-        android:visibility="invisible"/-->
     <androidx.cardview.widget.CardView
         android:id="@+id/aux"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorBlank"
-        app:cardCornerRadius="4dp">
+        app:cardCornerRadius="8dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/reviewed_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"
-            android:layout_marginTop="2dp"
-            android:backgroundTint="@color/colorDarkGrayCardBackground"
+            android:backgroundTint="@color/colorAccent"
             app:cardCornerRadius="8dp">
 
             <LinearLayout
@@ -42,7 +28,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_5dp"
+                    android:layout_margin="@dimen/margin_10dp"
                     android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -50,7 +36,7 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:src="@drawable/user1"
-                        app:civ_border_color="#FFF"
+                        app:civ_border_color="@color/colorPrimary"
                         app:civ_border_width="2dp" />
 
                     <TextView
@@ -59,9 +45,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_margin="@dimen/margin_5dp"
+                        android:layout_marginStart="@dimen/margin_15dp"
                         android:text="@string/example_text"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/primaryText"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -71,21 +57,23 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:justificationMode="inter_word"
                         android:id="@+id/user_comment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_5dp"
-                        android:layout_marginEnd="@dimen/margin_5dp"
-                        android:layout_marginBottom="@dimen/margin_5dp"
+                        android:layout_marginBottom="@dimen/margin_10dp"
+                        android:layout_marginStart="@dimen/margin_15dp"
+                        android:layout_marginEnd="@dimen/margin_15dp"
+                        android:justificationMode="inter_word"
                         android:text="@string/Lorem_ipsum"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/primaryText"
                         android:textSize="12sp" />
 
                 </ScrollView>
+
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
+
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>

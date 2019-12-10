@@ -64,10 +64,10 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
     private void shouldShowEmptyMessage() {
         if (booksAdapter.getItemCount() == 0) {
             anyBookLayout.setVisibility(View.VISIBLE);
-            searchView.setVisibility(View.INVISIBLE);
-            recyclerViewGenres.setVisibility(View.INVISIBLE);
+            searchView.setVisibility(View.GONE);
+            recyclerViewGenres.setVisibility(View.GONE);
         } else {
-            anyBookLayout.setVisibility(View.INVISIBLE);
+            anyBookLayout.setVisibility(View.GONE);
             searchView.setVisibility(View.VISIBLE);
             recyclerViewGenres.setVisibility(View.VISIBLE);
         }

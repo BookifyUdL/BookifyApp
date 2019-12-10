@@ -6,7 +6,27 @@
     android:orientation="vertical"
     tools:context=".Reading.ReadingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimaryDark">
+
+        <TextView
+            android:id="@+id/info_text"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="My readings"
+            android:textColor="@color/colorPrimaryLight"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -15,14 +35,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/margin_15dp"
+            android:layout_marginEnd="@dimen/margin_15dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/any_book_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
+                    <TextView
+                        android:id="@+id/any_book_text"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/any_book_yet" />
 
+                </LinearLayout>
+      
                 <LinearLayout
                     android:id="@+id/reading_text_layout"
                     android:layout_width="match_parent"
@@ -31,13 +66,12 @@
 
                     <TextView
                         android:id="@+id/reading_text"
-                        style="@style/TextAppearance.AppCompat.Title"
+                        style="@style/TextAppearance.AppCompat.Body1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="15dp"
                         android:text="@string/reading_text_title"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/primaryText"
                         android:textSize="25sp"
                         android:textStyle="bold" />
 
@@ -45,10 +79,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="5dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:background="@color/colorMark"
+                        android:background="@color/divider"
                         android:gravity="center_horizontal" />
 
                 </LinearLayout>
@@ -57,10 +89,7 @@
                     android:id="@+id/reading_books_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="10dp" />
+                    android:layout_marginTop="15dp"/>
 
                 <LinearLayout
                     android:id="@+id/pending_text_layout"
@@ -70,13 +99,12 @@
 
                     <TextView
                         android:id="@+id/pending_text"
-                        style="@style/TextAppearance.AppCompat.Title"
+                        style="@style/TextAppearance.AppCompat.Body1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="15dp"
                         android:text="@string/pending"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/primaryText"
                         android:textSize="25sp"
                         android:textStyle="bold" />
 
@@ -84,10 +112,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="5dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:background="@color/colorYellowSwipe"
+                        android:background="@color/divider"
                         android:gravity="center_horizontal" />
 
                 </LinearLayout>
@@ -97,10 +123,7 @@
                     android:id="@+id/pending_books_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="10dp" />
+                    android:layout_marginTop="15dp"/>
 
                 <LinearLayout
                     android:id="@+id/discover_layout"
@@ -112,11 +135,18 @@
                         android:id="@+id/card_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
+                        android:layout_marginTop="15dp"
                         android:layout_marginBottom="5dp"
-                        card_view:cardBackgroundColor="@color/colorGrayCardBackground"
+                        card_view:cardBackgroundColor="@color/colorPrimary"
                         card_view:cardCornerRadius="4dp">
+
+                        <!--<TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|center_horizontal"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:text="@string/discover_link"
+                            android:textColor="@color/icons" />-->
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -172,8 +202,6 @@
                     android:orientation="vertical" />
 
             </LinearLayout>
-
-        </LinearLayout>
 
     </ScrollView>
 

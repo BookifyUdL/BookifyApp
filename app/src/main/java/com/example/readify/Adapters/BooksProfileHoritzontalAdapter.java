@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readify.Models.Book;
@@ -46,8 +47,8 @@ public class BooksProfileHoritzontalAdapter extends RecyclerView.Adapter<BooksPr
         holder.myImageView.setImageResource(mInflater.getContext()
                 .getResources().getIdentifier(book.getPicture(), "drawable", mInflater.getContext().getPackageName()));
         if (position == mData.size() - 1) {
-            holder.myCardView.setBackgroundColor(Color.BLACK);
-            holder.myTextViewTitle.setTextColor(Color.WHITE);
+            holder.myCardView.setBackgroundColor(ContextCompat.getColor(mInflater.getContext(), R.color.colorPrimary));
+            holder.myTextViewTitle.setTextColor(ContextCompat.getColor(mInflater.getContext(), R.color.icons));
         }
     }
 
