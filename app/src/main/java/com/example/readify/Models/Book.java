@@ -77,7 +77,7 @@ public class Book {
         for (Book book : books){
             JSONObject object = new JSONObject();
             try{
-                object.put("_id", book.getId());
+                //object.put("_id", book.getId());
                 booksArray.put(object);
             } catch (Exception e) {
                 //continue;

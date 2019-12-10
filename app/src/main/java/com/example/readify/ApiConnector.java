@@ -32,6 +32,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
     private static String ALL_GENRES = "genres";
     private static String ALL_BOOKS = "books";
+    private static String ALL_USERS = "users";
 
     //Context context;
     //RequestQueue queue = Volley.newRequestQueue(context);
@@ -44,6 +45,59 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
     public static void addUserToDatabase(Context context, final ServerCallback callback, User user){
         //User user = new User()
+        JSONObject userJSON = User.toJSON(user);
+        try{
+            //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.POST, urlv + ALL_USERS, userJSON, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            System.out.println(response.toString());
+                            callback.onSuccess(response);
+                            /*String aux = response.toString();
+                            try{
+                                //String aux2 = response.get("genres");
+                                //String aux2 = response.get("genres").toString();
+
+                                JSONArray jsonarray = new JSONArray(response.get("books").toString());
+                                for (int i = 0; i < jsonarray.length(); i++) {
+                                    JSONObject book = jsonarray.getJSONObject(i);
+                                    Author author = new Author(book.getJSONObject("author"));
+                                    Book auxBook = new Book(book.getString("_id"), book.getString("title"), author, book.getString("cover_image"));
+                                    //books.add(auxBook);
+                                }
+
+                                //MockupsValues.setGenres(genres);
+                                //MockupsValues.setAllBooksForTutorial(books);
+
+                                callback.onSuccess(response);
+                                //aux2 = "";
+                            } catch (org.json.JSONException e) {
+
+                                System.out.println("Error");
+
+                            }*/
+                            //textView.setText("Response: " + response.toString());
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            System.out.println("Error");
+
+                        }
+                    });
+
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+            queue.start();
+            //Wait_until_Downloaded();
+            //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public static void updateUserIntoDatabase(Context context, final ServerCallback callback){

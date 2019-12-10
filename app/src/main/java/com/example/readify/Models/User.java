@@ -84,24 +84,24 @@ public class User {
         this.achievements = MockupsValues.getAchievementsPersonalized();
     }
 
-    public String toJSON(){
+    public static JSONObject toJSON(User user){
 
         JSONObject jsonObject= new JSONObject();
         try {
-            jsonObject.put("name", getName());
+            jsonObject.put("name", user.getName());
             //MISSING ACHIEVEMENTS
             jsonObject.put("achievements", new JSONArray());
-            jsonObject.put("firebaseId", firebaseId);
-            jsonObject.put("userPicture", getPicture());
-            jsonObject.put("premium", isPremium());
-            jsonObject.put("library", Book.bookListToJSON(getLibrary()));
+            jsonObject.put("firebaseId", "verga");
+            jsonObject.put("userPicture", user.getPicture());
+            jsonObject.put("premium", user.isPremium());
+            jsonObject.put("library", Book.bookListToJSON(user.getLibrary()));
 
-            jsonObject.put("read_book", Book.bookListToJSON(getReadedBooks()));
-            jsonObject.put("interested_book", Book.bookListToJSON(getInterested()));
-            jsonObject.put("reading_books", Book.bookListToJSON(getReading()));
+            jsonObject.put("read_book", Book.bookListToJSON(user.getReadedBooks()));
+            jsonObject.put("interested_book", Book.bookListToJSON(user.getInterested()));
+            jsonObject.put("reading_books", Book.bookListToJSON(user.getReadingBooks()));
 
-            jsonObject.put("email", getEmail());
-            jsonObject.put("genres", Genre.genresListToJSON(getGenres()));
+            jsonObject.put("email", user.getEmail());
+            jsonObject.put("genres", Genre.genresListToJSON(user.getGenres()));
             /*"_id": "5ddd6287e1cc0e546e3d476a",
                     "name": "Agricolesa",
                     "firebaseId": "5ddc0f601b6cd31ed7b8afa4",
@@ -117,12 +117,12 @@ public class User {
                 "type": "GET",
                         "url": "http://localhost:3000/users/5ddd6287e1cc0e546e3d476a"*/
 
-            String aux = jsonObject.toString();
-            return jsonObject.toString();
+            //String aux = jsonObject.toString();
+            return jsonObject;
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return "";
+            return new JSONObject();
         }
 
     }
