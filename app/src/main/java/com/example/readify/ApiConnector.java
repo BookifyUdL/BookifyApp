@@ -14,6 +14,7 @@ import com.example.readify.Models.Author;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
 import com.example.readify.Models.ServerCallback;
+import com.example.readify.Models.User;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonIOException;
 
@@ -39,6 +40,14 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
     public void setContext(Context context){
         //this.context = context;
+    }
+
+    public static void addUserToDatabase(Context context, final ServerCallback callback, User user){
+        //User user = new User()
+    }
+
+    public static void updateUserIntoDatabase(Context context, final ServerCallback callback){
+
     }
 
     public static void getAllBooks(Context context, final ServerCallback callback){

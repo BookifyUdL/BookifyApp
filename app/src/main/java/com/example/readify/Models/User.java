@@ -19,6 +19,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,12 +45,12 @@ public class User {
     private ArrayList<Achievement> achievements;
     private ArrayList<Book> library;
     private ArrayList<Genre> genres;
-
+    private String firebaseId;
     private ArrayList<Book> interested;
     private ArrayList<Book> reading;
 
     public User() {
-        this.uid = "0000";
+        //this.uid = "0000";
         this.name = "User Unknown";
         this.email = "user@unknown.com";
         this.picture = "userfinale";
@@ -78,6 +82,49 @@ public class User {
         if (genres != null)
             this.genres = genres;
         this.achievements = MockupsValues.getAchievementsPersonalized();
+    }
+
+    public String toJSON(){
+
+        JSONObject jsonObject= new JSONObject();
+        try {
+            jsonObject.put("name", getName());
+            //MISSING ACHIEVEMENTS
+            jsonObject.put("achievements", new JSONArray());
+            jsonObject.put("firebaseId", firebaseId);
+            jsonObject.put("userPicture", getPicture());
+            jsonObject.put("premium", isPremium());
+            jsonObject.put("library", Book.bookListToJSON(getLibrary()));
+
+            jsonObject.put("read_book", Book.bookListToJSON(getReadedBooks()));
+            jsonObject.put("interested_book", Book.bookListToJSON(getInterested()));
+            jsonObject.put("reading_books", Book.bookListToJSON(getReading()));
+
+            jsonObject.put("email", getEmail());
+            jsonObject.put("genres", Genre.genresListToJSON(getGenres()));
+            /*"_id": "5ddd6287e1cc0e546e3d476a",
+                    "name": "Agricolesa",
+                    "firebaseId": "5ddc0f601b6cd31ed7b8afa4",
+                    "userPicture": "-",
+                    "premium": false,
+                    "achievements": [],
+            "library": [],
+            "read_book": [],
+            "interested_book": [],
+            "genres": [],
+            "email": "agri@coles.ca",
+                    "request": {
+                "type": "GET",
+                        "url": "http://localhost:3000/users/5ddd6287e1cc0e546e3d476a"*/
+
+            String aux = jsonObject.toString();
+            return jsonObject.toString();
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "";
+        }
+
     }
 
     public String getUid() {

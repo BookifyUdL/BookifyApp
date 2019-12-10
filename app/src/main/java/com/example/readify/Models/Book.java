@@ -1,5 +1,6 @@
 package com.example.readify.Models;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -71,6 +72,20 @@ public class Book {
         }
     }
 
+    public static JSONArray bookListToJSON(ArrayList<Book> books){
+        JSONArray booksArray = new JSONArray();
+        for (Book book : books){
+            JSONObject object = new JSONObject();
+            try{
+                object.put("_id", book.getId());
+                booksArray.put(object);
+            } catch (Exception e) {
+                //continue;
+            }
+        }
+        return booksArray;
+    }
+
     public Book(String title, String author, String picture, int year, int extension, Genre genre) {
         this.title = title;
         this.author = author;
@@ -103,6 +118,10 @@ public class Book {
 
     public void setExtension(int extension){
         this.extension = extension;
+    }
+
+    public String getId(){
+        return this.id;
     }
 
     public Genre getGenre() { return this.genre; }

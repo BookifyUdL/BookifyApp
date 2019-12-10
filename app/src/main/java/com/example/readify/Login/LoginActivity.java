@@ -183,6 +183,10 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                /*boolean fg = false;
+                if(fg){
+
+                }*/
                 bookITextView.setVisibility(GONE);
                 loadingProgressBar.setVisibility(GONE);
                 rootView.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.colorSplashText));
@@ -367,6 +371,8 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG_G, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            user.getEmail();
 
                             if (user != null)
                                 updateUI(user, task);

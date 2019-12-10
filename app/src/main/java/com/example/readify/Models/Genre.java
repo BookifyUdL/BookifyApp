@@ -1,9 +1,13 @@
 package com.example.readify.Models;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class Genre {
+    String id;
     String name;
     String picture;
 
@@ -16,12 +20,40 @@ public class Genre {
 
     public Genre(JSONObject jsonobject){
         try{
+            this.id = id;
             this.name = jsonobject.getString("name");
             this.picture = jsonobject.getString("picture");
         } catch (JSONException e) {
             this.name = "Error";
             this.picture = "Error";
         }
+    }
+
+    public static JSONArray  genresListToJSON(ArrayList<Genre> genres){
+        JSONArray genresArray = new JSONArray();
+        for (Genre genre : genres){
+            JSONObject object = new JSONObject();
+            try{
+                object.put("_id", genre.getId());
+                genresArray.put(object);
+            } catch (Exception e) {
+                //continue;
+            }
+        }
+        return genresArray;
+    }
+
+    public JSONObject toJSON(){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", getId());
+            jsonObject.put("name", getName());
+            jsonObject.put("picture", getPicture());
+
+        } catch (Exception e){
+            jsonObject = new JSONObject();
+        }
+        return jsonObject;
     }
 
     public String getName() {
@@ -38,5 +70,9 @@ public class Genre {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public String getId(){
+        return this.id;
     }
 }
