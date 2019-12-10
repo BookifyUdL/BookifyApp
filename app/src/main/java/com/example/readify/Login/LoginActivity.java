@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
 
-        connectionEnabled = false;
+        connectionEnabled = true;
         connectivityReceiver = new ConnectivityReceiver();
 
         // Fix a Facebook bug (token)
@@ -452,6 +452,8 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             if (currentUser != null)
                 updateUI(currentUser);
 
+            initializeAnimation();
+
         } else if (status.equals(getResources().getString(R.string.mobile_ok)) && connectivityFull) {
             connectionEnabled = true;
 
@@ -461,18 +463,8 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             if (currentUser != null)
                 updateUI(currentUser);
 
-        } else if (status.equals(getResources().getString(R.string.mobile_ok)) && !connectivityFull) {
-            connectionEnabled = false;
-            AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();
-            alertDialog.setTitle("Alert");
-            alertDialog.setMessage("Mobile data is disabled. Please try to connect with Wifi or change the configuration.");
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
+            initializeAnimation();
+
         } else {
             connectionEnabled = false;
             AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();

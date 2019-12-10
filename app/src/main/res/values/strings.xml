@@ -145,4 +145,7 @@
     <string name="wifi_ok" translatable="false">wifi_ok</string>
     <string name="mobile_ok" translatable="false">mobile_ok</string>
     <string name="internet_ko" translatable="false">internet_ko</string>
+
+    <string name="client_id_paypal" translatable="false">ASOBY-QQvBf_kxLtW8pzZo0e7Giaj34a5ECUYzo8WBitAGQoo1HT0YBfDCYU2xe6TxBtUQj5qFRHXm7v</string>
+
 </resources>

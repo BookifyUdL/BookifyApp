@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -45,10 +47,16 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalPayment;
+import com.paypal.android.sdk.payments.PayPalService;
+import com.paypal.android.sdk.payments.PaymentActivity;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -75,15 +83,22 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private static PayPalConfiguration config = new PayPalConfiguration()
+            .environment(PayPalConfiguration.ENVIRONMENT_NO_NETWORK)
+            .clientId(Integer.toString(R.string.client_id_paypal));
+
     private User user;
     private CircleImageView userImage;
     private TextView textViewAchievements;
     private TextView readedBooksTextView;
     private ImageView imageViewPremiumBadge;
     private Dialog dialog;
+    private Dialog dialogUpgrade;
     private CheckBox checkBox;
     private RadioButton radioButtonWifi;
     private RadioButton radioButtonData;
+    private AchievementsHoritzontalAdapter adapterAchievements;
 
     private FirebaseAuth mAuth;
 
@@ -213,12 +228,13 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         recyclerViewAchievements.setLayoutManager(achievementsManager);
 
         List<Achievement> achievementsCompleted = user.getCompletedAchievements();
-        final AchievementsHoritzontalAdapter adapterAchievements = new AchievementsHoritzontalAdapter(getContext(), achievementsCompleted);
+        adapterAchievements = new AchievementsHoritzontalAdapter(getContext(), achievementsCompleted);
         recyclerViewAchievements.setAdapter(adapterAchievements);
 
         //Settings button
         ImageButton buttonSettings = (ImageButton) view.findViewById(R.id.buttonSettingsProfile);
         dialog = new Dialog(getContext());
+        dialogUpgrade = new Dialog(getContext());
         buttonSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -237,27 +253,32 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
             }
         });
 
+        /* Initialize a PayPal Services */
+        Intent intent = new Intent(getContext(), PayPalService.class);
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+        getActivity().startService(intent);
+
         //Upgrade account button
         Button buttonUpgrade = (Button) view.findViewById(R.id.upgrade_button);
         buttonUpgrade.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        user.setPremium(true);
+                        openUpgrade(view);
+                        //user.setPremium(true);
 
                         //For every achievement
-                        user.getAchievements().get(4).incrementValue(1);
+                        /*user.getAchievements().get(4).incrementValue(1);
                         textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + user.getAchievements().size());
 
                         String achievementsToPref = new Gson().toJson(user.getAchievements());
                         prefs.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
 
                         user.saveToFirebase();
-                        //--
 
                         adapterAchievements.setAchivementsList(user.getCompletedAchievements());
                         adapterAchievements.notifyDataSetChanged();
-                        imageViewPremiumBadge.setVisibility(View.VISIBLE);
+                        imageViewPremiumBadge.setVisibility(View.VISIBLE);*/
                     }
                 }
         );
@@ -275,7 +296,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         return view;
     }
 
-    private void openSettings(View view){
+    private void openSettings(View view) {
         dialog.setContentView(R.layout.settings_popup);
         checkBox = (CheckBox) dialog.findViewById(R.id.checkbox_notifiactions);
         radioButtonWifi = (RadioButton) dialog.findViewById(R.id.wifiOnly);
@@ -304,6 +325,37 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         dialog.show();
+    }
+
+    private void openUpgrade(View view) {
+        dialogUpgrade.setContentView(R.layout.upgrade_popup);
+
+        ImageButton buttonClose = (ImageButton) dialogUpgrade.findViewById(R.id.close_upgrade_popup);
+        buttonClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogUpgrade.dismiss();
+            }
+        });
+
+        Button buttonPay = (Button) dialogUpgrade.findViewById(R.id.paymentButton);
+        buttonPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PayPalPayment payment = new PayPalPayment(new BigDecimal(Double.toString(3.99)),
+                        "EUR", "Bookify", PayPalPayment.PAYMENT_INTENT_SALE);
+
+                // send the same configuration for restart resiliency
+                Intent intent = new Intent(getContext(), PaymentActivity.class);
+                intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+                intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payment);
+
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        dialogUpgrade.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        dialogUpgrade.show();
     }
 
     private void loadValues() {
@@ -345,6 +397,40 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 0) {
+            if (resultCode == Activity.RESULT_OK) {
+                PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+                if (confirm != null) {
+                    dialogUpgrade.dismiss();
+
+                    Toast.makeText(getContext(), "The payment had been completed", Toast.LENGTH_LONG).show();
+
+                    user.setPremium(true);
+
+                    user.getAchievements().get(4).incrementValue(1);
+                    textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + user.getAchievements().size());
+
+                    String achievementsToPref = new Gson().toJson(user.getAchievements());
+                    prefs.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
+
+                    user.saveToFirebase();
+
+                    adapterAchievements.setAchivementsList(user.getCompletedAchievements());
+                    adapterAchievements.notifyDataSetChanged();
+
+                    imageViewPremiumBadge.setVisibility(View.VISIBLE);
+                }
+
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Toast.makeText(getContext(), "The user canceled the operation", Toast.LENGTH_LONG).show();
+            } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+                Toast.makeText(getContext(), "An invalid Payment or PayPalConfiguration was submitted. Please see the docs", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
     public void onItemClick(View view, int position) {
         MainActivity activity = (MainActivity) getActivity();
         if (user.getReadedBooks().size() == position)
@@ -379,6 +465,12 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().stopService(new Intent(getContext(), PayPalService.class));
     }
 
     @Override

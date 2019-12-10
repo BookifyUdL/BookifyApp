@@ -64,6 +64,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
     implementation 'com.facebook.android:facebook-login:5.9.0'
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
