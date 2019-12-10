@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_margin="5dp"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="8dp">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutCardView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="@color/colorGrayCardBackground">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/shop_logo"
+            android:layout_width="120dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/profile_photo"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/shop_price"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"
+                android:text="10.59"/>
+
+            <TextView
+                android:id="@+id/currency"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorBlack"
+                android:text="@string/euro_currency"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/go_shop_button"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_go_shop_button" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

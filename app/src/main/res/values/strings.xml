@@ -24,7 +24,7 @@
     <string name="done_first_form_title">Thank you!</string>
     <string name="done_first_form_text">Finally, we have correctly configured your library and have optimized your searches based on the options that you have chosen. These options can be modified in the future if you wish.</string>
     <string name="done_redirect_first_form_text">To start using the application, press "done" for the changes to take effect.</string>
-
+    <string name="done_end">Done</string>
     <string name="last_added">Latest additions</string>
     <string name="search_bar">Search by book title or users</string>
 
@@ -114,6 +114,8 @@
     <string name="rate_example" translatable="false">4.4</string>
     <string name="upgrade_account_text">Upgrade account</string>
     <string name="configuration_text">Configuration</string>
+
+    <string name="euro_currency">€</string>
 
     <string name="publish_title">PUBLISH</string>
     <string name="delete">Delete Comment</string>

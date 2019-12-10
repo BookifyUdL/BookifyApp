@@ -109,6 +109,7 @@
                             android:src="@drawable/ic_add_white" />
 
                         <ImageButton
+                            android:id="@+id/show_shops_popup"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"

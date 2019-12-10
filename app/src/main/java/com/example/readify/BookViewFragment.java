@@ -3,6 +3,7 @@ package com.example.readify;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -24,7 +25,9 @@ import android.widget.Toast;
 import com.example.readify.Adapters.BooksHorizontalAdapter;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.User;
+import com.example.readify.Popups.BookReadedPopup;
 import com.example.readify.Popups.ReviewsPopup;
+import com.example.readify.Popups.ShopsPopup;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -79,6 +82,15 @@ public class BookViewFragment extends Fragment {
         return fragment;
     }
 
+    private void shopShopsPopup(){
+        /*BookReadedPopup dialog =  new BookReadedPopup(get, holder, fragmentManager, book, user);
+        FragmentTransaction ft2 = fragmentManager.beginTransaction();
+        dialog.show(ft2, "book_readed_popup");*/
+        ShopsPopup dialog = new ShopsPopup();
+        FragmentTransaction ft2 = getFragmentManager().beginTransaction();
+        dialog.show(ft2, "shops_popup");
+    }
+
     private void showReviewsPopup(){
         ReviewsPopup dialog =  new ReviewsPopup();
         //dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -124,6 +136,14 @@ public class BookViewFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 showReviewsPopup();
+            }
+        });
+
+        ImageButton showShops = (ImageButton) view.findViewById(R.id.show_shops_popup);
+        showShops.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shopShopsPopup();
             }
         });
 

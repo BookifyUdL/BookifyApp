@@ -42,6 +42,7 @@ public class ReadingFragment extends Fragment {
     BooksListVerticalAdapter readingBooksAdapter;
     RecyclerView recyclerView;
     RecyclerView recyclerView2;
+    private LinearLayout emptyLayout;
     private LinearLayout anyBookMessage;
     private LinearLayout readingTextLayout;
     private LinearLayout pendingTextLayout;
@@ -81,6 +82,7 @@ public class ReadingFragment extends Fragment {
 
         LinearLayout discoverButton = view.findViewById(R.id.discover_layout);
         anyBookMessage = (LinearLayout) view.findViewById(R.id.any_book_layout);
+        emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);
         readingTextLayout = (LinearLayout) view.findViewById(R.id.reading_text_layout);
         pendingTextLayout = (LinearLayout) view.findViewById(R.id.pending_text_layout);
         discoverButton.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +103,8 @@ public class ReadingFragment extends Fragment {
         recyclerView.setAdapter(readingBooksAdapter);
         ItemTouchHelper itemTouchHelperReading = new ItemTouchHelper(new SwipeToReadOrDeleteCallback(readingBooksAdapter, false));
         itemTouchHelperReading.attachToRecyclerView(recyclerView);
+
+
 
 
         LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -127,12 +131,14 @@ public class ReadingFragment extends Fragment {
 
         if (user.getReading().isEmpty() && user.getInterested().isEmpty()) {
             anyBookMessage.setVisibility(View.VISIBLE);
+            emptyLayout.setVisibility(View.GONE);
             pendingTextLayout.setVisibility(View.GONE);
             readingTextLayout.setVisibility(View.GONE);
             recyclerView.setVisibility(View.GONE);
             recyclerView2.setVisibility(View.GONE);
         } else {
             anyBookMessage.setVisibility(View.GONE);
+            emptyLayout.setVisibility(View.VISIBLE);
             pendingTextLayout.setVisibility(View.VISIBLE);
             readingTextLayout.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.VISIBLE);

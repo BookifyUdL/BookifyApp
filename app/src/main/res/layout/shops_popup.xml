@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:tag="shops_popup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/top_linear_layout">
+
+    <!--<RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/top_relative_layout">
+        <ImageView
+            android:id="@+id/cover"
+            android:layout_width="100dp"
+            android:layout_height="150dp"
+            android:src="@drawable/lib1"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:foregroundGravity="center_horizontal"/>
+        <LinearLayout
+            android:layout_marginTop="120dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@android:color/background_light"/>
+    </RelativeLayout>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="@dimen/margin_10dp"
+        android:layout_marginEnd="@dimen/margin_10dp"
+        android:background="@color/colorBlank"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:background="@color/colorBlank"
+            android:orientation="horizontal"
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="start">
+
+                <ImageButton
+                    android:id="@+id/close_arrow"
+                    android:background="@color/cardview_light_background"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="@dimen/margin_10dp"
+                    android:src="@drawable/ic_close_arrow"
+                    android:contentDescription="@string/imageview_adapter_text" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/info_text"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_horizontal"
+                    android:text="@string/booktitle_text"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="@dimen/margin_5dp"
+                    android:layout_marginBottom="@dimen/margin_20dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/shops_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_5dp"
+                        android:layout_marginBottom="@dimen/margin_5dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/book_cover_layout_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="@dimen/margin_10dp"
+            android:src="@drawable/lib1"
+            android:foregroundGravity="center_horizontal"
+            android:layout_centerHorizontal="true"/>
+
+    </RelativeLayout>
+
+
+    <!--LinearLayout
+        android:background="@color/colorBlank"
+        android:orientation="horizontal"
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="start">
+            <ImageButton
+                android:id="@+id/close_arrow"
+                android:background="@color/cardview_light_background"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_10dp"
+                android:layout_marginTop="@dimen/margin_10dp"
+                android:src="@drawable/ic_close_arrow"
+                android:contentDescription="@string/imageview_adapter_text" />
+        </LinearLayout>
+        <TextView
+            style="@style/TextAppearance.AppCompat.Title"
+            android:id="@+id/info_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/booktitle_text"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>-->
+
+
+
+
+    <!--androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/books_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"/-->
+
+</RelativeLayout>

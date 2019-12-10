@@ -16,6 +16,7 @@
     <string name="done_first_form_title">Gracias!</string>
     <string name="done_first_form_text">Finalmente, hemos configurado correctamente su biblioteca y hemos optimizado sus búsquedas en función de las opciones que haya elegido. Estas opciones se pueden modificar en el futuro si lo desea.</string>
     <string name="done_redirect_first_form_text">Para comenzar a usar la aplicación, presione "listo" para que los cambios surtan efecto.</string>
+    <string name="done_end">Listo</string>
 
     <string name="last_added">Últimos añadidos</string>
     <string name="top_rated">Mejor valorados</string>
@@ -102,6 +103,7 @@
     <string name="any_book_yet">Todavía no has añadido ningún libro. Haz click en el botón para descubrir nuevos libros!</string>
     <string name="disconnect_text">Disconnect</string>
     <string name="achievements_text">Achievements</string>
+    <string name="euro_currency">€</string>
 
     <string name="facebook_app_id">2457878697756823</string>
     <string name="fb_login_protocol_scheme">fb2457878697756823</string>

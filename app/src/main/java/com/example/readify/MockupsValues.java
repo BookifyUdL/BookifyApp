@@ -6,13 +6,18 @@ import android.widget.ArrayAdapter;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Emoji;
 import com.example.readify.Models.Genre;
+import com.example.readify.Models.Item;
 import com.example.readify.Models.Review;
+import com.example.readify.Models.Shop;
 import com.example.readify.Models.User;
 import com.example.readify.Models.Achievement;
 
 import java.util.ArrayList;
 
 public class MockupsValues {
+
+    private static ArrayList<Shop> SHOPS;
+    private static ArrayList<Item> ITEMS;
 
     private static ArrayList<Genre> GENRE;
     private static ArrayList<Genre> PROFILE_GENRE_PERSONALIZED;
@@ -51,6 +56,28 @@ public class MockupsValues {
   
 
     //public void setUser(User user) { this.user = user; }
+
+    private static ArrayList<Shop> getShops(){
+        if(SHOPS == null || SHOPS.isEmpty()){
+            SHOPS = new ArrayList<>();
+            SHOPS.add(new Shop("casadellibro", "Casa del Libro"));
+            SHOPS.add(new Shop("elcorteingles", "El Corte Inglés"));
+            SHOPS.add(new Shop("fnac", "Fnac"));
+        }
+        return SHOPS;
+    }
+
+    public static ArrayList<Item> getItems(){
+        ArrayList<Shop> shops = getShops();
+        if(ITEMS == null || ITEMS.isEmpty()){
+            ITEMS = new ArrayList<>();
+            ITEMS.add(new Item(10.5, shops.get(0)));
+            ITEMS.add(new Item(7.5, shops.get(1)));
+            ITEMS.add(new Item(8, shops.get(2)));
+
+        }
+        return ITEMS;
+    }
 
     public static ArrayList<User> getUsers(){
         if(USERS == null || USERS.isEmpty()){
