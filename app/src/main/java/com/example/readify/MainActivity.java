@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements
         if (status.equals(getResources().getString(R.string.wifi_ok))) {
 
         } else if (status.equals(getResources().getString(R.string.mobile_ok)) && connectivityFull) {
-            
+
         } else {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
