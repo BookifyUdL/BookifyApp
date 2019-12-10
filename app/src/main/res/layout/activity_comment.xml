@@ -10,192 +10,66 @@
         android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/colorPrimaryDark">
 
         <LinearLayout
-            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
             android:gravity="start"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/close_arrow"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_10dp"
-                android:layout_marginTop="@dimen/margin_10dp"
-                android:background="@color/cardview_light_background"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/close"
+                android:scaleType="centerInside"
+                android:background="@android:color/transparent"
                 android:contentDescription="@string/imageview_adapter_text"
-                android:src="@drawable/ic_close_button" />
+                android:padding="18dp"
+                android:layout_gravity="center"/>
 
-            <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_review_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorGrayCardBackground"
-                android:foregroundTint="@color/colorGrayCardBackground"
-                android:src="@drawable/ic_add_book" />-->
         </LinearLayout>
 
         <LinearLayout
-            android:layout_gravity="center_vertical"
-            android:paddingEnd="@dimen/margin_5dp"
-            android:paddingStart="@dimen/margin_5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/margin_10dp"
             android:gravity="end"
             android:orientation="horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/info_text"
-                style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
+                android:background="@color/colorPrimaryLight"
                 android:text="@string/publish_title"
-                android:textColor="@color/colorBlack"
-                android:background="@drawable/rounded_button_publish"
-                android:paddingEnd="2dp"
-                android:paddingStart="2dp"
+                android:textColor="@color/icons"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
-            <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/add_review_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorGrayCardBackground"
-                android:foregroundTint="@color/colorGrayCardBackground"
-                android:src="@drawable/ic_add_book" />-->
         </LinearLayout>
 
-        <!--LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/linearLayout"
-            android:gravity="end">
-
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/roudend_image_button"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="@dimen/margin_10dp"
-                android:layout_marginTop="@dimen/margin_10dp"
-                android:src="@drawable/ic_add_book"/>
-
-
-        </LinearLayout-->
     </LinearLayout>
 
-
     <ScrollView
-        android:layout_below="@+id/linear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear">
 
         <LinearLayout
             android:id="@+id/comment_layout"
             android:layout_width="match_parent"
             android:layout_height="350dp"
-            android:layout_marginStart="@dimen/margin_5dp"
-            android:layout_marginTop="@dimen/margin_5dp"
-            android:layout_marginEnd="@dimen/margin_5dp"
-            android:layout_marginBottom="@dimen/margin_5dp"
+            android:layout_margin="@dimen/margin_15dp"
             android:orientation="vertical">
 
-
-            <!--<androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorBlack"
-                app:cardCornerRadius="5dp">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="1dp"
-                    android:backgroundTint="@color/colorDarkGrayCardBackground"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="20dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/margin_5dp"
-                            android:orientation="horizontal">
-
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:id="@+id/profile_image"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:src="@drawable/user1"
-                                app:civ_border_color="#FFF"
-                                app:civ_border_width="2dp" />
-
-                            <TextView
-                                android:id="@+id/user_name"
-                                style="@style/TextAppearance.AppCompat.Title"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_margin="@dimen/margin_5dp"
-                                android:textColor="@color/colorBlack"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                        <ScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <RelativeLayout
-                                android:id="@+id/edit_text_lay"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                            </RelativeLayout>
-
-                        </ScrollView>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-            </androidx.cardview.widget.CardView>-->
-
-            <!--<com.like.LikeButton
-                app:icon_type="heart"
-                app:icon_size="25dp"
-                android:id="@+id/star_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>-->
-
-            <!--WebView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:id="@+id/webView"
-                android:layout_gravity="center_horizontal" /-->
-            <!--<ImageView
-                android:id="@+id/imageView"
-                android:contentDescription="GIff"
-                android:layout_width="wrap_content"
-                android:layout_height="200dp"/>-->
-
         </LinearLayout>
+
     </ScrollView>
-
-
-
 
 </RelativeLayout>
