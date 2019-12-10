@@ -10,6 +10,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
+import com.example.readify.Models.Author;
+import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
 import com.example.readify.Models.ServerCallback;
 import com.google.gson.JsonArray;
@@ -28,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class ApiConnector extends AsyncTask<String, Integer, String> {
 
     private static String ALL_GENRES = "genres";
+    private static String ALL_BOOKS = "books";
 
     //Context context;
     //RequestQueue queue = Volley.newRequestQueue(context);
@@ -36,6 +39,64 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
     public void setContext(Context context){
         //this.context = context;
+    }
+
+    public static void getAllBooks(Context context, final ServerCallback callback){
+        final ArrayList<Book> books = new ArrayList<>();
+        try{
+            //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, urlv + ALL_BOOKS, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            String aux = response.toString();
+                            try{
+                                //String aux2 = response.get("genres");
+                                //String aux2 = response.get("genres").toString();
+
+                                JSONArray jsonarray = new JSONArray(response.get("books").toString());
+                                for (int i = 0; i < jsonarray.length(); i++) {
+                                    JSONObject book = jsonarray.getJSONObject(i);
+                                    Author author = new Author(book.getJSONObject("author"));
+                                    Book auxBook = new Book(book.getString("_id"), book.getString("title"), author, book.getString("cover_image"));
+                                    books.add(auxBook);
+                                    /*JSONObject jsonobject = jsonarray.getJSONObject(i);
+                                    String name = jsonobject.getString("name");
+                                    String url = jsonobject.getString("url");*/
+                                }
+
+                                //MockupsValues.setGenres(genres);
+                                MockupsValues.setAllBooksForTutorial(books);
+
+                                callback.onSuccess(response);
+                                //aux2 = "";
+                            } catch (org.json.JSONException e) {
+
+                                System.out.println("Error");
+
+                            }
+                            //textView.setText("Response: " + response.toString());
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            System.out.println("Error");
+
+                        }
+                    });
+
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+            queue.start();
+            //Wait_until_Downloaded();
+            //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        //return genres;
     }
 
     public static void getGenres(Context context, final ServerCallback callback){

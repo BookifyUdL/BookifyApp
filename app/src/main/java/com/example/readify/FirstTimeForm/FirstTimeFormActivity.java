@@ -51,12 +51,16 @@ public class FirstTimeFormActivity extends AppCompatActivity
                 System.out.println("Get genres funko!!!!");
                 MockupsValues.setContext(context);
 
-                mAuth = FirebaseAuth.getInstance();
-                firebaseDatabase = FirebaseDatabase.getInstance();
-                databaseReference = firebaseDatabase.getReference(USERS);
-
-
-                fm.beginTransaction().add(R.id.main_container_first_form,genreFragment, "1").commit();
+                ApiConnector.getAllBooks(getApplicationContext(), new ServerCallback() {
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        System.out.println("Get allBooks funko!!!!");
+                        mAuth = FirebaseAuth.getInstance();
+                        firebaseDatabase = FirebaseDatabase.getInstance();
+                        databaseReference = firebaseDatabase.getReference(USERS);
+                        fm.beginTransaction().add(R.id.main_container_first_form,genreFragment, "1").commit();
+                    }
+                });
             }
         });
         //MockupsValues.setGenres(genres);

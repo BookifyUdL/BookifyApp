@@ -14,6 +14,7 @@ public class Book {
     private int year;
     private int extension;
     private Genre genre;
+    private Author auth;
     private ArrayList<Review> comments;
     private String id;
     private int sumRatings;
@@ -21,10 +22,12 @@ public class Book {
     private boolean isNew;
 
 
-    public Book(String title, String author){
-        //this.id = id;
+    public Book(String id, String title, Author author, String picture){
+        this.id = id;
         this.title = title;
-        this.author = author;
+        this.auth = author;
+        this.picture = picture;
+        this.author = author.getName();
     }
 
     public Book(JSONObject jsonobject){
@@ -121,6 +124,10 @@ public class Book {
     public void setAuthor(String author) {
         this.author = author;
     }
+
+    /*public Author getAuth(){
+        return this.auth;
+    }*/
 
     public String getPicture() {
         return picture;

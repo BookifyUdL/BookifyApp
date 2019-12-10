@@ -224,13 +224,19 @@ public class MockupsValues {
     }
 
     public static ArrayList<Book> getAllBooksForTutorial(){
-        if(ALL_BOOKS_FOR_TUTORIAL == null || ALL_BOOKS_FOR_TUTORIAL.isEmpty() || ALL_BOOKS_FOR_TUTORIAL.size() != 15){
+        /*if(ALL_BOOKS_FOR_TUTORIAL == null || ALL_BOOKS_FOR_TUTORIAL.isEmpty() || ALL_BOOKS_FOR_TUTORIAL.size() != 15){
             ALL_BOOKS_FOR_TUTORIAL = new ArrayList<>();
             ALL_BOOKS_FOR_TUTORIAL.addAll(getLastAddedBooks());
             ALL_BOOKS_FOR_TUTORIAL.addAll(getSameAuthorBooks());
             ALL_BOOKS_FOR_TUTORIAL.addAll(getSameGenderBooks());
-        }
+        }*/
+        if(ALL_BOOKS_FOR_TUTORIAL == null)
+            ALL_BOOKS_FOR_TUTORIAL = new ArrayList<>();
         return ALL_BOOKS_FOR_TUTORIAL;
+    }
+
+    public static void setAllBooksForTutorial(ArrayList<Book> booksForTutorial){
+        ALL_BOOKS_FOR_TUTORIAL = booksForTutorial;
     }
 
 
