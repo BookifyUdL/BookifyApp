@@ -7,6 +7,7 @@ import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 
@@ -68,6 +69,7 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -391,37 +393,53 @@ public class LoginActivity extends AppCompatActivity {
 
     //Methods to update an app after to do a login
     private void updateUI(FirebaseUser currentUser) {
-        /*MockupsValues.setContext(this);
+        try {
+            MockupsValues.setContext(this);
+            MockupsValues.getUser().setFirebaseId(currentUser.getUid());
+            Uri url =currentUser.getPhotoUrl();
+            MockupsValues.getUser().setPicture(url.toString());
 
-        pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
-        pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
-        pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
-        pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString()).apply();
+            /*pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
+            pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
+            pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
+            pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString()).apply();
 
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        readDataFromFirebase(currentUser.getUid(), intent);*/
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            readDataFromFirebase(currentUser.getUid(), intent);*/
 
-        Intent intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
-        startActivity(intent);
-        finish();
+            Intent intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+            startActivity(intent);
+            finish();
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            Toast.makeText(getApplicationContext(), "Error in login 1", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateUI(FirebaseUser currentUser, Task<AuthResult> task) {
-        MockupsValues.setContext(this);
-        Intent intent;
-        /*pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
-        pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
-        pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
-        pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString() + "?type=large").apply();
+        try {
+            MockupsValues.setContext(this);
+            MockupsValues.getUser().setFirebaseId(currentUser.getUid());
+            Uri url =currentUser.getPhotoUrl();
+            MockupsValues.getUser().setPicture(url.toString());
+            Intent intent;
+            /*pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
+            pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
+            pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
+            pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString() + "?type=large").apply();
 
 
-        if (!task.getResult().getAdditionalUserInfo().isNewUser()) {
-            intent = new Intent(LoginActivity.this, MainActivity.class);
-            readDataFromFirebase(currentUser.getUid(), intent);
-        } else {*/
-            intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
-            startActivity(intent);
-            finish();
-        //}
+            if (!task.getResult().getAdditionalUserInfo().isNewUser()) {
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                readDataFromFirebase(currentUser.getUid(), intent);
+            } else {*/
+                intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+                startActivity(intent);
+                finish();
+                //}
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            Toast.makeText(getApplicationContext(), "Error in login 2", Toast.LENGTH_SHORT).show();
+        }
     }
 }

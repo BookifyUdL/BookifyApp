@@ -20,7 +20,7 @@ public class Genre {
 
     public Genre(JSONObject jsonobject){
         try{
-            this.id = id;
+            this.id = jsonobject.getString("_id");
             this.name = jsonobject.getString("name");
             this.picture = jsonobject.getString("picture");
         } catch (JSONException e) {

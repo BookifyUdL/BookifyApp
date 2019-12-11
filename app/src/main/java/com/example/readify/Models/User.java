@@ -84,6 +84,15 @@ public class User {
         this.achievements = MockupsValues.getAchievementsPersonalized();
     }
 
+
+    public String getFirebaseId() {
+        return firebaseId;
+    }
+
+    public void setFirebaseId(String firebaseId) {
+        this.firebaseId = firebaseId;
+    }
+
     public static JSONObject toJSON(User user){
 
         JSONObject jsonObject= new JSONObject();
@@ -91,7 +100,7 @@ public class User {
             jsonObject.put("name", user.getName());
             //MISSING ACHIEVEMENTS
             jsonObject.put("achievements", new JSONArray());
-            jsonObject.put("firebaseId", "verga");
+            jsonObject.put("firebaseId", user.getFirebaseId());
             jsonObject.put("userPicture", user.getPicture());
             jsonObject.put("premium", user.isPremium());
             jsonObject.put("library", Book.bookListToJSON(user.getLibrary()));
