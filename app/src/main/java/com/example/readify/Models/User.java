@@ -84,6 +84,33 @@ public class User {
         this.achievements = MockupsValues.getAchievementsPersonalized();
     }
 
+    public User(JSONObject userJson){
+        try{
+           JSONObject user = userJson.getJSONArray("genre").getJSONObject(0);
+           this.premium = user.getBoolean("premium");
+           // MIssing Achivements
+           this.achievements = new ArrayList<>();
+           this.library = Book.bookListFromJson(user.getJSONArray("library"));
+           this.reading = Book.bookListFromJson(user.getJSONArray("reading_book"));
+           this.interested = Book.bookListFromJson(user.getJSONArray("interested_book"));
+           this.uid = user.getString("uid");
+           this.firebaseId = user.getString("firebaseId");
+           this.picture = user.getString("userPicture");
+           this.name = user.getString("name");
+           this.email = user.getString("email");
+
+           //Falta cridar per cada id de genre el genre en concret
+
+
+           //this.read
+
+        } catch (Error e){
+            System.out.println("Error creating user from json object");
+        } catch (JSONException ex) {
+            System.out.println("Error creating user from json object. Catching json");
+        }
+    }
+
 
     public String getFirebaseId() {
         return firebaseId;

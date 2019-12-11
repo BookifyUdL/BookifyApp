@@ -233,7 +233,6 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
     public static void getGenres(Context context, final ServerCallback callback){
         final ArrayList<Genre> genres = new ArrayList<>();
         try{
-            RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, urlv + ALL_GENRES, null, new Response.Listener<JSONObject>() {
 
@@ -274,7 +273,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
             RequestQueue queue = Volley.newRequestQueue(context);
             queue.add(jsonObjectRequest);
-            queue.start();
+            //queue.start();
             //Wait_until_Downloaded();
             //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
         } catch (Exception e) {

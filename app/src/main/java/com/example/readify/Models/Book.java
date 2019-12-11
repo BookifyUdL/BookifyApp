@@ -72,6 +72,19 @@ public class Book {
         }
     }
 
+    public static ArrayList<Book> bookListFromJson(JSONArray bookListJson){
+        try {
+            ArrayList<Book> booksList = new ArrayList<>();
+            for (int i=0; i < bookListJson.length(); i++){
+                booksList.add(new Book(bookListJson.getJSONObject(i)));
+            }
+            return  booksList;
+        } catch (Exception e) {
+
+        }
+        return new ArrayList<>();
+    }
+
     public static JSONArray bookListToJSON(ArrayList<Book> books){
         JSONArray booksArray = new JSONArray();
         for (Book book : books){

@@ -29,6 +29,15 @@ public class Genre {
         }
     }
 
+    /*public static ArrayList<Genre> genresFromJSONArray(JSONArray jsonArray){
+        try {
+            ArrayList<Genre>
+        } catch (Exception e) {
+
+        }
+        return new ArrayList<>();
+    }*/
+
     public static JSONArray  genresListToJSON(ArrayList<Genre> genres){
         JSONArray genresArray = new JSONArray();
         for (Genre genre : genres){
