@@ -40,6 +40,7 @@ public class MockupsValues {
     private static ArrayList<User> USERS;
     public  static User user = new User();
     private static Context context;
+    private static boolean isUserInDatabase = false;
 
 
     //private static User userProfile = new User("Connor MacArthur", true, getPersonalizedGenres(), getLastAddedBooksWithReads());
@@ -65,6 +66,14 @@ public class MockupsValues {
             SHOPS.add(new Shop("fnac", "Fnac"));
         }
         return SHOPS;
+    }
+
+    public static void setIsUserInDatabase(boolean isOrNot){
+        isUserInDatabase = isOrNot;
+    }
+
+    public static boolean getIsUserInDatabase(){
+        return isUserInDatabase;
     }
 
     public static ArrayList<Item> getItems(){

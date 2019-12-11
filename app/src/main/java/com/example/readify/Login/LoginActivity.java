@@ -95,6 +95,8 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButton;
 
+    //private boolean isInDatabase = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,9 +133,13 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-
         if (currentUser != null)
+        {
+            //GET user info ::
+            MockupsValues.setIsUserInDatabase(true);
             updateUI(currentUser);
+
+        }
     }
 
     private void initViews() {

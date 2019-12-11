@@ -93,6 +93,74 @@ public class User {
         this.firebaseId = firebaseId;
     }
 
+    public static JSONArray toJSONPatch(User user){
+        JSONArray jsonArray = new JSONArray();
+        try {
+            JSONObject nameJSON = new JSONObject();
+            nameJSON.put("propName", "name");
+            nameJSON.put("value", user.getName());
+            jsonArray.put(nameJSON);
+
+            //MISSING ACHIEVEMENTS
+            JSONObject achievementsJSON = new JSONObject();
+            achievementsJSON.put("propName", "achievements");
+            achievementsJSON.put("value", new JSONArray());
+            jsonArray.put(achievementsJSON);
+
+            JSONObject firebaseIdJSON = new JSONObject();
+            firebaseIdJSON.put("propName", "firebaseId");
+            firebaseIdJSON.put("value", user.getFirebaseId());
+            jsonArray.put(firebaseIdJSON);
+
+            JSONObject userPictureJSON = new JSONObject();
+            userPictureJSON.put("propName", "userPicture");
+            userPictureJSON.put("value", user.getPicture());
+            jsonArray.put(userPictureJSON);
+
+            JSONObject premiumJSON = new JSONObject();
+            premiumJSON.put("propName", "premium");
+            premiumJSON.put("value", user.isPremium());
+            jsonArray.put(premiumJSON);
+
+            JSONObject libraryJSON = new JSONObject();
+            libraryJSON.put("propName", "library");
+            libraryJSON.put("value", Book.bookListToJSON(user.getLibrary()));
+            jsonArray.put(libraryJSON);
+
+            JSONObject readBooksJSON = new JSONObject();
+            readBooksJSON.put("propName", "read_book");
+            readBooksJSON.put("value", Book.bookListToJSON(user.getReadedBooks()));
+            jsonArray.put(readBooksJSON);
+
+
+            JSONObject interestedBooksJSON = new JSONObject();
+            interestedBooksJSON.put("propName", "interested_book");
+            interestedBooksJSON.put("value", Book.bookListToJSON(user.getInterested()));
+            jsonArray.put(interestedBooksJSON);
+
+            JSONObject readingBooksJSON = new JSONObject();
+            readingBooksJSON.put("propName", "reading_book");
+            readingBooksJSON.put("value", Book.bookListToJSON(user.getReadingBooks()));
+            jsonArray.put(readBooksJSON);
+
+            JSONObject emailJSON = new JSONObject();
+            emailJSON.put("propName", "email");
+            emailJSON.put("value", user.getEmail());
+            jsonArray.put(emailJSON);
+
+            JSONObject genresJSON = new JSONObject();
+            genresJSON.put("propName", "genres");
+            genresJSON.put("value", Genre.genresListToJSON(user.getGenres()));
+            jsonArray.put(genresJSON);
+
+            return jsonArray;
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return new JSONArray();
+        }
+    }
+
     public static JSONObject toJSON(User user){
 
         JSONObject jsonObject= new JSONObject();
@@ -107,7 +175,7 @@ public class User {
 
             jsonObject.put("read_book", Book.bookListToJSON(user.getReadedBooks()));
             jsonObject.put("interested_book", Book.bookListToJSON(user.getInterested()));
-            jsonObject.put("reading_books", Book.bookListToJSON(user.getReadingBooks()));
+            jsonObject.put("reading_book", Book.bookListToJSON(user.getReadingBooks()));
 
             jsonObject.put("email", user.getEmail());
             jsonObject.put("genres", Genre.genresListToJSON(user.getGenres()));
@@ -135,6 +203,8 @@ public class User {
         }
 
     }
+
+
 
     public String getUid() {
         return uid;
@@ -185,6 +255,8 @@ public class User {
     }
 
     public ArrayList<Book> getReadingBooks() {
+        if(this.reading == null)
+            this.reading = new ArrayList<>();
         return reading;
     }
 
@@ -201,6 +273,8 @@ public class User {
     }
 
     public ArrayList<Book> getReading() {
+        if(this.reading == null)
+            this.reading = new ArrayList<>();
         return reading;
     }
 
@@ -224,7 +298,11 @@ public class User {
     }
 
     public ArrayList<Book> getLibrary() {
-        return library;
+        ArrayList<Book> lib = new ArrayList<>();
+        lib.addAll(getReadingBooks());
+        lib.addAll(getInterested());
+        lib.addAll(getReadedBooks());
+        return lib;
     }
 
     public void setLibrary(ArrayList<Book> library) {
@@ -311,6 +389,8 @@ public class User {
     }
 
     public ArrayList<Book> getInterested() {
+        if(this.interested == null)
+            this.interested = new ArrayList<>();
         return interested;
     }
 

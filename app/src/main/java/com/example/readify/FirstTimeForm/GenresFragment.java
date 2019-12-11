@@ -258,6 +258,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
                         MockupsValues.getUser().setAchievements(MockupsValues.getAchievements());
 
                         comunicateFragmentsFirstForm.exitForm(MockupsValues.getUser());
+                        addOrUpdateUser();
                     }
                 });
             }
@@ -265,6 +266,27 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
             return view;
         }
     };
+
+
+    private void addOrUpdateUser(){
+        if(MockupsValues.getIsUserInDatabase()){
+            ApiConnector.updateUser(getContext(), new ServerCallback() {
+                @Override
+                public void onSuccess(JSONObject result) {
+                    System.out.println("Get allBooks funko!!!!");
+                    comunicateFragmentsFirstForm.doneForm(MockupsValues.getUser());
+                }
+            }, MockupsValues.getUser());
+        } else {
+            ApiConnector.addUserToDatabase(getContext(), new ServerCallback() {
+                @Override
+                public void onSuccess(JSONObject result) {
+                    System.out.println("Get allBooks funko!!!!");
+                    comunicateFragmentsFirstForm.doneForm(MockupsValues.getUser());
+                }
+            }, MockupsValues.getUser());
+        }
+    }
 
     private void showTutorialDonePopup(){
         AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
@@ -296,13 +318,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
                         MockupsValues.getUser().setAchievements(MockupsValues.getAchievements());
 
                         dialog.cancel();
-                        ApiConnector.addUserToDatabase(getContext(), new ServerCallback() {
-                            @Override
-                            public void onSuccess(JSONObject result) {
-                                System.out.println("Get allBooks funko!!!!");
-                                comunicateFragmentsFirstForm.doneForm(MockupsValues.getUser());
-                            }
-                        }, MockupsValues.getUser());
+                        addOrUpdateUser();
 
                     }
                 });
