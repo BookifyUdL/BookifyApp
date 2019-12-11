@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,24 +21,20 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.readify.Adapters.BooksGridAdapter;
 import com.example.readify.Adapters.BooksListVerticalAdapter;
 import com.example.readify.Adapters.EmojisAdapter;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Emoji;
-import com.example.readify.Models.Genre;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.google.gson.Gson;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.ListIterator;
 
 public class BookReadedPopup extends DialogFragment implements Popup {
 
@@ -187,7 +181,16 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     private void acceptButtonClicked(){
         ArrayList<Book> library = user.getLibrary();
         book.setRead(true);
+
+        ListIterator<Book> itr = library.listIterator();
+        while (itr.hasNext()) {
+            Book tmp = itr.next();
+            if (tmp.getTitle().equals(book.getTitle()))
+                library.remove(tmp);
+        }
+
         library.add(0, book);
+
         user.setLibrary(library);
         //MockupsValues.user.setLibraryBookAsRead(book);
         String libraryToPref = new Gson().toJson(user.getLibrary());
