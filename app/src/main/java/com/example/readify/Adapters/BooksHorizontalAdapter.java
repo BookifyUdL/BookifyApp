@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontalAdapter.ViewHolder> {
 
@@ -66,30 +67,34 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
             holder.lastView.setVisibility(View.VISIBLE);
         } else {
             String namePicture = mViewBooks.get(position).getPicture();
-            holder.imageLayout.setBackground(ContextCompat.getDrawable(holder.imageLayout.getContext(),
+            holder.imageLayout.setImageDrawable(ContextCompat.getDrawable(holder.imageLayout.getContext(),
                     holder.imageLayout.getContext().getResources().getIdentifier(namePicture, "drawable", holder.layout.getContext().getPackageName())));
-            if(user.getInterested().contains(mViewBooks.get(position))){
-                setAddButtonIcon(holder);
-            } else {
-                holder.addButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        setAddButtonIcon(holder);
-                        Book book = mViewBooks.get(position);
 
-                        ArrayList<Book> pending = user.getInterested();
-                        pending.add(book);
-                        user.setInterested(pending);
+            holder.addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setAddButtonIcon(holder);
+                    Book book = mViewBooks.get(position);
 
-                        String interestedToPref = new Gson().toJson(user.getInterested());
-                        pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+                    ArrayList<Book> pending = user.getInterested();
+                    pending.add(book);
+                    user.setInterested(pending);
 
-                        //MockupsValues.addPendingBook(book);
-                        activity.notifyPendingListChanged(user);
-                        Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
+                    String interestedToPref = new Gson().toJson(user.getInterested());
+                    pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
 
-                    }
-                });
+                    //MockupsValues.addPendingBook(book);
+                    activity.notifyPendingListChanged(user);
+                    Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
+
+                }
+            });
+
+            ListIterator<Book> itr = user.getLibrary().listIterator();
+            while (itr.hasNext()) {
+                Book tmp = itr.next();
+                if (tmp.getTitle().equals(mViewBooks.get(position).getTitle()))
+                    setAddButtonIcon(holder);
             }
         }
     }
@@ -108,7 +113,8 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageButton addButton;
         View lastView;
-        RelativeLayout layout, imageLayout;
+        RelativeLayout layout;
+        ImageView imageLayout;
 
         ViewHolder(View itemView) {
             super(itemView);

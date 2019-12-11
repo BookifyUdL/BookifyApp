@@ -151,9 +151,6 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         String readingToPref = new Gson().toJson(user.getReading());
         prefs.edit().putString("com.example.readify.reading", readingToPref).apply();
 
-        //MockupsValues.addPendingBook(book);
-        //MockupsValues.removeReadingListBook(book);
-
         activity.notifyReadingListChanged(user);
         activity.notifyPendingListChanged(user);
     }

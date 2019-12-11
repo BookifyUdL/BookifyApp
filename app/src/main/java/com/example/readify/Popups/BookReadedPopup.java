@@ -63,7 +63,6 @@ public class BookReadedPopup extends DialogFragment implements Popup {
             int index = Integer.parseInt(view.getTag().toString());
             for (int i = 0; i < stars.size(); i++){
                 if(i < index){
-                    //stars.get(i).setBackgroundDrawable();
                     Drawable drawable = ContextCompat.getDrawable(getContext(),
                             getContext().getResources().getIdentifier("ic_star", "drawable", getContext().getPackageName()));
                     starsImage.get(i).setImageDrawable(drawable);
