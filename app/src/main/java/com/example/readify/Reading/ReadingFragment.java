@@ -93,7 +93,7 @@ public class ReadingFragment extends Fragment {
             }
         });
 
-        /*Llista baix*/
+        /* Reading books */
         LinearLayoutManager verticalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.reading_books_recycler_view);
         recyclerView.setLayoutManager(verticalLayoutManagaer);
@@ -104,20 +104,20 @@ public class ReadingFragment extends Fragment {
         ItemTouchHelper itemTouchHelperReading = new ItemTouchHelper(new SwipeToReadOrDeleteCallback(readingBooksAdapter, false));
         itemTouchHelperReading.attachToRecyclerView(recyclerView);
 
-
-
-
+        /* Pending books */
         LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+
         recyclerView2 = (RecyclerView) view.findViewById(R.id.pending_books_recycler_view);
         recyclerView2.setLayoutManager(vlm);
-        //ArrayList<Book> pendingBooksList = new ArrayList<>();
-        //pendingBooksList.addAll(MockupsValues.getPendingListBooks());
+
         pendingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), user.getInterested(), user);
         pendingBooksAdapter.setIsInPendingList(true);
         recyclerView2.setAdapter(pendingBooksAdapter);
+
         ItemTouchHelper itemTouchHelperDelete = new ItemTouchHelper(new SwipeToReadOrDeleteCallback(pendingBooksAdapter, true));
         itemTouchHelperDelete.attachToRecyclerView(recyclerView2);
         shouldShowEmptyMessage();
+
         return view;
     }
 
@@ -125,7 +125,7 @@ public class ReadingFragment extends Fragment {
         if (user.getReading() == null) {
             user.setReading(new ArrayList<Book>());
         }
-        if (user.getInterested() == null){
+        if (user.getInterested() == null) {
             user.setInterested(new ArrayList<Book>());
         }
 
@@ -146,58 +146,58 @@ public class ReadingFragment extends Fragment {
         }
     }
 
-        public void readingBooksChanged () {
-            user.readFromSharedPreferences(prefs);
-            ArrayList<Book> readingBooks = user.getReadingBooks();
-            readingBooksAdapter.setBooksList(readingBooks);
-            readingBooksAdapter.notifyDataSetChanged();
-            shouldShowEmptyMessage();
-        }
+    public void readingBooksChanged() {
+        user.readFromSharedPreferences(prefs);
+        ArrayList<Book> readingBooks = user.getReadingBooks();
+        readingBooksAdapter.setBooksList(readingBooks);
+        readingBooksAdapter.notifyDataSetChanged();
+        shouldShowEmptyMessage();
+    }
 
-        public void pendingListChanged () {
-            user.readFromSharedPreferences(prefs);
-            ArrayList<Book> pendingBooks = user.getInterested();
-            pendingBooksAdapter.setBooksList(pendingBooks);
-            pendingBooksAdapter.notifyDataSetChanged();
-            shouldShowEmptyMessage();
-        }
+    public void pendingListChanged() {
+        user.readFromSharedPreferences(prefs);
+        ArrayList<Book> pendingBooks = user.getInterested();
+        pendingBooksAdapter.setBooksList(pendingBooks);
+        pendingBooksAdapter.notifyDataSetChanged();
+        shouldShowEmptyMessage();
+    }
 
-        // TODO: Rename method, update argument and hook method into UI event
-        public void onButtonPressed (Uri uri){
-            if (mListener != null) {
-                mListener.onFragmentInteraction(uri);
-            }
-        }
-
-        @Override
-        public void onAttach (Context context){
-            super.onAttach(context);
-            if (context instanceof OnFragmentInteractionListener) {
-                mListener = (OnFragmentInteractionListener) context;
-            } else {
-                throw new RuntimeException(context.toString()
-                        + " must implement OnFragmentInteractionListener");
-            }
-        }
-
-        @Override
-        public void onDetach () {
-            super.onDetach();
-            mListener = null;
-        }
-
-        /**
-         * This interface must be implemented by activities that contain this
-         * fragment to allow an interaction in this fragment to be communicated
-         * to the activity and potentially other fragments contained in that
-         * activity.
-         * <p>
-         * See the Android Training lesson <a href=
-         * "http://developer.android.com/training/basics/fragments/communicating.html"
-         * >Communicating with Other Fragments</a> for more information.
-         */
-        public interface OnFragmentInteractionListener {
-            // TODO: Update argument type and name
-            void onFragmentInteraction(Uri uri);
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
         }
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+}

@@ -87,8 +87,28 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
     }
 
     public void deleteItem(int position){
-        if(!booksList.isEmpty())
+        Book book  = booksList.get(position);
+        if(!booksList.isEmpty()) {
             booksList.remove(position);
+            if (isInReadingList) {
+                ArrayList<Book> reading = user.getReading();
+                reading.remove(book);
+                user.setReading(reading);
+                String readingToPref = new Gson().toJson(user.getReading());
+                prefs.edit().putString("com.example.readify.reading", readingToPref).apply();
+            } else {
+                ArrayList<Book> pending = user.getInterested();
+                pending.remove(book);
+                user.setInterested(pending);
+                String interestedToPref = new Gson().toJson(user.getInterested());
+                prefs.edit().putString("com.example.readify.interested", interestedToPref).apply();
+            }
+            user.saveToFirebase();
+        }
+
+        activity.notifyPendingListChanged(user);
+        activity.notifyReadingListChanged(user);
+
         notifyDataSetChanged();
     }
 
