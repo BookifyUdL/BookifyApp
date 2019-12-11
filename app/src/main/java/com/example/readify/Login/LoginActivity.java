@@ -29,6 +29,7 @@ import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import com.example.readify.ApiConnector;
 import com.example.readify.BuildConfig;
 import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.MainActivity;
@@ -151,6 +152,7 @@ public class LoginActivity extends AppCompatActivity {
         gifImageView = findViewById(R.id.gifImageView);
 
         pref = getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        ApiConnector.setPreferences(pref);
 
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();

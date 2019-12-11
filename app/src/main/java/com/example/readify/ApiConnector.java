@@ -1,6 +1,7 @@
 package com.example.readify;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import com.android.volley.Request;
@@ -22,6 +23,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -37,6 +39,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
     private static String ALL_BOOKS = "books";
     private static String ALL_USERS = "users";
     private static String ALL_UPDATE = "/update";
+    private static SharedPreferences preferences;
 
     //Context context;
     //RequestQueue queue = Volley.newRequestQueue(context);
@@ -47,9 +50,15 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         //this.context = context;
     }
 
+    public static void setPreferences(SharedPreferences pref){
+        preferences = pref;
+    }
+
     public static void updateUser(Context context, final ServerCallback callback, User user){
-        String id = "/5df13ba645ad971d47c7759a";
+        //String id = "/" + preferences.getString("_id", "5df13ba645ad971d47c7759a");
+        //String id = "/5df13ba645ad971d47c7759a";
         //JSONArray userJson = User.toJSONPatch(user);
+        String id = "/" + preferences.getString("com.example.readify._id", "empt");
         try{
             JSONObject jsonObject = User.toJSON(user);
             //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
@@ -122,6 +131,12 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                         @Override
                         public void onResponse(JSONObject response) {
                             System.out.println(response.toString());
+                            try {
+                                String id = response.getString("_id");
+                                preferences.edit().putString("com.example.readify._id", id).apply();
+                            } catch (JSONException ex) {
+                                System.out.println(ex);
+                            }
                             callback.onSuccess(response);
                             /*String aux = response.toString();
                             try{
