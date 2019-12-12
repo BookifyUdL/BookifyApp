@@ -51,6 +51,7 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
 
     public void setBooksList(ArrayList<Book> books){
         this.mViewBooks = books;
+        this.originalSearchList = books;
     }
 
     public void filter(String newText) {
@@ -116,13 +117,11 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageButton addButton;
-        View lastView;
         RelativeLayout layout, imageLayout;
 
         ViewHolder(View itemView) {
             super(itemView);
             pref = itemView.getContext().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-            lastView = itemView.findViewById(R.id.coverView);
             layout = itemView.findViewById(R.id.relative_layout);
             imageLayout = itemView.findViewById(R.id.image_layout);
             addButton = itemView.findViewById(R.id.add_button);

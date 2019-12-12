@@ -43,7 +43,8 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
     private FragmentManager fragmentManager;
     private SharedPreferences prefs;
 
-    // Counstructor for the Class
+    // Counstructors for the Class
+    /* Pending */
     public BooksListVerticalAdapter(MainActivity activity, Context context, ArrayList<Book> booksList, User user) {
         this.booksList = booksList;
         this.originalSearchList = new ArrayList<>();
@@ -54,18 +55,18 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         this.user = user;
     }
 
+    /* Reading */
     public BooksListVerticalAdapter(MainActivity activity, Context context, ArrayList<Book> booksList, FragmentManager manager, User user) {
         this.booksList = booksList;
         this.originalSearchList = new ArrayList<>();
         this.originalSearchList.addAll(booksList);
-        this.mContext = context;
         this.activity = activity;
+        this.mContext = context;
         this.isInReadingList = true;
         this.fragmentManager = manager;
         this.user = user;
     }
 
-    // Counstructor for the Class
     public BooksListVerticalAdapter(Context context, ArrayList<Book> booksList, User user) {
         this.booksList = booksList;
         this.originalSearchList = new ArrayList<>();
@@ -75,31 +76,50 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         this.user = user;
     }
 
-    public void setIsInPendingList(boolean bool){
+    public void setIsInPendingList(boolean bool) {
         this.isInPendingList = bool;
     }
 
-    public Context getContext(){
+    public Context getContext() {
         return mContext;
     }
 
-    public void setBooksList(ArrayList<Book> books){
+    public void setBooksList(ArrayList<Book> books) {
         this.booksList = books;
     }
 
-    public void deleteItem(int position){
-        if(!booksList.isEmpty())
+    public void deleteItem(int position) {
+        if (!booksList.isEmpty()) {
             booksList.remove(position);
+            if (isInReadingList) {
+                user.setReading(booksList);
+
+                String readingToPref = new Gson().toJson(user.getReading());
+                prefs.edit().putString("com.example.readify.reading", readingToPref).apply();
+            } else {
+                user.setInterested(booksList);
+
+                String interestedToPref = new Gson().toJson(user.getInterested());
+                prefs.edit().putString("com.example.readify.interested", interestedToPref).apply();
+            }
+
+            activity.notifyReadingListChanged(user);
+            activity.notifyPendingListChanged(user);
+
+            user.saveToFirebase();
+        }
+
         notifyDataSetChanged();
     }
 
-    public void readingListChanged(int position){
-        Book book  = booksList.get(position);
+    public void readingListChanged(int position) {
+        Book book = booksList.get(position);
+
         ArrayList<Book> reading = user.getReading();
         ArrayList<Book> pending = user.getInterested();
 
         reading.add(book);
-        pending.remove(book);
+        pending.remove(position);
 
         user.setReading(reading);
         user.setInterested(pending);
@@ -109,20 +129,20 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         String readingToPref = new Gson().toJson(user.getReading());
         prefs.edit().putString("com.example.readify.reading", readingToPref).apply();
 
-        //MockupsValues.addReadingBook(book);
-        //MockupsValues.removePendingListBook(book);
-
         activity.notifyPendingListChanged(user);
         activity.notifyReadingListChanged(user);
+
+        notifyDataSetChanged();
     }
 
-    public void pendingListChanged(int position){
-        Book book  = booksList.get(position);
+    public void pendingListChanged(int position) {
+        Book book = booksList.get(position);
+
         ArrayList<Book> reading = user.getReading();
         ArrayList<Book> pending = user.getInterested();
 
         pending.add(book);
-        reading.remove(book);
+        reading.remove(position);
 
         user.setReading(reading);
         user.setInterested(pending);
@@ -132,11 +152,10 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         String readingToPref = new Gson().toJson(user.getReading());
         prefs.edit().putString("com.example.readify.reading", readingToPref).apply();
 
-        //MockupsValues.addPendingBook(book);
-        //MockupsValues.removeReadingListBook(book);
-
         activity.notifyReadingListChanged(user);
         activity.notifyPendingListChanged(user);
+
+        notifyDataSetChanged();
     }
 
     // This method creates views for the RecyclerView by inflating the layout
@@ -188,21 +207,21 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         /*holder.bookCover.setImageResource(
                 mContext.getResources().getIdentifier(book.getPicture(), "drawable", aux));*/
 
-        if(isInReadingList || isInPendingList)
-            holder.addButton.setVisibility(View.INVISIBLE);
+        if (isInReadingList || isInPendingList)
+            holder.addButton.setVisibility(View.GONE);
 
-        if(isInReadingList) {
+        if (isInReadingList) {
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    BookReadedPopup dialog =  new BookReadedPopup(activity, holder, fragmentManager, book, user);
+                    BookReadedPopup dialog = new BookReadedPopup(activity, holder, fragmentManager, book, user);
                     FragmentTransaction ft2 = fragmentManager.beginTransaction();
                     dialog.show(ft2, "book_readed_popup");
                 }
             });
-
+            /* Personalized search */
         } else {
-            if(user.getInterested().contains(booksList.get(position))){
+            if (user.getLibrary().contains(booksList.get(position))) {
                 setAddButtonIcon(holder);
             } else {
                 holder.addButton.setOnClickListener(new View.OnClickListener() {
@@ -211,6 +230,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
                         setAddButtonIcon(holder);
 
                         Book book = booksList.get(position);
+                        /* Add book to interested books */
                         ArrayList<Book> pending = user.getInterested();
                         pending.add(book);
                         user.setInterested(pending);
@@ -218,14 +238,25 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
                         String interestedToPref = new Gson().toJson(user.getInterested());
                         prefs.edit().putString("com.example.readify.interested", interestedToPref).apply();
 
-                        //MockupsValues.addPendingBook(book);
                         activity.notifyPendingListChanged(user);
+
+                        /* Add book to library */
+                        ArrayList<Book> library = user.getLibrary();
+                        library.add(book);
+                        user.setLibrary(library);
+
+                        String libraryToPref = new Gson().toJson(user.getLibrary());
+                        prefs.edit().putString("com.example.readify.library", libraryToPref).apply();
+
+                        activity.notifyLibraryListChanged(user);
+
                         Toast.makeText(getContext(), book.getTitle() + " " + getContext().getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
                     }
                 });
             }
         }
     }
+
 
     private void setBookCover(@NonNull final BookHolder holder, String picture){
         Picasso.with(mContext) // Context
@@ -257,7 +288,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
             cardView = (CardView) itemView.findViewById(R.id.card_view);
         }
 
-        public void destroyView(){
+        public void destroyView() {
             ExplosionField explosionField = ExplosionField.attach2Window(activity);
             explosionField.explode(itemView);
         }
