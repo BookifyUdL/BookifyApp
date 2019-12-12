@@ -131,13 +131,13 @@ public class ReadingFragment extends Fragment {
 
         if (user.getReading().isEmpty() && user.getInterested().isEmpty()) {
             anyBookMessage.setVisibility(View.VISIBLE);
-            emptyLayout.setVisibility(View.INVISIBLE);
-            pendingTextLayout.setVisibility(View.INVISIBLE);
-            readingTextLayout.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
-            recyclerView2.setVisibility(View.INVISIBLE);
+            emptyLayout.setVisibility(View.GONE);
+            pendingTextLayout.setVisibility(View.GONE);
+            readingTextLayout.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
+            recyclerView2.setVisibility(View.GONE);
         } else {
-            anyBookMessage.setVisibility(View.INVISIBLE);
+            anyBookMessage.setVisibility(View.GONE);
             emptyLayout.setVisibility(View.VISIBLE);
             pendingTextLayout.setVisibility(View.VISIBLE);
             readingTextLayout.setVisibility(View.VISIBLE);
