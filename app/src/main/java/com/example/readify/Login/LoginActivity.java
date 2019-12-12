@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -36,11 +37,13 @@ import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+import com.example.readify.ApiConnector;
 import com.example.readify.BuildConfig;
 import com.example.readify.ConnectivityReceiver;
 import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
+import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.facebook.AccessToken;
@@ -74,9 +77,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
@@ -102,8 +107,11 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButton;
 
+    //private boolean isInDatabase = false;
+
     private BroadcastReceiver connectivityReceiver = null;
     private Boolean connectionEnabled;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
         }
 
-        // Initialize all components in Login Layout
+        /*// Initialize all components in Login Layout
         initViews();
 
         // Create an initial animation
@@ -135,13 +143,58 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         initializeSignInFacebook();
 
         // Initialize Google login button
-        initializeSignInGoogle();
+        initializeSignInGoogle();*/
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        // Initialize all components in Login Layout
+        initViews();
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null)
+        {
+            //GET user info ::
+            ApiConnector.getGenres(getApplicationContext(), new ServerCallback() {
+                @Override
+                public void onSuccess(JSONObject result) {
+                    System.out.println("Get genres funko!!!!");
+                    MockupsValues.setContext(getApplicationContext());
+                    ApiConnector.getAllBooks(getApplicationContext(), new ServerCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            System.out.println("Get allBooks funko!!!!");
+                            ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
+                                @Override
+                                public void onSuccess(JSONObject result) {
+                                    System.out.println("Get userInfo funko!!!!");
+                                    MockupsValues.setIsUserInDatabase(true);
+                                    updateUI(currentUser);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+        } else {
+            // Create an initial animation
+            initializeAnimation();
+
+            // Create an animated background with gif
+            initializeBackgroundGif();
+
+            // Initialize Facebook Login button
+            initializeSignInFacebook();
+
+            // Initialize Google login button
+            initializeSignInGoogle();
+        }
     }
+
+
+
 
     @Override
     protected void onResume() {
@@ -165,6 +218,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         gifImageView = findViewById(R.id.gifImageView);
 
         pref = getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        ApiConnector.setPreferences(pref);
 
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -198,13 +252,18 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     }
 
     private void initializeAnimation() {
-        new CountDownTimer(2000, 1000) {
+        new CountDownTimer(4000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
             }
 
             @Override
             public void onFinish() {
+                bookITextView.setVisibility(GONE);
+                loadingProgressBar.setVisibility(GONE);
+                rootView.setBackgroundColor(ContextCompat.getColor(LoginActivity.this, R.color.colorSplashText));
+                bookIconImageView.setImageResource(R.drawable.bookify_icon_only);
+                startAnimation();
                 if (connectionEnabled) {
                     bookITextView.setVisibility(GONE);
                     loadingProgressBar.setVisibility(GONE);
@@ -220,7 +279,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     private void startAnimation() {
         ViewPropertyAnimator viewPropertyAnimator = bookIconImageView.animate();
         viewPropertyAnimator.y(100f);
-        viewPropertyAnimator.setDuration(1000);
+        viewPropertyAnimator.setDuration(3000);
         viewPropertyAnimator.setListener(new Animator.AnimatorListener() {
 
             @Override
@@ -392,6 +451,8 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                             Log.d(TAG_G, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
+                            user.getEmail();
+
                             if (user != null)
                                 updateUI(user, task);
 
@@ -409,16 +470,58 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
 
     //Methods to update an app after to do a login
     private void updateUI(FirebaseUser currentUser) {
-        MockupsValues.setContext(this);
 
-        pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
-        pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
-        pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
-        pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString()).apply();
+        try {
+            MockupsValues.setContext(this);
+            MockupsValues.getUser().setFirebaseId(currentUser.getUid());
+            Uri url =currentUser.getPhotoUrl();
+            MockupsValues.getUser().setPicture(url.toString());
 
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        readDataFromFirebase(currentUser.getUid(), intent);
+            pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
+            pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
+            pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
+            pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString()).apply();
+
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            readDataFromFirebase(currentUser.getUid(), intent);
+
+            //Intent intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+            startActivity(intent);
+            finish();
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            Toast.makeText(getApplicationContext(), "Error in login 1", Toast.LENGTH_SHORT).show();
+        }
     }
+
+    /*private void updateUI(FirebaseUser currentUser, Task<AuthResult> task) {
+        try {
+            MockupsValues.setContext(this);
+            MockupsValues.getUser().setFirebaseId(currentUser.getUid());
+            Uri url =currentUser.getPhotoUrl();
+            MockupsValues.getUser().setPicture(url.toString());
+            Intent intent;
+            pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
+            pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
+            pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
+            pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString() + "?type=large").apply();
+
+
+            if (!task.getResult().getAdditionalUserInfo().isNewUser()) {
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                readDataFromFirebase(currentUser.getUid(), intent);
+            } else {
+                intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            Toast.makeText(getApplicationContext(), "Error in login 2", Toast.LENGTH_SHORT).show();
+        }
+        //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        //readDataFromFirebase(currentUser.getUid(), intent);
+    }*/
 
     private void updateUI(FirebaseUser currentUser, Task<AuthResult> task) {
         MockupsValues.setContext(this);

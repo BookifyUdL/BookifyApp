@@ -1,6 +1,10 @@
 package com.example.readify.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +21,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.User;
 import com.example.readify.R;
+import com.squareup.picasso.Picasso;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
@@ -27,9 +37,11 @@ public class BooksListFormAdapter extends RecyclerView.Adapter<BooksListFormAdap
     private ItemClickListener mClickListener;
     private User user;
     private boolean read;
+    private Context context;
 
     // data is passed into the constructor
     public BooksListFormAdapter(Context context, ArrayList<Book> booksList, User user, boolean read) {
+        this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.booksList = booksList;
         this.originalSearchList = new ArrayList<>();
@@ -78,8 +90,10 @@ public class BooksListFormAdapter extends RecyclerView.Adapter<BooksListFormAdap
         holder.bookTitle.setText(book.getTitle());
         holder.bookAuthor.setText(book.getAuthor());
         String aux = mInflater.getContext().getPackageName();
-        holder.bookCover.setImageResource(mInflater.getContext()
-                .getResources().getIdentifier(book.getPicture(), "drawable", aux));
+        setBookCover(holder, book.getPicture());
+        //holder.bookCover.setImageResource(null);
+        /*holder.bookCover.setImageResource(mInflater.getContext()
+                .getResources().getIdentifier(book.getPicture(), "drawable", aux));*/
         holder.addButton.setVisibility(View.GONE);
 
         if (holder.cardView.getTag() == mInflater.getContext().getString(R.string.cardView_unmark)) {
@@ -113,6 +127,36 @@ public class BooksListFormAdapter extends RecyclerView.Adapter<BooksListFormAdap
                 if (mClickListener != null) mClickListener.onItemClick(view);
             }
         });
+    }
+
+    private void setBookCover(@NonNull final BookHolder holder, String coverUrl){
+        Picasso.with(context) // Context
+                .load(coverUrl) // URL or file
+                .into(holder.bookCover);
+        /*@SuppressLint("StaticFieldLeak")
+        AsyncTask<Void, Void, Bitmap> t = new AsyncTask<Void, Void, Bitmap>() {
+            protected Bitmap doInBackground(Void... p) {
+                Bitmap bmp = null;
+                try {
+                    URL aURL = new URL(user.getPicture());
+                    URLConnection conn = aURL.openConnection();
+                    conn.setUseCaches(true);
+                    conn.connect();
+                    InputStream is = conn.getInputStream();
+                    BufferedInputStream bis = new BufferedInputStream(is);
+                    bmp = BitmapFactory.decodeStream(bis);
+                    bis.close();
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return bmp;
+            }
+
+            protected void onPostExecute(Bitmap bmp) {
+                holder.bookCover.setImageBitmap(bmp);
+            }
+        };*/
     }
 
     // total number of cells

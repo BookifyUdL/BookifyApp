@@ -4,19 +4,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.readify.ApiConnector;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.Genre;
+import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class FirstTimeFormActivity extends AppCompatActivity
         implements GenresFragment.OnFragmentInteractionListener, ComunicateFragmentsFirstForm {
@@ -34,13 +42,29 @@ public class FirstTimeFormActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_time_form);
-        MockupsValues.setContext(this.getApplicationContext());
 
-        mAuth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference(USERS);
+        //new ApiConnector().execute();
+        final Context context = this.getApplicationContext();
+        ApiConnector.getGenres(getApplicationContext(), new ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                System.out.println("Get genres funko!!!!");
+                MockupsValues.setContext(context);
 
-        fm.beginTransaction().add(R.id.main_container_first_form,genreFragment, "1").commit();
+                ApiConnector.getAllBooks(getApplicationContext(), new ServerCallback() {
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        System.out.println("Get allBooks funko!!!!");
+                        mAuth = FirebaseAuth.getInstance();
+                        firebaseDatabase = FirebaseDatabase.getInstance();
+                        databaseReference = firebaseDatabase.getReference(USERS);
+                        fm.beginTransaction().add(R.id.main_container_first_form,genreFragment, "1").commit();
+                    }
+                });
+            }
+        });
+        //MockupsValues.setGenres(genres);
+
     }
 
     @Override
