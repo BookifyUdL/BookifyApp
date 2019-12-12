@@ -29,14 +29,20 @@ public class Genre {
         }
     }
 
-    /*public static ArrayList<Genre> genresFromJSONArray(JSONArray jsonArray){
+    public static ArrayList<Genre> genresFromJSONArray(JSONArray jsonArray){
+        ArrayList<Genre> genres = new ArrayList<>();
         try {
-            ArrayList<Genre>
+            for (int i = 0; i < jsonArray.length(); i++){
+                JSONObject genre = jsonArray.getJSONObject(i);
+                genres.add(new Genre(genre));
+            }
         } catch (Exception e) {
-
+            System.out.println(e.toString());
         }
-        return new ArrayList<>();
-    }*/
+        return genres;
+    }
+
+
 
     public static JSONArray  genresListToJSON(ArrayList<Genre> genres){
         JSONArray genresArray = new JSONArray();

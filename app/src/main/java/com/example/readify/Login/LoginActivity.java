@@ -34,6 +34,7 @@ import com.example.readify.BuildConfig;
 import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
+import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.facebook.AccessToken;
@@ -67,6 +68,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import org.apache.commons.io.IOUtils;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -133,12 +135,18 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null)
         {
             //GET user info ::
-            MockupsValues.setIsUserInDatabase(true);
-            updateUI(currentUser);
+            ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
+                @Override
+                public void onSuccess(JSONObject result) {
+                    System.out.println("Get userInfo funko!!!!");
+                    MockupsValues.setIsUserInDatabase(true);
+                    updateUI(currentUser);
+                }
+            });
 
         }
     }

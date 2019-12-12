@@ -86,7 +86,8 @@ public class User {
 
     public User(JSONObject userJson){
         try{
-           JSONObject user = userJson.getJSONArray("genre").getJSONObject(0);
+            
+           JSONObject user = userJson.getJSONObject("genre");
            this.premium = user.getBoolean("premium");
            // MIssing Achivements
            this.achievements = new ArrayList<>();
@@ -99,6 +100,27 @@ public class User {
            this.name = user.getString("name");
            this.email = user.getString("email");
 
+           JSONArray genresId = user.getJSONArray("genres");
+           this.genres = Genre.genresFromJSONArray(genresId);
+               /*
+               "genres": [
+                {
+                    "_id": "5de7fb595a66a02fe3c39eac",
+                    "picture": "genre1",
+                    "name": "Biography"
+                },
+                {
+                    "_id": "5de7fb595a66a02fe3c39eae",
+                    "picture": "genre3",
+                    "name": "Crime"
+                },
+                {
+                    "_id": "5de7fb595a66a02fe3c39ead",
+                    "picture": "genre2",
+                    "name": "Computing / Interenet"
+                }
+            ],
+               * */
            //Falta cridar per cada id de genre el genre en concret
 
 

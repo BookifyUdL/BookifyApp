@@ -54,6 +54,70 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         preferences = pref;
     }
 
+    public static void getUser(Context context, final ServerCallback callback) {
+        String id = "/" + preferences.getString("com.example.readify._id", "empt");
+        try{
+            //JSONObject jsonObject = User.toJSON(user);
+            //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, urlv + ALL_USERS +  id, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            System.out.println(response.toString());
+                            MockupsValues.user = new User(response);
+                            callback.onSuccess(new JSONObject());
+
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            System.out.println("Error");
+                            /*try {
+                                String responseBody = new String(error.networkResponse.data, "utf-8");
+                                JSONObject data = new JSONObject(responseBody);
+                                JSONArray errors = data.getJSONArray("errors");
+                                JSONObject jsonMessage = errors.getJSONObject(0);
+                                String message = jsonMessage.getString("message");
+                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                            } catch (JSONException e) {
+                            } catch (UnsupportedEncodingException errorr) {
+                            }*/
+
+                        }
+                    });
+            /*JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.POST, urlv + ALL_USERS, jsonObject, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            System.out.println(response.toString());
+                            callback.onSuccess(response);
+
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            System.out.println("Error");
+
+                        }
+                    });*/
+
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+            queue.start();
+            //Wait_until_Downloaded();
+            //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
+        } catch (Exception e){
+            System.out.println("GET catch error, user.");
+            System.out.println(e);
+        }
+    }
+
     public static void updateUser(Context context, final ServerCallback callback, User user){
         //String id = "/" + preferences.getString("_id", "5df13ba645ad971d47c7759a");
         //String id = "/5df13ba645ad971d47c7759a";
