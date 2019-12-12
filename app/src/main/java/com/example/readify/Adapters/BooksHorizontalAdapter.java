@@ -62,7 +62,8 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
     // binds the data to the view and textview in each row
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        if((position == mViewBooks.size() - 1 && mHasDiscoverButtons)){
+        boolean found = false;
+        if ((position == mViewBooks.size() - 1 && mHasDiscoverButtons)) {
             holder.layout.setVisibility(View.INVISIBLE);
             holder.lastView.setVisibility(View.VISIBLE);
         } else {
@@ -70,37 +71,48 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
             holder.imageLayout.setImageDrawable(ContextCompat.getDrawable(holder.imageLayout.getContext(),
                     holder.imageLayout.getContext().getResources().getIdentifier(namePicture, "drawable", holder.layout.getContext().getPackageName())));
 
-            holder.addButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    setAddButtonIcon(holder);
-                    Book book = mViewBooks.get(position);
-
-                    ArrayList<Book> pending = user.getInterested();
-                    pending.add(book);
-                    user.setInterested(pending);
-
-                    String interestedToPref = new Gson().toJson(user.getInterested());
-                    pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
-
-                    //MockupsValues.addPendingBook(book);
-                    activity.notifyPendingListChanged(user);
-                    Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
-
-                }
-            });
-
             ListIterator<Book> itr = user.getLibrary().listIterator();
             while (itr.hasNext()) {
                 Book tmp = itr.next();
-                if (tmp.getTitle().equals(mViewBooks.get(position).getTitle()))
+                if (tmp.getTitle().equals(mViewBooks.get(position).getTitle())) {
                     setAddButtonIcon(holder);
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                holder.addButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        setAddButtonIcon(holder);
+                        Book book = mViewBooks.get(position);
+
+                        /* Add book to interest list user */
+                        ArrayList<Book> pending = user.getInterested();
+                        pending.add(book);
+                        user.setInterested(pending);
+                        String interestedToPref = new Gson().toJson(user.getInterested());
+                        pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+
+                        /* Add book to user library */
+                        ArrayList<Book> library = user.getLibrary();
+                        library.add(book);
+                        user.setLibrary(library);
+                        String libraryToPref = new Gson().toJson(user.getLibrary());
+                        pref.edit().putString("com.example.readify.library", libraryToPref).apply();
+
+                        //MockupsValues.addPendingBook(book);
+                        activity.notifyPendingListChanged(user);
+                        Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         }
     }
 
-    private void setAddButtonIcon(ViewHolder holder){
+    private void setAddButtonIcon(ViewHolder holder) {
         holder.addButton.setImageResource(R.drawable.ic_added_book);
+        holder.addButton.setOnClickListener(null);
     }
 
     // total number of rows
