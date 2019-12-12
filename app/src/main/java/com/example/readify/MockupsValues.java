@@ -40,6 +40,7 @@ public class MockupsValues {
     private static ArrayList<User> USERS;
     public  static User user = new User();
     private static Context context;
+    private static boolean isUserInDatabase = false;
 
 
     //private static User userProfile = new User("Connor MacArthur", true, getPersonalizedGenres(), getLastAddedBooksWithReads());
@@ -65,6 +66,14 @@ public class MockupsValues {
             SHOPS.add(new Shop("fnac", "Fnac"));
         }
         return SHOPS;
+    }
+
+    public static void setIsUserInDatabase(boolean isOrNot){
+        isUserInDatabase = isOrNot;
+    }
+
+    public static boolean getIsUserInDatabase(){
+        return isUserInDatabase;
     }
 
     public static ArrayList<Item> getItems(){
@@ -106,7 +115,7 @@ public class MockupsValues {
     }
 
     public static ArrayList<Genre> getGenres() {
-        if (GENRE == null || GENRE.isEmpty()) {
+        /*if (GENRE == null || GENRE.isEmpty()) {
             GENRE = new ArrayList<>();
             GENRE.add(new Genre( context.getResources().getString(R.string.biography_gender), "genre1"));
             GENRE.add(new Genre( context.getResources().getString(R.string.internet_gender), "genre2"));
@@ -117,8 +126,14 @@ public class MockupsValues {
             GENRE.add(new Genre( context.getResources().getString(R.string.romance_gender), "genre7"));
             GENRE.add(new Genre( context.getResources().getString(R.string.fantasy_gender), "genre8"));
             GENRE.add(new Genre( context.getResources().getString(R.string.adventure_gender), "genre9"));
-        }
+        }*/
+        if(GENRE == null)
+            GENRE = new ArrayList<>();
         return GENRE;
+    }
+
+    public static void setGenres(ArrayList<Genre> genres){
+        GENRE = genres;
     }
 
 
@@ -218,13 +233,19 @@ public class MockupsValues {
     }
 
     public static ArrayList<Book> getAllBooksForTutorial(){
-        if(ALL_BOOKS_FOR_TUTORIAL == null || ALL_BOOKS_FOR_TUTORIAL.isEmpty() || ALL_BOOKS_FOR_TUTORIAL.size() != 15){
+        /*if(ALL_BOOKS_FOR_TUTORIAL == null || ALL_BOOKS_FOR_TUTORIAL.isEmpty() || ALL_BOOKS_FOR_TUTORIAL.size() != 15){
             ALL_BOOKS_FOR_TUTORIAL = new ArrayList<>();
             ALL_BOOKS_FOR_TUTORIAL.addAll(getLastAddedBooks());
             ALL_BOOKS_FOR_TUTORIAL.addAll(getSameAuthorBooks());
             ALL_BOOKS_FOR_TUTORIAL.addAll(getSameGenderBooks());
-        }
+        }*/
+        if(ALL_BOOKS_FOR_TUTORIAL == null)
+            ALL_BOOKS_FOR_TUTORIAL = new ArrayList<>();
         return ALL_BOOKS_FOR_TUTORIAL;
+    }
+
+    public static void setAllBooksForTutorial(ArrayList<Book> booksForTutorial){
+        ALL_BOOKS_FOR_TUTORIAL = booksForTutorial;
     }
 
 

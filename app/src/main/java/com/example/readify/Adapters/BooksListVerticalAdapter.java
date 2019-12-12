@@ -26,6 +26,7 @@ import com.example.readify.Models.User;
 import com.example.readify.Popups.BookReadedPopup;
 import com.example.readify.R;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -183,8 +184,9 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         holder.bookTitle.setText(book.getTitle());
         holder.bookAuthor.setText(book.getAuthor());
         String aux = mContext.getPackageName();
-        holder.bookCover.setImageResource(
-                mContext.getResources().getIdentifier(book.getPicture(), "drawable", aux));
+        setBookCover(holder, book.getPicture());
+        /*holder.bookCover.setImageResource(
+                mContext.getResources().getIdentifier(book.getPicture(), "drawable", aux));*/
 
         if(isInReadingList || isInPendingList)
             holder.addButton.setVisibility(View.INVISIBLE);
@@ -223,6 +225,12 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
                 });
             }
         }
+    }
+
+    private void setBookCover(@NonNull final BookHolder holder, String picture){
+        Picasso.with(mContext) // Context
+                .load(picture) // URL or file
+                .into(holder.bookCover);
     }
 
     private void setAddButtonIcon(BookHolder holder){
