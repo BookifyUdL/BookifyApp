@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.example.readify.Models.Book;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,9 +89,18 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
     @Override
     public void onBindViewHolder(@NonNull final BooksGridAdapter.ViewHolder holder, final int position) {
         String namePicture = mViewBooks.get(position).getPicture();
-        holder.imageLayout.setBackground(ContextCompat.getDrawable(holder.imageLayout.getContext(),
-                holder.imageLayout.getContext().getResources().getIdentifier(namePicture, "drawable", holder.layout.getContext().getPackageName())));
+        /*holder.imageLayout.setBackground(ContextCompat.getDrawable(holder.imageLayout.getContext(),
+                holder.imageLayout.getContext().getResources().getIdentifier(namePicture, "drawable", holder.layout.getContext().getPackageName())));*/
+        setBookCover(holder, namePicture);
         holder.setAddButtonState(position);
+    }
+
+    private void setBookCover(@NonNull final BooksGridAdapter.ViewHolder holder, String picture){
+        ImageView imageView = new ImageView(context);
+        Picasso.with(context) // Context
+                .load(picture) // URL or file
+                .into(imageView);
+        holder.imageLayout.setBackground(imageView.getDrawable());
     }
 
     /*private void setAddButtonIcon(BooksGridAdapter.ViewHolder holder){

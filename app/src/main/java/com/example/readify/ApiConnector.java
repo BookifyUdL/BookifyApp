@@ -236,7 +236,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
             RequestQueue queue = Volley.newRequestQueue(context);
             queue.add(jsonObjectRequest);
-            queue.start();
+            //queue.start();
             //Wait_until_Downloaded();
             //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
         } catch (Exception e) {
