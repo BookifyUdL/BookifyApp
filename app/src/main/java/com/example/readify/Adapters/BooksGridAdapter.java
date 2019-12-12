@@ -49,6 +49,7 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
 
     public void setBooksList(ArrayList<Book> books){
         this.mViewBooks = books;
+        this.originalSearchList = books;
     }
 
     public void filter(String newText) {
@@ -105,7 +106,6 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageButton addButton;
-        View lastView;
         RelativeLayout layout, imageLayout;
 
         ViewHolder(View itemView) {
