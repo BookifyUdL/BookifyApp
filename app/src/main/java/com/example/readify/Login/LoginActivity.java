@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
             FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
         }
 
-        // Initialize all components in Login Layout
+        /*// Initialize all components in Login Layout
         initViews();
 
         // Create an initial animation
@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
         initializeSignInFacebook();
 
         // Initialize Google login button
-        initializeSignInGoogle();
+        initializeSignInGoogle();*/
     }
 
     @Override
@@ -135,19 +135,46 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         // Check if user is signed in (non-null) and update UI accordingly.
+        // Initialize all components in Login Layout
+        initViews();
         final FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null)
         {
             //GET user info ::
-            ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
+            ApiConnector.getGenres(getApplicationContext(), new ServerCallback() {
                 @Override
                 public void onSuccess(JSONObject result) {
-                    System.out.println("Get userInfo funko!!!!");
-                    MockupsValues.setIsUserInDatabase(true);
-                    updateUI(currentUser);
+                    System.out.println("Get genres funko!!!!");
+                    MockupsValues.setContext(getApplicationContext());
+                    ApiConnector.getAllBooks(getApplicationContext(), new ServerCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            System.out.println("Get allBooks funko!!!!");
+                            ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
+                                @Override
+                                public void onSuccess(JSONObject result) {
+                                    System.out.println("Get userInfo funko!!!!");
+                                    MockupsValues.setIsUserInDatabase(true);
+                                    updateUI(currentUser);
+                                }
+                            });
+                        }
+                    });
                 }
             });
 
+        } else {
+            // Create an initial animation
+            initializeAnimation();
+
+            // Create an animated background with gif
+            initializeBackgroundGif();
+
+            // Initialize Facebook Login button
+            initializeSignInFacebook();
+
+            // Initialize Google login button
+            initializeSignInGoogle();
         }
     }
 
@@ -194,7 +221,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initializeAnimation() {
-        new CountDownTimer(2000, 1000) {
+        new CountDownTimer(4000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
             }
@@ -415,15 +442,15 @@ public class LoginActivity extends AppCompatActivity {
             Uri url =currentUser.getPhotoUrl();
             MockupsValues.getUser().setPicture(url.toString());
 
-            /*pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
+            pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
             pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
             pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
             pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString()).apply();
 
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            readDataFromFirebase(currentUser.getUid(), intent);*/
+            readDataFromFirebase(currentUser.getUid(), intent);
 
-            Intent intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+            //Intent intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
             startActivity(intent);
             finish();
         } catch (Exception e){
@@ -439,7 +466,7 @@ public class LoginActivity extends AppCompatActivity {
             Uri url =currentUser.getPhotoUrl();
             MockupsValues.getUser().setPicture(url.toString());
             Intent intent;
-            /*pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
+            pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
             pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
             pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
             pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString() + "?type=large").apply();
@@ -448,11 +475,11 @@ public class LoginActivity extends AppCompatActivity {
             if (!task.getResult().getAdditionalUserInfo().isNewUser()) {
                 intent = new Intent(LoginActivity.this, MainActivity.class);
                 readDataFromFirebase(currentUser.getUid(), intent);
-            } else {*/
+            } else {
                 intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
                 startActivity(intent);
                 finish();
-                //}
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             Toast.makeText(getApplicationContext(), "Error in login 2", Toast.LENGTH_SHORT).show();

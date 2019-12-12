@@ -86,7 +86,7 @@ public class User {
 
     public User(JSONObject userJson){
         try{
-            
+
            JSONObject user = userJson.getJSONObject("genre");
            this.premium = user.getBoolean("premium");
            // MIssing Achivements
@@ -94,7 +94,7 @@ public class User {
            this.library = Book.bookListFromJson(user.getJSONArray("library"));
            this.reading = Book.bookListFromJson(user.getJSONArray("reading_book"));
            this.interested = Book.bookListFromJson(user.getJSONArray("interested_book"));
-           this.uid = user.getString("uid");
+           this.uid = user.getString("_id");
            this.firebaseId = user.getString("firebaseId");
            this.picture = user.getString("userPicture");
            this.name = user.getString("name");
