@@ -156,27 +156,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         if (currentUser != null)
         {
             //GET user info ::
-            ApiConnector.getGenres(getApplicationContext(), new ServerCallback() {
-                @Override
-                public void onSuccess(JSONObject result) {
-                    System.out.println("Get genres funko!!!!");
-                    MockupsValues.setContext(getApplicationContext());
-                    ApiConnector.getAllBooks(getApplicationContext(), new ServerCallback() {
-                        @Override
-                        public void onSuccess(JSONObject result) {
-                            System.out.println("Get allBooks funko!!!!");
-                            ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
-                                @Override
-                                public void onSuccess(JSONObject result) {
-                                    System.out.println("Get userInfo funko!!!!");
-                                    MockupsValues.setIsUserInDatabase(true);
-                                    updateUI(currentUser);
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+            getUserInfoAndUpdateUi(currentUser);
 
         } else {
             // Create an initial animation
@@ -525,6 +505,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
 
     private void updateUI(FirebaseUser currentUser, Task<AuthResult> task) {
         MockupsValues.setContext(this);
+        MockupsValues.getUser().setFirebaseId(currentUser.getUid());
 
         pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
         pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
@@ -542,6 +523,30 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         }
     }
 
+    private void getUserInfoAndUpdateUi(final FirebaseUser currentUser){
+        ApiConnector.getGenres(getApplicationContext(), new ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                System.out.println("Get genres funko!!!!");
+                MockupsValues.setContext(getApplicationContext());
+                ApiConnector.getAllBooks(getApplicationContext(), new ServerCallback() {
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        System.out.println("Get allBooks funko!!!!");
+                        ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
+                            @Override
+                            public void onSuccess(JSONObject result) {
+                                System.out.println("Get userInfo funko!!!!");
+                                MockupsValues.setIsUserInDatabase(true);
+                                updateUI(currentUser);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
     @Override
     public void onNetworkConnectionChanged(String status) {
         Boolean connectivityFull = pref.getBoolean("com.example.readify.wifiAndData", false);
@@ -553,7 +558,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             FirebaseUser currentUser = mAuth.getCurrentUser();
 
             if (currentUser != null)
-                updateUI(currentUser);
+                getUserInfoAndUpdateUi(currentUser);
 
             initializeAnimation();
 
@@ -564,7 +569,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             FirebaseUser currentUser = mAuth.getCurrentUser();
 
             if (currentUser != null)
-                updateUI(currentUser);
+                getUserInfoAndUpdateUi(currentUser);
 
             initializeAnimation();
 
