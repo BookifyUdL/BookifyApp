@@ -117,7 +117,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
             }
         });
 
-
+        ArrayList<Book> books = MockupsValues.getLastAddedBooks();
         mCardAdapter = new CardPagerAdapter((MainActivity) getActivity());
         for (int i = 0; i < MockupsValues.getLastAddedBooks().size(); i++) {
             mCardAdapter.addCardItem(MockupsValues.getLastAddedBooks().get(i));
@@ -133,7 +133,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         mViewPager.setOffscreenPageLimit(3);
 
         /* Llista top rated */
-        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        /*LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.top_rated_recycler_view);
         recyclerView.setLayoutManager(horizontalLayoutManagaer);
 
@@ -146,7 +146,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), list, true, user);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
-        addGenres(view);
+        addGenres(view);*/
 
         width = view.getWidth();
         height = view.getHeight();

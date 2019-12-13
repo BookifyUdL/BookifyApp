@@ -23,6 +23,7 @@ import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +69,9 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
             holder.lastView.setVisibility(View.VISIBLE);
         } else {
             String namePicture = mViewBooks.get(position).getPicture();
-            holder.imageLayout.setImageDrawable(ContextCompat.getDrawable(holder.imageLayout.getContext(),
-                    holder.imageLayout.getContext().getResources().getIdentifier(namePicture, "drawable", holder.layout.getContext().getPackageName())));
+            setBookCover(holder, namePicture);
+            //holder.imageLayout.setImageDrawable(ContextCompat.getDrawable(holder.imageLayout.getContext(),
+            //        holder.imageLayout.getContext().getResources().getIdentifier(namePicture, "drawable", holder.layout.getContext().getPackageName())));
 
             ListIterator<Book> itr = user.getLibrary().listIterator();
             while (itr.hasNext()) {
@@ -108,6 +110,12 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
                 });
             }
         }
+    }
+
+    private void setBookCover(@NonNull final BooksHorizontalAdapter.ViewHolder holder, String picture){
+        Picasso.with(context) // Context
+                .load(picture) // URL or file
+                .into(holder.imageLayout);
     }
 
     private void setAddButtonIcon(ViewHolder holder) {

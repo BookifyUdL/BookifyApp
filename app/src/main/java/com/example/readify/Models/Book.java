@@ -23,12 +23,13 @@ public class Book {
     private boolean isNew;
 
 
-    public Book(String id, String title, Author author, String picture){
+    public Book(String id, String title, Author author, String picture, boolean isNew){
         this.id = id;
         this.title = title;
         this.auth = author;
         this.picture = picture;
         this.author = author.getName();
+        this.isNew = isNew;
     }
 
     public Book(JSONObject jsonobject){
@@ -125,6 +126,11 @@ public class Book {
     }
 
     public Book() {
+    }
+
+
+    public boolean isNew(){
+        return this.isNew;
     }
 
     public int getExtension() { return this.extension; }

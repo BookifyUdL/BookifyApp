@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readify.Models.Book;
 import com.example.readify.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -24,9 +25,11 @@ public class BooksProfileHoritzontalAdapter extends RecyclerView.Adapter<BooksPr
     private List<Book> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+    private Context mContext;
 
     public BooksProfileHoritzontalAdapter(Context context, List<Book> data) {
         this.mInflater = LayoutInflater.from(context);
+        this.mContext = context;
         this.mData = data;
         mData.add(new Book("Add books", "", "add_book"));
     }
@@ -44,12 +47,19 @@ public class BooksProfileHoritzontalAdapter extends RecyclerView.Adapter<BooksPr
 
         holder.myTextViewTitle.setText(book.getTitle());
         holder.myTextViewDescription.setText(book.getAuthor());
-        holder.myImageView.setImageResource(mInflater.getContext()
-                .getResources().getIdentifier(book.getPicture(), "drawable", mInflater.getContext().getPackageName()));
+        setBookCover(holder, book.getPicture());
+        /*holder.myImageView.setImageResource(mInflater.getContext()
+                .getResources().getIdentifier(book.getPicture(), "drawable", mInflater.getContext().getPackageName()));*/
         if (position == mData.size() - 1) {
             holder.myCardView.setBackgroundColor(ContextCompat.getColor(mInflater.getContext(), R.color.colorPrimary));
             holder.myTextViewTitle.setTextColor(ContextCompat.getColor(mInflater.getContext(), R.color.icons));
         }
+    }
+
+    private void setBookCover(@NonNull final BooksProfileHoritzontalAdapter.ViewHolder holder, String picture){
+        Picasso.with(mContext) // Context
+                .load(picture) // URL or file
+                .into(holder.myImageView);
     }
 
     @Override

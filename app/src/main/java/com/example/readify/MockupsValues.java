@@ -252,11 +252,17 @@ public class MockupsValues {
     public static ArrayList<Book> getLastAddedBooks(){
         if(LAST_ADDED_BOOKS == null || LAST_ADDED_BOOKS.isEmpty()){
             LAST_ADDED_BOOKS = new ArrayList<>();
-            LAST_ADDED_BOOKS.add(new Book("Algún día hoy", "Ángela Becerra", "lib1", 2015, 253,getGenreFromGenresList(6)));
+            if(ALL_BOOKS_FOR_TUTORIAL != null){
+                for (Book book : ALL_BOOKS_FOR_TUTORIAL){
+                    if(book.isNew())
+                        LAST_ADDED_BOOKS.add(book);
+                }
+            }
+            /*LAST_ADDED_BOOKS.add(new Book("Algún día hoy", "Ángela Becerra", "lib1", 2015, 253,getGenreFromGenresList(6)));
             LAST_ADDED_BOOKS.add(new Book("La cocinera de Gastamar", "Fernadndo J.Múñez", "lib2", 2001, 200,getGenreFromGenresList(3)));
             LAST_ADDED_BOOKS.add(new Book("El rey recibe", "Eduardo Mendoza", "lib3", 2017, 353,getGenreFromGenresList(4)));
             LAST_ADDED_BOOKS.add(new Book("100 recetas de oro", "Carlos Arguiñano", "lib4", 2019, 153,getGenreFromGenresList(5)));
-            LAST_ADDED_BOOKS.add(new Book("Patria", "Fernando Aramburu", "lib5", 2018, 99,getGenreFromGenresList(7)));
+            LAST_ADDED_BOOKS.add(new Book("Patria", "Fernando Aramburu", "lib5", 2018, 99,getGenreFromGenresList(7)));*/
         }
         return LAST_ADDED_BOOKS;
     }

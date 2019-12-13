@@ -264,10 +264,16 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
                                 JSONArray jsonarray = new JSONArray(response.get("books").toString());
                                 for (int i = 0; i < jsonarray.length(); i++) {
-                                    JSONObject book = jsonarray.getJSONObject(i);
-                                    Author author = new Author(book.getJSONObject("author"));
-                                    Book auxBook = new Book(book.getString("_id"), book.getString("title"), author, book.getString("cover_image"));
-                                    books.add(auxBook);
+                                    try {
+                                        JSONObject book = jsonarray.getJSONObject(i);
+                                        Author author = new Author(book.getJSONObject("author"));
+                                        Book auxBook = new Book(book.getString("_id"),
+                                                book.getString("title"), author, book.getString("cover_image"), book.getBoolean("is_new"));
+                                        //Book auxBook = new Book(book);
+                                        books.add(auxBook);
+                                    } catch (Exception e) {
+                                        System.out.println("Error parsion book ");
+                                    }
                                     /*JSONObject jsonobject = jsonarray.getJSONObject(i);
                                     String name = jsonobject.getString("name");
                                     String url = jsonobject.getString("url");*/

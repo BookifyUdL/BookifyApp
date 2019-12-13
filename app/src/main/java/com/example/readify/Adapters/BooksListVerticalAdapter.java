@@ -258,7 +258,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
     }
 
 
-    private void setBookCover(@NonNull final BookHolder holder, String picture){
+    private void setBookCover(@NonNull final BooksListVerticalAdapter.BookHolder holder, String picture){
         Picasso.with(mContext) // Context
                 .load(picture) // URL or file
                 .into(holder.bookCover);
