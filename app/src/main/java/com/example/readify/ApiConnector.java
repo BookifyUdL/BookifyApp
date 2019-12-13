@@ -247,9 +247,6 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         }
     }
 
-    public static void updateUserIntoDatabase(Context context, final ServerCallback callback){
-
-    }
 
     public static void getAllBooks(Context context, final ServerCallback callback){
         final ArrayList<Book> books = new ArrayList<>();
