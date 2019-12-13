@@ -54,9 +54,10 @@ public class BooksSectionFragment extends Fragment {
 
         ArrayList<Book> list  = new ArrayList<>();
         //TODO Change for obtain all books from database?
-        list.addAll(MockupsValues.getLastAddedBooks());
+        list.addAll(MockupsValues.getAllBooksForTutorial());
+        /*list.addAll(MockupsValues.getLastAddedBooks());
         list.addAll(MockupsValues.getSameAuthorBooks());
-        list.addAll(MockupsValues.getSameGenderBooks());
+        list.addAll(MockupsValues.getSameGenderBooks());*/
 
         adapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), list, user);
         recyclerView.setAdapter(adapter);

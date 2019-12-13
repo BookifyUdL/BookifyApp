@@ -550,7 +550,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
 
     @Override
     public void onNetworkConnectionChanged(String status) {
-        Boolean connectivityFull = pref.getBoolean("com.example.readify.wifiAndData", false);
+        /*Boolean connectivityFull = pref.getBoolean("com.example.readify.wifiAndData", false);
 
         if (status.equals(getResources().getString(R.string.wifi_ok))) {
             connectionEnabled = true;
@@ -586,6 +586,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                         }
                     });
             alertDialog.show();
-        }
+        }*/
     }
 }
