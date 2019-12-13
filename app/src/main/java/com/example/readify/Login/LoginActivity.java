@@ -524,6 +524,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     }
 
     private void getUserInfoAndUpdateUi(final FirebaseUser currentUser){
+        //api call solution
         ApiConnector.getGenres(getApplicationContext(), new ServerCallback() {
             @Override
             public void onSuccess(JSONObject result) {
