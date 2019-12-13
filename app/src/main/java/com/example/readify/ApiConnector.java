@@ -39,6 +39,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
     private static String ALL_BOOKS = "books";
     private static String ALL_USERS = "users";
     private static String ALL_UPDATE = "/update";
+    private static String ALL_TOP_RATED = "/toprated";
     private static SharedPreferences preferences;
 
     //Context context;
@@ -249,7 +250,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
 
     public static void getAllBooks(Context context, final ServerCallback callback){
-        final ArrayList<Book> books = new ArrayList<>();
+        //final ArrayList<Book> books = new ArrayList<>();
         try{
             //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -263,21 +264,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                                 //String aux2 = response.get("genres").toString();
 
                                 JSONArray jsonarray = new JSONArray(response.get("books").toString());
-                                for (int i = 0; i < jsonarray.length(); i++) {
-                                    try {
-                                        JSONObject book = jsonarray.getJSONObject(i);
-                                        Author author = new Author(book.getJSONObject("author"));
-                                        Book auxBook = new Book(book.getString("_id"),
-                                                book.getString("title"), author, book.getString("cover_image"), book.getBoolean("is_new"));
-                                        //Book auxBook = new Book(book);
-                                        books.add(auxBook);
-                                    } catch (Exception e) {
-                                        System.out.println("Error parsion book ");
-                                    }
-                                    /*JSONObject jsonobject = jsonarray.getJSONObject(i);
-                                    String name = jsonobject.getString("name");
-                                    String url = jsonobject.getString("url");*/
-                                }
+                                ArrayList<Book> books = parseJsonArrayToBookList(jsonarray);
 
                                 //MockupsValues.setGenres(genres);
                                 MockupsValues.setAllBooksForTutorial(books);
@@ -310,6 +297,66 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             System.out.println(e);
         }
         //return genres;
+    }
+
+    private static ArrayList<Book> parseJsonArrayToBookList(JSONArray jsonarray){
+        final ArrayList<Book> books = new ArrayList<>();
+        for (int i = 0; i < jsonarray.length(); i++) {
+            try {
+                JSONObject book = jsonarray.getJSONObject(i);
+                Author author = new Author(book.getJSONObject("author"));
+                Book auxBook = new Book(book.getString("_id"),
+                        book.getString("title"), author, book.getString("cover_image"), book.getBoolean("is_new"));
+                //Book auxBook = new Book(book);
+                books.add(auxBook);
+            } catch (Exception e) {
+                System.out.println("Error parsion book ");
+            }
+        }
+        return books;
+    }
+
+    public static void getTopRatedBooks(Context context, final ServerCallback callback){
+        try{
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, urlv + ALL_BOOKS + ALL_TOP_RATED, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            String aux = response.toString();
+                            try{
+                                //String aux2 = response.get("genres");
+                                //String aux2 = response.get("genres").toString();
+                                JSONArray jsonarray = new JSONArray(response.get("book").toString());
+                                ArrayList<Book> books = parseJsonArrayToBookList(jsonarray);
+                                MockupsValues.setTopRatedBooks(books);
+                                callback.onSuccess(response);
+                                //aux2 = "";
+                            } catch (org.json.JSONException e) {
+
+                                System.out.println("Error");
+
+                            }
+                            //textView.setText("Response: " + response.toString());
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            System.out.println("Error");
+
+                        }
+                    });
+
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+            //queue.start();
+            //Wait_until_Downloaded();
+            //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public static void getGenres(Context context, final ServerCallback callback){

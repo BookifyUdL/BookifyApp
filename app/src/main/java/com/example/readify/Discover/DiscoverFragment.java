@@ -21,10 +21,12 @@ import android.view.ViewGroup;
 import com.example.readify.Adapters.BooksHorizontalAdapter;
 import com.example.readify.Adapters.CardFragmentPagerAdapter;
 import com.example.readify.Adapters.CardPagerAdapter;
+import com.example.readify.ApiConnector;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
+import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.User;
 import com.example.readify.Pages;
 import com.example.readify.R;
@@ -35,6 +37,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,10 +136,24 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         mViewPager.setPageTransformer(false, mCardShadowTransformer);
         mViewPager.setOffscreenPageLimit(3);
 
+        final LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.top_rated_recycler_view);
+        final DiscoverFragment discoverFragment = this;
+        ApiConnector.getTopRatedBooks(getContext(), new ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                /* Llista top rated */
+                recyclerView.setLayoutManager(horizontalLayoutManagaer);
+                BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), MockupsValues.getTopRatedBooks(), true, user);
+                adapter.setClickListener(discoverFragment);
+                recyclerView.setAdapter(adapter);
+            }
+        });
         /* Llista top rated */
         /*LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.top_rated_recycler_view);
         recyclerView.setLayoutManager(horizontalLayoutManagaer);
+
 
         // set up the RecyclerView
         ArrayList<Book> list = MockupsValues.getLastAddedBooks();

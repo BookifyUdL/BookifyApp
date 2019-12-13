@@ -29,6 +29,7 @@ public class MockupsValues {
     private static ArrayList<Book> PENDING_LIST_BOOKS;
     private static ArrayList<Book> READING_LIST_BOOKS;
     private static ArrayList<Book> PROFILE_PERSONALIZED_LIST_BOOKS;
+    private static ArrayList<Book> TOP_RATED_BOOKS;
 
     private static ArrayList<Achievement> ACHIEVEMENTS;
     private static ArrayList<Achievement> PROFILE_ACHIEVEMENTS_PERSONALIZED;
@@ -66,6 +67,16 @@ public class MockupsValues {
             SHOPS.add(new Shop("fnac", "Fnac"));
         }
         return SHOPS;
+    }
+
+    public static void setTopRatedBooks(ArrayList<Book> topRatedBooks){
+        TOP_RATED_BOOKS = topRatedBooks;
+    }
+
+    public static ArrayList<Book> getTopRatedBooks(){
+        if(TOP_RATED_BOOKS == null)
+            TOP_RATED_BOOKS = new ArrayList<>();
+        return TOP_RATED_BOOKS;
     }
 
     public static void setIsUserInDatabase(boolean isOrNot){
