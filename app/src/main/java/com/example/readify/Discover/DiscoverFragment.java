@@ -132,7 +132,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         mViewPager.setPageTransformer(false, mCardShadowTransformer);
         mViewPager.setOffscreenPageLimit(3);
 
-        /*Llista baix*/
+        /* Llista top rated */
         LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.top_rated_recycler_view);
         recyclerView.setLayoutManager(horizontalLayoutManagaer);

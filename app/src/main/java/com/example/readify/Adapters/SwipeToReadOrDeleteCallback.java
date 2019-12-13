@@ -23,7 +23,7 @@ public class SwipeToReadOrDeleteCallback extends ItemTouchHelper.SimpleCallback 
     ColorDrawable yellow = new ColorDrawable(Color.parseColor("#d9c01c"));
     ColorDrawable green = new ColorDrawable(Color.parseColor("#5BE356"));
 
-    public SwipeToReadOrDeleteCallback(BooksListVerticalAdapter adapter, boolean pending ){
+    public SwipeToReadOrDeleteCallback(BooksListVerticalAdapter adapter, boolean pending){
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         mAdapter = adapter;
         icon = delete = ContextCompat.getDrawable(mAdapter.getContext(), R.drawable.ic_delete_white);
@@ -91,15 +91,7 @@ public class SwipeToReadOrDeleteCallback extends ItemTouchHelper.SimpleCallback 
 
             background.setBounds(itemView.getRight() + ((int) dX) - backgroundCornerOffset,
                     itemView.getTop(), itemView.getRight(), itemView.getBottom());
-            /*icon = delete;
-            //icon = ContextCompat.getDrawable(mAdapter.getContext(), R.drawable.ic_reading_white);
-            int iconLeft = itemView.getLeft() + iconMargin + icon.getIntrinsicWidth();
-            int iconRight = itemView.getLeft() + iconMargin;
-            icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
 
-            background.setBounds(itemView.getLeft(), itemView.getTop(),
-                    itemView.getLeft() + ((int) dX) + backgroundCornerOffset,
-                    itemView.getBottom());*/
         } else if (dX < 0) { // Swiping to the left
             icon = delete;
             int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();

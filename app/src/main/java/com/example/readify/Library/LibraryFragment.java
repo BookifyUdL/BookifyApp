@@ -43,6 +43,7 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
     private GridLayoutManager gridLayoutManager;
     private RecyclerView recyclerViewGenres;
     private LinearLayout anyBookLayout;
+    private LinearLayout searchLayout;
     private SearchView searchView;
 
     private User user;
@@ -64,11 +65,11 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
     private void shouldShowEmptyMessage() {
         if (booksAdapter.getItemCount() == 0) {
             anyBookLayout.setVisibility(View.VISIBLE);
-            searchView.setVisibility(View.GONE);
+            searchLayout.setVisibility(View.GONE);
             recyclerViewGenres.setVisibility(View.GONE);
         } else {
             anyBookLayout.setVisibility(View.GONE);
-            searchView.setVisibility(View.VISIBLE);
+            searchLayout.setVisibility(View.VISIBLE);
             recyclerViewGenres.setVisibility(View.VISIBLE);
         }
     }
@@ -104,6 +105,7 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
                 mainActivity.focusDiscoverFragment();
             }
         });
+        searchLayout = (LinearLayout) view.findViewById(R.id.search_bar_bookshelf);
         anyBookLayout = (LinearLayout) view.findViewById(R.id.any_book_layout);
         recyclerViewGenres = view.findViewById(R.id.recyclerViewGenres);
         gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
