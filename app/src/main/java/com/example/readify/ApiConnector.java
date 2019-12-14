@@ -346,6 +346,10 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                                         public void onSuccess(ArrayList<ArrayList<Book>> books) {
                                             callback.onSuccess(booksByGenre);
                                         }
+
+                                        @Override
+                                        public void onSuccess(Book book) {
+                                        }
                                     });
                                     //callback.onSuccess(response);
                                     //responseReceived = true;
@@ -384,10 +388,14 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             genresId.add(g.getId());
         }
         getGenreById(context, 0, genresId, booksByGenre, new ServerCallbackForBooks() {
-                    @Override
-                    public void onSuccess(ArrayList<ArrayList<Book>> books) {
-                        callback.onSuccess(books);
-                    }
+            @Override
+            public void onSuccess(ArrayList<ArrayList<Book>> books) {
+                callback.onSuccess(books);
+            }
+
+            @Override
+            public void onSuccess(Book book) {
+            }
         });
                 //String[] urls =  urlz.toArray(new String[0]);
                 //String uls = (String) urls;

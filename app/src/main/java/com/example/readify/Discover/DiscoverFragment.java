@@ -157,6 +157,11 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
                         System.out.println("Get top rated books by genre succed");
                         addGenres(view, booksByGenre);
                     }
+
+                    @Override
+                    public void onSuccess(Book book){
+
+                    }
                 });
             }
         });

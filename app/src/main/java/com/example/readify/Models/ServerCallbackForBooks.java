@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public interface ServerCallbackForBooks {
-    abstract void onSuccess(ArrayList<ArrayList<Book>> books);
-    abstract void onSuccess(Book book);
+public abstract interface ServerCallbackForBooks {
+    void onSuccess(ArrayList<ArrayList<Book>> books);
+    void onSuccess(Book book);
 }
