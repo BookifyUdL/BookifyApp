@@ -42,6 +42,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
     private static String ALL_USERS = "users";
     private static String ALL_UPDATE = "/update";
     private static String ALL_TOP_RATED = "/toprated";
+    private static String ALL_AUTHOR = "/author";
     private static SharedPreferences preferences;
 
     private static String SLASH = "/";
@@ -255,6 +256,50 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         }
     }
 
+    public static void getBooksByAuthor(Context context, final ArrayList<Book> books, String authorId, final String bookId, final ServerCallback callback){
+        try{
+            String url = urlv + ALL_BOOKS + ALL_AUTHOR + SLASH + authorId;
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            String aux = response.toString();
+                            try{
+                                JSONArray jsonArray = response.getJSONArray("book");
+                                ArrayList<Book> authorBooks = Book.bookListFromJson(jsonArray);
+                                for (Book b : authorBooks){
+                                    if(b.getId() != bookId)
+                                        books.add(b);
+
+                                }
+                                callback.onSuccess(response);
+                            } catch (org.json.JSONException e) {
+
+                                System.out.println("Error");
+
+                            }
+                            //textView.setText("Response: " + response.toString());
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            System.out.println("Error");
+
+                        }
+                    });
+
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+            //queue.start();
+            //Wait_until_Downloaded();
+            //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
 
     public static void getAllBooks(Context context, final ServerCallback callback){
         //final ArrayList<Book> books = new ArrayList<>();

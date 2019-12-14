@@ -17,7 +17,7 @@ public class Book {
     private int year;
     private int extension;
     private Genre genre;
-    private Author auth;
+    public Author auth;
     private ArrayList<Review> comments;
     private String id;
     private int sumRatings;
@@ -52,6 +52,8 @@ public class Book {
                 this.genre = new Genre("5de7fb595a66a02fe3c39eae", "Crime", "genre3");
             }
             this.extension = jsonobject.getInt("num_page");
+            this.auth = new Author(jsonobject.getJSONObject("author"));
+            this.author = this.auth.getName();
             //missing author
             //missing comments
 
@@ -95,6 +97,9 @@ public class Book {
             //String aux = jsonobject.get("genre").toString();
             this.extension = jsonobject.getInt("num_page");
             //missing author
+            this.auth = new Author(jsonobject.getJSONObject("author"));
+            this.author = this.auth.getName();
+
             //missing comments
 
            /* "publication_date": "2019-01-01T00:00:00.000Z",
@@ -123,6 +128,22 @@ public class Book {
             //this.name = "Error";
             //this.picture = "Error";
         }
+    }
+
+    public int getSumRatings() {
+        return sumRatings;
+    }
+
+    public void setSumRatings(int sumRatings) {
+        this.sumRatings = sumRatings;
+    }
+
+    public int getNumRatings() {
+        return numRatings;
+    }
+
+    public void setNumRatings(int numRatings) {
+        this.numRatings = numRatings;
     }
 
     public static ArrayList<Book> bookListFromJson(JSONArray bookListJson){

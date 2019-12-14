@@ -7,6 +7,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,13 +24,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.readify.Adapters.BooksHorizontalAdapter;
+import com.example.readify.Adapters.BooksListVerticalAdapter;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.ServerCallback;
+import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
 import com.example.readify.Popups.BookReadedPopup;
 import com.example.readify.Popups.ReviewsPopup;
 import com.example.readify.Popups.ShopsPopup;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +57,7 @@ public class BookViewFragment extends Fragment {
     private ArrayList<Book> prevoiusBooks;
     private ArrayList<Pages> parents;
     private View view;
-    private List<Book> sameAuthorBooks;
+    private ArrayList<Book> sameAuthorBooks;
     private List<Book> sameGenderBooks;
     private Pages parent;
 
@@ -182,13 +191,10 @@ public class BookViewFragment extends Fragment {
                 }
             }
         });
-        /*Recyclers Views*/
-        /*Same author books*/
-        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView recyclerViewAuthor = (RecyclerView) view.findViewById(R.id.author_books_recycler_view);
-        recyclerViewAuthor.setLayoutManager(horizontalLayoutManagaer);
-        sameAuthorBooks = MockupsValues.getSameAuthorBooks();
-        LinearLayoutManager horizontalLayoutManager
+
+
+        //sameAuthorBooks = MockupsValues.getSameAuthorBooks();
+        /*LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
         BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), sameAuthorBooks, false, user);
@@ -198,7 +204,86 @@ public class BookViewFragment extends Fragment {
                showBookFragment(sameAuthorBooks.get(position));
            }
         });
-        recyclerViewAuthor.setAdapter(adapterAuth);
+        recyclerViewAuthor.setAdapter(adapterAuth);*/
+
+        return view;
+    }
+
+    /*@Override
+    public void onItemClick(View view, int position) {
+        //showBookFragment();
+
+    }*/
+
+    private void showBookFragment(Book book){
+        MainActivity activity = (MainActivity) getActivity();
+        activity.goToBookPage(book, Pages.BOOK_VIEW_PAGE);
+    }
+
+    private void setBookCover(ImageView picture, String pictureUrl){
+        Picasso.with(getContext()) // Context
+                .load(pictureUrl) // URL or file
+                .into(picture);
+    }
+
+    private void setContent(){
+        //if(book != null)
+        //    prevoiusBooks.add()
+        ScrollView scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
+        ImageView bookImageView = (ImageView) view.findViewById(R.id.book_cover_image_view);
+        setBookCover(bookImageView, book.getPicture());
+        //bookImageView.setImageResource(bookImageView.getContext().getResources().getIdentifier(book.getPicture(), "drawable", bookImageView.getContext().getPackageName()));
+        TextView bookTitle = (TextView) view.findViewById(R.id.book_title);
+        TextView bookAuthor = (TextView) view.findViewById(R.id.book_author);
+        TextView textView = (TextView) view.findViewById(R.id.same_author_books_title);
+        bookTitle.setText(book.getTitle());
+        bookAuthor.setText(book.getAuthor());
+        String aux  = getString(R.string.more_books_of) + " " + book.getAuthor() + " :";
+        textView.setText(aux);
+        ImageButton addBook = (ImageButton) view.findViewById(R.id.add_button);
+        if(user.getInterested().contains(book)){
+            Drawable drawable = ContextCompat.getDrawable(getContext(),
+                    getContext().getResources().getIdentifier("ic_reading_white", "drawable", getContext().getPackageName()));
+            //holder.addButton.setImageResource(R.drawable.ic_added_book);
+            addBook.setImageDrawable(drawable);
+        }
+        TextView genreName = (TextView) view.findViewById(R.id.text_genre_name);
+        ImageView genreIcon = (ImageView) view.findViewById(R.id.genre_icon);
+        TextView extensionNumber = (TextView) view.findViewById(R.id.extension_number);
+        TextView ratingsAverage = (TextView) view.findViewById(R.id.ratings_average);
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        double ratings = book.getSumRatings() / book.getNumRatings();
+
+        extensionNumber.setText(String.valueOf(book.getExtension()));
+        ratingsAverage.setText(String.valueOf(decimalFormat.format(ratings)));
+        genreName.setText(book.getGenre().getName());
+        genreIcon.setImageResource(getContext().getResources().getIdentifier(book.getGenre().getPicture(), "drawable", getContext().getPackageName()));
+        scrollView.setScrollY(0);
+
+        /*Recyclers Views*/
+        /*Same author books*/
+        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        final RecyclerView recyclerViewAuthor = (RecyclerView) view.findViewById(R.id.author_books_recycler_view);
+        recyclerViewAuthor.setLayoutManager(horizontalLayoutManagaer);
+        sameAuthorBooks = new ArrayList<>();
+        Book b = book;
+        ApiConnector.getBooksByAuthor(getContext(), sameAuthorBooks, book.auth.getId(), book.getId(), new ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                LinearLayoutManager horizontalLayoutManager
+                        = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
+                BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), sameAuthorBooks, false, user);
+                adapterAuth.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        showBookFragment(sameAuthorBooks.get(position));
+                    }
+                });
+                recyclerViewAuthor.setAdapter(adapterAuth);
+            }
+        });
 
         /*Same gender books*/
         //LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -217,45 +302,6 @@ public class BookViewFragment extends Fragment {
             }
         });
         recyclerView.setAdapter(adapterGender);
-        return view;
-    }
-
-    /*@Override
-    public void onItemClick(View view, int position) {
-        //showBookFragment();
-
-    }*/
-
-    private void showBookFragment(Book book){
-        MainActivity activity = (MainActivity) getActivity();
-        activity.goToBookPage(book, Pages.BOOK_VIEW_PAGE);
-    }
-
-    private void setContent(){
-        //if(book != null)
-        //    prevoiusBooks.add()
-        ScrollView scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
-        ImageView bookImageView = (ImageView) view.findViewById(R.id.book_cover_image_view);
-        bookImageView.setImageResource(bookImageView.getContext().getResources().getIdentifier(book.getPicture(), "drawable", bookImageView.getContext().getPackageName()));
-        TextView bookTitle = (TextView) view.findViewById(R.id.book_title);
-        TextView bookAuthor = (TextView) view.findViewById(R.id.book_author);
-        TextView textView = (TextView) view.findViewById(R.id.same_author_books_title);
-        bookTitle.setText(book.getTitle());
-        bookAuthor.setText(book.getAuthor());
-        String aux  = getString(R.string.more_books_of) + " " + book.getAuthor() + " :";
-        textView.setText(aux);
-        ImageButton addBook = (ImageButton) view.findViewById(R.id.add_button);
-        if(user.getInterested().contains(book)){
-            Drawable drawable = ContextCompat.getDrawable(getContext(),
-                    getContext().getResources().getIdentifier("ic_reading_white", "drawable", getContext().getPackageName()));
-            //holder.addButton.setImageResource(R.drawable.ic_added_book);
-            addBook.setImageDrawable(drawable);
-        }
-        TextView genreName = (TextView) view.findViewById(R.id.text_genre_name);
-        ImageView genreIcon = (ImageView) view.findViewById(R.id.genre_icon);
-        genreName.setText(book.getGenre().getName());
-        genreIcon.setImageResource(getContext().getResources().getIdentifier(book.getGenre().getPicture(), "drawable", getContext().getPackageName()));
-        scrollView.setScrollY(0);
     }
 
     private void onGoBackButtonClicked(){
