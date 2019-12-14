@@ -489,6 +489,48 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
     }
 
+    public static void getBookById(Context context, String bookId, final ServerCallbackForBooks callback){
+        String url = urlv + ALL_BOOKS + SLASH + bookId;
+        try{
+            //JSONObject jsonObject = User.toJSON(user);
+            //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            System.out.println(response.toString());
+                            try {
+                                JSONObject aux = response.getJSONObject("book");
+                                Book book = new Book(aux);
+                                callback.onSuccess(book);
+                            } catch (Exception e) {
+                                System.out.println("Error parsing book from jsonobject");
+                            }
+
+                            //MockupsValues.user = new User(response);
+                            ////callback.onSuccess(new JSONObject());
+
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            System.out.println("Error");
+
+
+                        }
+                    });
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+            //queue.start();
+        } catch (Exception e){
+            System.out.println("GET catch error, user.");
+            System.out.println(e);
+        }
+    }
+
     public static void getTopRatedBooks(Context context, final ServerCallback callback){
         try{
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest

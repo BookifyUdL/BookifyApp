@@ -12,6 +12,7 @@ import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.Library.LibraryFragment;
 import com.example.readify.Login.LoginActivity;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
 import com.example.readify.Profile.ProfileFragment;
 import com.example.readify.Reading.ReadingFragment;
@@ -31,6 +32,8 @@ import android.os.Bundle;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.MenuItem;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements
         ReadingFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
@@ -137,14 +140,22 @@ public class MainActivity extends AppCompatActivity implements
         active = fragment1;
     }
 
-    public void goToBookPage(Book book, Pages fromPage) {
-        String id = book.getId();
-        fragment6.setBook(book);
-        fragment6.setParent(fromPage);
-        fragment6.setEnterTransition(new Slide(Gravity.BOTTOM));
-        fragment6.setExitTransition(new Slide(Gravity.TOP));
-        fm.beginTransaction().hide(active).show(fragment6).commit();
-        active = fragment6;
+    public void goToBookPage(Book bookReceived, final Pages fromPage) {
+        String id = bookReceived.getId();
+        ApiConnector.getBookById(getApplicationContext(), id, new ServerCallbackForBooks() {
+            @Override
+            public void onSuccess(ArrayList<ArrayList<Book>> books) { }
+
+            @Override
+            public void onSuccess(Book book) {
+                fragment6.setBook(book);
+                fragment6.setParent(fromPage);
+                fragment6.setEnterTransition(new Slide(Gravity.BOTTOM));
+                fragment6.setExitTransition(new Slide(Gravity.TOP));
+                fm.beginTransaction().hide(active).show(fragment6).commit();
+                active = fragment6;
+            }
+        });
     }
 
     public void focusDiscoverFragment() {

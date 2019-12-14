@@ -1,5 +1,7 @@
 package com.example.readify.Models;
 
+import com.google.gson.JsonObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +44,14 @@ public class Book {
             this.numRatings = jsonobject.getInt("num_rating");
             this.isNew = jsonobject.getBoolean("is_new");
             //String aux = jsonobject.get("genre").toString();
-            this.genre = new Genre(jsonobject.getJSONObject("genre"));
+            JSONArray jsonArrayGenre = jsonobject.getJSONArray("genre");
+            try {
+                JSONObject jsonObjectGenre = jsonArrayGenre.getJSONObject(0);
+                this.genre = new Genre(jsonArrayGenre.getJSONObject(0));   //new JSONArray();
+            } catch (Exception e) {
+                this.genre = new Genre("5de7fb595a66a02fe3c39eae", "Crime", "genre3");
+            }
+            this.extension = jsonobject.getInt("num_page");
             //missing author
             //missing comments
 
@@ -68,6 +77,49 @@ public class Book {
                         "url": "http://localhost:3000/books/5de7fb655a66a02fe3c39ebc"
             }*/
         } catch (JSONException e) {
+            System.out.println("Error parsing book constructor");
+            //this.name = "Error";
+            //this.picture = "Error";
+        }
+    }
+
+    public Book(JSONObject jsonobject, boolean type){
+        try{
+            this.title = jsonobject.getString("title");
+            this.summary = jsonobject.getString("summary");
+            this.id = jsonobject.getString("_id");
+            this.picture = jsonobject.getString("cover_image");
+            this.sumRatings = jsonobject.getInt("rating");
+            this.numRatings = jsonobject.getInt("num_rating");
+            this.isNew = jsonobject.getBoolean("is_new");
+            //String aux = jsonobject.get("genre").toString();
+            this.extension = jsonobject.getInt("num_page");
+            //missing author
+            //missing comments
+
+           /* "publication_date": "2019-01-01T00:00:00.000Z",
+                    "author": {
+                "_id": "5ddd69ac99439a0f2d99edc9",
+                        "name": "DEFREDS JOSE. A. GOMEZ IGLESIAS"
+            },
+            "genre": [
+            {
+                "_id": "5de7fb595a66a02fe3c39ead",
+                    "picture": "genre2",
+                    "name": "Computing / Interenet"
+            }
+            ],
+            "cover_image": "https://imagessl6.casadellibro.com/a/l/t1/16/9788467056716.jpg",
+                    "comments": [],
+            "rating": 5,
+                    "num_rating": 1,
+                    "is_new": true,
+                    "request": {
+                "type": "GET",
+                        "url": "http://localhost:3000/books/5de7fb655a66a02fe3c39ebc"
+            }*/
+        } catch (JSONException e) {
+            System.out.println("Error parsing book constructor");
             //this.name = "Error";
             //this.picture = "Error";
         }
@@ -77,7 +129,7 @@ public class Book {
         try {
             ArrayList<Book> booksList = new ArrayList<>();
             for (int i=0; i < bookListJson.length(); i++){
-                booksList.add(new Book(bookListJson.getJSONObject(i)));
+                booksList.add(new Book(bookListJson.getJSONObject(i), false));
             }
             return  booksList;
         } catch (Exception e) {
