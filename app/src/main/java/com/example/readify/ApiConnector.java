@@ -3,6 +3,7 @@ package com.example.readify;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,6 +18,7 @@ import com.example.readify.Models.Author;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
 import com.example.readify.Models.ServerCallback;
+import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonIOException;
@@ -41,6 +43,11 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
     private static String ALL_UPDATE = "/update";
     private static String ALL_TOP_RATED = "/toprated";
     private static SharedPreferences preferences;
+
+    private static String SLASH = "/";
+
+    private static boolean responseReceived = false;
+    private static int requests;
 
     //Context context;
     //RequestQueue queue = Volley.newRequestQueue(context);
@@ -314,6 +321,164 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             }
         }
         return books;
+    }
+
+    public static void getGenreById(final Context context, final int index, final ArrayList<String> genresId, final ArrayList<ArrayList<Book>> booksByGenre, final ServerCallbackForBooks callback){
+
+        if(index >= genresId.size()){
+            callback.onSuccess(booksByGenre);
+        } else {
+            String url = urlv + ALL_BOOKS + ALL_TOP_RATED + SLASH + genresId.get(index);
+            try{
+                //final boolean responseReceived = false;
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                        (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                //String aux = response.toString();
+                                try{
+                                    JSONArray jsonarray = new JSONArray(response.get("book").toString());
+                                    ArrayList<Book> books = parseJsonArrayToBookList(jsonarray);
+                                    booksByGenre.add(books);
+                                    getGenreById(context, index + 1, genresId, booksByGenre, new ServerCallbackForBooks() {
+                                        @Override
+                                        public void onSuccess(ArrayList<ArrayList<Book>> books) {
+                                            callback.onSuccess(booksByGenre);
+                                        }
+                                    });
+                                    //callback.onSuccess(response);
+                                    //responseReceived = true;
+                                    //requests--;
+                                } catch (org.json.JSONException e) {
+                                    System.out.println("Error");
+                                }
+                                //textView.setText("Response: " + response.toString());
+                            }
+                        }, new Response.ErrorListener() {
+
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // TODO: Handle error
+                                System.out.println("Error");
+                                booksByGenre.add(new ArrayList<Book>());
+
+                            }
+                        });
+                RequestQueue queue = Volley.newRequestQueue(context);
+                queue.add(jsonObjectRequest);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+
+            //queue.add(jsonObjectRequest);
+    }
+
+    public static void getTopRatedBooksForGenre(final Context context, ArrayList<Genre>  genres, final ServerCallbackForBooks callback){
+        final ArrayList<ArrayList<Book>> booksByGenre = new ArrayList<ArrayList<Book> >();
+        ArrayList<String> genresId = new ArrayList<>();
+        for (Genre g: genres){
+            //String url = urlv + ALL_BOOKS + ALL_TOP_RATED + SLASH + g.getId();
+            //urls.put(url);
+            genresId.add(g.getId());
+        }
+        getGenreById(context, 0, genresId, booksByGenre, new ServerCallbackForBooks() {
+                    @Override
+                    public void onSuccess(ArrayList<ArrayList<Book>> books) {
+                        callback.onSuccess(books);
+                    }
+        });
+                //String[] urls =  urlz.toArray(new String[0]);
+                //String uls = (String) urls;
+        /*RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urls.toString(), null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for(int i=0; i<response.length(); i++){
+                    try{
+                        JSONArray jsonArray = new JSONArray(response.getJSONObject(i).get("book").toString());
+                        //JSONArray jsonarray = new JSONArray(response.get(i).get("book").toString());
+
+                        ArrayList<Book> books = parseJsonArrayToBookList(jsonArray);
+                        booksByGenre.add(books);
+                        //callback.onSuccess(response);
+                        //responseReceived = true;
+                        //requests--;
+                    } catch (org.json.JSONException e) {
+                        System.out.println("Error");
+                    }
+
+                }
+                callback.onSuccess(booksByGenre);
+            }
+        }, new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyerror){
+                //progressDialog.dismiss();
+                //Toast.makeText(context, volleyerror.getMessage(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, volleyerror.getMessage(), Toast.LENGTH_SHORT).show();
+                System.out.println("Error gettign top rated books for each genre");
+            }
+        });
+        requestQueue.add(jsonArrayRequest);
+
+
+        //RequestQueue requestQueue = Volley.newRequestQueue(context);
+        //CustomPriorityRequest jsonArrayRequest = new CustomPriorityRequest(Request.Method.GET, )
+        //requests = genres.size();
+        //getGenreById(genres.get(0).getId(), booksByGenre, );
+        //callback.onSuccess(booksByGenre);
+        /*requests = genres.size();
+        RequestQueue queue = Volley.newRequestQueue(context);
+        for (Genre genre : genres){
+            String url = urlv + ALL_BOOKS + ALL_TOP_RATED + SLASH + genre.getId();
+            try{
+                //final boolean responseReceived = false;
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                        (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                //String aux = response.toString();
+                                try{
+                                    JSONArray jsonarray = new JSONArray(response.get("book").toString());
+                                    ArrayList<Book> books = parseJsonArrayToBookList(jsonarray);
+                                    booksByGenre.add(books);
+                                    //responseReceived = true;
+                                    requests--;
+                                    //MockupsValues.setTopRatedBooks(books);
+                                    //aux2 = "";
+                                } catch (org.json.JSONException e) {
+                                    System.out.println("Error");
+                                }
+                                //textView.setText("Response: " + response.toString());
+                            }
+                        }, new Response.ErrorListener() {
+
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // TODO: Handle error
+                                System.out.println("Error");
+                                booksByGenre.add(new ArrayList<Book>());
+
+                            }
+                        });
+
+                queue.add(jsonObjectRequest);
+
+                //queue.start();
+                //Wait_until_Downloaded();
+                //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }*/
+
+        /*queue.start();
+        while(requests != 0) { System.out.println("WAiting requests, " + requests); }
+        callback.onSuccess(booksByGenre);*/
+
     }
 
     public static void getTopRatedBooks(Context context, final ServerCallback callback){

@@ -27,6 +27,7 @@ import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
 import com.example.readify.Models.ServerCallback;
+import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
 import com.example.readify.Pages;
 import com.example.readify.R;
@@ -105,7 +106,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_discover, container, false);
+        final View view = inflater.inflate(R.layout.fragment_discover, container, false);
 
         prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
         user = new User();
@@ -147,8 +148,19 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
                 BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), MockupsValues.getTopRatedBooks(), true, user);
                 adapter.setClickListener(discoverFragment);
                 recyclerView.setAdapter(adapter);
+
+                ArrayList<Genre> b = MockupsValues.user.getGenres();
+
+                ApiConnector.getTopRatedBooksForGenre(getContext(), MockupsValues.user.getGenres(), new ServerCallbackForBooks() {
+                    @Override
+                    public void onSuccess(ArrayList<ArrayList<Book>> booksByGenre) {
+                        System.out.println("Get top rated books by genre succed");
+                        addGenres(view, booksByGenre);
+                    }
+                });
             }
         });
+
         /* Llista top rated */
         /*LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.top_rated_recycler_view);
@@ -171,7 +183,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         return view;
     }
 
-    private void addGenres(View view) {
+    private void addGenres(View view, ArrayList<ArrayList<Book>> booksByGenre) {
         RelativeLayout relativeLayout = (RelativeLayout) view.findViewById(R.id.relative_layout);
         boolean isFirst = true;
         int previousId = 0;
@@ -180,12 +192,11 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         int margin_10dp = (int) getContext().getResources().getDimension(R.dimen.margin_10dp);
         int margin_15dp = (int) getContext().getResources().getDimension(R.dimen.margin_15dp);
 
-        ArrayList<Book> books = MockupsValues.getLastAddedBooksDiscover();
+        //ArrayList<Book> books = MockupsValues.getLastAddedBooksDiscover();
         //books.add(MockupsValues.getSameAuthorBooks().get(0));
-
-        for (Genre genre : user.getGenres()) {
+        for (int i = 0; i < user.getGenres().size(); i++){
             TextView textView = new TextView(getContext());
-            String text = genre.getName() + " genre";
+            String text = user.getGenres().get(i).getName() + " genre";
             textView.setText(text);
             textView.setTextAppearance(R.style.TextAppearance_AppCompat_Body1);
             textView.setTypeface(null, Typeface.BOLD);
@@ -227,13 +238,17 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
             LinearLayoutManager horizontalLayoutManager
                     = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
             recyclerView.setLayoutManager(horizontalLayoutManager);
-            BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), books, true, user);
+            BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), booksByGenre.get(i), true, user);
             adapter.setClickListener(this);
             recyclerView.setAdapter(adapter);
 
             cardView.addView(recyclerView);
             relativeLayout.addView(cardView);
         }
+
+        /*for (Genre genre : user.getGenres()) {
+
+        }*/
 
         int blankLayoutHeight = (int) getContext().getResources().getDimension(R.dimen.blank_layout);
         LinearLayout linearLayout = new LinearLayout(getContext());

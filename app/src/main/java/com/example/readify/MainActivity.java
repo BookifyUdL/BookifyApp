@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void goToBookPage(Book book, Pages fromPage) {
+        String id = book.getId();
         fragment6.setBook(book);
         fragment6.setParent(fromPage);
         fragment6.setEnterTransition(new Slide(Gravity.BOTTOM));
