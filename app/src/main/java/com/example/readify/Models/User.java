@@ -228,6 +228,7 @@ public class User {
 
             jsonObject.put("email", user.getEmail());
             jsonObject.put("genres", Genre.genresListToJSON(user.getGenres()));
+
             /*"_id": "5ddd6287e1cc0e546e3d476a",
                     "name": "Agricolesa",
                     "firebaseId": "5ddc0f601b6cd31ed7b8afa4",
@@ -448,7 +449,7 @@ public class User {
     }
 
     public void readFromSharedPreferences(SharedPreferences pref) {
-        this.uid = pref.getString("com.example.readify.uid", "0");
+        /*this.uid = pref.getString("com.example.readify.uid", "0");
         this.name = pref.getString("com.example.readify.name", "Unknown");
         this.email = pref.getString("com.example.readify.email", "mail@unknown.com");
         this.picture = pref.getString("com.example.readify.photo", "userfinale");
@@ -477,7 +478,7 @@ public class User {
         //Reading
         String readingPref = pref.getString("com.example.readify.reading", "");
         Type type4 = new TypeToken<List<Book>>() {}.getType();
-        this.reading = new Gson().fromJson(readingPref, type4);
+        this.reading = new Gson().fromJson(readingPref, type4);*/
     }
 
     /* Method to update information on database */

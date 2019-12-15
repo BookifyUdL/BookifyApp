@@ -178,35 +178,37 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     }
 
     private void acceptButtonClicked(){
-        ArrayList<Book> library = user.getLibrary();
+        //ArrayList<Book> library = user.getLibrary();
         book.setRead(true);
-
-
-        /*Some shit is happening here bros*/
-        ListIterator<Book> itr = library.listIterator();
-        while (itr.hasNext()) {
-            Book tmp = itr.next();
-            if (tmp.getTitle().equals(book.getTitle()))
-                library.remove(tmp);
-        }
-
-        library.add(0, book);
-
-        user.setLibrary(library);
-        //MockupsValues.user.setLibraryBookAsRead(book);
-        String libraryToPref = new Gson().toJson(user.getLibrary());
-        pref.edit().putString("com.example.readify.library", libraryToPref).apply();
-
-        this.activity.notifyLibraryListChanged(user);
 
         ArrayList<Book> reading = user.getReading();
         reading.remove(book);
         user.setReading(reading);
         //MockupsValues.removeReadingListBook(book);
-        String readingToPref = new Gson().toJson(user.getReading());
-        pref.edit().putString("com.example.readify.reading", readingToPref).apply();
+        //String readingToPref = new Gson().toJson(user.getReading());
+        //pref.edit().putString("com.example.readify.reading", readingToPref).apply();
 
         this.activity.notifyReadingListChanged(user);
+
+
+        /*Some shit is happening here bros*/
+        /*ListIterator<Book> itr = library.listIterator();
+        while (itr.hasNext()) {
+            Book tmp = itr.next();
+            if (tmp.getTitle().equals(book.getTitle()))
+                library.remove(tmp);
+        }*/
+
+        //library.add(0, book);
+        user.getLibrary().remove(book);
+        user.getLibrary().add(0, book);
+
+        //user.setLibrary(library);
+        //MockupsValues.user.setLibraryBookAsRead(book);
+        //String libraryToPref = new Gson().toJson(user.getLibrary());
+        //pref.edit().putString("com.example.readify.library", libraryToPref).apply();
+
+        this.activity.notifyLibraryListChanged(user);
 
         Toast.makeText(getContext(), getContext().getString(R.string.review_added_correctly), Toast.LENGTH_LONG).show();
         close();

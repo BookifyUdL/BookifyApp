@@ -93,9 +93,9 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
 
         View view = inflater.inflate(R.layout.fragment_library, container, false);
 
-        user = new User();
-        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-        user.readFromSharedPreferences(prefs);
+        user = MockupsValues.getUser();
+        //prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        //user.readFromSharedPreferences(prefs);
 
         LinearLayout discoverButton = view.findViewById(R.id.discover_layout);
         discoverButton.setOnClickListener(new View.OnClickListener() {

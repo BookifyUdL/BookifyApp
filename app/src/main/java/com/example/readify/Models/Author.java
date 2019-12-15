@@ -22,6 +22,10 @@ public class Author {
         this.id = id;
     }
 
+    public Author(){
+
+    }
+
     public String getName() {
         return name;
     }

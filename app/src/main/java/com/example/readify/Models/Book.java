@@ -223,6 +223,26 @@ public class Book {
     public Book() {
     }
 
+    @Override
+    public boolean equals(Object o){
+        // If the object is compared with itself then return true
+        if (o == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Book)) {
+            return false;
+        }
+
+        // typecast o to Complex so that we can compare data members
+        Book c = (Book) o;
+
+        // Compare the data members and return accordingly
+        return c.getId().equals(this.getId());
+    }
+
 
     public boolean isNew(){
         return this.isNew;
