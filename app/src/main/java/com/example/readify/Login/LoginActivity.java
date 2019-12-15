@@ -462,12 +462,34 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
             pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString()).apply();
 
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            readDataFromFirebase(currentUser.getUid(), intent);
+            final String uid = currentUser.getUid();
+            ApiConnector.getGenres(getApplicationContext(), new ServerCallback() {
+                @Override
+                public void onSuccess(JSONObject result) {
+                    System.out.println("Get genres funko!!!!");
+                    MockupsValues.setContext(getApplicationContext());
+                    ApiConnector.getAllBooks(getApplicationContext(), new ServerCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            System.out.println("Get allBooks funko!!!!");
+                            ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
+                                @Override
+                                public void onSuccess(JSONObject result) {
+                                    System.out.println("Get userInfo funko!!!!");
+                                    //MockupsValues.setIsUserInDatabase(true);
+                                    //updateUI(currentUser);
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    readDataFromFirebase(uid, intent);
 
-            //Intent intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
-            startActivity(intent);
-            finish();
+                                    //Intent intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+                        }
+                    });
+                }
+            });
         } catch (Exception e){
             System.out.println(e.getMessage());
             Toast.makeText(getApplicationContext(), "Error in login 1", Toast.LENGTH_SHORT).show();
@@ -550,7 +572,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
 
     @Override
     public void onNetworkConnectionChanged(String status) {
-        Boolean connectivityFull = pref.getBoolean("com.example.readify.wifiAndData", false);
+        /*Boolean connectivityFull = pref.getBoolean("com.example.readify.wifiAndData", false);
 
         if (status.equals(getResources().getString(R.string.wifi_ok))) {
             connectionEnabled = true;
@@ -586,6 +608,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                         }
                     });
             alertDialog.show();
-        }
+        }*/
     }
 }

@@ -181,6 +181,8 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         ArrayList<Book> library = user.getLibrary();
         book.setRead(true);
 
+
+        /*Some shit is happening here bros*/
         ListIterator<Book> itr = library.listIterator();
         while (itr.hasNext()) {
             Book tmp = itr.next();

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.PagerAdapter;
 
@@ -15,6 +16,7 @@ import com.example.readify.MainActivity;
 import com.example.readify.Models.Book;
 import com.example.readify.Pages;
 import com.example.readify.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +97,15 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         ImageView bookImageView = (ImageView) view.findViewById(R.id.bookImageView);
         titleTextView.setText(item.getAuthor());
         contentTextView.setText(item.getTitle());
-        bookImageView.setImageResource(bookImageView.getContext().getResources().getIdentifier(item.getPicture(), "drawable", bookImageView.getContext().getPackageName()));
+        setBookCover(bookImageView, item.getPicture());
+        //bookImageView.setImageResource(bookImageView.getContext().getResources().getIdentifier(item.getPicture(), "drawable", bookImageView.getContext().getPackageName()));
         //bookImageView.setImageBitmap(context.getResources().getIdentifier(item.getPicture(), "drawable", context.getPackageName()));
     }
+
+    private void setBookCover(ImageView image, String picture){
+        Picasso.with(activity.getApplicationContext()) // Context
+                .load(picture) // URL or file
+                .into(image);
+    }
+
 }

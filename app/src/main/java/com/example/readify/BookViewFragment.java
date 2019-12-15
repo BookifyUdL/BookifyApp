@@ -7,6 +7,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,13 +24,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.readify.Adapters.BooksHorizontalAdapter;
+import com.example.readify.Adapters.BooksListVerticalAdapter;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.Item;
+import com.example.readify.Models.ServerCallback;
+import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
 import com.example.readify.Popups.BookReadedPopup;
 import com.example.readify.Popups.ReviewsPopup;
 import com.example.readify.Popups.ShopsPopup;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +59,7 @@ public class BookViewFragment extends Fragment {
     private ArrayList<Book> prevoiusBooks;
     private ArrayList<Pages> parents;
     private View view;
-    private List<Book> sameAuthorBooks;
+    private ArrayList<Book> sameAuthorBooks;
     private List<Book> sameGenderBooks;
     private Pages parent;
 
@@ -75,6 +86,18 @@ public class BookViewFragment extends Fragment {
         setContent();
     }
 
+    public void setSameAuthorBooks(ArrayList<Book> books){
+        //if(this.sameAuthorBooks )
+        this.sameAuthorBooks = books;
+        setSameAuthorBooksAdapter();
+    }
+
+
+    public void setSameGenderBooks(ArrayList<Book> books){
+        this.sameGenderBooks = books;
+        setSameGenderBooks();
+    }
+
 
     public static BookViewFragment newInstance(Book book) {
         BookViewFragment fragment = new BookViewFragment();
@@ -83,12 +106,20 @@ public class BookViewFragment extends Fragment {
     }
 
     private void shopShopsPopup(){
-        /*BookReadedPopup dialog =  new BookReadedPopup(get, holder, fragmentManager, book, user);
-        FragmentTransaction ft2 = fragmentManager.beginTransaction();
-        dialog.show(ft2, "book_readed_popup");*/
-        ShopsPopup dialog = new ShopsPopup();
-        FragmentTransaction ft2 = getFragmentManager().beginTransaction();
-        dialog.show(ft2, "shops_popup");
+        ApiConnector.getShopItemsByBookId(getContext(), book.getId(), new ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                try{
+                    JSONArray array = result.getJSONArray("item");
+                    ArrayList<Item> items = Item.getItemsFromJSONArray(array);
+                    ShopsPopup dialog = new ShopsPopup(items, book);
+                    FragmentTransaction ft2 = getFragmentManager().beginTransaction();
+                    dialog.show(ft2, "shops_popup");
+                } catch (Exception e) {
+                    System.out.println("Error parsing items");
+                }
+            }
+        });
     }
 
     private void showReviewsPopup(){
@@ -182,13 +213,14 @@ public class BookViewFragment extends Fragment {
                 }
             }
         });
+
+
         /*Recyclers Views*/
-        /*Same author books*/
-        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView recyclerViewAuthor = (RecyclerView) view.findViewById(R.id.author_books_recycler_view);
-        recyclerViewAuthor.setLayoutManager(horizontalLayoutManagaer);
-        sameAuthorBooks = MockupsValues.getSameAuthorBooks();
-        LinearLayoutManager horizontalLayoutManager
+
+
+
+        //sameAuthorBooks = MockupsValues.getSameAuthorBooks();
+        /*LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
         BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), sameAuthorBooks, false, user);
@@ -197,26 +229,9 @@ public class BookViewFragment extends Fragment {
            public void onItemClick(View view, int position) {
                showBookFragment(sameAuthorBooks.get(position));
            }
-        });
-        recyclerViewAuthor.setAdapter(adapterAuth);
+        });*/
+        //recyclerViewAuthor.setAdapter(adapterAuth);
 
-        /*Same gender books*/
-        //LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.gender_books_recycler_view);
-        recyclerView.setLayoutManager(horizontalLayoutManagaer);
-        sameGenderBooks = MockupsValues.getSameGenderBooks();
-        LinearLayoutManager horizontalLayoutManagerGender
-                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(horizontalLayoutManagerGender);
-        BooksHorizontalAdapter adapterGender = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), sameGenderBooks, false, user);
-        //adapterGender.setClickListener(this);
-        adapterGender.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                showBookFragment(sameGenderBooks.get(position));
-            }
-        });
-        recyclerView.setAdapter(adapterGender);
         return view;
     }
 
@@ -226,9 +241,53 @@ public class BookViewFragment extends Fragment {
 
     }*/
 
+    private void setSameGenderBooks(){
+        /*Same gender books*/
+        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.gender_books_recycler_view);
+        recyclerView.setLayoutManager(horizontalLayoutManagaer);
+        //sameGenderBooks = MockupsValues.getSameGenderBooks();
+        LinearLayoutManager horizontalLayoutManagerGender
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(horizontalLayoutManagerGender);
+        BooksHorizontalAdapter adapterGender = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), sameGenderBooks, false, user);
+        //adapterGender.setClickListener(this);
+        adapterGender.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, Book book, int size) {
+                showBookFragment(sameGenderBooks.get(position));
+            }
+        });
+        recyclerView.setAdapter(adapterGender);
+    }
+
+    private void setSameAuthorBooksAdapter(){
+        /*Same author books*/
+        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        final RecyclerView recyclerViewAuthor = (RecyclerView) view.findViewById(R.id.author_books_recycler_view);
+        recyclerViewAuthor.setLayoutManager(horizontalLayoutManagaer);
+        LinearLayoutManager horizontalLayoutManager
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
+        BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), sameAuthorBooks, false, user);
+        adapterAuth.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, Book book, int size) {
+                showBookFragment(sameAuthorBooks.get(position));
+            }
+        });
+        recyclerViewAuthor.setAdapter(adapterAuth);
+    }
+
     private void showBookFragment(Book book){
         MainActivity activity = (MainActivity) getActivity();
         activity.goToBookPage(book, Pages.BOOK_VIEW_PAGE);
+    }
+
+    private void setBookCover(ImageView picture, String pictureUrl){
+        Picasso.with(getContext()) // Context
+                .load(pictureUrl) // URL or file
+                .into(picture);
     }
 
     private void setContent(){
@@ -236,7 +295,8 @@ public class BookViewFragment extends Fragment {
         //    prevoiusBooks.add()
         ScrollView scrollView = (ScrollView) view.findViewById(R.id.scroll_view);
         ImageView bookImageView = (ImageView) view.findViewById(R.id.book_cover_image_view);
-        bookImageView.setImageResource(bookImageView.getContext().getResources().getIdentifier(book.getPicture(), "drawable", bookImageView.getContext().getPackageName()));
+        setBookCover(bookImageView, book.getPicture());
+        //bookImageView.setImageResource(bookImageView.getContext().getResources().getIdentifier(book.getPicture(), "drawable", bookImageView.getContext().getPackageName()));
         TextView bookTitle = (TextView) view.findViewById(R.id.book_title);
         TextView bookAuthor = (TextView) view.findViewById(R.id.book_author);
         TextView textView = (TextView) view.findViewById(R.id.same_author_books_title);
@@ -253,6 +313,17 @@ public class BookViewFragment extends Fragment {
         }
         TextView genreName = (TextView) view.findViewById(R.id.text_genre_name);
         ImageView genreIcon = (ImageView) view.findViewById(R.id.genre_icon);
+        TextView extensionNumber = (TextView) view.findViewById(R.id.extension_number);
+        TextView ratingsAverage = (TextView) view.findViewById(R.id.ratings_average);
+
+        TextView summatyTextView = (TextView) view.findViewById(R.id.book_summary_text_view);
+        summatyTextView.setText(book.getSummary());
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        double ratings = book.getSumRatings() / book.getNumRatings();
+
+        extensionNumber.setText(String.valueOf(book.getExtension()));
+        ratingsAverage.setText(String.valueOf(decimalFormat.format(ratings)));
         genreName.setText(book.getGenre().getName());
         genreIcon.setImageResource(getContext().getResources().getIdentifier(book.getGenre().getPicture(), "drawable", getContext().getPackageName()));
         scrollView.setScrollY(0);

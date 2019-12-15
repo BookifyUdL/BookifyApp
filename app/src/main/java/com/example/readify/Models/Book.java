@@ -1,10 +1,19 @@
 package com.example.readify.Models;
 
+import com.google.gson.JsonObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class Book {
     private String title;
@@ -15,7 +24,7 @@ public class Book {
     private int year;
     private int extension;
     private Genre genre;
-    private Author auth;
+    public Author auth;
     private ArrayList<Review> comments;
     private String id;
     private int sumRatings;
@@ -23,12 +32,13 @@ public class Book {
     private boolean isNew;
 
 
-    public Book(String id, String title, Author author, String picture){
+    public Book(String id, String title, Author author, String picture, boolean isNew){
         this.id = id;
         this.title = title;
         this.auth = author;
         this.picture = picture;
         this.author = author.getName();
+        this.isNew = isNew;
     }
 
     public Book(JSONObject jsonobject){
@@ -41,7 +51,27 @@ public class Book {
             this.numRatings = jsonobject.getInt("num_rating");
             this.isNew = jsonobject.getBoolean("is_new");
             //String aux = jsonobject.get("genre").toString();
-            this.genre = new Genre(jsonobject.getJSONObject("genre"));
+            JSONArray jsonArrayGenre = jsonobject.getJSONArray("genre");
+            try {
+                JSONObject jsonObjectGenre = jsonArrayGenre.getJSONObject(0);
+                this.genre = new Genre(jsonArrayGenre.getJSONObject(0));   //new JSONArray();
+            } catch (Exception e) {
+                this.genre = new Genre("5de7fb595a66a02fe3c39eae", "Crime", "genre3");
+            }
+            this.extension = jsonobject.getInt("num_page");
+            this.auth = new Author(jsonobject.getJSONObject("author"));
+            this.author = this.auth.getName();
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.ENGLISH);
+            try{
+                Date date = format.parse(jsonobject.getString("publication_date"));
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(date);
+                this.year = calendar.get(Calendar.YEAR);
+            } catch (Exception e) {
+                this.year = 2019;
+            }
+            //Date date  = Date.from(jsonobject.getString("publication_date"));
+            //this.year = 1;
             //missing author
             //missing comments
 
@@ -67,16 +97,82 @@ public class Book {
                         "url": "http://localhost:3000/books/5de7fb655a66a02fe3c39ebc"
             }*/
         } catch (JSONException e) {
+            System.out.println("Error parsing book constructor");
             //this.name = "Error";
             //this.picture = "Error";
         }
+    }
+
+    public Book(JSONObject jsonobject, boolean type){
+        try{
+            this.title = jsonobject.getString("title");
+            this.summary = jsonobject.getString("summary");
+            this.id = jsonobject.getString("_id");
+            this.picture = jsonobject.getString("cover_image");
+            this.sumRatings = jsonobject.getInt("rating");
+            this.numRatings = jsonobject.getInt("num_rating");
+            this.isNew = jsonobject.getBoolean("is_new");
+            //String aux = jsonobject.get("genre").toString();
+            this.extension = jsonobject.getInt("num_page");
+            //missing author
+            this.auth = new Author(jsonobject.getJSONObject("author"));
+            this.author = this.auth.getName();
+
+            //missing comments
+
+           /* "publication_date": "2019-01-01T00:00:00.000Z",
+                    "author": {
+                "_id": "5ddd69ac99439a0f2d99edc9",
+                        "name": "DEFREDS JOSE. A. GOMEZ IGLESIAS"
+            },
+            "genre": [
+            {
+                "_id": "5de7fb595a66a02fe3c39ead",
+                    "picture": "genre2",
+                    "name": "Computing / Interenet"
+            }
+            ],
+            "cover_image": "https://imagessl6.casadellibro.com/a/l/t1/16/9788467056716.jpg",
+                    "comments": [],
+            "rating": 5,
+                    "num_rating": 1,
+                    "is_new": true,
+                    "request": {
+                "type": "GET",
+                        "url": "http://localhost:3000/books/5de7fb655a66a02fe3c39ebc"
+            }*/
+        } catch (JSONException e) {
+            System.out.println("Error parsing book constructor");
+            //this.name = "Error";
+            //this.picture = "Error";
+        }
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public int getSumRatings() {
+        return sumRatings;
+    }
+
+    public void setSumRatings(int sumRatings) {
+        this.sumRatings = sumRatings;
+    }
+
+    public int getNumRatings() {
+        return numRatings;
+    }
+
+    public void setNumRatings(int numRatings) {
+        this.numRatings = numRatings;
     }
 
     public static ArrayList<Book> bookListFromJson(JSONArray bookListJson){
         try {
             ArrayList<Book> booksList = new ArrayList<>();
             for (int i=0; i < bookListJson.length(); i++){
-                booksList.add(new Book(bookListJson.getJSONObject(i)));
+                booksList.add(new Book(bookListJson.getJSONObject(i), false));
             }
             return  booksList;
         } catch (Exception e) {
@@ -125,6 +221,11 @@ public class Book {
     }
 
     public Book() {
+    }
+
+
+    public boolean isNew(){
+        return this.isNew;
     }
 
     public int getExtension() { return this.extension; }

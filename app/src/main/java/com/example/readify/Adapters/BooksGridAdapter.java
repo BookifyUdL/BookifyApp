@@ -130,7 +130,7 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition(), mViewBooks.get(getAdapterPosition()), mViewBooks.size());
         }
 
         private void setAddButtonState(final int position){

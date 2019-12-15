@@ -12,6 +12,8 @@ import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.Library.LibraryFragment;
 import com.example.readify.Login.LoginActivity;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.ServerCallback;
+import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
 import com.example.readify.Profile.ProfileFragment;
 import com.example.readify.Reading.ReadingFragment;
@@ -31,6 +33,11 @@ import android.os.Bundle;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.MenuItem;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements
         ReadingFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
@@ -137,13 +144,60 @@ public class MainActivity extends AppCompatActivity implements
         active = fragment1;
     }
 
-    public void goToBookPage(Book book, Pages fromPage) {
-        fragment6.setBook(book);
-        fragment6.setParent(fromPage);
-        fragment6.setEnterTransition(new Slide(Gravity.BOTTOM));
-        fragment6.setExitTransition(new Slide(Gravity.TOP));
-        fm.beginTransaction().hide(active).show(fragment6).commit();
-        active = fragment6;
+    public void goToBookPage(Book bookReceived, final Pages fromPage) {
+        String id = bookReceived.getId();
+        ApiConnector.getBookById(getApplicationContext(), id, new ServerCallbackForBooks() {
+            @Override
+            public void onSuccess(ArrayList<ArrayList<Book>> books) { }
+
+            @Override
+            public void onSuccess(final Book book) {
+                 final ArrayList<Book> sameAuthorBooks = new ArrayList<Book>();
+                 ApiConnector.getBooksByAuthor(getApplicationContext(), sameAuthorBooks, book.auth.getId(), book.getId(), new ServerCallback() {
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        ApiConnector.getBooksByGenre(getApplicationContext(), book.getGenre().getId(), new ServerCallback() {
+                            @Override
+                            public void onSuccess(JSONObject result) {
+                                try {
+                                    JSONArray jsonarray = new JSONArray(result.get("book").toString());
+                                    ArrayList<Book> sameGenderBooks = ApiConnector.parseJsonArrayToBookList(jsonarray);
+                                    fragment6.setSameGenderBooks(sameGenderBooks);
+                                    fragment6.setSameAuthorBooks(sameAuthorBooks);
+                                    fragment6.setBook(book);
+                                    fragment6.setParent(fromPage);
+                                    fragment6.setEnterTransition(new Slide(Gravity.BOTTOM));
+                                    fragment6.setExitTransition(new Slide(Gravity.TOP));
+                                    fm.beginTransaction().hide(active).show(fragment6).commit();
+                                    active = fragment6;
+                                } catch (Exception e) {
+
+                                }
+                            }
+                        });
+                        /*ArrayList<Book> books = MockupsValues.getAllBooksForTutorial();
+                        ArrayList<Book> sameGenderBooks = new ArrayList<>();
+                        for(Book b : books){
+                            if(b.getGenre().getId().equals(book.getGenre().getId())){
+                                sameGenderBooks.add(b);
+                            }
+                        }*/
+                        //fragment6.setSameGenderBooks(sameGenderBooks);
+                        /*LinearLayoutManager horizontalLayoutManager
+                                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                        recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
+                        BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), sameAuthorBooks, false, user);
+                        adapterAuth.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                showBookFragment(sameAuthorBooks.get(position));
+                            }
+                        });
+                        recyclerViewAuthor.setAdapter(adapterAuth);*/
+                    }
+                });
+            }
+        });
     }
 
     public void focusDiscoverFragment() {

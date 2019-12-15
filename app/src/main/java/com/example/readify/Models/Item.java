@@ -1,5 +1,13 @@
 package com.example.readify.Models;
 
+import com.example.readify.MockupsValues;
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class Item implements Comparable {
 
     private String id;
@@ -28,6 +36,46 @@ public class Item implements Comparable {
     public Item(double price, Shop shop){
         this.price = price;
         this.shop = shop;
+    }
+
+    public Item(JSONObject itemJson){
+        try {
+            /*
+            "shop_id": [
+                {
+                    "_id": "5de7fb5a5a66a02fe3c39eb6",
+                    "url": "https://www.elcorteingles.es/recursos/informacioncorporativa/img/portal/2017/07/06/el-corte-ingles-triangulo.png",
+                    "name": "El Corte Ingles"
+                }
+            ],
+            "_id": "5de7fb665a66a02fe3c39ebe",
+            "url": "elcorteingles.es/libros/A33030295-incondicional-edicion-limitada-firmada-tapa-dura-2065212770194/",
+            "price": "15.1",
+            * */
+            this.id = itemJson.getString("_id");
+            this.price = Double.parseDouble(itemJson.getString("price"));
+            this.url = itemJson.getString("url");
+            JSONArray jsonArray = itemJson.getJSONArray("shop_id");
+            Shop aux = new Shop(jsonArray.getJSONObject(0));
+            this.shop = MockupsValues.getCorrespondiShop(aux);
+
+        } catch (Exception e){
+            System.out.println("Error parsing item");
+        }
+    }
+
+    public static ArrayList<Item> getItemsFromJSONArray(JSONArray jsonArray){
+        ArrayList<Item> items = new ArrayList<>();
+        for (int i=0; i < jsonArray.length(); i++){
+            try {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                items.add(new Item(jsonObject));
+            } catch (Exception e) {
+                System.out.println("Error parsing in method: getItemsFromJSONArray");
+            }
+
+        }
+        return items;
     }
 
     @Override

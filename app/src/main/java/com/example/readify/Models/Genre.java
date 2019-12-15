@@ -13,6 +13,12 @@ public class Genre {
 
     public Genre() { }
 
+    public Genre(String id, String name, String picture){
+        this.id = id;
+        this.name = name;
+        this.picture = picture;
+    }
+
     public Genre(String name, String picture) {
         this.name = name;
         this.picture = picture;
