@@ -93,15 +93,16 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
                         ArrayList<Book> pending = user.getInterested();
                         pending.add(book);
                         user.setInterested(pending);
-                        String interestedToPref = new Gson().toJson(user.getInterested());
-                        pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+                        /*String interestedToPref = new Gson().toJson(user.getInterested());
+                        pref.edit().putString("com.example.readify.interested", interestedToPref).apply();*/
 
                         /* Add book to user library */
                         ArrayList<Book> library = user.getLibrary();
                         library.add(book);
                         user.setLibrary(library);
-                        String libraryToPref = new Gson().toJson(user.getLibrary());
-                        pref.edit().putString("com.example.readify.library", libraryToPref).apply();
+
+                        /*String libraryToPref = new Gson().toJson(user.getLibrary());
+                        pref.edit().putString("com.example.readify.library", libraryToPref).apply();*/
 
                         //MockupsValues.addPendingBook(book);
                         activity.notifyPendingListChanged(user);
