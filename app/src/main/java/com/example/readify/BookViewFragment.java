@@ -306,6 +306,9 @@ public class BookViewFragment extends Fragment {
         TextView extensionNumber = (TextView) view.findViewById(R.id.extension_number);
         TextView ratingsAverage = (TextView) view.findViewById(R.id.ratings_average);
 
+        TextView summatyTextView = (TextView) view.findViewById(R.id.book_summary_text_view);
+        summatyTextView.setText(book.getSummary());
+
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
         double ratings = book.getSumRatings() / book.getNumRatings();
 

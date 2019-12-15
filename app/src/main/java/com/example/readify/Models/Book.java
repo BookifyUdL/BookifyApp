@@ -6,7 +6,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class Book {
     private String title;
@@ -54,6 +61,18 @@ public class Book {
             this.extension = jsonobject.getInt("num_page");
             this.auth = new Author(jsonobject.getJSONObject("author"));
             this.author = this.auth.getName();
+            String string = "January 2, 2010";
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.ENGLISH);
+            try{
+                Date date = format.parse(jsonobject.getString("publication_date"));
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(date);
+                this.year = calendar.get(Calendar.YEAR);
+            } catch (Exception e) {
+                this.year = 2019;
+            }
+            //Date date  = Date.from(jsonobject.getString("publication_date"));
+            //this.year = 1;
             //missing author
             //missing comments
 
@@ -128,6 +147,10 @@ public class Book {
             //this.name = "Error";
             //this.picture = "Error";
         }
+    }
+
+    public String getSummary() {
+        return summary;
     }
 
     public int getSumRatings() {
