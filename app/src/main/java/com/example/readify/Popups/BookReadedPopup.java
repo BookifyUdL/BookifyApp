@@ -12,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
@@ -32,6 +34,7 @@ import com.example.readify.Models.Emoji;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -45,6 +48,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     private Book book;
     private MainActivity activity;
     private BooksListVerticalAdapter.BookHolder bookHolder;
+    private ArrayList<Emoji> emojis;
 
     private User user;
     private SharedPreferences pref;
@@ -55,6 +59,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         this.book = book;
         this.bookHolder = bookHolder;
         this.user = user;
+        //this.emojis = em
     }
 
     View.OnClickListener listener = new View.OnClickListener() {
@@ -88,6 +93,9 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         view = inflater.inflate(R.layout.book_readed_popup, container);
 
         pref = view.getContext().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+
+        ImageView cover = (ImageView) view.findViewById(R.id.book_cover);
+        setBookCover(cover, book.getPicture());
 
         this.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         CardView cardView = view.findViewById(R.id.card_reviews);
@@ -169,12 +177,21 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 4);
         recyclerViewGenres.setLayoutManager(gridLayoutManager);
 
-        ArrayList<Emoji> emojis = MockupsValues.getEmojis();
+        //ArrayList<Emoji> emojis = MockupsValues.getEmojis();
+        ArrayList<Emoji> emojis = book.getEmojis();
 
         EmojisAdapter emojisAdapter = new EmojisAdapter(getContext(), emojis);
         recyclerViewGenres.setAdapter(emojisAdapter);
 
+
+
         return view;
+    }
+
+    private void setBookCover(ImageView holder, String picture){
+        Picasso.with(getContext()) // Context
+                .load(picture) // URL or file
+                .into(holder);
     }
 
     private void acceptButtonClicked(){

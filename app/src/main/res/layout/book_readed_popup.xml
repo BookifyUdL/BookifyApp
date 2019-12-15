@@ -435,12 +435,13 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/book_cover"
             android:layout_width="100dp"
             android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_10dp"
-            android:src="@drawable/lib1"
             android:foregroundGravity="center_horizontal"
-            android:layout_centerHorizontal="true"/>
+            android:src="@drawable/lib1" />
 
     </RelativeLayout>
 

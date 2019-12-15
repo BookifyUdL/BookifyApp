@@ -1,5 +1,8 @@
 package com.example.readify.Models;
 
+import android.content.Context;
+
+import com.example.readify.R;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -30,6 +33,7 @@ public class Book {
     private int sumRatings;
     private int numRatings;
     private boolean isNew;
+    private ArrayList<Emoji> emojis;
 
 
     public Book(String id, String title, Author author, String picture, boolean isNew){
@@ -41,7 +45,7 @@ public class Book {
         this.isNew = isNew;
     }
 
-    public Book(JSONObject jsonobject){
+    public Book(JSONObject jsonobject, Context context){
         try{
             this.title = jsonobject.getString("title");
             this.summary = jsonobject.getString("summary");
@@ -70,6 +74,30 @@ public class Book {
             } catch (Exception e) {
                 this.year = 2019;
             }
+            JSONObject feelings = jsonobject.getJSONObject("feelings");
+            setEmojis(feelings, context);
+            /*public Emoji(String name, String emoji, int value, int num){
+                this.name = name;
+                this.emoji = emoji;
+                this.value = value;
+                this.num = num;
+            }*/
+
+
+
+            /*public static ArrayList<Emoji> getEmojis(){
+                if(EMOJIS == null || EMOJIS.isEmpty()){
+                    EMOJIS = new ArrayList<>();
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.angry_emoji), "angry"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.scared_emoji), "scare"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.sad_emoji), "unhappy"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.confused_emoji), "confused"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.bored_emoji), "bored"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.shocked_emoji), "surprised"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.happy_emoji), "happy"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.excited_emoji), "excited"));
+                }
+                return EMOJIS;*/
             //Date date  = Date.from(jsonobject.getString("publication_date"));
             //this.year = 1;
             //missing author
@@ -146,6 +174,38 @@ public class Book {
             //this.name = "Error";
             //this.picture = "Error";
         }
+    }
+
+    public void setEmojis(JSONObject feelings, Context context){
+        try {
+            this.emojis = new ArrayList<>();
+            int angry = feelings.getInt("angry");
+            int scared = feelings.getInt("scared");
+            int sad = feelings.getInt("sad");
+            int confused = feelings.getInt("confused");
+            int bored = feelings.getInt("bored");
+            int shocked = feelings.getInt("shocked");
+            int happy = feelings.getInt("happy");
+            int excited = feelings.getInt("excited");
+
+            emojis = new ArrayList<>();
+            emojis.add(new Emoji(context.getResources().getString(R.string.angry_emoji), "angry", angry, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.scared_emoji), "scare", scared, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.sad_emoji), "unhappy", sad, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.confused_emoji), "confused", confused, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.bored_emoji), "bored", bored, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.shocked_emoji), "surprised", shocked, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.happy_emoji), "happy", happy, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.excited_emoji), "excited", excited, numRatings));
+
+        } catch (Exception e){
+            this.emojis = new ArrayList<>();
+        }
+
+    }
+
+    public ArrayList<Emoji> getEmojis(){
+        return this.emojis;
     }
 
     public String getSummary() {

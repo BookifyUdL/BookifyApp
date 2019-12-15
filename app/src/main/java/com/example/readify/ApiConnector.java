@@ -602,7 +602,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
     }
 
-    public static void getBookById(Context context, String bookId, final ServerCallbackForBooks callback){
+    public static void getBookById(final Context context, String bookId, final ServerCallbackForBooks callback){
         String url = urlv + ALL_BOOKS + SLASH + bookId;
         try{
             //JSONObject jsonObject = User.toJSON(user);
@@ -615,7 +615,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                             System.out.println(response.toString());
                             try {
                                 JSONObject aux = response.getJSONObject("book");
-                                Book book = new Book(aux);
+                                Book book = new Book(aux, context);
                                 callback.onSuccess(book);
                             } catch (Exception e) {
                                 System.out.println("Error parsing book from jsonobject");
