@@ -38,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 public class ApiConnector extends AsyncTask<String, Integer, String> {
 
     private static String ALL_GENRES = "genres";
+    private static String ALL_GENRE = "genre";
     private static String ALL_BOOKS = "books";
     private static String ALL_USERS = "users";
     private static String ALL_UPDATE = "/update";
@@ -351,7 +352,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         //return genres;
     }
 
-    private static ArrayList<Book> parseJsonArrayToBookList(JSONArray jsonarray){
+    public static ArrayList<Book> parseJsonArrayToBookList(JSONArray jsonarray){
         final ArrayList<Book> books = new ArrayList<>();
         for (int i = 0; i < jsonarray.length(); i++) {
             try {
@@ -423,6 +424,43 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
             //queue.add(jsonObjectRequest);
     }
+
+    public static void getBooksByGenre(Context context, String genreId, final ServerCallback callback){
+        try{
+            String url = urlv + ALL_BOOKS + SLASH + ALL_GENRE + SLASH  + genreId;
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            callback.onSuccess(response);
+                            //String aux = response.toString();
+                            /*try{
+                                //JSONArray jsonarray = new JSONArray(response.get("book").toString());
+                                //ArrayList<Book> books = parseJsonArrayToBookList(jsonarray);
+                                callback.onSuccess(response);
+                            } catch (org.json.JSONException e) {
+                                System.out.println("Error");
+                            }*/
+                            //textView.setText("Response: " + response.toString());
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            System.out.println("Error");
+                            //booksByGenre.add(new ArrayList<Book>());
+
+                        }
+                    });
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
 
     public static void getTopRatedBooksForGenre(final Context context, ArrayList<Genre>  genres, final ServerCallbackForBooks callback){
         final ArrayList<ArrayList<Book>> booksByGenre = new ArrayList<ArrayList<Book> >();

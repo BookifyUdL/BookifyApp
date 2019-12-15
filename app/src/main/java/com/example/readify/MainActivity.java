@@ -34,6 +34,7 @@ import android.transition.Slide;
 import android.view.Gravity;
 import android.view.MenuItem;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -155,13 +156,33 @@ public class MainActivity extends AppCompatActivity implements
                  ApiConnector.getBooksByAuthor(getApplicationContext(), sameAuthorBooks, book.auth.getId(), book.getId(), new ServerCallback() {
                     @Override
                     public void onSuccess(JSONObject result) {
-                        fragment6.setSameAuthorBooks(sameAuthorBooks);
-                        fragment6.setBook(book);
-                        fragment6.setParent(fromPage);
-                        fragment6.setEnterTransition(new Slide(Gravity.BOTTOM));
-                        fragment6.setExitTransition(new Slide(Gravity.TOP));
-                        fm.beginTransaction().hide(active).show(fragment6).commit();
-                        active = fragment6;
+                        ApiConnector.getBooksByGenre(getApplicationContext(), book.getGenre().getId(), new ServerCallback() {
+                            @Override
+                            public void onSuccess(JSONObject result) {
+                                try {
+                                    JSONArray jsonarray = new JSONArray(result.get("book").toString());
+                                    ArrayList<Book> sameGenderBooks = ApiConnector.parseJsonArrayToBookList(jsonarray);
+                                    fragment6.setSameGenderBooks(sameGenderBooks);
+                                    fragment6.setSameAuthorBooks(sameAuthorBooks);
+                                    fragment6.setBook(book);
+                                    fragment6.setParent(fromPage);
+                                    fragment6.setEnterTransition(new Slide(Gravity.BOTTOM));
+                                    fragment6.setExitTransition(new Slide(Gravity.TOP));
+                                    fm.beginTransaction().hide(active).show(fragment6).commit();
+                                    active = fragment6;
+                                } catch (Exception e) {
+
+                                }
+                            }
+                        });
+                        /*ArrayList<Book> books = MockupsValues.getAllBooksForTutorial();
+                        ArrayList<Book> sameGenderBooks = new ArrayList<>();
+                        for(Book b : books){
+                            if(b.getGenre().getId().equals(book.getGenre().getId())){
+                                sameGenderBooks.add(b);
+                            }
+                        }*/
+                        //fragment6.setSameGenderBooks(sameGenderBooks);
                         /*LinearLayoutManager horizontalLayoutManager
                                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
                         recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
