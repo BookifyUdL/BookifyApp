@@ -62,11 +62,19 @@ public class MockupsValues {
     private static ArrayList<Shop> getShops(){
         if(SHOPS == null || SHOPS.isEmpty()){
             SHOPS = new ArrayList<>();
-            SHOPS.add(new Shop("casadellibro", "Casa del Libro"));
-            SHOPS.add(new Shop("elcorteingles", "El Corte Inglés"));
-            SHOPS.add(new Shop("fnac", "Fnac"));
+            SHOPS.add(new Shop(Shop.CASA_DEL_LIBRO_ID , "casadellibro", "Casa del Libro"));
+            SHOPS.add(new Shop(Shop.CORTE_INGLES_ID,"elcorteingles", "El Corte Inglés"));
+            SHOPS.add(new Shop(Shop.FNAC_ID,"fnac", "Fnac"));
         }
         return SHOPS;
+    }
+
+    public  static Shop getCorrespondiShop(Shop shop){
+        for (Shop aux: getShops()){
+            if(aux.getId().equals(shop.getId()))
+                return aux;
+        }
+        return getShops().get(0);
     }
 
     public static void setTopRatedBooks(ArrayList<Book> topRatedBooks){

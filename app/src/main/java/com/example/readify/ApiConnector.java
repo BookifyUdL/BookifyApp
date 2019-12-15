@@ -40,6 +40,8 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
     private static String ALL_GENRES = "genres";
     private static String ALL_GENRE = "genre";
     private static String ALL_BOOKS = "books";
+    private static String ALL_BOOK = "book";
+    private static String ALL_ITEMS = "items";
     private static String ALL_USERS = "users";
     private static String ALL_UPDATE = "/update";
     private static String ALL_TOP_RATED = "/toprated";
@@ -423,6 +425,34 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         }
 
             //queue.add(jsonObjectRequest);
+    }
+
+    public static void getShopItemsByBookId(Context context, String bookId, final ServerCallback callback){
+        try{
+            String url = urlv + ALL_ITEMS + SLASH + ALL_BOOK + SLASH + bookId;
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            callback.onSuccess(response);
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            System.out.println("Error");
+                            //booksByGenre.add(new ArrayList<Book>());
+
+                        }
+                    });
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+
+        } catch (Exception e) {
+            System.out.println("Error in api call. Get item shops by book id");
+        }
     }
 
     public static void getBooksByGenre(Context context, String genreId, final ServerCallback callback){

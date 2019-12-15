@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.example.readify.Adapters.BooksHorizontalAdapter;
 import com.example.readify.Adapters.BooksListVerticalAdapter;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.Item;
 import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
@@ -36,6 +37,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -104,12 +106,20 @@ public class BookViewFragment extends Fragment {
     }
 
     private void shopShopsPopup(){
-        /*BookReadedPopup dialog =  new BookReadedPopup(get, holder, fragmentManager, book, user);
-        FragmentTransaction ft2 = fragmentManager.beginTransaction();
-        dialog.show(ft2, "book_readed_popup");*/
-        ShopsPopup dialog = new ShopsPopup();
-        FragmentTransaction ft2 = getFragmentManager().beginTransaction();
-        dialog.show(ft2, "shops_popup");
+        ApiConnector.getShopItemsByBookId(getContext(), book.getId(), new ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                try{
+                    JSONArray array = result.getJSONArray("item");
+                    ArrayList<Item> items = Item.getItemsFromJSONArray(array);
+                    ShopsPopup dialog = new ShopsPopup(items);
+                    FragmentTransaction ft2 = getFragmentManager().beginTransaction();
+                    dialog.show(ft2, "shops_popup");
+                } catch (Exception e) {
+                    System.out.println("Error parsing items");
+                }
+            }
+        });
     }
 
     private void showReviewsPopup(){

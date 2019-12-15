@@ -61,7 +61,6 @@ public class Book {
             this.extension = jsonobject.getInt("num_page");
             this.auth = new Author(jsonobject.getJSONObject("author"));
             this.author = this.auth.getName();
-            String string = "January 2, 2010";
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.ENGLISH);
             try{
                 Date date = format.parse(jsonobject.getString("publication_date"));

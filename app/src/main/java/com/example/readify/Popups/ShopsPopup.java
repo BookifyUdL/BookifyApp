@@ -29,8 +29,10 @@ import java.util.ArrayList;
 
 public class ShopsPopup extends DialogFragment implements Popup {
 
-    public ShopsPopup(){
+    ArrayList<Item> items;
 
+    public ShopsPopup(ArrayList<Item> items){
+        this.items = items;
     }
 
     @Override
@@ -53,7 +55,7 @@ public class ShopsPopup extends DialogFragment implements Popup {
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 4);
         //recyclerViewShops.setLayoutManager(gridLayoutManager);
 
-        ArrayList<Item> items= MockupsValues.getItems();
+        //ArrayList<Item> items= MockupsValues.getItems();
 
         //EmojisAdapter emojisAdapter = new EmojisAdapter(getContext(), emojis);
         ShopsItemsVerticalAdapter adapter = new ShopsItemsVerticalAdapter(getContext(), items);
