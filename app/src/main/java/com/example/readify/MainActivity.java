@@ -12,6 +12,7 @@ import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.Library.LibraryFragment;
 import com.example.readify.Login.LoginActivity;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
 import com.example.readify.Profile.ProfileFragment;
@@ -32,6 +33,8 @@ import android.os.Bundle;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.MenuItem;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -147,13 +150,31 @@ public class MainActivity extends AppCompatActivity implements
             public void onSuccess(ArrayList<ArrayList<Book>> books) { }
 
             @Override
-            public void onSuccess(Book book) {
-                fragment6.setBook(book);
-                fragment6.setParent(fromPage);
-                fragment6.setEnterTransition(new Slide(Gravity.BOTTOM));
-                fragment6.setExitTransition(new Slide(Gravity.TOP));
-                fm.beginTransaction().hide(active).show(fragment6).commit();
-                active = fragment6;
+            public void onSuccess(final Book book) {
+                 final ArrayList<Book> sameAuthorBooks = new ArrayList<Book>();
+                 ApiConnector.getBooksByAuthor(getApplicationContext(), sameAuthorBooks, book.auth.getId(), book.getId(), new ServerCallback() {
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        fragment6.setSameAuthorBooks(sameAuthorBooks);
+                        fragment6.setBook(book);
+                        fragment6.setParent(fromPage);
+                        fragment6.setEnterTransition(new Slide(Gravity.BOTTOM));
+                        fragment6.setExitTransition(new Slide(Gravity.TOP));
+                        fm.beginTransaction().hide(active).show(fragment6).commit();
+                        active = fragment6;
+                        /*LinearLayoutManager horizontalLayoutManager
+                                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                        recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
+                        BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), sameAuthorBooks, false, user);
+                        adapterAuth.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                showBookFragment(sameAuthorBooks.get(position));
+                            }
+                        });
+                        recyclerViewAuthor.setAdapter(adapterAuth);*/
+                    }
+                });
             }
         });
     }

@@ -84,6 +84,12 @@ public class BookViewFragment extends Fragment {
         setContent();
     }
 
+    public void setSameAuthorBooks(ArrayList<Book> books){
+        //if(this.sameAuthorBooks )
+        this.sameAuthorBooks = books;
+        setSameAuthorBooksAdapter();
+    }
+
 
     public static BookViewFragment newInstance(Book book) {
         BookViewFragment fragment = new BookViewFragment();
@@ -193,6 +199,27 @@ public class BookViewFragment extends Fragment {
         });
 
 
+        /*Recyclers Views*/
+
+        /*Same gender books*/
+        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.gender_books_recycler_view);
+        recyclerView.setLayoutManager(horizontalLayoutManagaer);
+        sameGenderBooks = MockupsValues.getSameGenderBooks();
+        LinearLayoutManager horizontalLayoutManagerGender
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(horizontalLayoutManagerGender);
+        BooksHorizontalAdapter adapterGender = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), sameGenderBooks, false, user);
+        //adapterGender.setClickListener(this);
+        adapterGender.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, Book book) {
+                showBookFragment(sameGenderBooks.get(position));
+            }
+        });
+        recyclerView.setAdapter(adapterGender);
+
+
         //sameAuthorBooks = MockupsValues.getSameAuthorBooks();
         /*LinearLayoutManager horizontalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -203,8 +230,8 @@ public class BookViewFragment extends Fragment {
            public void onItemClick(View view, int position) {
                showBookFragment(sameAuthorBooks.get(position));
            }
-        });
-        recyclerViewAuthor.setAdapter(adapterAuth);*/
+        });*/
+        //recyclerViewAuthor.setAdapter(adapterAuth);
 
         return view;
     }
@@ -214,6 +241,24 @@ public class BookViewFragment extends Fragment {
         //showBookFragment();
 
     }*/
+
+    private void setSameAuthorBooksAdapter(){
+        /*Same author books*/
+        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        final RecyclerView recyclerViewAuthor = (RecyclerView) view.findViewById(R.id.author_books_recycler_view);
+        recyclerViewAuthor.setLayoutManager(horizontalLayoutManagaer);
+        LinearLayoutManager horizontalLayoutManager
+                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
+        BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), sameAuthorBooks, false, user);
+        adapterAuth.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, Book book) {
+                showBookFragment(sameAuthorBooks.get(position));
+            }
+        });
+        recyclerViewAuthor.setAdapter(adapterAuth);
+    }
 
     private void showBookFragment(Book book){
         MainActivity activity = (MainActivity) getActivity();
@@ -260,48 +305,6 @@ public class BookViewFragment extends Fragment {
         genreName.setText(book.getGenre().getName());
         genreIcon.setImageResource(getContext().getResources().getIdentifier(book.getGenre().getPicture(), "drawable", getContext().getPackageName()));
         scrollView.setScrollY(0);
-
-        /*Recyclers Views*/
-        /*Same author books*/
-        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        final RecyclerView recyclerViewAuthor = (RecyclerView) view.findViewById(R.id.author_books_recycler_view);
-        recyclerViewAuthor.setLayoutManager(horizontalLayoutManagaer);
-        sameAuthorBooks = new ArrayList<>();
-        Book b = book;
-        ApiConnector.getBooksByAuthor(getContext(), sameAuthorBooks, book.auth.getId(), book.getId(), new ServerCallback() {
-            @Override
-            public void onSuccess(JSONObject result) {
-                LinearLayoutManager horizontalLayoutManager
-                        = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-                recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
-                BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), sameAuthorBooks, false, user);
-                adapterAuth.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        showBookFragment(sameAuthorBooks.get(position));
-                    }
-                });
-                recyclerViewAuthor.setAdapter(adapterAuth);
-            }
-        });
-
-        /*Same gender books*/
-        //LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.gender_books_recycler_view);
-        recyclerView.setLayoutManager(horizontalLayoutManagaer);
-        sameGenderBooks = MockupsValues.getSameGenderBooks();
-        LinearLayoutManager horizontalLayoutManagerGender
-                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(horizontalLayoutManagerGender);
-        BooksHorizontalAdapter adapterGender = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), sameGenderBooks, false, user);
-        //adapterGender.setClickListener(this);
-        adapterGender.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                showBookFragment(sameGenderBooks.get(position));
-            }
-        });
-        recyclerView.setAdapter(adapterGender);
     }
 
     private void onGoBackButtonClicked(){
