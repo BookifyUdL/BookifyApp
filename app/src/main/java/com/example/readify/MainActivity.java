@@ -87,18 +87,21 @@ public class MainActivity extends AppCompatActivity implements
     };
 
     public void notifyLibraryListChanged(User user) {
-        user.saveToFirebase();
+        //user.saveToFirebase();
+        MockupsValues.user = user;
         fragment2.notifyLibraryChanged();
     }
 
     public void notifyReadingListChanged(User user) {
-        user.saveToFirebase();
+        //user.saveToFirebase();
+        MockupsValues.user = user;
         fragment1.readingBooksChanged();
+        //notifyLibraryListChanged(user);
     }
 
     public void notifyPendingListChanged(User user) {
-        user.saveToFirebase();
-
+        //user.saveToFirebase();
+        MockupsValues.user = user;
         fragment1.pendingListChanged();
         notifyLibraryListChanged(user);
     }

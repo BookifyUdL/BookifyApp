@@ -163,7 +163,8 @@ public class ReadingFragment extends Fragment {
     }
 
     public void readingBooksChanged() {
-        user.readFromSharedPreferences(prefs);
+        //user.readFromSharedPreferences(prefs);
+        user = MockupsValues.getUser();
         ArrayList<Book> readingBooks = user.getReadingBooks();
         readingBooksAdapter.setBooksList(readingBooks);
         readingBooksAdapter.notifyDataSetChanged();
@@ -171,7 +172,8 @@ public class ReadingFragment extends Fragment {
     }
 
     public void pendingListChanged() {
-        user.readFromSharedPreferences(prefs);
+        //user.readFromSharedPreferences(prefs);
+        user = MockupsValues.getUser();
         ArrayList<Book> pendingBooks = user.getInterested();
         pendingBooksAdapter.setBooksList(pendingBooks);
         pendingBooksAdapter.notifyDataSetChanged();

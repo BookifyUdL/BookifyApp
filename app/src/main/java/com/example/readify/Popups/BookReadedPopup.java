@@ -183,7 +183,19 @@ public class BookReadedPopup extends DialogFragment implements Popup {
 
         ArrayList<Book> reading = user.getReading();
         reading.remove(book);
+        //MockupsValues.user.setReading(reading);
+
+        ArrayList<Book> library = MockupsValues.user.getLibrary();
+        library.remove(book);
+        ArrayList<Book> auxLibrary = new ArrayList<>();
+        auxLibrary.add(book);
+        auxLibrary.addAll(library);
+        //library.add(0, book);
+
+        //MockupsValues.user.setLibrary(library);
+
         user.setReading(reading);
+        user.setLibrary(auxLibrary);
         //MockupsValues.removeReadingListBook(book);
         //String readingToPref = new Gson().toJson(user.getReading());
         //pref.edit().putString("com.example.readify.reading", readingToPref).apply();
@@ -200,15 +212,15 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         }*/
 
         //library.add(0, book);
-        user.getLibrary().remove(book);
-        user.getLibrary().add(0, book);
+        //user.getLibrary().remove(book);
+        //user.getLibrary().add(0, book);
 
         //user.setLibrary(library);
         //MockupsValues.user.setLibraryBookAsRead(book);
         //String libraryToPref = new Gson().toJson(user.getLibrary());
         //pref.edit().putString("com.example.readify.library", libraryToPref).apply();
 
-        this.activity.notifyLibraryListChanged(user);
+        //this.activity.notifyLibraryListChanged(user);
 
         Toast.makeText(getContext(), getContext().getString(R.string.review_added_correctly), Toast.LENGTH_LONG).show();
         close();

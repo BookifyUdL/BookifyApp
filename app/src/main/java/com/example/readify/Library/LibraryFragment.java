@@ -75,9 +75,14 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
     }
 
     public void notifyLibraryChanged() {
-        user.readFromSharedPreferences(prefs);
-        booksAdapter.setBooksList(user.getLibrary());
-        booksAdapter.notifyDataSetChanged();
+        //user.readFromSharedPreferences(prefs);
+        user = MockupsValues.getUser();
+        booksAdapter = new BooksGridAdapter((MainActivity) getActivity(), getContext(), user.getLibrary(), user);
+        recyclerViewGenres.setAdapter(booksAdapter);
+        booksAdapter.setClickListener(this);
+        //booksAdapter.setBooksList(user.getLibrary());
+        //booksAdapter.reloadAllImages();
+        //booksAdapter.notifyDataSetChanged();
         shouldShowEmptyMessage();
     }
 
