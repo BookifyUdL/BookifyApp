@@ -269,8 +269,8 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                                 JSONArray jsonArray = response.getJSONArray("book");
                                 ArrayList<Book> authorBooks = Book.bookListFromJson(jsonArray);
                                 for (Book b : authorBooks){
-                                    if(b.getId() != bookId)
-                                        books.add(b);
+                                    //if(b.getId() != bookId)
+                                    books.add(b);
 
                                 }
                                 callback.onSuccess(response);

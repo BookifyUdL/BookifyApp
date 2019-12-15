@@ -126,7 +126,7 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
     }
 
     @Override
-    public void onItemClick(View view, int position, Book book) {
+    public void onItemClick(View view, int position, Book book, int size) {
         showBookFragment(book);
     }
 

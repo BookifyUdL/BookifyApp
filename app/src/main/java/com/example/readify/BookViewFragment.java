@@ -213,7 +213,7 @@ public class BookViewFragment extends Fragment {
         //adapterGender.setClickListener(this);
         adapterGender.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
             @Override
-            public void onItemClick(View view, int position, Book book) {
+            public void onItemClick(View view, int position, Book book, int size) {
                 showBookFragment(sameGenderBooks.get(position));
             }
         });
@@ -253,7 +253,7 @@ public class BookViewFragment extends Fragment {
         BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), sameAuthorBooks, false, user);
         adapterAuth.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
             @Override
-            public void onItemClick(View view, int position, Book book) {
+            public void onItemClick(View view, int position, Book book, int size) {
                 showBookFragment(sameAuthorBooks.get(position));
             }
         });

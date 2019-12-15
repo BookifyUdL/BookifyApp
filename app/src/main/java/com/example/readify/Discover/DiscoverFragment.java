@@ -266,9 +266,9 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onItemClick(View view, int position, Book book) {
+    public void onItemClick(View view, int position, Book book, int size) {
         // Aqui pt esta el bug del discover
-        if (position == MockupsValues.getLastAddedBooks().size() - 1) {
+        if (position == size - 1) {
             showSearchFragment();
         } else {
             showBookFragment(book);
