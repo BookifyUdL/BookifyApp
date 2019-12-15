@@ -15,9 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readify.MainActivity;
+import com.example.readify.Models.Book;
 import com.example.readify.Models.Item;
 import com.example.readify.Models.User;
 import com.example.readify.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,12 +63,25 @@ public class ShopsItemsVerticalAdapter extends RecyclerView.Adapter<ShopsItemsVe
 
     @Override
     public void onBindViewHolder(@NonNull final ShopsItemsVerticalAdapter.ShopsItemsHolder holder, final int position) {
-        Item item = itemsList.get(position);
+        final Item item = itemsList.get(position);
         holder.priceInShop.setText(String.valueOf(item.getPrice()));
         String aux = mContext.getPackageName();
         holder.shopLogo.setImageResource(
                 mContext.getResources().getIdentifier(item.getShop().getUrl(), "drawable", aux));
+
+        holder.goShopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.openUrl(item);
+            }
+        });
     }
+
+    /*private void setBookCover(@NonNull final BooksHorizontalAdapter.ViewHolder holder, String picture){
+        Picasso.with(context) // Context
+                .load(picture) // URL or file
+                .into(holder.imageLayout);
+    }*/
 
     @Override
     public int getItemCount() {
@@ -86,27 +101,42 @@ public class ShopsItemsVerticalAdapter extends RecyclerView.Adapter<ShopsItemsVe
             this.shopLogo = (CircleImageView) itemView.findViewById(R.id.shop_logo);
             this.priceInShop = (TextView) itemView.findViewById(R.id.shop_price);
             this.goShopButton= (ImageView) itemView.findViewById(R.id.go_shop_button);
-            this.goShopButton.setOnClickListener(new View.OnClickListener() {
+            /*this.goShopButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     openUrl();
                 }
-            });
+            });*/
             /*this.itemView = itemView;
             userImage = (CircleImageView) itemView.findViewById(R.id.user_item_image);
             userName = (TextView) itemView.findViewById(R.id.user_item_name);
             userEmail = (TextView) itemView.findViewById(R.id.user_item_email);*/
         }
 
-        public void openUrl(){
+        public void openUrl(Item item){
+            String url = item.getUrl();
+            //https://www.fnac.es/a7055931/Sara-Buho-La-inercia-del-silencio#fnac
+            if(!url.contains("https://www."))
+                url = "https://www." + url;
+
+            Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(url));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setPackage("com.android.chrome");
             try {
-                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.casadellibro.com/libro-incondicional-ejemplar-firmado-por-el-autor/2910022780324/10066150"));
+                mContext.startActivity(intent);
+            } catch (ActivityNotFoundException ex) {
+                // Chrome browser presumably not installed so allow user to choose instead
+                intent.setPackage(null);
+                mContext.startActivity(intent);
+            }
+            /*try {
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getUrl()));
                 mContext.startActivity(myIntent);
                 //startActivity(myIntent);
             } catch (ActivityNotFoundException e) {
                 Toast.makeText(mContext, "No application can handle this request. Please install a webbrowser",  Toast.LENGTH_LONG).show();
                 e.printStackTrace();
-            }
+            }*/
         }
     }
 }

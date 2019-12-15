@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 public class Shop {
 
-    public static String CORTE_INGLES_ID = "5de7fb5a5a66a02fe3c39eb5";
+    public static String CORTE_INGLES_ID = "5de7fb5a5a66a02fe3c39eb6";
     public static String FNAC_ID = "5de7fb5b5a66a02fe3c39eb7";
     public static String CASA_DEL_LIBRO_ID = "5de7fb5a5a66a02fe3c39eb5";
 

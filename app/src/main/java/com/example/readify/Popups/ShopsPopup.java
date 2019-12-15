@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -21,19 +22,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.readify.Adapters.EmojisAdapter;
 import com.example.readify.Adapters.ShopsItemsVerticalAdapter;
 import com.example.readify.MockupsValues;
+import com.example.readify.Models.Book;
 import com.example.readify.Models.Emoji;
 import com.example.readify.Models.Item;
 import com.example.readify.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class ShopsPopup extends DialogFragment implements Popup {
 
     ArrayList<Item> items;
+    //String coverUrl;
+    Book book;
 
-    public ShopsPopup(ArrayList<Item> items){
+    public ShopsPopup(ArrayList<Item> items, Book book){
         this.items = items;
+        this.book = book;
+        //this.coverUrl = coverUrl;
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,15 +58,18 @@ public class ShopsPopup extends DialogFragment implements Popup {
             }
         });
 
+        ImageView coverImage = (ImageView) view.findViewById(R.id.boo_cover_image);
+        Picasso.with(getContext()) // Context
+                .load(this.book.getPicture()) // URL or file
+                .into(coverImage);
+
+        TextView bookTitle = (TextView) view.findViewById(R.id.info_text);
+        bookTitle.setText(this.book.getTitle());
+
         RecyclerView recyclerViewShops = view.findViewById(R.id.shops_recycler_view);
         LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerViewShops.setLayoutManager(vlm);
-        //GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 4);
-        //recyclerViewShops.setLayoutManager(gridLayoutManager);
 
-        //ArrayList<Item> items= MockupsValues.getItems();
-
-        //EmojisAdapter emojisAdapter = new EmojisAdapter(getContext(), emojis);
         ShopsItemsVerticalAdapter adapter = new ShopsItemsVerticalAdapter(getContext(), items);
         recyclerViewShops.setAdapter(adapter);
 

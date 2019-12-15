@@ -29,7 +29,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="175dp"
         android:layout_marginStart="@dimen/margin_10dp"
         android:layout_marginEnd="@dimen/margin_10dp"
         android:background="@color/colorBlank"
@@ -113,12 +113,13 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:id="@+id/boo_cover_image"
+            android:layout_width="150dp"
+            android:layout_height="225dp"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_10dp"
-            android:src="@drawable/lib1"
             android:foregroundGravity="center_horizontal"
-            android:layout_centerHorizontal="true"/>
+            android:src="@drawable/lib1" />
 
     </RelativeLayout>
 

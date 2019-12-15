@@ -112,7 +112,7 @@ public class BookViewFragment extends Fragment {
                 try{
                     JSONArray array = result.getJSONArray("item");
                     ArrayList<Item> items = Item.getItemsFromJSONArray(array);
-                    ShopsPopup dialog = new ShopsPopup(items);
+                    ShopsPopup dialog = new ShopsPopup(items, book);
                     FragmentTransaction ft2 = getFragmentManager().beginTransaction();
                     dialog.show(ft2, "shops_popup");
                 } catch (Exception e) {
