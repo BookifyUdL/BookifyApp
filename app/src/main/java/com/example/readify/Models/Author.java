@@ -26,6 +26,18 @@ public class Author {
 
     }
 
+    public JSONObject toJson(){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", getId());
+            jsonObject.put("name", getName());
+
+        } catch (Exception e){
+            jsonObject = new JSONObject();
+        }
+        return jsonObject;
+    }
+
     public String getName() {
         return name;
     }

@@ -67,6 +67,7 @@ public class EmojisAdapter extends RecyclerView.Adapter<EmojisAdapter.EmojiHolde
 
         Emoji emoji = recylcerList.get(position);
         int value = emoji.getValue() + 1;
+        emoji.setValue(emoji.getValue() + 1);
         int num = emoji.getNum() + 1;
         double div = (double) value / num;
         double p = div * 100;

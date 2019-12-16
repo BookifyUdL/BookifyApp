@@ -34,6 +34,7 @@ public class Book {
     private int numRatings;
     private boolean isNew;
     private ArrayList<Emoji> emojis;
+    private Calendar calendar;
 
 
     public Book(String id, String title, Author author, String picture, boolean isNew){
@@ -68,7 +69,7 @@ public class Book {
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.ENGLISH);
             try{
                 Date date = format.parse(jsonobject.getString("publication_date"));
-                Calendar calendar = new GregorianCalendar();
+                this.calendar = new GregorianCalendar();
                 calendar.setTime(date);
                 this.year = calendar.get(Calendar.YEAR);
             } catch (Exception e) {
@@ -142,7 +143,6 @@ public class Book {
             this.isNew = jsonobject.getBoolean("is_new");
             //String aux = jsonobject.get("genre").toString();
             this.extension = jsonobject.getInt("num_page");
-            //missing author
             this.auth = new Author(jsonobject.getJSONObject("author"));
             this.author = this.auth.getName();
 
@@ -173,6 +173,39 @@ public class Book {
             System.out.println("Error parsing book constructor");
             //this.name = "Error";
             //this.picture = "Error";
+        }
+    }
+
+    public JSONObject addRate(int rate){
+        sumRatings = sumRatings + rate;
+        numRatings = numRatings + 1;
+        return  bookToJsonObject();
+    }
+
+    public JSONObject bookToJsonObject(){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            //Missing COMMENTS
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put(this.getGenre().toJSON());
+            jsonObject.put("genre", jsonArray);
+            jsonObject.put("comments", new JSONArray());
+            jsonObject.put("rating", sumRatings);
+            jsonObject.put("num_Rating", numRatings);
+            jsonObject.put("is_new", isNew);
+            jsonObject.put("_id", id);
+            jsonObject.put("author", auth.toJson());
+            jsonObject.put("title", title);
+            jsonObject.put("summary", summary);
+            jsonObject.put("cover_image", picture);
+            jsonObject.put("publication_date", calendar.toString());
+
+
+            return jsonObject;
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return new JSONObject();
         }
     }
 
