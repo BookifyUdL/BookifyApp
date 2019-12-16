@@ -7,6 +7,8 @@ public class Author {
     private String name;
     private String id;
 
+    public Author(){}
+
     public Author(JSONObject author){
         try{
             this.id = author.getString("_id");

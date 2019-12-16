@@ -32,12 +32,12 @@
         android:layout_marginTop="175dp"
         android:layout_marginStart="@dimen/margin_10dp"
         android:layout_marginEnd="@dimen/margin_10dp"
-        android:background="@color/colorBlank"
+        android:background="@color/colorPrimaryLight"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <LinearLayout
-            android:background="@color/colorBlank"
+            android:background="@color/colorPrimary"
             android:orientation="horizontal"
             android:id="@+id/linear"
             android:layout_width="match_parent"
@@ -46,17 +46,20 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:gravity="start">
 
                 <ImageButton
                     android:id="@+id/close_arrow"
-                    android:background="@color/cardview_light_background"
+                    android:background="@color/colorPrimary"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:padding="12dp"
+                    android:layout_marginStart="@dimen/margin_10dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="@dimen/margin_10dp"
-                    android:src="@drawable/ic_close_arrow"
+                    android:src="@drawable/close"
+                    android:scaleType="centerInside"
                     android:contentDescription="@string/imageview_adapter_text" />
 
             </LinearLayout>
@@ -76,8 +79,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="5dp"
                     android:layout_marginTop="20dp"
+                    android:layout_marginBottom="@dimen/margin_5dp"
                     android:gravity="center_horizontal"
                     android:text="@string/booktitle_text"
                     android:textColor="@color/colorBlack"
@@ -96,7 +99,8 @@
                         android:id="@+id/shops_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_5dp"
+                        android:layout_marginEnd="@dimen/margin_10dp"
+                        android:layout_marginStart="@dimen/margin_10dp"
                         android:layout_marginBottom="@dimen/margin_5dp"/>
                 </LinearLayout>
 
