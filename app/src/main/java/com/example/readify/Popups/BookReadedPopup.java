@@ -27,14 +27,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readify.Adapters.BooksListVerticalAdapter;
 import com.example.readify.Adapters.EmojisAdapter;
+import com.example.readify.ApiConnector;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Emoji;
+import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -49,6 +53,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     private MainActivity activity;
     private BooksListVerticalAdapter.BookHolder bookHolder;
     private ArrayList<Emoji> emojis;
+    private int starsClicked;
 
     private User user;
     private SharedPreferences pref;
@@ -59,13 +64,17 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         this.book = book;
         this.bookHolder = bookHolder;
         this.user = user;
+        this.starsClicked = 0;
         //this.emojis = em
     }
 
     View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+
             int index = Integer.parseInt(view.getTag().toString());
+            starsClicked = index + 1;
+
             for (int i = 0; i < stars.size(); i++){
                 if(i < index){
                     Drawable drawable = ContextCompat.getDrawable(getContext(),
@@ -178,9 +187,9 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         recyclerViewGenres.setLayoutManager(gridLayoutManager);
 
         //ArrayList<Emoji> emojis = MockupsValues.getEmojis();
-        ArrayList<Emoji> emojis = book.getEmojis();
+        //ArrayList<Emoji> emojis = book.getEmojis();
 
-        EmojisAdapter emojisAdapter = new EmojisAdapter(getContext(), emojis);
+        EmojisAdapter emojisAdapter = new EmojisAdapter(getContext(), book.getEmojis());
         recyclerViewGenres.setAdapter(emojisAdapter);
 
 
@@ -197,6 +206,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     private void acceptButtonClicked(){
         //ArrayList<Book> library = user.getLibrary();
         book.setRead(true);
+        book.setSumRatings(book.getNumRatings() + starsClicked);
 
         ArrayList<Book> reading = user.getReading();
         reading.remove(book);
@@ -216,10 +226,18 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         //MockupsValues.removeReadingListBook(book);
         //String readingToPref = new Gson().toJson(user.getReading());
         //pref.edit().putString("com.example.readify.reading", readingToPref).apply();
+        ApiConnector.updateBook(getContext(), book, new ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                Toast.makeText(getContext(), getContext().getString(R.string.review_added_correctly), Toast.LENGTH_LONG).show();
+                close();
+                bookHolder.destroyView();
+            }
+        });
+        //book.setEmojis(em);
+
 
         this.activity.notifyReadingListChanged(user);
-
-
         /*Some shit is happening here bros*/
         /*ListIterator<Book> itr = library.listIterator();
         while (itr.hasNext()) {
@@ -239,9 +257,6 @@ public class BookReadedPopup extends DialogFragment implements Popup {
 
         //this.activity.notifyLibraryListChanged(user);
 
-        Toast.makeText(getContext(), getContext().getString(R.string.review_added_correctly), Toast.LENGTH_LONG).show();
-        close();
-        bookHolder.destroyView();
     }
 
     public void close(){

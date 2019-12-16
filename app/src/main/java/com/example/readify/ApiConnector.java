@@ -17,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.readify.Models.Author;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
+import com.example.readify.Models.Review;
 import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
@@ -46,6 +47,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
     private static String ALL_UPDATE = "/update";
     private static String ALL_TOP_RATED = "/toprated";
     private static String ALL_AUTHOR = "/author";
+    private static String ALL_COMMENTS = "comments";
     private static SharedPreferences preferences;
 
     private static String SLASH = "/";
@@ -126,6 +128,61 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
         } catch (Exception e){
             System.out.println("GET catch error, user.");
+            System.out.println(e);
+        }
+    }
+
+    public static void postComment(Context context, Review comment, final ServerCallback callback){
+        try {
+            JSONObject object = comment.toJsonObject();
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.POST, urlv + ALL_COMMENTS, object, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            callback.onSuccess(response);
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            System.out.println("Error");
+
+                        }
+                    });
+
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            System.out.println("Post user error.");
+        }
+    }
+
+    public static void updateBook(Context context, Book book, final ServerCallback callback){
+        try{
+            //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
+            JSONObject object = book.toJsonObject();
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.PATCH, urlv + ALL_BOOKS + SLASH + book.getId(), object, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            callback.onSuccess(response);
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            System.out.println("Error");
+
+                        }
+                    });
+
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+        } catch (Exception e) {
             System.out.println(e);
         }
     }

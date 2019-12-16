@@ -39,9 +39,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.readify.Models.Review;
+import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.gsconrad.richcontentedittext.RichContentEditText;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -230,7 +233,13 @@ public class CommentActivity extends AppCompatActivity implements RichEditTextIn
                 } else {
                     MockupsValues.setReview(review, position);
                 }
-                finishActivity();
+                ApiConnector.postComment(getApplicationContext(), review, new ServerCallback() {
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        finishActivity();
+                    }
+                });
+
             }
         });
     }

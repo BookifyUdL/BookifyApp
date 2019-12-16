@@ -4,6 +4,9 @@ import android.net.Uri;
 
 import com.example.readify.CommentType;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -20,6 +23,7 @@ public class Review {
     private Uri uri;
     private ArrayList<Review> subReviews;
     private ArrayList<User> userLiked;
+    private boolean isSub = false;
 
     public Review(User user, String comment){
         this.user = user;
@@ -46,6 +50,50 @@ public class Review {
         this.userLiked = new ArrayList<>();
         this.subReviews = new ArrayList<>();
 
+    }
+
+    public void setIsSub(boolean isSub){
+        this.isSub = isSub;
+    }
+
+    public JSONObject toJsonObject(){
+        int type = commentTypeToInt();
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("user", user.getUid());
+            jsonObject.put("message", comment);
+            jsonObject.put("uri", uri);
+            jsonObject.put("comment_type", type);
+            jsonObject.put("is_sub", isSub);
+            JSONArray liked = new JSONArray();
+            for (User lik : userLiked){
+                liked.put(lik.getUid());
+            }
+            jsonObject.put("user_liked", liked);
+
+        } catch (Exception e) {
+
+        }
+        return jsonObject;
+    }
+
+    public int commentTypeToInt(){
+        int type = 1;
+        switch (commentType){
+            case COMMENT:
+                type = 1;
+                break;
+            case COMMENT_AND_IMAGE:
+                type = 2;
+                break;
+            case COMMENT_AND_GIF:
+                type = 3;
+                break;
+            default:
+                break;
+        }
+        return type;
     }
 
     public ArrayList<Review> getSubReviews() {
