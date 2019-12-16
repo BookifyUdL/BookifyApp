@@ -18,12 +18,9 @@ import com.example.readify.Models.User;
 import com.example.readify.Profile.ProfileFragment;
 import com.example.readify.Reading.ReadingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseUser;
 
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -47,14 +44,14 @@ public class MainActivity extends AppCompatActivity implements
         ConnectivityReceiver.ConnectivityReceiverListener{
 
     private BottomNavigationView navigation;
-    private final ReadingFragment fragment1 = new ReadingFragment();
-    private final LibraryFragment fragment2 = new LibraryFragment();
+    private ReadingFragment fragment1 = new ReadingFragment();
+    private LibraryFragment fragment2 = new LibraryFragment();
     private Fragment fragment3 = DiscoverFragment.newInstance();
-    private final Fragment fragment4 = new ProfileFragment();
+    private ProfileFragment fragment4 = new ProfileFragment();
     private Fragment fragment5 = new SearchBookFragment();
     private BookViewFragment fragment6 = new BookViewFragment();
     private BooksSectionFragment fragment7 = new BooksSectionFragment();
-    private final FragmentManager fm = getSupportFragmentManager();
+    private FragmentManager fm = getSupportFragmentManager();
     private BroadcastReceiver connectivityReceiver = null;
     private SharedPreferences pref;
 
@@ -78,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements
                     active = fragment3;
                     return true;
                 case R.id.navigation_profile_fragment:
+                    fragment4.setUserMain();
                     fm.beginTransaction().hide(active).show(fragment4).commit();
                     active = fragment4;
                     return true;
@@ -144,6 +142,28 @@ public class MainActivity extends AppCompatActivity implements
         active = fragment1;
     }
 
+    public void goToUserPage(User user) {
+        String id = user.getUid();
+        fragment4.setUserVisitor(user);
+        fm.beginTransaction().hide(active).show(fragment4).commit();
+        active = fragment4;
+        /*ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                //TODO get genres by user
+                //TODO get books readed by user
+                try {
+                    JSONArray jsonArray = new JSONArray(result.get("user").toString());
+                    //ArrayList<Genre> userGenres = ApiConnector.getGenres();
+                    //..
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });*/
+    }
+
     public void goToBookPage(Book bookReceived, final Pages fromPage) {
         String id = bookReceived.getId();
         ApiConnector.getBookById(getApplicationContext(), id, new ServerCallbackForBooks() {
@@ -175,25 +195,6 @@ public class MainActivity extends AppCompatActivity implements
                                 }
                             }
                         });
-                        /*ArrayList<Book> books = MockupsValues.getAllBooksForTutorial();
-                        ArrayList<Book> sameGenderBooks = new ArrayList<>();
-                        for(Book b : books){
-                            if(b.getGenre().getId().equals(book.getGenre().getId())){
-                                sameGenderBooks.add(b);
-                            }
-                        }*/
-                        //fragment6.setSameGenderBooks(sameGenderBooks);
-                        /*LinearLayoutManager horizontalLayoutManager
-                                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-                        recyclerViewAuthor.setLayoutManager(horizontalLayoutManager);
-                        BooksHorizontalAdapter adapterAuth = new BooksHorizontalAdapter((MainActivity) getActivity(),getContext(), sameAuthorBooks, false, user);
-                        adapterAuth.setClickListener(new BooksHorizontalAdapter.ItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                showBookFragment(sameAuthorBooks.get(position));
-                            }
-                        });
-                        recyclerViewAuthor.setAdapter(adapterAuth);*/
                     }
                 });
             }

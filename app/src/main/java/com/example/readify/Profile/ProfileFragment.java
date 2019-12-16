@@ -34,8 +34,8 @@ import android.widget.Toast;
 import com.example.readify.Adapters.AchievementsHoritzontalAdapter;
 import com.example.readify.Adapters.BooksProfileHoritzontalAdapter;
 import com.example.readify.Adapters.GenresHoritzontalAdapter;
-import com.example.readify.MainActivityLogOut;
 import com.example.readify.MainActivity;
+import com.example.readify.MainActivityLogOut;
 import com.example.readify.Models.Achievement;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
@@ -99,6 +99,13 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     private RadioButton radioButtonWifi;
     private RadioButton radioButtonData;
     private AchievementsHoritzontalAdapter adapterAchievements;
+    private Button buttonUpgrade;
+    private Button disconnectButton;
+    private ImageButton buttonAchievements;
+    private ImageButton buttonSettings;
+    private TextView textViewNameUser;
+    private TextView commentsNumber;
+
 
     private FirebaseAuth mAuth;
 
@@ -109,6 +116,30 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
 
     public ProfileFragment() {
         // Required empty public constructor
+    }
+
+    public void setUserMain() {
+        user = new User();
+        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        user.readFromSharedPreferences(prefs);
+
+        buttonUpgrade.setVisibility(View.VISIBLE);
+        disconnectButton.setVisibility(View.VISIBLE);
+        buttonAchievements.setVisibility(View.VISIBLE);
+        buttonSettings.setVisibility(View.VISIBLE);
+
+        updateUI(user);
+    }
+
+    public void setUserVisitor(User user) {
+        this.user = user;
+
+        buttonUpgrade.setVisibility(View.GONE);
+        disconnectButton.setVisibility(View.GONE);
+        buttonAchievements.setVisibility(View.GONE);
+        buttonSettings.setVisibility(View.GONE);
+
+        updateUI(user);
     }
 
     /**
@@ -146,10 +177,28 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if (currentUser == null)
-            updateUI();
+            updateUILogOut();
     }
 
-    private void updateUI() {
+    private void updateUI(User user) {
+        getProfileImage();
+        textViewNameUser.setText(user.getName());
+        //Num of books readed
+        readedBooksTextView.setText(Integer.toString(user.getNumReadedBooks()));
+        //Num of the achievements
+        textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + user.getAchievements().size());
+        //Num of the comments
+        commentsNumber.setText("10");
+        //Show badge premium
+        if (user.isPremium())
+            imageViewPremiumBadge.setVisibility(View.VISIBLE);
+        else
+            imageViewPremiumBadge.setVisibility(View.INVISIBLE);
+
+        //TODO get genres, books and achievements of the user
+    }
+
+    private void updateUILogOut() {
         Toast.makeText(getContext(), "You're logged out", Toast.LENGTH_SHORT).show();
         exitActivity.exitAccount();
     }
@@ -187,7 +236,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         getProfileImage();
 
         // Put the name of the user
-        TextView textViewNameUser = (TextView) view.findViewById(R.id.nameUserTextview);
+        textViewNameUser = (TextView) view.findViewById(R.id.nameUserTextview);
         textViewNameUser.setText(user.getName());
 
         //Initialize the badge of the premium user
@@ -196,6 +245,10 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         // Num of readed books by the user
         readedBooksTextView = (TextView) view.findViewById(R.id.numReadedBooksText);
         readedBooksTextView.setText(Integer.toString(user.getReadedBooks().size()));
+
+        // Num of comments
+        commentsNumber = (TextView) view.findViewById(R.id.commentsNumber);
+        commentsNumber.setText("0"); //TODO implement the comments values
 
         // Achievements of the user
         textViewAchievements = (TextView) view.findViewById(R.id.achievementsText);
@@ -232,7 +285,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         recyclerViewAchievements.setAdapter(adapterAchievements);
 
         //Settings button
-        ImageButton buttonSettings = (ImageButton) view.findViewById(R.id.buttonSettingsProfile);
+        buttonSettings = (ImageButton) view.findViewById(R.id.buttonSettingsProfile);
         dialog = new Dialog(getContext());
         dialogUpgrade = new Dialog(getContext());
         buttonSettings.setOnClickListener(new View.OnClickListener() {
@@ -243,7 +296,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         });
 
         //Achievements button
-        ImageButton buttonAchievements = (ImageButton) view.findViewById(R.id.buttonAchievementsProfile);
+        buttonAchievements = (ImageButton) view.findViewById(R.id.buttonAchievementsProfile);
         buttonAchievements.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -259,37 +312,21 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         getActivity().startService(intent);
 
         //Upgrade account button
-        Button buttonUpgrade = (Button) view.findViewById(R.id.upgrade_button);
-        buttonUpgrade.setOnClickListener(
-                new View.OnClickListener() {
+        buttonUpgrade = (Button) view.findViewById(R.id.upgrade_button);
+        buttonUpgrade.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         openUpgrade(view);
-                        //user.setPremium(true);
-
-                        //For every achievement
-                        /*user.getAchievements().get(4).incrementValue(1);
-                        textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + user.getAchievements().size());
-
-                        String achievementsToPref = new Gson().toJson(user.getAchievements());
-                        prefs.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
-
-                        user.saveToFirebase();
-
-                        adapterAchievements.setAchivementsList(user.getCompletedAchievements());
-                        adapterAchievements.notifyDataSetChanged();
-                        imageViewPremiumBadge.setVisibility(View.VISIBLE);*/
                     }
-                }
-        );
+                });
 
-        Button disconnectButton = (Button) view.findViewById(R.id.logOutButton);
+        disconnectButton = (Button) view.findViewById(R.id.logOutButton);
         disconnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
-                updateUI();
+                updateUILogOut();
             }
         });
 

@@ -59,19 +59,31 @@ public class User {
         this.reading = new ArrayList<>();
         this.interested = new ArrayList<>();
         this.genres = new ArrayList<>();
-        this.achievements = new ArrayList<>();
-        //this.achievements = MockupsValues.getAchievementsPersonalized();
+        this.achievements = MockupsValues.getAchievementsPersonalized();
     }
 
     public User(String name, String picture) {
         this.name = name;
+        this.email = "user@unknown.com";
         this.picture = picture;
+        this.premium = false;
+        this.library = new ArrayList<>();
+        this.reading = new ArrayList<>();
+        this.interested = new ArrayList<>();
+        this.genres = new ArrayList<>();
+        this.achievements = MockupsValues.getAchievementsPersonalized();
     }
 
     public User(String name, String email, String picture) {
         this.name = name;
         this.email = email;
-        this.picture = picture;
+        this.picture = "https://lh3.googleusercontent.com/a-/AAuE7mASENpnxywLWZs5rlleVOyYuAUGuw7RaajOI1Nt=s96-c";
+        this.premium = false;
+        this.library = new ArrayList<>();
+        this.reading = new ArrayList<>();
+        this.interested = new ArrayList<>();
+        this.genres = new ArrayList<>();
+        this.achievements = MockupsValues.getAchievementsPersonalized();
     }
 
     public User(String name, Boolean premium, ArrayList<Genre> genres, ArrayList<Book> library) {
