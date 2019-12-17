@@ -12,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
@@ -25,13 +27,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readify.Adapters.BooksListVerticalAdapter;
 import com.example.readify.Adapters.EmojisAdapter;
+import com.example.readify.ApiConnector;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Emoji;
+import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -45,6 +52,8 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     private Book book;
     private MainActivity activity;
     private BooksListVerticalAdapter.BookHolder bookHolder;
+    private ArrayList<Emoji> emojis;
+    private int starsClicked;
 
     private User user;
     private SharedPreferences pref;
@@ -55,12 +64,17 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         this.book = book;
         this.bookHolder = bookHolder;
         this.user = user;
+        this.starsClicked = 0;
+        //this.emojis = em
     }
 
     View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+
             int index = Integer.parseInt(view.getTag().toString());
+            starsClicked = index;
+
             for (int i = 0; i < stars.size(); i++){
                 if(i < index){
                     Drawable drawable = ContextCompat.getDrawable(getContext(),
@@ -76,7 +90,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     };
 
     private void showReviewsPopup(){
-        ReviewsPopup dialog =  new ReviewsPopup();
+        ReviewsPopup dialog =  new ReviewsPopup(this.book);
         FragmentTransaction ft2 = fragmentManager.beginTransaction();
         dialog.show(ft2, "reviews_fragment");
     }
@@ -88,6 +102,9 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         view = inflater.inflate(R.layout.book_readed_popup, container);
 
         pref = view.getContext().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+
+        ImageView cover = (ImageView) view.findViewById(R.id.book_cover);
+        setBookCover(cover, book.getPicture());
 
         this.getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         CardView cardView = view.findViewById(R.id.card_reviews);
@@ -169,48 +186,78 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 4);
         recyclerViewGenres.setLayoutManager(gridLayoutManager);
 
-        ArrayList<Emoji> emojis = MockupsValues.getEmojis();
+        //ArrayList<Emoji> emojis = MockupsValues.getEmojis();
+        //ArrayList<Emoji> emojis = book.getEmojis();
 
-        EmojisAdapter emojisAdapter = new EmojisAdapter(getContext(), emojis);
+        EmojisAdapter emojisAdapter = new EmojisAdapter(getContext(), book.getEmojis());
         recyclerViewGenres.setAdapter(emojisAdapter);
+
+
 
         return view;
     }
 
+    private void setBookCover(ImageView holder, String picture){
+        Picasso.with(getContext()) // Context
+                .load(picture) // URL or file
+                .into(holder);
+    }
+
     private void acceptButtonClicked(){
-        ArrayList<Book> library = user.getLibrary();
+        //ArrayList<Book> library = user.getLibrary();
         book.setRead(true);
+        book.setSumRatings(book.getSumRatings() + starsClicked);
+        book.setNumRatings(book.getNumRatings() + 1);
+
+        ArrayList<Book> reading = user.getReading();
+        reading.remove(book);
+        //MockupsValues.user.setReading(reading);
+
+        ArrayList<Book> library = MockupsValues.user.getLibrary();
+        library.remove(book);
+        ArrayList<Book> auxLibrary = new ArrayList<>();
+        auxLibrary.add(book);
+        auxLibrary.addAll(library);
+        //library.add(0, book);
+
+        //MockupsValues.user.setLibrary(library);
+
+        user.setReading(reading);
+        user.setLibrary(auxLibrary);
+        //MockupsValues.removeReadingListBook(book);
+        //String readingToPref = new Gson().toJson(user.getReading());
+        //pref.edit().putString("com.example.readify.reading", readingToPref).apply();
+        ApiConnector.updateBook(getContext(), book, new ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                Toast.makeText(getContext(), getContext().getString(R.string.review_added_correctly), Toast.LENGTH_LONG).show();
+                close();
+                bookHolder.destroyView();
+            }
+        });
+        //book.setEmojis(em);
 
 
+        this.activity.notifyReadingListChanged(user);
         /*Some shit is happening here bros*/
-        ListIterator<Book> itr = library.listIterator();
+        /*ListIterator<Book> itr = library.listIterator();
         while (itr.hasNext()) {
             Book tmp = itr.next();
             if (tmp.getTitle().equals(book.getTitle()))
                 library.remove(tmp);
-        }
+        }*/
 
-        library.add(0, book);
+        //library.add(0, book);
+        //user.getLibrary().remove(book);
+        //user.getLibrary().add(0, book);
 
-        user.setLibrary(library);
+        //user.setLibrary(library);
         //MockupsValues.user.setLibraryBookAsRead(book);
-        String libraryToPref = new Gson().toJson(user.getLibrary());
-        pref.edit().putString("com.example.readify.library", libraryToPref).apply();
+        //String libraryToPref = new Gson().toJson(user.getLibrary());
+        //pref.edit().putString("com.example.readify.library", libraryToPref).apply();
 
-        this.activity.notifyLibraryListChanged(user);
+        //this.activity.notifyLibraryListChanged(user);
 
-        ArrayList<Book> reading = user.getReading();
-        reading.remove(book);
-        user.setReading(reading);
-        //MockupsValues.removeReadingListBook(book);
-        String readingToPref = new Gson().toJson(user.getReading());
-        pref.edit().putString("com.example.readify.reading", readingToPref).apply();
-
-        this.activity.notifyReadingListChanged(user);
-
-        Toast.makeText(getContext(), getContext().getString(R.string.review_added_correctly), Toast.LENGTH_LONG).show();
-        close();
-        bookHolder.destroyView();
     }
 
     public void close(){
