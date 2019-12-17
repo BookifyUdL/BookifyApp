@@ -145,7 +145,8 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
         }
 
         private void setAddButtonState(final int position){
-            if(user.getInterested().contains(mViewBooks.get(position))){
+
+            if(user.getReadingBooks().contains(mViewBooks.get(position)) || user.getInterested().contains(mViewBooks.get(position))){
                 setAddButtonIconToAdded();
             } else {
                 setAddButtonIconToAdd();
@@ -154,43 +155,33 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(user.getInterested().contains(mViewBooks.get(position))){
+                    if(user.getReadingBooks().contains(mViewBooks.get(position)) || user.getInterested().contains(mViewBooks.get(position))){
                         setAddButtonIconToAdd();
                         toPendingList(position);
                         //setAddButtonIconToAdded();
                         //removeFromPendingList(position);
-                    } /*else {
+                    } else {
                         setAddButtonIconToAdd();
                         toPendingList(position);
-                    }*/
+                    }
                 }
             });
         }
 
         private void removeFromPendingList(int position){
             Book book = mViewBooks.get(position);
-
             ArrayList<Book> pending = user.getInterested();
             pending.remove(book);
             user.setInterested(pending);
-
-            /*String interestedToPref = new Gson().toJson(user.getInterested());
-            pref.edit().putString("com.example.readify.interested", interestedToPref).apply();*/
-
             activity.notifyPendingListChanged(user);
             Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_removed_correctly_message), Toast.LENGTH_LONG).show();
         }
 
         private void toPendingList(int position){
             Book book = mViewBooks.get(position);
-
             ArrayList<Book> pending = user.getInterested();
             pending.add(book);
             user.setInterested(pending);
-
-            /*String interestedToPref = new Gson().toJson(user.getInterested());
-            pref.edit().putString("com.example.readify.interested", interestedToPref).apply();*/
-
             activity.notifyPendingListChanged(user);
             Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
         }

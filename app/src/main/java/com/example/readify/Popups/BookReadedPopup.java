@@ -205,12 +205,13 @@ public class BookReadedPopup extends DialogFragment implements Popup {
 
     private void acceptButtonClicked(){
         //ArrayList<Book> library = user.getLibrary();
+        ArrayList<Book> reading = user.getReading();
+        reading.remove(book);
+
         book.setRead(true);
         book.setSumRatings(book.getSumRatings() + starsClicked);
         book.setNumRatings(book.getNumRatings() + 1);
 
-        ArrayList<Book> reading = user.getReading();
-        reading.remove(book);
         //MockupsValues.user.setReading(reading);
 
         ArrayList<Book> library = MockupsValues.user.getLibrary();
@@ -236,9 +237,6 @@ public class BookReadedPopup extends DialogFragment implements Popup {
             }
         });
         //book.setEmojis(em);
-
-
-        this.activity.notifyReadingListChanged(user);
         /*Some shit is happening here bros*/
         /*ListIterator<Book> itr = library.listIterator();
         while (itr.hasNext()) {
@@ -271,5 +269,12 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         Window window = getDialog().getWindow();
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         window.setGravity(Gravity.CENTER);
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        this.activity.notifyReadingListChanged(user);
+        this.activity.notifyLibraryListChanged(user);
     }
 }

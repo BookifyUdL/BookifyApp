@@ -381,8 +381,18 @@ public class User {
     public ArrayList<Book> getLibrary() {
         ArrayList<Book> lib = new ArrayList<>();
         lib.addAll(getReadingBooks());
-        lib.addAll(getInterested());
-        lib.addAll(getReadedBooks());
+        for(Book book : getInterested()){
+            if(!lib.contains(book))
+                lib.add(book);
+        }
+        for(Book book : getReadedBooks()){
+            if(!lib.contains(book))
+                lib.add(book);
+        }
+        for(Book book : getInterested()){
+            if(!lib.contains(book))
+                lib.add(book);
+        }
         return lib;
     }
 
