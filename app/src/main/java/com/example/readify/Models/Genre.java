@@ -67,7 +67,7 @@ public class Genre {
     public JSONObject toJSON(){
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("id", getId());
+            jsonObject.put("_id", getId());
             jsonObject.put("name", getName());
             jsonObject.put("picture", getPicture());
 

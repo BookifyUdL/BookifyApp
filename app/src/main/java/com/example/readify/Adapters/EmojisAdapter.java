@@ -53,18 +53,27 @@ public class EmojisAdapter extends RecyclerView.Adapter<EmojisAdapter.EmojiHolde
         holder.emoji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                emojiClicked(holder);
+                emojiClicked(holder, position);
             }
         });
     }
 
-    public void emojiClicked(EmojisAdapter.EmojiHolder holder){
+    public void emojiClicked(EmojisAdapter.EmojiHolder holder, int position){
         float dim = context.getResources().getDimension(R.dimen.card_view_dimen);
         CardView.LayoutParams cardViewParams = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         cardViewParams.setMargins((int) dim,(int) dim,(int) dim, (int) dim);
         holder.cardView.setLayoutParams(cardViewParams);
         holder.cardView.requestLayout();
-        holder.emojiTitle.setText("9%");
+
+        Emoji emoji = recylcerList.get(position);
+        int value = emoji.getValue() + 1;
+        emoji.setValue(emoji.getValue() + 1);
+        int num = emoji.getNum() + 1;
+        double div = (double) value / num;
+        double p = div * 100;
+        int percent = (int) Math.round(p);
+        String v = percent + "%";
+        holder.emojiTitle.setText(v);
     }
 
     public class EmojiHolder extends RecyclerView.ViewHolder {

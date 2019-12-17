@@ -115,7 +115,6 @@ public class User {
 
     public User(JSONObject userJson){
         try{
-
            JSONObject user = userJson.getJSONObject("genre");
            this.premium = user.getBoolean("premium");
            // MIssing Achivements
@@ -174,6 +173,7 @@ public class User {
     public static JSONArray toJSONPatch(User user){
         JSONArray jsonArray = new JSONArray();
         try {
+
             JSONObject nameJSON = new JSONObject();
             nameJSON.put("propName", "name");
             nameJSON.put("value", user.getName());
@@ -243,6 +243,8 @@ public class User {
 
         JSONObject jsonObject= new JSONObject();
         try {
+            if(user.uid != null)
+                jsonObject.put("_id", user.getUid());
             jsonObject.put("name", user.getName());
             //MISSING ACHIEVEMENTS
             jsonObject.put("achievements", new JSONArray());
@@ -257,6 +259,7 @@ public class User {
 
             jsonObject.put("email", user.getEmail());
             jsonObject.put("genres", Genre.genresListToJSON(user.getGenres()));
+
             /*"_id": "5ddd6287e1cc0e546e3d476a",
                     "name": "Agricolesa",
                     "firebaseId": "5ddc0f601b6cd31ed7b8afa4",
@@ -477,7 +480,7 @@ public class User {
     }
 
     public void readFromSharedPreferences(SharedPreferences pref) {
-        this.uid = pref.getString("com.example.readify.uid", "0");
+        /*this.uid = pref.getString("com.example.readify.uid", "0");
         this.name = pref.getString("com.example.readify.name", "Unknown");
         this.email = pref.getString("com.example.readify.email", "mail@unknown.com");
         this.picture = pref.getString("com.example.readify.photo", "userfinale");
@@ -506,7 +509,7 @@ public class User {
         //Reading
         String readingPref = pref.getString("com.example.readify.reading", "");
         Type type4 = new TypeToken<List<Book>>() {}.getType();
-        this.reading = new Gson().fromJson(readingPref, type4);
+        this.reading = new Gson().fromJson(readingPref, type4);*/
     }
 
     /* Method to update information on database */

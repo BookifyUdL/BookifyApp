@@ -1,5 +1,8 @@
 package com.example.readify.Models;
 
+import android.content.Context;
+
+import com.example.readify.R;
 import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
@@ -26,10 +29,13 @@ public class Book {
     private Genre genre;
     public Author auth;
     private ArrayList<Review> comments;
+    //private ArrayList<Review>
     private String id;
     private int sumRatings;
     private int numRatings;
     private boolean isNew;
+    private ArrayList<Emoji> emojis;
+    private Calendar calendar;
 
 
     public Book(String id, String title, Author author, String picture, boolean isNew){
@@ -41,7 +47,7 @@ public class Book {
         this.isNew = isNew;
     }
 
-    public Book(JSONObject jsonobject){
+    public Book(JSONObject jsonobject, Context context){
         try{
             this.title = jsonobject.getString("title");
             this.summary = jsonobject.getString("summary");
@@ -64,12 +70,42 @@ public class Book {
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.ENGLISH);
             try{
                 Date date = format.parse(jsonobject.getString("publication_date"));
-                Calendar calendar = new GregorianCalendar();
+                this.calendar = new GregorianCalendar();
                 calendar.setTime(date);
                 this.year = calendar.get(Calendar.YEAR);
             } catch (Exception e) {
                 this.year = 2019;
             }
+            JSONObject feelings = jsonobject.getJSONObject("feelings");
+            setEmojis(feelings, context);
+            comments = new ArrayList<>();
+            JSONArray commentsJson = jsonobject.getJSONArray("comments");
+            for(int i = 0; i < commentsJson.length(); i++){
+                comments.add(new Review(commentsJson.getJSONObject(i)));
+            }
+
+            /*public Emoji(String name, String emoji, int value, int num){
+                this.name = name;
+                this.emoji = emoji;
+                this.value = value;
+                this.num = num;
+            }*/
+
+
+
+            /*public static ArrayList<Emoji> getEmojis(){
+                if(EMOJIS == null || EMOJIS.isEmpty()){
+                    EMOJIS = new ArrayList<>();
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.angry_emoji), "angry"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.scared_emoji), "scare"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.sad_emoji), "unhappy"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.confused_emoji), "confused"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.bored_emoji), "bored"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.shocked_emoji), "surprised"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.happy_emoji), "happy"));
+                    EMOJIS.add(new Emoji(context.getResources().getString(R.string.excited_emoji), "excited"));
+                }
+                return EMOJIS;*/
             //Date date  = Date.from(jsonobject.getString("publication_date"));
             //this.year = 1;
             //missing author
@@ -114,7 +150,6 @@ public class Book {
             this.isNew = jsonobject.getBoolean("is_new");
             //String aux = jsonobject.get("genre").toString();
             this.extension = jsonobject.getInt("num_page");
-            //missing author
             this.auth = new Author(jsonobject.getJSONObject("author"));
             this.author = this.auth.getName();
 
@@ -146,6 +181,100 @@ public class Book {
             //this.name = "Error";
             //this.picture = "Error";
         }
+    }
+
+    public void addRate(int rate){
+        sumRatings = sumRatings + rate;
+        numRatings = numRatings + 1;
+        //return toJsonObject();
+    }
+
+
+    public void addComment(Review comment){
+        if(comments == null)
+            comments = new ArrayList<>();
+        comments.add(comment);
+    }
+
+    public JSONObject toJsonObject(){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            //Missing COMMENTS
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put(this.getGenre().toJSON());
+            jsonObject.put("genre", jsonArray);
+            jsonObject.put("comments", new JSONArray());
+            jsonObject.put("rating", sumRatings);
+            jsonObject.put("num_rating", numRatings);
+            jsonObject.put("is_new", isNew);
+            jsonObject.put("_id", id);
+            jsonObject.put("num_page", extension);
+            jsonObject.put("author", auth.toJson());
+            jsonObject.put("title", title);
+            jsonObject.put("summary", summary);
+            jsonObject.put("cover_image", picture);
+            String date = this.year + "-01-01" + "T00:00:00.000Z";
+            jsonObject.put("publication_date", date);
+            //"publication_date": "2019-01-01T00:00:00.000Z"
+
+            JSONArray feelingsArray = new JSONArray();
+            JSONObject object = new JSONObject();
+            object.put("angry", getEmojis().get(0).getValue());
+            object.put("scared", getEmojis().get(1).getValue());
+            object.put("sad", getEmojis().get(2).getValue());
+            object.put("confused", getEmojis().get(3).getValue());
+            object.put("bored", getEmojis().get(4).getValue());
+            object.put("shocked", getEmojis().get(5).getValue());
+            object.put("happy", getEmojis().get(6).getValue());
+            object.put("excited", getEmojis().get(7).getValue());
+
+            jsonObject.put("feelings", object);
+
+            JSONArray commmentsArray = new JSONArray();
+            for (Review comment : comments){
+                commmentsArray.put(comment.toJsonObject());
+            }
+            jsonObject.put("comments", commmentsArray);
+
+
+            return jsonObject;
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return new JSONObject();
+        }
+    }
+
+    public void setEmojis(JSONObject feelings, Context context){
+        try {
+            this.emojis = new ArrayList<>();
+            int angry = feelings.getInt("angry");
+            int scared = feelings.getInt("scared");
+            int sad = feelings.getInt("sad");
+            int confused = feelings.getInt("confused");
+            int bored = feelings.getInt("bored");
+            int shocked = feelings.getInt("shocked");
+            int happy = feelings.getInt("happy");
+            int excited = feelings.getInt("excited");
+
+            emojis = new ArrayList<>();
+            emojis.add(new Emoji(context.getResources().getString(R.string.angry_emoji), "angry", angry, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.scared_emoji), "scare", scared, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.sad_emoji), "unhappy", sad, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.confused_emoji), "confused", confused, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.bored_emoji), "bored", bored, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.shocked_emoji), "surprised", shocked, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.happy_emoji), "happy", happy, numRatings));
+            emojis.add(new Emoji(context.getResources().getString(R.string.excited_emoji), "excited", excited, numRatings));
+
+        } catch (Exception e){
+            this.emojis = new ArrayList<>();
+        }
+
+    }
+
+    public ArrayList<Emoji> getEmojis(){
+        return this.emojis;
     }
 
     public String getSummary() {
@@ -221,6 +350,26 @@ public class Book {
     }
 
     public Book() {
+    }
+
+    @Override
+    public boolean equals(Object o){
+        // If the object is compared with itself then return true
+        if (o == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Book)) {
+            return false;
+        }
+
+        // typecast o to Complex so that we can compare data members
+        Book c = (Book) o;
+
+        // Compare the data members and return accordingly
+        return c.getId().equals(this.getId());
     }
 
 

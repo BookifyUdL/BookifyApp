@@ -75,9 +75,14 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
     }
 
     public void notifyLibraryChanged() {
-        user.readFromSharedPreferences(prefs);
-        booksAdapter.setBooksList(user.getLibrary());
-        booksAdapter.notifyDataSetChanged();
+        //user.readFromSharedPreferences(prefs);
+        user = MockupsValues.getUser();
+        booksAdapter = new BooksGridAdapter((MainActivity) getActivity(), getContext(), user.getLibrary(), user);
+        recyclerViewGenres.setAdapter(booksAdapter);
+        booksAdapter.setClickListener(this);
+        //booksAdapter.setBooksList(user.getLibrary());
+        //booksAdapter.reloadAllImages();
+        //booksAdapter.notifyDataSetChanged();
         shouldShowEmptyMessage();
     }
 
@@ -93,9 +98,9 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
 
         View view = inflater.inflate(R.layout.fragment_library, container, false);
 
-        user = new User();
-        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-        user.readFromSharedPreferences(prefs);
+        user = MockupsValues.getUser();
+        //prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        //user.readFromSharedPreferences(prefs);
 
         LinearLayout discoverButton = view.findViewById(R.id.discover_layout);
         discoverButton.setOnClickListener(new View.OnClickListener() {

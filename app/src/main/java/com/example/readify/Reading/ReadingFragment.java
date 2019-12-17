@@ -77,8 +77,8 @@ public class ReadingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_reading, container, false);
 
         prefs = view.getContext().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-        user = new User();
-        user.readFromSharedPreferences(prefs);
+        user = MockupsValues.getUser();
+        //user.readFromSharedPreferences(prefs);
 
         LinearLayout discoverButton = view.findViewById(R.id.discover_layout);
         anyBookMessage = (LinearLayout) view.findViewById(R.id.any_book_layout);
@@ -93,14 +93,26 @@ public class ReadingFragment extends Fragment {
             }
         });
 
+        ArrayList<Book> list = user.getInterested();
+        ArrayList<Book> list2 = user.getReading();
+
+        ArrayList<Book> pendingBooks = new ArrayList<>();
+        ArrayList<Book> readingBooks = new ArrayList<>();
+        for(Book b: MockupsValues.getAllBooksForTutorial()){
+            if(list.contains(b))
+                pendingBooks.add(b);
+            if(list2.contains(b))
+                readingBooks.add(b);
+
+        }
+
         /* Reading books */
         LinearLayoutManager verticalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.reading_books_recycler_view);
         recyclerView.setLayoutManager(verticalLayoutManagaer);
 
-        ArrayList<Book> list = new ArrayList<>();
-        readingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), list, getActivity().getSupportFragmentManager(), user);
+        readingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), readingBooks, getActivity().getSupportFragmentManager(), user);
         recyclerView.setAdapter(readingBooksAdapter);
 
         ItemTouchHelper itemTouchHelperReading = new ItemTouchHelper(new SwipeToReadOrDeleteCallback(readingBooksAdapter, false));
@@ -112,7 +124,8 @@ public class ReadingFragment extends Fragment {
         recyclerView2 = (RecyclerView) view.findViewById(R.id.pending_books_recycler_view);
         recyclerView2.setLayoutManager(vlm);
 
-        pendingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), user.getInterested(), user);
+
+        pendingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), pendingBooks, user);
         pendingBooksAdapter.setIsInPendingList(true);
         recyclerView2.setAdapter(pendingBooksAdapter);
 
@@ -150,7 +163,8 @@ public class ReadingFragment extends Fragment {
     }
 
     public void readingBooksChanged() {
-        user.readFromSharedPreferences(prefs);
+        //user.readFromSharedPreferences(prefs);
+        user = MockupsValues.getUser();
         ArrayList<Book> readingBooks = user.getReadingBooks();
         readingBooksAdapter.setBooksList(readingBooks);
         readingBooksAdapter.notifyDataSetChanged();
@@ -158,7 +172,8 @@ public class ReadingFragment extends Fragment {
     }
 
     public void pendingListChanged() {
-        user.readFromSharedPreferences(prefs);
+        //user.readFromSharedPreferences(prefs);
+        user = MockupsValues.getUser();
         ArrayList<Book> pendingBooks = user.getInterested();
         pendingBooksAdapter.setBooksList(pendingBooks);
         pendingBooksAdapter.notifyDataSetChanged();

@@ -123,7 +123,7 @@ public class BookViewFragment extends Fragment {
     }
 
     private void showReviewsPopup(){
-        ReviewsPopup dialog =  new ReviewsPopup();
+        ReviewsPopup dialog =  new ReviewsPopup(this.book);
         //dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         //dialog = new ProfileDialog(post.getGuide(), this, post.getPlace());
         FragmentTransaction ft2 = getFragmentManager().beginTransaction();
@@ -144,8 +144,9 @@ public class BookViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-        user = new User();
-        user.readFromSharedPreferences(prefs);
+        user = MockupsValues.getUser();
+        //user = new User();
+        //user.readFromSharedPreferences(prefs);
         //User user = MockupsValues.getUser();
 
         prevoiusBooks = new ArrayList<>();
@@ -199,9 +200,12 @@ public class BookViewFragment extends Fragment {
                     ArrayList<Book> pending = user.getInterested();
                     pending.add(book);
                     user.setInterested(pending);
+                    ArrayList<Book> library = user.getLibrary();
+                    library.add(book);
+                    user.setLibrary(library);
                     //MockupsValues.addPendingBook(book);
-                    String interestedToPref = new Gson().toJson(user.getInterested());
-                    prefs.edit().putString("com.example.readify.interested", interestedToPref).apply();
+                    //String interestedToPref = new Gson().toJson(user.getInterested());
+                    //prefs.edit().putString("com.example.readify.interested", interestedToPref).apply();
 
                     MainActivity activity = (MainActivity) getActivity();
                     activity.notifyPendingListChanged(user);

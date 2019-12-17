@@ -36,6 +36,7 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
     private MainActivity activity;
     private User user;
     private SharedPreferences pref;
+    private ArrayList<ViewHolder> holders;
 
 
     public BooksGridAdapter(MainActivity activity, Context context, ArrayList<Book> library, User user) {
@@ -46,6 +47,7 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
         this.originalSearchList = new ArrayList<>();
         this.originalSearchList.addAll(user.getLibrary());
         this.activity = activity;
+        this.holders = new ArrayList<>();
 
     }
 
@@ -89,12 +91,21 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull final BooksGridAdapter.ViewHolder holder, final int position) {
+        holders.add(holder);
         String namePicture = mViewBooks.get(position).getPicture();
         /*holder.imageLayout.setBackground(ContextCompat.getDrawable(holder.imageLayout.getContext(),
                 holder.imageLayout.getContext().getResources().getIdentifier(namePicture, "drawable", holder.layout.getContext().getPackageName())));*/
         setBookCover(holder, namePicture);
         holder.setAddButtonState(position);
     }
+
+    public void reloadAllImages(){
+        for (int i = 0; i < holders.size(); i++){
+            setBookCover(holders.get(i), mViewBooks.get(i).getPicture());
+        }
+    }
+
+
 
     private void setBookCover(@NonNull final BooksGridAdapter.ViewHolder holder, String picture){
         ImageView imageView = new ImageView(context);
@@ -139,16 +150,19 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
             } else {
                 setAddButtonIconToAdd();
             }
+
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(user.getInterested().contains(mViewBooks.get(position))){
-                        setAddButtonIconToAdded();
-                        removeFromPendingList(position);
-                    } else {
                         setAddButtonIconToAdd();
                         toPendingList(position);
-                    }
+                        //setAddButtonIconToAdded();
+                        //removeFromPendingList(position);
+                    } /*else {
+                        setAddButtonIconToAdd();
+                        toPendingList(position);
+                    }*/
                 }
             });
         }
@@ -160,8 +174,8 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
             pending.remove(book);
             user.setInterested(pending);
 
-            String interestedToPref = new Gson().toJson(user.getInterested());
-            pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+            /*String interestedToPref = new Gson().toJson(user.getInterested());
+            pref.edit().putString("com.example.readify.interested", interestedToPref).apply();*/
 
             activity.notifyPendingListChanged(user);
             Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_removed_correctly_message), Toast.LENGTH_LONG).show();
@@ -174,8 +188,8 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
             pending.add(book);
             user.setInterested(pending);
 
-            String interestedToPref = new Gson().toJson(user.getInterested());
-            pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+            /*String interestedToPref = new Gson().toJson(user.getInterested());
+            pref.edit().putString("com.example.readify.interested", interestedToPref).apply();*/
 
             activity.notifyPendingListChanged(user);
             Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();

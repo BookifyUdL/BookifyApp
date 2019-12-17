@@ -109,8 +109,10 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         final View view = inflater.inflate(R.layout.fragment_discover, container, false);
 
         prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-        user = new User();
-        user.readFromSharedPreferences(prefs);
+        user = MockupsValues.getUser();
+
+        //user = new User();
+        //user.readFromSharedPreferences(prefs);
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
 
