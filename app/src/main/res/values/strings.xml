@@ -7,6 +7,7 @@
     <string name="library">Bookshelf</string>
     <string name="discover">Discover</string>
     <string name="profile">Profile</string>
+    <string name="message_token" translatable="false">message_token</string>
 
     <string name="skip_first_form_message"><u>Skip the form</u></string>
     <string name="description_first_form_text">To improve your experience in this application, we recommend that you waste a part of your time to make this form so that in the future, we can offer you the best book recommendations. This form is not mandatory.</string>

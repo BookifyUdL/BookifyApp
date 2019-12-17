@@ -12,12 +12,16 @@ import com.example.readify.FirstTimeForm.FirstTimeFormActivity;
 import com.example.readify.Library.LibraryFragment;
 import com.example.readify.Login.LoginActivity;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.Genre;
 import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
 import com.example.readify.Profile.ProfileFragment;
 import com.example.readify.Reading.ReadingFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,6 +34,7 @@ import android.os.Bundle;
 import android.transition.Slide;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -224,6 +229,20 @@ public class MainActivity extends AppCompatActivity implements
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         connectivityReceiver = new ConnectivityReceiver();
+
+
+        ArrayList<Genre> genres =  MockupsValues.getUser().getGenres();
+        for (Genre genre : genres)
+        {
+            FirebaseMessaging.getInstance().subscribeToTopic(genre.getName())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(MainActivity.this, "New notification!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+
     }
 
     @Override
