@@ -74,7 +74,7 @@ public class CommentActivity extends AppCompatActivity implements RichEditTextIn
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        user = new User();
+        user = MockupsValues.getUser();
         setContentView(R.layout.activity_comment);
         setOnCloseButtonClicked();
         setupRichContentEditText();

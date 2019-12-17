@@ -100,8 +100,9 @@ public class ReviewsPopup extends DialogFragment implements Popup{
         window.setGravity(Gravity.CENTER);
 
         prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-        user = new User();
-        user.readFromSharedPreferences(prefs);
+        user = MockupsValues.getUser();
+        //user = new User();
+        //user.readFromSharedPreferences(prefs);
 
         LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(vlm);
