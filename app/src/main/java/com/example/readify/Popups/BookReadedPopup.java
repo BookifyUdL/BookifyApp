@@ -207,6 +207,8 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         //ArrayList<Book> library = user.getLibrary();
         ArrayList<Book> reading = user.getReading();
         reading.remove(book);
+        ArrayList<Book> library = user.getLibrary();
+        library.remove(book);
 
         book.setRead(true);
         book.setSumRatings(book.getSumRatings() + starsClicked);
@@ -214,8 +216,8 @@ public class BookReadedPopup extends DialogFragment implements Popup {
 
         //MockupsValues.user.setReading(reading);
 
-        ArrayList<Book> library = MockupsValues.user.getLibrary();
-        library.remove(book);
+
+
         ArrayList<Book> auxLibrary = new ArrayList<>();
         auxLibrary.add(book);
         auxLibrary.addAll(library);
@@ -225,6 +227,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
 
         user.setReading(reading);
         user.setLibrary(auxLibrary);
+        MockupsValues.user = user;
         //MockupsValues.removeReadingListBook(book);
         //String readingToPref = new Gson().toJson(user.getReading());
         //pref.edit().putString("com.example.readify.reading", readingToPref).apply();
@@ -236,26 +239,6 @@ public class BookReadedPopup extends DialogFragment implements Popup {
                 bookHolder.destroyView();
             }
         });
-        //book.setEmojis(em);
-        /*Some shit is happening here bros*/
-        /*ListIterator<Book> itr = library.listIterator();
-        while (itr.hasNext()) {
-            Book tmp = itr.next();
-            if (tmp.getTitle().equals(book.getTitle()))
-                library.remove(tmp);
-        }*/
-
-        //library.add(0, book);
-        //user.getLibrary().remove(book);
-        //user.getLibrary().add(0, book);
-
-        //user.setLibrary(library);
-        //MockupsValues.user.setLibraryBookAsRead(book);
-        //String libraryToPref = new Gson().toJson(user.getLibrary());
-        //pref.edit().putString("com.example.readify.library", libraryToPref).apply();
-
-        //this.activity.notifyLibraryListChanged(user);
-
     }
 
     public void close(){

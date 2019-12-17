@@ -15,13 +15,17 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.readify.ApiConnector;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,6 +168,12 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
                         setAddButtonIconToAdd();
                         toPendingList(position);
                     }
+                    ApiConnector.updateUser(context, new ServerCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            Toast.makeText(context, "Book added correctly", Toast.LENGTH_LONG).show();
+                        }
+                    }, MockupsValues.getUser());
                 }
             });
         }

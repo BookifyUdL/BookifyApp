@@ -93,6 +93,12 @@ public class MainActivity extends AppCompatActivity implements
         //user.saveToFirebase();
         MockupsValues.user = user;
         fragment2.notifyLibraryChanged();
+        ApiConnector.updateUser(getApplicationContext(), new ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                Toast.makeText(getApplicationContext(), "Book added correctly to library", Toast.LENGTH_LONG).show();
+            }
+        }, MockupsValues.getUser());
     }
 
     public void notifyReadingListChanged(User user) {

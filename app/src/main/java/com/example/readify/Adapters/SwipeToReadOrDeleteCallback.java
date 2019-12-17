@@ -1,17 +1,25 @@
 package com.example.readify.Adapters;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.readify.ApiConnector;
+import com.example.readify.MockupsValues;
+import com.example.readify.Models.ServerCallback;
+import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.R;
+
+import org.json.JSONObject;
 
 public class SwipeToReadOrDeleteCallback extends ItemTouchHelper.SimpleCallback {
 
@@ -22,9 +30,11 @@ public class SwipeToReadOrDeleteCallback extends ItemTouchHelper.SimpleCallback 
     ColorDrawable red = new ColorDrawable(Color.RED);
     ColorDrawable yellow = new ColorDrawable(Color.parseColor("#d9c01c"));
     ColorDrawable green = new ColorDrawable(Color.parseColor("#5BE356"));
+    private Context mContext;
 
-    public SwipeToReadOrDeleteCallback(BooksListVerticalAdapter adapter, boolean pending){
+    public SwipeToReadOrDeleteCallback(BooksListVerticalAdapter adapter, boolean pending, Context context){
         super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        mContext = context;
         mAdapter = adapter;
         icon = delete = ContextCompat.getDrawable(mAdapter.getContext(), R.drawable.ic_delete_white);
         toPending = pending;
@@ -47,11 +57,17 @@ public class SwipeToReadOrDeleteCallback extends ItemTouchHelper.SimpleCallback 
         if(direction == ItemTouchHelper.LEFT){
             mAdapter.deleteItem(position);
         } else {
-            if(toPending)
+            if(toPending){
                 mAdapter.readingListChanged(position);
-            if(!toPending)
+            } else {
                 mAdapter.pendingListChanged(position);
-            // Add to reading list
+            }
+            ApiConnector.updateUser(mContext, new ServerCallback() {
+                @Override
+                public void onSuccess(JSONObject result) {
+                    Toast.makeText(mContext, "Book added correctly", Toast.LENGTH_LONG).show();
+                }
+            }, MockupsValues.getUser());
         }
     }
 
