@@ -86,7 +86,6 @@ public class User {
 
     public User(JSONObject userJson){
         try{
-
            JSONObject user = userJson.getJSONObject("genre");
            this.premium = user.getBoolean("premium");
            // MIssing Achivements
@@ -145,6 +144,7 @@ public class User {
     public static JSONArray toJSONPatch(User user){
         JSONArray jsonArray = new JSONArray();
         try {
+
             JSONObject nameJSON = new JSONObject();
             nameJSON.put("propName", "name");
             nameJSON.put("value", user.getName());
@@ -214,6 +214,8 @@ public class User {
 
         JSONObject jsonObject= new JSONObject();
         try {
+            if(user.uid != null)
+                jsonObject.put("_id", user.getUid());
             jsonObject.put("name", user.getName());
             //MISSING ACHIEVEMENTS
             jsonObject.put("achievements", new JSONArray());

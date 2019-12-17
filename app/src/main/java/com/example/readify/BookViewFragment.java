@@ -123,7 +123,7 @@ public class BookViewFragment extends Fragment {
     }
 
     private void showReviewsPopup(){
-        ReviewsPopup dialog =  new ReviewsPopup();
+        ReviewsPopup dialog =  new ReviewsPopup(this.book);
         //dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         //dialog = new ProfileDialog(post.getGuide(), this, post.getPlace());
         FragmentTransaction ft2 = getFragmentManager().beginTransaction();

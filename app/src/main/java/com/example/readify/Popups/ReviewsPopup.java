@@ -51,9 +51,10 @@ public class ReviewsPopup extends DialogFragment implements Popup{
     private FloatingActionButton addCommentButton;
     private User user;
     private SharedPreferences prefs;
+    final private Book book;
 
-    public ReviewsPopup(){
-
+    public ReviewsPopup(Book book){
+        this.book = book;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +68,9 @@ public class ReviewsPopup extends DialogFragment implements Popup{
         addCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //CommentActivity commentActivity = new CommentActivity();
+                //commentActivity.setBook(book);
+                MockupsValues.setCurrentBookViewing(book);
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
                 startActivity(intent);
             }

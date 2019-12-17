@@ -29,6 +29,7 @@ public class Book {
     private Genre genre;
     public Author auth;
     private ArrayList<Review> comments;
+    //private ArrayList<Review>
     private String id;
     private int sumRatings;
     private int numRatings;
@@ -77,6 +78,12 @@ public class Book {
             }
             JSONObject feelings = jsonobject.getJSONObject("feelings");
             setEmojis(feelings, context);
+            comments = new ArrayList<>();
+            JSONArray commentsJson = jsonobject.getJSONArray("comments");
+            for(int i = 0; i < commentsJson.length(); i++){
+                comments.add(new Review(commentsJson.getJSONObject(i)));
+            }
+
             /*public Emoji(String name, String emoji, int value, int num){
                 this.name = name;
                 this.emoji = emoji;
@@ -182,6 +189,13 @@ public class Book {
         //return toJsonObject();
     }
 
+
+    public void addComment(Review comment){
+        if(comments == null)
+            comments = new ArrayList<>();
+        comments.add(comment);
+    }
+
     public JSONObject toJsonObject(){
         JSONObject jsonObject = new JSONObject();
         try {
@@ -206,47 +220,22 @@ public class Book {
             JSONArray feelingsArray = new JSONArray();
             JSONObject object = new JSONObject();
             object.put("angry", getEmojis().get(0).getValue());
-            //feelingsArray.put(object);
-            //object.remove("angry");
-
-            //JSONObject object1 = new JSONObject();
             object.put("scared", getEmojis().get(1).getValue());
-            //feelingsArray.put(object1);
-            //object.remove("scared");
-
-            //JSONObject object2 = new JSONObject();
             object.put("sad", getEmojis().get(2).getValue());
-            //feelingsArray.put(object2);
-            //object.remove("sad");
-
-            //JSONObject object3 = new JSONObject();
             object.put("confused", getEmojis().get(3).getValue());
-            //feelingsArray.put(object3);
-            //object.remove("confused");
-
-            //JSONObject object4 = new JSONObject();
             object.put("bored", getEmojis().get(4).getValue());
-            //object.remove("bored");
-            //feelingsArray.put(object4);
-
-            //JSONObject object5 = new JSONObject();
             object.put("shocked", getEmojis().get(5).getValue());
-            //object.remove("shocked");
-            //feelingsArray.put(object5);
-
-            //JSONObject object6 = new JSONObject();
             object.put("happy", getEmojis().get(6).getValue());
-            //object.remove("happy");
-            //feelingsArray.put(object6);
-
-            //JSONObject object7 = new JSONObject();
             object.put("excited", getEmojis().get(7).getValue());
-            //object.remove("excited");
-            //feelingsArray.put(object7);
 
-            //JSONObject jsonObjectFellings = new JSONObject();
-            //jsonObjectFellings.put(feelingsArray);
             jsonObject.put("feelings", object);
+
+            JSONArray commmentsArray = new JSONArray();
+            for (Review comment : comments){
+                commmentsArray.put(comment.toJsonObject());
+            }
+            jsonObject.put("comments", commmentsArray);
+
 
             return jsonObject;
         } catch (JSONException e) {

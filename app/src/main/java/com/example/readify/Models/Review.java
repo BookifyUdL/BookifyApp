@@ -5,6 +5,7 @@ import android.net.Uri;
 import com.example.readify.CommentType;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URI;
@@ -22,8 +23,11 @@ public class Review {
     private CommentType commentType;
     private Uri uri;
     private ArrayList<Review> subReviews;
+    private ArrayList<String> subReviewsId;
     private ArrayList<User> userLiked;
+    private ArrayList<String> userLikedId;
     private boolean isSub = false;
+    private String id;
 
     public Review(User user, String comment){
         this.user = user;
@@ -52,6 +56,40 @@ public class Review {
 
     }
 
+    public Review(JSONObject jsonObject){
+        try{
+            this.user = new User(jsonObject.getJSONObject("user"));
+            this.comment = jsonObject.getString("message");
+            int comment = jsonObject.getInt("comment_type");
+            if(comment == 1){
+                commentType = CommentType.COMMENT;
+                this.uri = this.uri = Uri.parse("No uri broh");
+            } else if(comment == 2) {
+                commentType = CommentType.COMMENT_AND_IMAGE;
+                this.uri = Uri.parse(jsonObject.getString("uri"));
+            } else {
+                commentType = CommentType.COMMENT_AND_GIF;
+                this.uri = Uri.parse(jsonObject.getString("uri"));
+            }
+
+            JSONArray userLiked = jsonObject.getJSONArray("user_liked");
+            this.userLikedId = new ArrayList<>();
+            for (int i = 0; i < userLiked.length(); i++){
+                this.userLikedId.add(userLiked.getString(i));
+            }
+
+            JSONArray subReviews = jsonObject.getJSONArray("user_liked");
+            this.subReviewsId = new ArrayList<>();
+            for (int i = 0; i < subReviews.length(); i++){
+                this.subReviewsId.add(subReviews.getString(i));
+            }
+        } catch (Error e){
+            System.out.println("Error creating user from json object");
+        } catch (JSONException ex) {
+            System.out.println("Error creating user from json object. Catching json");
+        }
+    }
+
     public void setIsSub(boolean isSub){
         this.isSub = isSub;
     }
@@ -61,21 +99,38 @@ public class Review {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("user", user.getUid());
+            jsonObject.put("id", this.id);
             jsonObject.put("message", comment);
+            jsonObject.put("user", User.toJSON(user));
             jsonObject.put("uri", uri);
             jsonObject.put("comment_type", type);
             jsonObject.put("is_sub", isSub);
             JSONArray liked = new JSONArray();
-            for (User lik : userLiked){
+            for(User lik : userLiked){
                 liked.put(lik.getUid());
             }
             jsonObject.put("user_liked", liked);
+            JSONArray subReviewIdJson = new JSONArray();
+            for(String subReviewId: subReviewsId){
+                subReviewIdJson.put(subReviewId);
+            }
+            jsonObject.put("subreviews", subReviewIdJson);
 
+            /*  "_id": "5df8e808db179a094b66c188",
+            "message": "Great book!",
+            "subreviews": [],
+            "request": {
+                "type": "GET",
+                "url": "http://localhost:3000/comments/5df8e808db179a094b66c188"
+            }*/
         } catch (Exception e) {
 
         }
         return jsonObject;
+    }
+
+    public void setId(String id){
+        this.id = id;
     }
 
     public int commentTypeToInt(){

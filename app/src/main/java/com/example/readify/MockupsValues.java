@@ -42,6 +42,7 @@ public class MockupsValues {
     public  static User user = new User();
     private static Context context;
     private static boolean isUserInDatabase = false;
+    private static Book currentBookViewing;
 
 
     //private static User userProfile = new User("Connor MacArthur", true, getPersonalizedGenres(), getLastAddedBooksWithReads());
@@ -58,6 +59,14 @@ public class MockupsValues {
   
 
     //public void setUser(User user) { this.user = user; }
+
+    public static void setCurrentBookViewing(Book book){
+        currentBookViewing = book;
+    }
+
+    public static Book getCurrentBookViewing(){
+        return currentBookViewing;
+    }
 
     private static ArrayList<Shop> getShops(){
         if(SHOPS == null || SHOPS.isEmpty()){

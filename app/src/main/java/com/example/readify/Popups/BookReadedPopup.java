@@ -90,7 +90,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     };
 
     private void showReviewsPopup(){
-        ReviewsPopup dialog =  new ReviewsPopup();
+        ReviewsPopup dialog =  new ReviewsPopup(this.book);
         FragmentTransaction ft2 = fragmentManager.beginTransaction();
         dialog.show(ft2, "reviews_fragment");
     }
