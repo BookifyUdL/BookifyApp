@@ -73,7 +73,7 @@ public class BookReadedPopup extends DialogFragment implements Popup {
         public void onClick(View view) {
 
             int index = Integer.parseInt(view.getTag().toString());
-            starsClicked = index + 1;
+            starsClicked = index;
 
             for (int i = 0; i < stars.size(); i++){
                 if(i < index){
@@ -206,7 +206,8 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     private void acceptButtonClicked(){
         //ArrayList<Book> library = user.getLibrary();
         book.setRead(true);
-        book.setSumRatings(book.getNumRatings() + starsClicked);
+        book.setSumRatings(book.getSumRatings() + starsClicked);
+        book.setNumRatings(book.getNumRatings() + 1);
 
         ArrayList<Book> reading = user.getReading();
         reading.remove(book);

@@ -29,7 +29,7 @@ public class Author {
     public JSONObject toJson(){
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("id", getId());
+            jsonObject.put("_id", getId());
             jsonObject.put("name", getName());
 
         } catch (Exception e){

@@ -176,10 +176,10 @@ public class Book {
         }
     }
 
-    public JSONObject addRate(int rate){
+    public void addRate(int rate){
         sumRatings = sumRatings + rate;
         numRatings = numRatings + 1;
-        return toJsonObject();
+        //return toJsonObject();
     }
 
     public JSONObject toJsonObject(){
@@ -191,14 +191,15 @@ public class Book {
             jsonObject.put("genre", jsonArray);
             jsonObject.put("comments", new JSONArray());
             jsonObject.put("rating", sumRatings);
-            jsonObject.put("num_Rating", numRatings);
+            jsonObject.put("num_rating", numRatings);
             jsonObject.put("is_new", isNew);
             jsonObject.put("_id", id);
+            jsonObject.put("num_page", extension);
             jsonObject.put("author", auth.toJson());
             jsonObject.put("title", title);
             jsonObject.put("summary", summary);
             jsonObject.put("cover_image", picture);
-            String date = this.year + "-00-00" + "T00:00:00.000Z";
+            String date = this.year + "-01-01" + "T00:00:00.000Z";
             jsonObject.put("publication_date", date);
             //"publication_date": "2019-01-01T00:00:00.000Z"
 

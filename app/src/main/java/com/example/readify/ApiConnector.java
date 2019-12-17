@@ -48,6 +48,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
     private static String ALL_TOP_RATED = "/toprated";
     private static String ALL_AUTHOR = "/author";
     private static String ALL_COMMENTS = "comments";
+    //private static String ALL_UPDATE = "uodate/";
     private static SharedPreferences preferences;
 
     private static String SLASH = "/";
@@ -164,7 +165,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
             JSONObject object = book.toJsonObject();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.PATCH, urlv + ALL_BOOKS + SLASH + book.getId(), object, new Response.Listener<JSONObject>() {
+                    (Request.Method.PATCH, urlv + ALL_BOOKS + ALL_UPDATE + SLASH + book.getId(), object, new Response.Listener<JSONObject>() {
 
                         @Override
                         public void onResponse(JSONObject response) {
