@@ -105,7 +105,8 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     private ImageButton buttonSettings;
     private TextView textViewNameUser;
     private TextView commentsNumber;
-
+    private GenresHoritzontalAdapter adapterGenrePreferences;
+    private BooksProfileHoritzontalAdapter adapterReaderBooks;
 
     private FirebaseAuth mAuth;
 
@@ -184,7 +185,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         getProfileImage();
         textViewNameUser.setText(user.getName());
         //Num of books readed
-        readedBooksTextView.setText(Integer.toString(user.getNumReadedBooks()));
+        readedBooksTextView.setText(Integer.toString(user.getReadedBooks().size()));
         //Num of the achievements
         textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + user.getAchievements().size());
         //Num of the comments
@@ -195,7 +196,17 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         else
             imageViewPremiumBadge.setVisibility(View.INVISIBLE);
 
-        //TODO get genres, books and achievements of the user
+        //Update genres
+        adapterGenrePreferences.setList(user.getGenres());
+        adapterGenrePreferences.notifyDataSetChanged();
+
+        //Update readed books
+        adapterReaderBooks.setList(user.getReadedBooks());
+        adapterReaderBooks.notifyDataSetChanged();
+
+        //Update achievements
+        adapterAchievements.setAchivementsList(user.getCompletedAchievements());
+        adapterAchievements.notifyDataSetChanged();
     }
 
     private void updateUILogOut() {
@@ -260,7 +271,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         recyclerViewGenrePreferences.setLayoutManager(genrePreferencesManager);
 
         ArrayList<Genre> listGenresPreferences = user.getGenres();
-        GenresHoritzontalAdapter adapterGenrePreferences = new GenresHoritzontalAdapter(getContext(), listGenresPreferences);
+        adapterGenrePreferences = new GenresHoritzontalAdapter(getContext(), listGenresPreferences);
         adapterGenrePreferences.setClickListener(this);
         recyclerViewGenrePreferences.setAdapter(adapterGenrePreferences);
 
@@ -270,14 +281,13 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         recyclerViewReadedBooks.setLayoutManager(readedBooksManager);
 
         List<Book> listReadedBooks = user.getReadedBooks();
-        BooksProfileHoritzontalAdapter adapterReaderBooks =
-                new BooksProfileHoritzontalAdapter(getContext(), listReadedBooks);
+        adapterReaderBooks = new BooksProfileHoritzontalAdapter(getContext(), listReadedBooks);
         adapterReaderBooks.setClickListener(this);
         recyclerViewReadedBooks.setAdapter(adapterReaderBooks);
 
         // Create a achievements list on profile
-        final LinearLayoutManager achievementsManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        final RecyclerView recyclerViewAchievements = (RecyclerView) view.findViewById(R.id.recycler_view_profile_achievements);
+        LinearLayoutManager achievementsManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView recyclerViewAchievements = (RecyclerView) view.findViewById(R.id.recycler_view_profile_achievements);
         recyclerViewAchievements.setLayoutManager(achievementsManager);
 
         List<Achievement> achievementsCompleted = user.getCompletedAchievements();

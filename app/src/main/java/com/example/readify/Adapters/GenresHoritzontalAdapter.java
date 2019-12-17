@@ -34,6 +34,10 @@ public class GenresHoritzontalAdapter extends RecyclerView.Adapter<GenresHoritzo
 
     }
 
+    public void setList(ArrayList<Genre> list){
+        this.mData = list;
+    }
+
     @NonNull
     @Override
     public GenresHoritzontalAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

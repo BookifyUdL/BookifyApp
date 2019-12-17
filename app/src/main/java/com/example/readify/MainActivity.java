@@ -143,25 +143,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void goToUserPage(User user) {
-        String id = user.getUid();
         fragment4.setUserVisitor(user);
         fm.beginTransaction().hide(active).show(fragment4).commit();
         active = fragment4;
-        /*ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
-            @Override
-            public void onSuccess(JSONObject result) {
-                //TODO get genres by user
-                //TODO get books readed by user
-                try {
-                    JSONArray jsonArray = new JSONArray(result.get("user").toString());
-                    //ArrayList<Genre> userGenres = ApiConnector.getGenres();
-                    //..
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });*/
     }
 
     public void goToBookPage(Book bookReceived, final Pages fromPage) {

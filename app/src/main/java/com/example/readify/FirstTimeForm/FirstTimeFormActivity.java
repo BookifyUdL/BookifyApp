@@ -55,10 +55,15 @@ public class FirstTimeFormActivity extends AppCompatActivity
                     @Override
                     public void onSuccess(JSONObject result) {
                         System.out.println("Get allBooks funko!!!!");
-                        mAuth = FirebaseAuth.getInstance();
-                        firebaseDatabase = FirebaseDatabase.getInstance();
-                        databaseReference = firebaseDatabase.getReference(USERS);
-                        fm.beginTransaction().add(R.id.main_container_first_form,genreFragment, "1").commit();
+                        ApiConnector.getAllUsers(getApplicationContext(), new ServerCallback() {
+                            @Override
+                            public void onSuccess(JSONObject result) {
+                                mAuth = FirebaseAuth.getInstance();
+                                firebaseDatabase = FirebaseDatabase.getInstance();
+                                databaseReference = firebaseDatabase.getReference(USERS);
+                                fm.beginTransaction().add(R.id.main_container_first_form,genreFragment, "1").commit();
+                            }
+                        });
                     }
                 });
             }

@@ -10,6 +10,7 @@ import android.util.Base64;
 
 import androidx.annotation.NonNull;
 
+import com.example.readify.Discover.BooksSectionFragment;
 import com.example.readify.MockupsValues;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -94,6 +95,22 @@ public class User {
         if (genres != null)
             this.genres = genres;
         this.achievements = MockupsValues.getAchievementsPersonalized();
+    }
+
+    public User(String uid, String firebaseId, String name, String picture, Boolean premium,
+                String email, ArrayList<Genre> genres, ArrayList<Book> library, ArrayList<Book> reading,
+                ArrayList<Book> interested, ArrayList<Achievement> achievements){
+        this.uid = uid;
+        this.firebaseId = firebaseId;
+        this.name = name;
+        this.email = email;
+        this.picture = picture;
+        this.premium = premium;
+        this.library = library;
+        this.reading = reading;
+        this.interested = interested;
+        this.genres = genres;
+        this.achievements = achievements;
     }
 
     public User(JSONObject userJson){

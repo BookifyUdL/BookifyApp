@@ -154,7 +154,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
                 ApiConnector.getTopRatedBooksForGenre(getContext(), MockupsValues.user.getGenres(), new ServerCallbackForBooks() {
                     @Override
                     public void onSuccess(ArrayList<ArrayList<Book>> booksByGenre) {
-                        System.out.println("Get top rated books by genre succed");
+                        System.out.println("Get top rated books by genre succeed");
                         addGenres(view, booksByGenre);
                     }
 
@@ -193,7 +193,6 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         boolean isFirst = true;
         int previousId = 0;
         int previousCardId = 0;
-        int margin_5dp = (int) getContext().getResources().getDimension(R.dimen.margin_5dp);
         int margin_10dp = (int) getContext().getResources().getDimension(R.dimen.margin_10dp);
         int margin_15dp = (int) getContext().getResources().getDimension(R.dimen.margin_15dp);
 
