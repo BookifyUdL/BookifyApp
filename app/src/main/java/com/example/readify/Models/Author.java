@@ -7,6 +7,7 @@ public class Author {
     private String name;
     private String id;
 
+    /*Butterfly effect*/
     public Author(){}
 
     public Author(JSONObject author){
