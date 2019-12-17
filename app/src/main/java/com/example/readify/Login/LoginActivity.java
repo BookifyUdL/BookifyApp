@@ -153,8 +153,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         // Initialize all components in Login Layout
         initViews();
         final FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null)
-        {
+        if (currentUser != null) {
             //GET user info ::
             getUserInfoAndUpdateUi(currentUser);
 
@@ -172,8 +171,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             initializeSignInGoogle();
         }
     }
-
-
 
 
     @Override
@@ -454,7 +451,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         try {
             MockupsValues.setContext(this);
             MockupsValues.getUser().setFirebaseId(currentUser.getUid());
-            Uri url =currentUser.getPhotoUrl();
+            Uri url = currentUser.getPhotoUrl();
             MockupsValues.getUser().setPicture(url.toString());
 
             pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
@@ -472,25 +469,31 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                         @Override
                         public void onSuccess(JSONObject result) {
                             System.out.println("Get allBooks funko!!!!");
-                            ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
+                            ApiConnector.getAllUsers(getApplicationContext(), new ServerCallback() {
                                 @Override
                                 public void onSuccess(JSONObject result) {
-                                    System.out.println("Get userInfo funko!!!!");
-                                    //MockupsValues.setIsUserInDatabase(true);
-                                    //updateUI(currentUser);
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    readDataFromFirebase(uid, intent);
+                                    System.out.println("Get allUsers funko!!!!");
+                                    ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
+                                        @Override
+                                        public void onSuccess(JSONObject result) {
+                                            System.out.println("Get userInfo funko!!!!");
+                                            //MockupsValues.setIsUserInDatabase(true);
+                                            //updateUI(currentUser);
+                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                            readDataFromFirebase(uid, intent);
 
-                                    //Intent intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                            //Intent intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
                                 }
                             });
                         }
                     });
                 }
             });
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             Toast.makeText(getApplicationContext(), "Error in login 1", Toast.LENGTH_SHORT).show();
         }
@@ -545,7 +548,8 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         }
     }
 
-    private void getUserInfoAndUpdateUi(final FirebaseUser currentUser){
+    // For on start method
+    private void getUserInfoAndUpdateUi(final FirebaseUser currentUser) {
         //api call solution
         ApiConnector.getGenres(getApplicationContext(), new ServerCallback() {
             @Override
@@ -556,12 +560,18 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                     @Override
                     public void onSuccess(JSONObject result) {
                         System.out.println("Get allBooks funko!!!!");
-                        ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
+                        ApiConnector.getAllUsers(getApplicationContext(), new ServerCallback() {
                             @Override
                             public void onSuccess(JSONObject result) {
-                                System.out.println("Get userInfo funko!!!!");
-                                MockupsValues.setIsUserInDatabase(true);
-                                updateUI(currentUser);
+                                System.out.println("Get allUsers funko!!!!");
+                                ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
+                                    @Override
+                                    public void onSuccess(JSONObject result) {
+                                        System.out.println("Get userInfo funko!!!!");
+                                        MockupsValues.setIsUserInDatabase(true);
+                                        updateUI(currentUser);
+                                    }
+                                });
                             }
                         });
                     }

@@ -122,6 +122,7 @@ public class BooksListFormAdapter extends RecyclerView.Adapter<BooksListFormAdap
                     } else {
                         book.setRead(false);
                         user.addBookToInterestedBooks(book);
+                        user.addBookToLibrary(book);
                     }
                 }
                 if (mClickListener != null) mClickListener.onItemClick(view);

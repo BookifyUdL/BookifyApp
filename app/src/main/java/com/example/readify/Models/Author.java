@@ -7,6 +7,8 @@ public class Author {
     private String name;
     private String id;
 
+    public Author(){}
+
     public Author(JSONObject author){
         try{
             this.id = author.getString("_id");
@@ -20,10 +22,6 @@ public class Author {
     public Author(String name, String id) {
         this.name = name;
         this.id = id;
-    }
-
-    public Author(){
-
     }
 
     public JSONObject toJson(){

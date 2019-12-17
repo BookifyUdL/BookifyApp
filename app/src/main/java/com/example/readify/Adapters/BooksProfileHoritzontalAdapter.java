@@ -18,6 +18,7 @@ import com.example.readify.Models.Book;
 import com.example.readify.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BooksProfileHoritzontalAdapter extends RecyclerView.Adapter<BooksProfileHoritzontalAdapter.ViewHolder> {
@@ -56,7 +57,7 @@ public class BooksProfileHoritzontalAdapter extends RecyclerView.Adapter<BooksPr
         }
     }
 
-    private void setBookCover(@NonNull final BooksProfileHoritzontalAdapter.ViewHolder holder, String picture){
+    private void setBookCover(@NonNull final BooksProfileHoritzontalAdapter.ViewHolder holder, String picture) {
         Picasso.with(mContext) // Context
                 .load(picture) // URL or file
                 .into(holder.myImageView);
@@ -67,8 +68,12 @@ public class BooksProfileHoritzontalAdapter extends RecyclerView.Adapter<BooksPr
         return mData.size();
     }
 
+    public void setList(ArrayList<Book> readedBooks) {
+        this.mData = readedBooks;
+    }
+
     // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView myTextViewTitle;
         TextView myTextViewDescription;
         ImageView myImageView;

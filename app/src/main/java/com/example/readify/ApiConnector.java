@@ -14,6 +14,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
+import com.example.readify.Models.Achievement;
 import com.example.readify.Models.Author;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
@@ -58,24 +59,24 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
     //Context context;
     //RequestQueue queue = Volley.newRequestQueue(context);
-    static String urlv ="http://10.0.2.2:3000/";
+    static String urlv = "http://10.0.2.2:3000/";
 
 
-    public void setContext(Context context){
+    public void setContext(Context context) {
         //this.context = context;
     }
 
-    public static void setPreferences(SharedPreferences pref){
+    public static void setPreferences(SharedPreferences pref) {
         preferences = pref;
     }
 
     public static void getUser(Context context, final ServerCallback callback) {
         String id = "/" + preferences.getString("com.example.readify._id", "empt");
-        try{
+        try {
             //JSONObject jsonObject = User.toJSON(user);
             //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.GET, urlv + ALL_USERS +  id, null, new Response.Listener<JSONObject>() {
+                    (Request.Method.GET, urlv + ALL_USERS + id, null, new Response.Listener<JSONObject>() {
 
                         @Override
                         public void onResponse(JSONObject response) {
@@ -127,11 +128,12 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             queue.start();
             //Wait_until_Downloaded();
             //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("GET catch error, user.");
             System.out.println(e);
         }
     }
+
 
     public static void postComment(Context context, Review comment, final ServerCallback callback){
         try {
@@ -188,16 +190,17 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         }
     }
 
-    public static void updateUser(Context context, final ServerCallback callback, User user){
+
+    public static void updateUser(Context context, final ServerCallback callback, User user) {
         //String id = "/" + preferences.getString("_id", "5df13ba645ad971d47c7759a");
         //String id = "/5df13ba645ad971d47c7759a";
         //JSONArray userJson = User.toJSONPatch(user);
         String id = "/" + preferences.getString("com.example.readify._id", "empt");
-        try{
+        try {
             JSONObject jsonObject = User.toJSON(user);
             //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
             JsonObjectRequest jsonArrayRequest = new JsonObjectRequest
-                    (Request.Method.PATCH, urlv + ALL_USERS + ALL_UPDATE +  id, jsonObject, new Response.Listener<JSONObject>() {
+                    (Request.Method.PATCH, urlv + ALL_USERS + ALL_UPDATE + id, jsonObject, new Response.Listener<JSONObject>() {
 
                         @Override
                         public void onResponse(JSONObject response) {
@@ -248,16 +251,16 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             queue.start();
             //Wait_until_Downloaded();
             //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("PATCH catch error, user.");
             System.out.println(e);
         }
     }
 
-    public static void addUserToDatabase(Context context, final ServerCallback callback, User user){
+    public static void addUserToDatabase(Context context, final ServerCallback callback, User user) {
         //User user = new User()
         JSONObject userJSON = User.toJSON(user);
-        try{
+        try {
             //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.POST, urlv + ALL_USERS, userJSON, new Response.Listener<JSONObject>() {
@@ -317,8 +320,8 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         }
     }
 
-    public static void getBooksByAuthor(Context context, final ArrayList<Book> books, String authorId, final String bookId, final ServerCallback callback){
-        try{
+    public static void getBooksByAuthor(Context context, final ArrayList<Book> books, String authorId, final String bookId, final ServerCallback callback) {
+        try {
             String url = urlv + ALL_BOOKS + ALL_AUTHOR + SLASH + authorId;
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -326,10 +329,10 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                         @Override
                         public void onResponse(JSONObject response) {
                             String aux = response.toString();
-                            try{
+                            try {
                                 JSONArray jsonArray = response.getJSONArray("book");
                                 ArrayList<Book> authorBooks = Book.bookListFromJson(jsonArray);
-                                for (Book b : authorBooks){
+                                for (Book b : authorBooks) {
                                     //if(b.getId() != bookId)
                                     books.add(b);
 
@@ -362,9 +365,9 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         }
     }
 
-    public static void getAllBooks(Context context, final ServerCallback callback){
+    public static void getAllBooks(Context context, final ServerCallback callback) {
         //final ArrayList<Book> books = new ArrayList<>();
-        try{
+        try {
             //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, urlv + ALL_BOOKS, null, new Response.Listener<JSONObject>() {
@@ -372,7 +375,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                         @Override
                         public void onResponse(JSONObject response) {
                             String aux = response.toString();
-                            try{
+                            try {
                                 //String aux2 = response.get("genres");
                                 //String aux2 = response.get("genres").toString();
 
@@ -412,7 +415,41 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         //return genres;
     }
 
-    public static ArrayList<Book> parseJsonArrayToBookList(JSONArray jsonarray){
+    public static void getAllUsers(Context context, final ServerCallback callback) {
+        try {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, urlv + ALL_USERS, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                JSONArray jsonarray = new JSONArray(response.get("users").toString());
+                                ArrayList<User> users = parseJsonArrayToUserList(jsonarray);
+
+                                MockupsValues.setAllUsers(users);
+
+                                callback.onSuccess(response);
+                            } catch (org.json.JSONException e) {
+                                System.out.println("Error");
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            System.out.println("Error");
+                        }
+                    });
+
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static ArrayList<Book> parseJsonArrayToBookList(JSONArray jsonarray) {
         final ArrayList<Book> books = new ArrayList<>();
         for (int i = 0; i < jsonarray.length(); i++) {
             try {
@@ -429,13 +466,53 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         return books;
     }
 
-    public static void getGenreById(final Context context, final int index, final ArrayList<String> genresId, final ArrayList<ArrayList<Book>> booksByGenre, final ServerCallbackForBooks callback){
+    public static ArrayList<User> parseJsonArrayToUserList(JSONArray jsonarray) {
+        final ArrayList<User> users = new ArrayList<>();
+        for (int i = 0; i < jsonarray.length(); i++) {
+            try {
+                JSONObject user = jsonarray.getJSONObject(i);
+                //Author author = new Author(book.getJSONObject("author"));
+                User auxUser = new User(user.getString("_id"),
+                        user.getString("firebaseId"),
+                        user.getString("name"),
+                        user.getString("userPicture"),
+                        user.getBoolean("premium"),
+                        user.getString("email"),
+                        parseJsonArrayToGenreList(user.getJSONArray("genres")),
+                        parseJsonArrayToBookList(user.getJSONArray("library")),
+                        parseJsonArrayToBookList(user.getJSONArray("reading_book")),
+                        parseJsonArrayToBookList(user.getJSONArray("interested_book")),
+                        MockupsValues.getAchievements());
+                users.add(auxUser);
+            } catch (Exception e) {
+                System.out.println("Error parse user");
+            }
+        }
+        return users;
+    }
 
-        if(index >= genresId.size()){
+    public static ArrayList<Genre> parseJsonArrayToGenreList(JSONArray jsonArray) {
+        ArrayList<Genre> genres = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject genre = jsonArray.getJSONObject(i);
+                Genre auxGenre = new Genre(genre.getString("_id"),
+                        genre.getString("name"), genre.getString("picture"));
+                genres.add(auxGenre);
+            } catch (Exception e) {
+                System.out.println("Error parse genre");
+            }
+        }
+        return genres;
+    }
+
+    public static void getGenreById(final Context context, final int index, final ArrayList<String> genresId, final ArrayList<ArrayList<Book>> booksByGenre, final ServerCallbackForBooks callback) {
+
+        if (index >= genresId.size()) {
             callback.onSuccess(booksByGenre);
         } else {
             String url = urlv + ALL_BOOKS + ALL_TOP_RATED + SLASH + genresId.get(index);
-            try{
+            try {
                 //final boolean responseReceived = false;
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                         (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -443,7 +520,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                             @Override
                             public void onResponse(JSONObject response) {
                                 //String aux = response.toString();
-                                try{
+                                try {
                                     JSONArray jsonarray = new JSONArray(response.get("book").toString());
                                     ArrayList<Book> books = parseJsonArrayToBookList(jsonarray);
                                     booksByGenre.add(books);
@@ -482,11 +559,11 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             }
         }
 
-            //queue.add(jsonObjectRequest);
+        //queue.add(jsonObjectRequest);
     }
 
-    public static void getShopItemsByBookId(Context context, String bookId, final ServerCallback callback){
-        try{
+    public static void getShopItemsByBookId(Context context, String bookId, final ServerCallback callback) {
+        try {
             String url = urlv + ALL_ITEMS + SLASH + ALL_BOOK + SLASH + bookId;
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -513,9 +590,9 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         }
     }
 
-    public static void getBooksByGenre(Context context, String genreId, final ServerCallback callback){
-        try{
-            String url = urlv + ALL_BOOKS + SLASH + ALL_GENRE + SLASH  + genreId;
+    public static void getBooksByGenre(Context context, String genreId, final ServerCallback callback) {
+        try {
+            String url = urlv + ALL_BOOKS + SLASH + ALL_GENRE + SLASH + genreId;
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -550,10 +627,10 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
     }
 
 
-    public static void getTopRatedBooksForGenre(final Context context, ArrayList<Genre>  genres, final ServerCallbackForBooks callback){
-        final ArrayList<ArrayList<Book>> booksByGenre = new ArrayList<ArrayList<Book> >();
+    public static void getTopRatedBooksForGenre(final Context context, ArrayList<Genre> genres, final ServerCallbackForBooks callback) {
+        final ArrayList<ArrayList<Book>> booksByGenre = new ArrayList<ArrayList<Book>>();
         ArrayList<String> genresId = new ArrayList<>();
-        for (Genre g: genres){
+        for (Genre g : genres) {
             //String url = urlv + ALL_BOOKS + ALL_TOP_RATED + SLASH + g.getId();
             //urls.put(url);
             genresId.add(g.getId());
@@ -568,8 +645,8 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             public void onSuccess(Book book) {
             }
         });
-                //String[] urls =  urlz.toArray(new String[0]);
-                //String uls = (String) urls;
+        //String[] urls =  urlz.toArray(new String[0]);
+        //String uls = (String) urls;
         /*RequestQueue requestQueue = Volley.newRequestQueue(context);
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urls.toString(), null, new Response.Listener<JSONArray>() {
             @Override
@@ -662,7 +739,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
     public static void getBookById(final Context context, String bookId, final ServerCallbackForBooks callback){
         String url = urlv + ALL_BOOKS + SLASH + bookId;
-        try{
+        try {
             //JSONObject jsonObject = User.toJSON(user);
             //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -696,21 +773,21 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             RequestQueue queue = Volley.newRequestQueue(context);
             queue.add(jsonObjectRequest);
             //queue.start();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("GET catch error, user.");
             System.out.println(e);
         }
     }
 
-    public static void getTopRatedBooks(Context context, final ServerCallback callback){
-        try{
+    public static void getTopRatedBooks(Context context, final ServerCallback callback) {
+        try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, urlv + ALL_BOOKS + ALL_TOP_RATED, null, new Response.Listener<JSONObject>() {
 
                         @Override
                         public void onResponse(JSONObject response) {
                             String aux = response.toString();
-                            try{
+                            try {
                                 //String aux2 = response.get("genres");
                                 //String aux2 = response.get("genres").toString();
                                 JSONArray jsonarray = new JSONArray(response.get("book").toString());
@@ -745,16 +822,16 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         }
     }
 
-    public static void getGenres(Context context, final ServerCallback callback){
+    public static void getGenres(Context context, final ServerCallback callback) {
         final ArrayList<Genre> genres = new ArrayList<>();
-        try{
+        try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, urlv + ALL_GENRES, null, new Response.Listener<JSONObject>() {
 
                         @Override
                         public void onResponse(JSONObject response) {
                             String aux = response.toString();
-                            try{
+                            try {
                                 //String aux2 = response.get("genres");
                                 //String aux2 = response.get("genres").toString();
 
@@ -817,11 +894,11 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                 buffer.append(line + "\n");
             }
 
-            if(buffer.length() == 0)
+            if (buffer.length() == 0)
                 return null;
 
             JSONObject jsonObj = new JSONObject(buffer.toString());
-            try{
+            try {
                 //String aux2 = response.get("genres");
                 JSONArray jsonarray = new JSONArray(jsonObj.get("genres"));
                 for (int i = 0; i < jsonarray.length(); i++) {

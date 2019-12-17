@@ -56,7 +56,7 @@ public class MockupsValues {
     public static User getUser(){
         return user;
     }
-  
+
 
     //public void setUser(User user) { this.user = user; }
 
@@ -117,14 +117,20 @@ public class MockupsValues {
     }
 
     public static ArrayList<User> getUsers(){
-        if(USERS == null || USERS.isEmpty()){
+        /*if(USERS == null || USERS.isEmpty()){
             USERS = new ArrayList<>();
-            USERS.add(new User("Núria Gonzalez", "nuria@gmail.com" ,"user3"));
+            User user = new User("Núria Gonzalez", "nuria@gmail.com" ,"user3");
+            user.setPremium(true);
+            USERS.add(user);
             USERS.add(new User("Alicia Carrasco", "carrasco@hotmail.es","user3"));
             USERS.add(new User("Joan Pérez", "perez2004@outlook.com", "user1"));
             USERS.add(new User("Arnau Roca", "arnau23@gmail.com","user2"));
-        }
+        }*/
         return USERS;
+    }
+
+    public static void setAllUsers(ArrayList<User> users){
+        USERS = users;
     }
 
     public static ArrayList<Emoji> getEmojis(){

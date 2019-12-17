@@ -131,7 +131,7 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         MockupsValues.getUser().setUid(pref.getString("com.example.readify.uid", "0"));
         MockupsValues.getUser().setName(pref.getString("com.example.readify.name", "Unknown"));
         MockupsValues.getUser().setEmail(pref.getString("com.example.readify.email", "email@unknown.com"));
-        //MockupsValues.getUser().setPicture(pref.getString("com.example.readify.photo", ""));
+        MockupsValues.getUser().setPicture(pref.getString("com.example.readify.photo", ""));
         MockupsValues.getUser().setPremium(false);
 
         //Initialize carouselView
