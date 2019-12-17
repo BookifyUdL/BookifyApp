@@ -15,13 +15,17 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.readify.ApiConnector;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,7 +149,8 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
         }
 
         private void setAddButtonState(final int position){
-            if(user.getInterested().contains(mViewBooks.get(position))){
+
+            if(user.getReadingBooks().contains(mViewBooks.get(position)) || user.getInterested().contains(mViewBooks.get(position))){
                 setAddButtonIconToAdded();
             } else {
                 setAddButtonIconToAdd();
@@ -154,43 +159,39 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(user.getInterested().contains(mViewBooks.get(position))){
+                    if(user.getReadingBooks().contains(mViewBooks.get(position)) || user.getInterested().contains(mViewBooks.get(position))){
                         setAddButtonIconToAdd();
                         toPendingList(position);
                         //setAddButtonIconToAdded();
                         //removeFromPendingList(position);
-                    } /*else {
+                    } else {
                         setAddButtonIconToAdd();
                         toPendingList(position);
-                    }*/
+                    }
+                    ApiConnector.updateUser(context, new ServerCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            Toast.makeText(context, "Book added correctly", Toast.LENGTH_LONG).show();
+                        }
+                    }, MockupsValues.getUser());
                 }
             });
         }
 
         private void removeFromPendingList(int position){
             Book book = mViewBooks.get(position);
-
             ArrayList<Book> pending = user.getInterested();
             pending.remove(book);
             user.setInterested(pending);
-
-            /*String interestedToPref = new Gson().toJson(user.getInterested());
-            pref.edit().putString("com.example.readify.interested", interestedToPref).apply();*/
-
             activity.notifyPendingListChanged(user);
             Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_removed_correctly_message), Toast.LENGTH_LONG).show();
         }
 
         private void toPendingList(int position){
             Book book = mViewBooks.get(position);
-
             ArrayList<Book> pending = user.getInterested();
             pending.add(book);
             user.setInterested(pending);
-
-            /*String interestedToPref = new Gson().toJson(user.getInterested());
-            pref.edit().putString("com.example.readify.interested", interestedToPref).apply();*/
-
             activity.notifyPendingListChanged(user);
             Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
         }

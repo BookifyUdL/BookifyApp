@@ -116,51 +116,29 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
 
     public void readingListChanged(int position) {
         Book book = booksList.get(position);
-
         ArrayList<Book> reading = user.getReading();
         ArrayList<Book> pending = user.getInterested();
-
         reading.add(book);
         pending.remove(position);
-
         user.setReading(reading);
         user.setInterested(pending);
-
         MockupsValues.user = user;
-
-        /*String interestedToPref = new Gson().toJson(user.getInterested());
-        prefs.edit().putString("com.example.readify.interested", interestedToPref).apply();
-        String readingToPref = new Gson().toJson(user.getReading());
-        prefs.edit().putString("com.example.readify.reading", readingToPref).apply();*/
-
         activity.notifyPendingListChanged(user);
         activity.notifyReadingListChanged(user);
-
         notifyDataSetChanged();
     }
 
     public void pendingListChanged(int position) {
         Book book = booksList.get(position);
-
         ArrayList<Book> reading = user.getReading();
         ArrayList<Book> pending = user.getInterested();
-
         pending.add(book);
         reading.remove(position);
-
         user.setReading(reading);
         user.setInterested(pending);
-
         MockupsValues.user = user;
-
-        /*String interestedToPref = new Gson().toJson(user.getInterested());
-        prefs.edit().putString("com.example.readify.interested", interestedToPref).apply();
-        String readingToPref = new Gson().toJson(user.getReading());
-        prefs.edit().putString("com.example.readify.reading", readingToPref).apply();*/
-
         activity.notifyReadingListChanged(user);
         activity.notifyPendingListChanged(user);
-
         notifyDataSetChanged();
     }
 
@@ -233,6 +211,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
                             BookReadedPopup dialog = new BookReadedPopup(activity, holder, fragmentManager, b, user);
                             FragmentTransaction ft2 = fragmentManager.beginTransaction();
                             dialog.show(ft2, "book_readed_popup");
+                            //dialog.s
                         }
                     });
                 }

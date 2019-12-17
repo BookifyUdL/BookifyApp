@@ -115,7 +115,7 @@ public class ReadingFragment extends Fragment {
         readingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), readingBooks, getActivity().getSupportFragmentManager(), user);
         recyclerView.setAdapter(readingBooksAdapter);
 
-        ItemTouchHelper itemTouchHelperReading = new ItemTouchHelper(new SwipeToReadOrDeleteCallback(readingBooksAdapter, false));
+        ItemTouchHelper itemTouchHelperReading = new ItemTouchHelper(new SwipeToReadOrDeleteCallback(readingBooksAdapter, false, getContext()));
         itemTouchHelperReading.attachToRecyclerView(recyclerView);
 
         /* Pending books */
@@ -129,7 +129,7 @@ public class ReadingFragment extends Fragment {
         pendingBooksAdapter.setIsInPendingList(true);
         recyclerView2.setAdapter(pendingBooksAdapter);
 
-        ItemTouchHelper itemTouchHelperDelete = new ItemTouchHelper(new SwipeToReadOrDeleteCallback(pendingBooksAdapter, true));
+        ItemTouchHelper itemTouchHelperDelete = new ItemTouchHelper(new SwipeToReadOrDeleteCallback(pendingBooksAdapter, true, getContext()));
         itemTouchHelperDelete.attachToRecyclerView(recyclerView2);
 
         shouldShowEmptyMessage();
