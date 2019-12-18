@@ -31,6 +31,8 @@ public class AchievementsHoritzontalAdapter extends RecyclerView.Adapter<Achieve
 
     public void setAchivementsList(ArrayList<Achievement> data){
         this.mData = data;
+        if (this.mData.size() == 0)
+            mData.add(new Achievement(0,"Empty", "Complete an achievements to add", "empty", 0, 9999));
         this.notifyDataSetChanged();
     }
 

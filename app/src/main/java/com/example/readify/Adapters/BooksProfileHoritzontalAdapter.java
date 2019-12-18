@@ -32,7 +32,6 @@ public class BooksProfileHoritzontalAdapter extends RecyclerView.Adapter<BooksPr
         this.mInflater = LayoutInflater.from(context);
         this.mContext = context;
         this.mData = data;
-        mData.add(new Book("Add books", "", "add_book"));
     }
 
     @NonNull
@@ -70,6 +69,7 @@ public class BooksProfileHoritzontalAdapter extends RecyclerView.Adapter<BooksPr
 
     public void setList(ArrayList<Book> readedBooks) {
         this.mData = readedBooks;
+        mData.add(new Book("Add books", "", "add_book"));
     }
 
     // stores and recycles views as they are scrolled off screen
