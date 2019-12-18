@@ -204,7 +204,6 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     }
 
     private void acceptButtonClicked(){
-        //ArrayList<Book> library = user.getLibrary();
         ArrayList<Book> reading = user.getReading();
         reading.remove(book);
         ArrayList<Book> library = user.getLibrary();
