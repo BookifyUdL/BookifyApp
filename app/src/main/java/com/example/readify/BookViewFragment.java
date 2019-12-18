@@ -309,7 +309,7 @@ public class BookViewFragment extends Fragment {
         String aux  = getString(R.string.more_books_of) + " " + book.getAuthor() + " :";
         textView.setText(aux);
         ImageButton addBook = (ImageButton) view.findViewById(R.id.add_button);
-        if(user.getInterested().contains(book)){
+        if(user.getInterested().contains(book) || user.getReadingBooks().contains(book)){
             Drawable drawable = ContextCompat.getDrawable(getContext(),
                     getContext().getResources().getIdentifier("ic_reading_white", "drawable", getContext().getPackageName()));
             //holder.addButton.setImageResource(R.drawable.ic_added_book);
