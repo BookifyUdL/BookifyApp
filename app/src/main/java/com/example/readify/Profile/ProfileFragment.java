@@ -36,6 +36,7 @@ import com.example.readify.Adapters.BooksProfileHoritzontalAdapter;
 import com.example.readify.Adapters.GenresHoritzontalAdapter;
 import com.example.readify.MainActivity;
 import com.example.readify.MainActivityLogOut;
+import com.example.readify.MockupsValues;
 import com.example.readify.Models.Achievement;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
@@ -120,9 +121,9 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     }
 
     public void setUserMain() {
-        user = new User();
-        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-        user.readFromSharedPreferences(prefs);
+        user = MockupsValues.user;
+        //prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        //user.readFromSharedPreferences(prefs);
 
         buttonUpgrade.setVisibility(View.VISIBLE);
         disconnectButton.setVisibility(View.VISIBLE);
@@ -187,7 +188,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         //Num of books readed
         readedBooksTextView.setText(Integer.toString(user.getReadedBooks().size()));
         //Num of the achievements
-        textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + user.getAchievements().size());
+        textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + MockupsValues.getAchievements().size());
         //Num of the comments
         commentsNumber.setText("10");
         //Show badge premium

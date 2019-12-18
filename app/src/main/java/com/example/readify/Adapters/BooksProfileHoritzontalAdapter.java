@@ -53,6 +53,9 @@ public class BooksProfileHoritzontalAdapter extends RecyclerView.Adapter<BooksPr
         if (position == mData.size() - 1) {
             holder.myCardView.setBackgroundColor(ContextCompat.getColor(mInflater.getContext(), R.color.colorPrimary));
             holder.myTextViewTitle.setTextColor(ContextCompat.getColor(mInflater.getContext(), R.color.icons));
+        } else {
+            holder.myCardView.setBackgroundColor(ContextCompat.getColor(mInflater.getContext(), R.color.colorGrayCardBackground));
+            holder.myTextViewTitle.setTextColor(ContextCompat.getColor(mInflater.getContext(), R.color.primaryText));
         }
     }
 

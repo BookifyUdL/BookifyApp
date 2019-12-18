@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.User;
 import com.example.readify.R;
@@ -125,6 +126,7 @@ public class BooksListFormAdapter extends RecyclerView.Adapter<BooksListFormAdap
                         user.addBookToLibrary(book);
                     }
                 }
+                MockupsValues.user = user;
                 if (mClickListener != null) mClickListener.onItemClick(view);
             }
         });

@@ -239,6 +239,12 @@ public class BookReadedPopup extends DialogFragment implements Popup {
                 bookHolder.destroyView();
             }
         });
+        ApiConnector.updateUser(getContext(), new ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+
+            }
+        }, MockupsValues.user);
     }
 
     public void close(){
