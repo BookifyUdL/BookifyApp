@@ -3,18 +3,13 @@ package com.example.readify;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
-import com.example.readify.Models.Achievement;
 import com.example.readify.Models.Author;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
@@ -22,9 +17,6 @@ import com.example.readify.Models.Review;
 import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +27,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class ApiConnector extends AsyncTask<String, Integer, String> {
 
@@ -49,93 +40,109 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
     private static String ALL_TOP_RATED = "/toprated";
     private static String ALL_AUTHOR = "/author";
     private static String ALL_COMMENTS = "comments";
-    //private static String ALL_UPDATE = "uodate/";
+
+    private static String ID_CLIENT;
+
     private static SharedPreferences preferences;
 
     private static String SLASH = "/";
 
-    private static boolean responseReceived = false;
-    private static int requests;
-
-    //Context context;
-    //RequestQueue queue = Volley.newRequestQueue(context);
-    static String urlv = "http://10.0.2.2:3000/";
-
-
-    public void setContext(Context context) {
-        //this.context = context;
-    }
+    private static String urlv = "http://10.0.2.2:3000/";
 
     public static void setPreferences(SharedPreferences pref) {
         preferences = pref;
     }
 
-    public static void getUser(Context context, final ServerCallback callback) {
-        String id = "/" + preferences.getString("com.example.readify._id", "empt");
+    public static void setIdClient(String idClient) { ID_CLIENT = idClient; }
+
+    public static void addUserToDatabase(Context context, final ServerCallback callback, User user) {
+        JSONObject userJSON = User.toJSON(user);
         try {
-            //JSONObject jsonObject = User.toJSON(user);
-            //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.POST, urlv + ALL_USERS, userJSON, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            System.out.println(response.toString());
+                            try {
+                                String id = response.getString("_id");
+                                MockupsValues.user.setUid(id);
+                                setIdClient(id);
+                                preferences.edit().putString("com.example.readify.uid", id).apply();
+                                MockupsValues.user.saveToFirebase();
+                            } catch (JSONException ex) {
+                                System.out.println(ex);
+                            }
+                            callback.onSuccess(response);
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            System.out.println("Error");
+                        }
+                    });
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+            queue.start();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void getUser(Context context, final ServerCallback callback) {
+        String id = SLASH + preferences.getString("com.example.readify._id", "empt");
+        try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, urlv + ALL_USERS + id, null, new Response.Listener<JSONObject>() {
-
                         @Override
                         public void onResponse(JSONObject response) {
                             System.out.println(response.toString());
                             MockupsValues.user = new User(response);
                             callback.onSuccess(new JSONObject());
-
                         }
                     }, new Response.ErrorListener() {
-
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // TODO: Handle error
                             System.out.println("Error");
-                            /*try {
-                                String responseBody = new String(error.networkResponse.data, "utf-8");
-                                JSONObject data = new JSONObject(responseBody);
-                                JSONArray errors = data.getJSONArray("errors");
-                                JSONObject jsonMessage = errors.getJSONObject(0);
-                                String message = jsonMessage.getString("message");
-                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                            } catch (JSONException e) {
-                            } catch (UnsupportedEncodingException errorr) {
-                            }*/
-
                         }
                     });
-            /*JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, urlv + ALL_USERS, jsonObject, new Response.Listener<JSONObject>() {
-
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            System.out.println(response.toString());
-                            callback.onSuccess(response);
-
-                        }
-                    }, new Response.ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            // TODO: Handle error
-                            System.out.println("Error");
-
-                        }
-                    });*/
-
             RequestQueue queue = Volley.newRequestQueue(context);
             queue.add(jsonObjectRequest);
             queue.start();
-            //Wait_until_Downloaded();
-            //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
         } catch (Exception e) {
             System.out.println("GET catch error, user.");
             System.out.println(e);
         }
     }
 
+    public static void getInfoClientUser(Context context, final ServerCallback callback) {
+        String id = "/" + preferences.getString("com.example.readify._id", "empt");
+        try {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, urlv + ALL_USERS + id, null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            System.out.println(response.toString());
+                            MockupsValues.user.getInfoFromJSON(response);
+                            callback.onSuccess(new JSONObject());
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            System.out.println("Error");
+                        }
+                    });
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+            queue.start();
+        } catch (Exception e) {
+            System.out.println("GET catch error, user.");
+            System.out.println(e);
+        }
+    }
 
-    public static void postComment(Context context, Review comment, final ServerCallback callback){
+    public static void postComment(Context context, Review comment, final ServerCallback callback) {
         try {
             JSONObject object = comment.toJsonObject();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -162,8 +169,8 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         }
     }
 
-    public static void updateBook(Context context, Book book, final ServerCallback callback){
-        try{
+    public static void updateBook(Context context, Book book, final ServerCallback callback) {
+        try {
             //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
             JSONObject object = book.toJsonObject();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -253,69 +260,6 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
         } catch (Exception e) {
             System.out.println("PATCH catch error, user.");
-            System.out.println(e);
-        }
-    }
-
-    public static void addUserToDatabase(Context context, final ServerCallback callback, User user) {
-        //User user = new User()
-        JSONObject userJSON = User.toJSON(user);
-        try {
-            //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, urlv + ALL_USERS, userJSON, new Response.Listener<JSONObject>() {
-
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            System.out.println(response.toString());
-                            try {
-                                String id = response.getString("_id");
-                                preferences.edit().putString("com.example.readify._id", id).apply();
-                            } catch (JSONException ex) {
-                                System.out.println(ex);
-                            }
-                            callback.onSuccess(response);
-                            /*String aux = response.toString();
-                            try{
-                                //String aux2 = response.get("genres");
-                                //String aux2 = response.get("genres").toString();
-
-                                JSONArray jsonarray = new JSONArray(response.get("books").toString());
-                                for (int i = 0; i < jsonarray.length(); i++) {
-                                    JSONObject book = jsonarray.getJSONObject(i);
-                                    Author author = new Author(book.getJSONObject("author"));
-                                    Book auxBook = new Book(book.getString("_id"), book.getString("title"), author, book.getString("cover_image"));
-                                    //books.add(auxBook);
-                                }
-
-                                //MockupsValues.setGenres(genres);
-                                //MockupsValues.setAllBooksForTutorial(books);
-
-                                callback.onSuccess(response);
-                                //aux2 = "";
-                            } catch (org.json.JSONException e) {
-
-                                System.out.println("Error");
-
-                            }*/
-                            //textView.setText("Response: " + response.toString());
-                        }
-                    }, new Response.ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            // TODO: Handle error
-                            System.out.println("Error");
-
-                        }
-                    });
-
-            RequestQueue queue = Volley.newRequestQueue(context);
-            queue.add(jsonObjectRequest);
-            queue.start();
-            //Wait_until_Downloaded();
-            //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
-        } catch (Exception e) {
             System.out.println(e);
         }
     }
@@ -737,7 +681,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
     }
 
-    public static void getBookById(final Context context, String bookId, final ServerCallbackForBooks callback){
+    public static void getBookById(final Context context, String bookId, final ServerCallbackForBooks callback) {
         String url = urlv + ALL_BOOKS + SLASH + bookId;
         try {
             //JSONObject jsonObject = User.toJSON(user);

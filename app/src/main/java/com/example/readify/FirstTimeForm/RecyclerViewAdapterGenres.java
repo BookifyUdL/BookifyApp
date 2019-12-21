@@ -48,14 +48,13 @@ public class RecyclerViewAdapterGenres extends RecyclerView.Adapter<RecyclerView
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (user.containsGenre(genre)) {
+                if (user.containsGenre(genre))
                     user.removeGenreToGenres(genre);
-                    Toast.makeText(view.getContext(), "Genre removed on your favourite genres", Toast.LENGTH_SHORT).show();
-                } else {
+                else
                     user.addGenreToGenres(genre);
-                    Toast.makeText(view.getContext(), "Genre added on your favourite genres", Toast.LENGTH_SHORT).show();
-                }
-                if (mClickListener != null) mClickListener.onItemClick(view);
+
+                if (mClickListener != null)
+                    mClickListener.onItemClick(view);
             }
         });
     }

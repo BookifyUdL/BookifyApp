@@ -99,7 +99,7 @@ public class User {
 
     public User(String uid, String firebaseId, String name, String picture, Boolean premium,
                 String email, ArrayList<Genre> genres, ArrayList<Book> library, ArrayList<Book> reading,
-                ArrayList<Book> interested, ArrayList<Achievement> achievements){
+                ArrayList<Book> interested, ArrayList<Achievement> achievements) {
         this.uid = uid;
         this.firebaseId = firebaseId;
         this.name = name;
@@ -113,54 +113,44 @@ public class User {
         this.achievements = achievements;
     }
 
-    public User(JSONObject userJson){
-        try{
-           JSONObject user = userJson.getJSONObject("genre");
-           this.premium = user.getBoolean("premium");
-           // MIssing Achivements
-           this.achievements = new ArrayList<>();
-           this.library = Book.bookListFromJson(user.getJSONArray("library"));
-           this.reading = Book.bookListFromJson(user.getJSONArray("reading_book"));
-           this.interested = Book.bookListFromJson(user.getJSONArray("interested_book"));
-           this.uid = user.getString("_id");
-           this.firebaseId = user.getString("firebaseId");
-           this.picture = user.getString("userPicture");
-           this.name = user.getString("name");
-           this.email = user.getString("email");
+    public User(JSONObject userJson) {
+        try {
+            JSONObject user = userJson.getJSONObject("genre");
+            this.premium = user.getBoolean("premium");
+            // MIssing Achivements
+            this.achievements = new ArrayList<>();
+            this.library = Book.bookListFromJson(userJson.getJSONArray("library"));
+            this.reading = Book.bookListFromJson(userJson.getJSONArray("reading_book"));
+            this.interested = Book.bookListFromJson(userJson.getJSONArray("interested_book"));
+            this.uid = user.getString("_id");
+            this.firebaseId = user.getString("firebaseId");
+            this.picture = user.getString("userPicture");
+            this.name = user.getString("name");
+            this.email = user.getString("email");
 
-           JSONArray genresId = user.getJSONArray("genres");
-           this.genres = Genre.genresFromJSONArray(genresId);
-               /*
-               "genres": [
-                {
-                    "_id": "5de7fb595a66a02fe3c39eac",
-                    "picture": "genre1",
-                    "name": "Biography"
-                },
-                {
-                    "_id": "5de7fb595a66a02fe3c39eae",
-                    "picture": "genre3",
-                    "name": "Crime"
-                },
-                {
-                    "_id": "5de7fb595a66a02fe3c39ead",
-                    "picture": "genre2",
-                    "name": "Computing / Interenet"
-                }
-            ],
-               * */
-           //Falta cridar per cada id de genre el genre en concret
+            JSONArray genresId = user.getJSONArray("genres");
+            this.genres = Genre.genresFromJSONArray(genresId);
 
-
-           //this.read
-
-        } catch (Error e){
+        } catch (Error e) {
             System.out.println("Error creating user from json object");
         } catch (JSONException ex) {
             System.out.println("Error creating user from json object. Catching json");
         }
     }
 
+    public void getInfoFromJSON(JSONObject userJson) {
+        try {
+            this.premium = userJson.getBoolean("premium");
+
+            this.genres = Genre.genresFromJSONArray(userJson.getJSONArray("genres"));
+            this.library = Book.bookListFromJson(userJson.getJSONArray("library"));
+            this.interested = Book.bookListFromJson(userJson.getJSONArray("interested_book"));
+            this.reading = Book.bookListFromJson(userJson.getJSONArray("reading_book"));
+            this.achievements = MockupsValues.getAchievements();
+        } catch (Exception ex) {
+            System.out.println("Error adding information user from json object");
+        }
+    }
 
     public String getFirebaseId() {
         return firebaseId;
@@ -170,7 +160,7 @@ public class User {
         this.firebaseId = firebaseId;
     }
 
-    public static JSONArray toJSONPatch(User user){
+    public static JSONArray toJSONPatch(User user) {
         JSONArray jsonArray = new JSONArray();
         try {
 
@@ -239,52 +229,35 @@ public class User {
         }
     }
 
-    public static JSONObject toJSON(User user){
+    public static JSONObject toJSON(User user) {
 
-        JSONObject jsonObject= new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         try {
-            if(user.uid != null)
+            if (user.uid != null)
                 jsonObject.put("_id", user.getUid());
-            jsonObject.put("name", user.getName());
-            //MISSING ACHIEVEMENTS
-            jsonObject.put("achievements", new JSONArray());
             jsonObject.put("firebaseId", user.getFirebaseId());
+            jsonObject.put("name", user.getName());
             jsonObject.put("userPicture", user.getPicture());
+            jsonObject.put("email", user.getEmail());
+            jsonObject.put("genres", Genre.genresListToJSON(user.getGenres()));
             jsonObject.put("premium", user.isPremium());
-            jsonObject.put("library", Book.bookListToJSON(user.getLibrary()));
 
+            jsonObject.put("library", Book.bookListToJSON(user.getLibrary()));
             jsonObject.put("read_book", Book.bookListToJSON(user.getReadedBooks()));
             jsonObject.put("interested_book", Book.bookListToJSON(user.getInterested()));
             jsonObject.put("reading_book", Book.bookListToJSON(user.getReadingBooks()));
 
-            jsonObject.put("email", user.getEmail());
-            jsonObject.put("genres", Genre.genresListToJSON(user.getGenres()));
+            //MISSING ACHIEVEMENTS
+            jsonObject.put("achievements", new JSONArray());
 
-            /*"_id": "5ddd6287e1cc0e546e3d476a",
-                    "name": "Agricolesa",
-                    "firebaseId": "5ddc0f601b6cd31ed7b8afa4",
-                    "userPicture": "-",
-                    "premium": false,
-                    "achievements": [],
-            "library": [],
-            "read_book": [],
-            "interested_book": [],
-            "genres": [],
-            "email": "agri@coles.ca",
-                    "request": {
-                "type": "GET",
-                        "url": "http://localhost:3000/users/5ddd6287e1cc0e546e3d476a"*/
-
-            //String aux = jsonObject.toString();
             return jsonObject;
+
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return new JSONObject();
         }
 
     }
-
 
 
     public String getUid() {
@@ -336,7 +309,7 @@ public class User {
     }
 
     public ArrayList<Book> getReadingBooks() {
-        if(this.reading == null)
+        if (this.reading == null)
             this.reading = new ArrayList<>();
         return reading;
     }
@@ -354,7 +327,7 @@ public class User {
     }
 
     public ArrayList<Book> getReading() {
-        if(this.reading == null)
+        if (this.reading == null)
             this.reading = new ArrayList<>();
         return reading;
     }
@@ -381,16 +354,16 @@ public class User {
     public ArrayList<Book> getLibrary() {
         ArrayList<Book> lib = new ArrayList<>();
         lib.addAll(getReadingBooks());
-        for(Book book : getInterested()){
-            if(!lib.contains(book))
+        for (Book book : getInterested()) {
+            if (!lib.contains(book))
                 lib.add(book);
         }
-        for(Book book : getReadedBooks()){
-            if(!lib.contains(book))
+        for (Book book : getReadedBooks()) {
+            if (!lib.contains(book))
                 lib.add(book);
         }
-        for(Book book : getInterested()){
-            if(!lib.contains(book))
+        for (Book book : getInterested()) {
+            if (!lib.contains(book))
                 lib.add(book);
         }
         return lib;
@@ -480,7 +453,7 @@ public class User {
     }
 
     public ArrayList<Book> getInterested() {
-        if(this.interested == null)
+        if (this.interested == null)
             this.interested = new ArrayList<>();
         return interested;
     }
@@ -490,7 +463,7 @@ public class User {
     }
 
     public void readFromSharedPreferences(SharedPreferences pref) {
-        /*this.uid = pref.getString("com.example.readify.uid", "0");
+        this.uid = pref.getString("com.example.readify.uid", "0");
         this.name = pref.getString("com.example.readify.name", "Unknown");
         this.email = pref.getString("com.example.readify.email", "mail@unknown.com");
         this.picture = pref.getString("com.example.readify.photo", "userfinale");
@@ -519,13 +492,14 @@ public class User {
         //Reading
         String readingPref = pref.getString("com.example.readify.reading", "");
         Type type4 = new TypeToken<List<Book>>() {}.getType();
-        this.reading = new Gson().fromJson(readingPref, type4);*/
+        this.reading = new Gson().fromJson(readingPref, type4);
     }
 
     /* Method to update information on database */
     private Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("uid", this.uid);
+        result.put("idFirebase", this.firebaseId);
         result.put("name", this.name);
         result.put("email", this.email);
         result.put("picture", this.picture);
@@ -539,7 +513,7 @@ public class User {
         return result;
     }
 
-    public void saveToFirebase(){
+    public void saveToFirebase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(this.uid, this.toMap());

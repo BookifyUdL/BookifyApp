@@ -161,9 +161,9 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
                 public void onClick(View view) {
                     if(user.getReadingBooks().contains(mViewBooks.get(position)) || user.getInterested().contains(mViewBooks.get(position))){
                         setAddButtonIconToAdd();
-                        toPendingList(position);
+                        //toPendingList(position);
                         //setAddButtonIconToAdded();
-                        //removeFromPendingList(position);
+                        removeFromPendingList(position);
                     } else {
                         setAddButtonIconToAdd();
                         toPendingList(position);
