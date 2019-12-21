@@ -60,7 +60,7 @@ public class User {
         this.reading = new ArrayList<>();
         this.interested = new ArrayList<>();
         this.genres = new ArrayList<>();
-        this.achievements = MockupsValues.getAchievementsPersonalized();
+        this.achievements = MockupsValues.getAchievements();
     }
 
     public User(String name, String picture) {
@@ -72,7 +72,7 @@ public class User {
         this.reading = new ArrayList<>();
         this.interested = new ArrayList<>();
         this.genres = new ArrayList<>();
-        this.achievements = MockupsValues.getAchievementsPersonalized();
+        this.achievements = MockupsValues.getAchievements();
     }
 
     public User(String name, String email, String picture) {
@@ -84,7 +84,7 @@ public class User {
         this.reading = new ArrayList<>();
         this.interested = new ArrayList<>();
         this.genres = new ArrayList<>();
-        this.achievements = MockupsValues.getAchievementsPersonalized();
+        this.achievements = MockupsValues.getAchievements();
     }
 
     public User(String name, Boolean premium, ArrayList<Genre> genres, ArrayList<Book> library) {
@@ -94,7 +94,7 @@ public class User {
             this.library = library;
         if (genres != null)
             this.genres = genres;
-        this.achievements = MockupsValues.getAchievementsPersonalized();
+        this.achievements = MockupsValues.getAchievements();
     }
 
     public User(String uid, String firebaseId, String name, String picture, Boolean premium,
@@ -140,12 +140,13 @@ public class User {
 
     public void getInfoFromJSON(JSONObject userJson) {
         try {
-            this.premium = userJson.getBoolean("premium");
+            JSONObject user = userJson.getJSONObject("genre");
+            this.premium = user.getBoolean("premium");
 
-            this.genres = Genre.genresFromJSONArray(userJson.getJSONArray("genres"));
-            this.library = Book.bookListFromJson(userJson.getJSONArray("library"));
-            this.interested = Book.bookListFromJson(userJson.getJSONArray("interested_book"));
-            this.reading = Book.bookListFromJson(userJson.getJSONArray("reading_book"));
+            this.genres = Genre.genresFromJSONArray(user.getJSONArray("genres"));
+            this.library = Book.bookListFromJson(user.getJSONArray("library"));
+            this.interested = Book.bookListFromJson(user.getJSONArray("interested_book"));
+            this.reading = Book.bookListFromJson(user.getJSONArray("reading_book"));
             this.achievements = MockupsValues.getAchievements();
         } catch (Exception ex) {
             System.out.println("Error adding information user from json object");
@@ -471,27 +472,32 @@ public class User {
 
         //Library
         String libraryPref = pref.getString("com.example.readify.library", "");
-        Type type = new TypeToken<List<Book>>() {}.getType();
+        Type type = new TypeToken<List<Book>>() {
+        }.getType();
         this.library = new Gson().fromJson(libraryPref, type);
 
         //Genres
         String genresPref = pref.getString("com.example.readify.genres", "");
-        Type type1 = new TypeToken<List<Genre>>() {}.getType();
+        Type type1 = new TypeToken<List<Genre>>() {
+        }.getType();
         this.genres = new Gson().fromJson(genresPref, type1);
 
         //Interested
         String interestedPref = pref.getString("com.example.readify.interested", "");
-        Type type2 = new TypeToken<List<Book>>() {}.getType();
+        Type type2 = new TypeToken<List<Book>>() {
+        }.getType();
         this.interested = new Gson().fromJson(interestedPref, type2);
 
         //Achievements
         String achievementsPref = pref.getString("com.example.readify.achievements", "");
-        Type type3 = new TypeToken<List<Achievement>>() {}.getType();
+        Type type3 = new TypeToken<List<Achievement>>() {
+        }.getType();
         this.achievements = new Gson().fromJson(achievementsPref, type3);
 
         //Reading
         String readingPref = pref.getString("com.example.readify.reading", "");
-        Type type4 = new TypeToken<List<Book>>() {}.getType();
+        Type type4 = new TypeToken<List<Book>>() {
+        }.getType();
         this.reading = new Gson().fromJson(readingPref, type4);
     }
 

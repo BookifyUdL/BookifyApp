@@ -41,7 +41,6 @@ public class MockupsValues {
     private static ArrayList<User> USERS;
     public  static User user = new User();
     private static Context context;
-    private static boolean isUserInDatabase = false;
     private static Book currentBookViewing;
 
 
@@ -94,14 +93,6 @@ public class MockupsValues {
         if(TOP_RATED_BOOKS == null)
             TOP_RATED_BOOKS = new ArrayList<>();
         return TOP_RATED_BOOKS;
-    }
-
-    public static void setIsUserInDatabase(boolean isOrNot){
-        isUserInDatabase = isOrNot;
-    }
-
-    public static boolean getIsUserInDatabase(){
-        return isUserInDatabase;
     }
 
     public static ArrayList<Item> getItems(){

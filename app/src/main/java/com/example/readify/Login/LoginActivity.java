@@ -392,7 +392,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //TODO Improve if the user didn't make the first form
 
-                final User user = dataSnapshot.getValue(User.class);
+                User user = dataSnapshot.getValue(User.class);
 
                 if (user == null) {
                     //If we don't complete de first form, it appear again
@@ -400,12 +400,13 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                     startActivity(firstFormAgain);
                     finish();
                 } else {
+                    MockupsValues.user.setUid(user.getUid());
+                    pref.edit().putString("com.example.readify._id", user.getUid()).apply();
                     //Obtain the rest of the data from database
                     ApiConnector.getInfoClientUser(getApplicationContext(), new ServerCallback() {
                         @Override
                         public void onSuccess(JSONObject result) {
                             System.out.println("The obtaining information of the user client works correctly");
-                            MockupsValues.user.getInfoFromJSON(result);
 
                             pref.edit().putBoolean("com.example.readify.premium", MockupsValues.user.isPremium()).apply();
 
@@ -461,10 +462,14 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     }
 
     private void updateUI(FirebaseUser currentUser, Task<AuthResult> task) {
+        // Load data to User
         MockupsValues.setContext(this);
         MockupsValues.user.setFirebaseId(currentUser.getUid());
+        MockupsValues.user.setPicture(currentUser.getPhotoUrl().toString());
+        MockupsValues.user.setName(currentUser.getDisplayName());
+        MockupsValues.user.setEmail(currentUser.getEmail());
 
-        pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
+        pref.edit().putString("com.example.readify.idFirebase", currentUser.getUid()).apply();
         pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
         pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
         pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString() + "?type=large").apply();
@@ -497,14 +502,14 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                             @Override
                             public void onSuccess(JSONObject result) {
                                 System.out.println("The obtaining of the users works correctly");
-                                ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
+                                updateUI(currentUser);
+                                /*ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
                                     @Override
                                     public void onSuccess(JSONObject result) {
                                         System.out.println("The obtaining of the user client works correctly");
-                                        MockupsValues.setIsUserInDatabase(true);
                                         updateUI(currentUser);
                                     }
-                                });
+                                });*/
                             }
                         });
                     }
@@ -525,7 +530,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         MockupsValues.user.setEmail(currentUser.getEmail());
 
         // Load data to Shared Preferences
-        pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
+        pref.edit().putString("com.example.readify.idFirebase", currentUser.getUid()).apply();
         pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
         pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
         pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString()).apply();
