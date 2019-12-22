@@ -4,14 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -20,14 +17,11 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -81,7 +75,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
@@ -430,28 +423,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                             finish();
                         }
                     });
-
-                    /*pref.edit().putBoolean("com.example.readify.premium", user.isPremium()).apply();
-
-                    String genresToPref = new Gson().toJson(user.getGenres());
-                    pref.edit().putString("com.example.readify.genres", genresToPref).apply();
-
-                    String libraryToPref = new Gson().toJson(user.getLibrary());
-                    pref.edit().putString("com.example.readify.library", libraryToPref).apply();
-
-                    String interestedToPref = new Gson().toJson(user.getInterested());
-                    pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
-
-                    String readingToPref = new Gson().toJson(user.getReading());
-                    pref.edit().putString("com.example.readify.reading", readingToPref).apply();
-
-                    String achievementsToPref = new Gson().toJson(user.getAchievements());
-                    pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
-
-                    //Go to app
-                    startActivity(intent);*/
                 }
-                //finish();
             }
 
             @Override
@@ -503,13 +475,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                             public void onSuccess(JSONObject result) {
                                 System.out.println("The obtaining of the users works correctly");
                                 updateUI(currentUser);
-                                /*ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
-                                    @Override
-                                    public void onSuccess(JSONObject result) {
-                                        System.out.println("The obtaining of the user client works correctly");
-                                        updateUI(currentUser);
-                                    }
-                                });*/
                             }
                         });
                     }
@@ -521,7 +486,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     //Methods to update an app after to do a login
     private void updateUI(FirebaseUser currentUser) {
 
-        /*try {*/
         // Load data to User
         MockupsValues.setContext(this);
         MockupsValues.user.setFirebaseId(currentUser.getUid());
@@ -538,38 +502,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         // Read data from Firebase
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         readDataFromFirebase(currentUser.getUid(), intent);
-
-            /*ApiConnector.getGenres(getApplicationContext(), new ServerCallback() {
-                @Override
-                public void onSuccess(JSONObject result) {
-                    System.out.println("The obtaining of the genres works correctly");
-                    MockupsValues.setContext(getApplicationContext());
-                    ApiConnector.getAllBooks(getApplicationContext(), new ServerCallback() {
-                        @Override
-                        public void onSuccess(JSONObject result) {
-                            System.out.println("The obtaining of the books works correctly");
-                            ApiConnector.getAllUsers(getApplicationContext(), new ServerCallback() {
-                                @Override
-                                public void onSuccess(JSONObject result) {
-                                    System.out.println("The obtaining of the users works correctly");
-                                    ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
-                                        @Override
-                                        public void onSuccess(JSONObject result) {
-                                            System.out.println("The obtaining of the client user works correctly");
-                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                            readDataFromFirebase(uid, intent);
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            Toast.makeText(getApplicationContext(), "Error in login 1", Toast.LENGTH_SHORT).show();
-        }*/
     }
 
     @Override

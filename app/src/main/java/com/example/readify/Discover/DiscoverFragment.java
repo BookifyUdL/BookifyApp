@@ -195,8 +195,6 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         boolean isFirst = true;
         int previousId = 0;
         int previousCardId = 0;
-        int margin_10dp = (int) getContext().getResources().getDimension(R.dimen.margin_10dp);
-        int margin_15dp = (int) getContext().getResources().getDimension(R.dimen.margin_15dp);
 
         //ArrayList<Book> books = MockupsValues.getLastAddedBooksDiscover();
         //books.add(MockupsValues.getSameAuthorBooks().get(0));
@@ -209,7 +207,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
             textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryText));
             textView.setTextSize(25);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(margin_15dp, margin_15dp, 0, 0);
+            params.setMargins(15, 15, 0, 0);
             if (isFirst) {
                 params.addRule(RelativeLayout.BELOW, R.id.card_view_top_rated);
                 isFirst = false;
@@ -226,7 +224,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
             CardView cardView = new CardView(getContext());
             cardView.setRadius(4);
             RelativeLayout.LayoutParams cardParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int) height);
-            cardParams.setMargins(margin_15dp, margin_15dp, margin_15dp, margin_15dp);
+            cardParams.setMargins(15, 15, 15, 15);
             cardParams.addRule(RelativeLayout.BELOW, previousId);
             cardParams.addRule(RelativeLayout.ALIGN_TOP);
             cardView.setLayoutParams(cardParams);
@@ -237,7 +235,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
             RecyclerView recyclerView = new RecyclerView(getContext());
             RelativeLayout.LayoutParams recyclerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-            recyclerParams.setMargins(margin_10dp, margin_10dp, margin_10dp, margin_10dp);
+            recyclerParams.setMargins(10, 10, 10, 10);
             recyclerView.setLayoutParams(recyclerParams);
 
             //List list = MockupsValues.getLastAddedBooks();

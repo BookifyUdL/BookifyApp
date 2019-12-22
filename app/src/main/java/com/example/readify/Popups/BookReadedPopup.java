@@ -264,6 +264,6 @@ public class BookReadedPopup extends DialogFragment implements Popup {
     public void onDestroy(){
         super.onDestroy();
         this.activity.notifyReadingListChanged(user);
-        this.activity.notifyLibraryListChanged(user);
+        this.activity.notifyLibraryListChanged(user, true);
     }
 }
