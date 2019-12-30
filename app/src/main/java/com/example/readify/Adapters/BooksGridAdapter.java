@@ -55,7 +55,7 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
 
     }
 
-    public void setBooksList(ArrayList<Book> books){
+    public void setBooksList(ArrayList<Book> books) {
         this.mViewBooks = books;
         this.originalSearchList = books;
     }
@@ -103,15 +103,14 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
         holder.setAddButtonState(position);
     }
 
-    public void reloadAllImages(){
-        for (int i = 0; i < holders.size(); i++){
+    public void reloadAllImages() {
+        for (int i = 0; i < holders.size(); i++) {
             setBookCover(holders.get(i), mViewBooks.get(i).getPicture());
         }
     }
 
 
-
-    private void setBookCover(@NonNull final BooksGridAdapter.ViewHolder holder, String picture){
+    private void setBookCover(@NonNull final BooksGridAdapter.ViewHolder holder, String picture) {
         ImageView imageView = new ImageView(context);
         Picasso.with(context) // Context
                 .load(picture) // URL or file
@@ -145,12 +144,13 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition(), mViewBooks.get(getAdapterPosition()), mViewBooks.size());
+            if (mClickListener != null)
+                mClickListener.onItemClick(view, getAdapterPosition(), mViewBooks.get(getAdapterPosition()), mViewBooks.size());
         }
 
-        private void setAddButtonState(final int position){
+        private void setAddButtonState(final int position) {
 
-            if(user.getReadingBooks().contains(mViewBooks.get(position)) || user.getInterested().contains(mViewBooks.get(position))){
+            if (user.getReadingBooks().contains(mViewBooks.get(position)) || user.getInterested().contains(mViewBooks.get(position))) {
                 setAddButtonIconToAdded();
             } else {
                 setAddButtonIconToAdd();
@@ -159,10 +159,11 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
             addButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(user.getReadingBooks().contains(mViewBooks.get(position)) || user.getInterested().contains(mViewBooks.get(position))){
+                    if (user.getReadingBooks().contains(mViewBooks.get(position)) || user.getInterested().contains(mViewBooks.get(position))) {
                         setAddButtonIconToAdd();
                         //toPendingList(position);
                         //setAddButtonIconToAdded();
+                        removeFromReadingList(position);
                         removeFromPendingList(position);
                     } else {
                         setAddButtonIconToAdd();
@@ -178,29 +179,45 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
             });
         }
 
-        private void removeFromPendingList(int position){
-            Book book = mViewBooks.get(position);
-            ArrayList<Book> pending = user.getInterested();
-            pending.remove(book);
-            user.setInterested(pending);
-            activity.notifyPendingListChanged(user);
-            Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_removed_correctly_message), Toast.LENGTH_LONG).show();
+        private void removeFromReadingList(int position) {
+            if (mViewBooks.size() > position) {
+                Book book = mViewBooks.get(position);
+                ArrayList<Book> reading = user.getInterested();
+                reading.remove(book);
+                user.setReading(reading);
+                activity.notifyReadingListChanged(user);
+            }
         }
 
-        private void toPendingList(int position){
-            Book book = mViewBooks.get(position);
-            ArrayList<Book> pending = user.getInterested();
-            pending.add(book);
-            user.setInterested(pending);
-            activity.notifyPendingListChanged(user);
-            Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
+        private void removeFromPendingList(int position) {
+            if (mViewBooks.size() > position) {
+                Book book = mViewBooks.get(position);
+                ArrayList<Book> pending = user.getInterested();
+                pending.remove(book);
+                user.setInterested(pending);
+                activity.notifyPendingListChanged(user);
+                Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_removed_correctly_message), Toast.LENGTH_SHORT).show();
+            }
         }
 
-        private void setAddButtonIconToAdd(){
+        private void toPendingList(int position) {
+            if (mViewBooks.size() > position) {
+                Book book = mViewBooks.get(position);
+                ArrayList<Book> pending = user.getInterested();
+                pending.add(book);
+                user.setInterested(pending);
+                activity.notifyPendingListChanged(user);
+                Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
+            }
+        }
+
+        private void setAddButtonIconToAdd() {
             addButton.setImageResource(R.drawable.ic_add_book);
         }
 
-        private void setAddButtonIconToAdded(){ addButton.setImageResource(R.drawable.ic_added_book); }
+        private void setAddButtonIconToAdded() {
+            addButton.setImageResource(R.drawable.ic_added_book);
+        }
     }
 
     public void setClickListener(BooksHorizontalAdapter.ItemClickListener itemClickListener) {

@@ -112,7 +112,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
     }
 
     public static void getInfoClientUser(Context context, final ServerCallback callback) {
-        String id = "/" + preferences.getString("com.example.readify._id", "empt");
+        String id = SLASH + preferences.getString("com.example.readify._id", "empt");
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, urlv + ALL_USERS + id, null, new Response.Listener<JSONObject>() {
@@ -194,7 +194,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
 
     public static void updateUser(Context context, final ServerCallback callback, User user) {
-        String id = "/" + preferences.getString("com.example.readify._id", "empt");
+        String id = SLASH + preferences.getString("com.example.readify._id", "empt");
         try {
             JSONObject jsonObject = User.toJSON(user);
             JsonObjectRequest jsonArrayRequest = new JsonObjectRequest
@@ -546,103 +546,11 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             public void onSuccess(Book book) {
             }
         });
-        //String[] urls =  urlz.toArray(new String[0]);
-        //String uls = (String) urls;
-        /*RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urls.toString(), null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                for(int i=0; i<response.length(); i++){
-                    try{
-                        JSONArray jsonArray = new JSONArray(response.getJSONObject(i).get("book").toString());
-                        //JSONArray jsonarray = new JSONArray(response.get(i).get("book").toString());
-
-                        ArrayList<Book> books = parseJsonArrayToBookList(jsonArray);
-                        booksByGenre.add(books);
-                        //callback.onSuccess(response);
-                        //responseReceived = true;
-                        //requests--;
-                    } catch (org.json.JSONException e) {
-                        System.out.println("Error");
-                    }
-
-                }
-                callback.onSuccess(booksByGenre);
-            }
-        }, new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse(VolleyError volleyerror){
-                //progressDialog.dismiss();
-                //Toast.makeText(context, volleyerror.getMessage(), Toast.LENGTH_LONG).show();
-                //Toast.makeText(context, volleyerror.getMessage(), Toast.LENGTH_SHORT).show();
-                System.out.println("Error gettign top rated books for each genre");
-            }
-        });
-        requestQueue.add(jsonArrayRequest);
-
-
-        //RequestQueue requestQueue = Volley.newRequestQueue(context);
-        //CustomPriorityRequest jsonArrayRequest = new CustomPriorityRequest(Request.Method.GET, )
-        //requests = genres.size();
-        //getGenreById(genres.get(0).getId(), booksByGenre, );
-        //callback.onSuccess(booksByGenre);
-        /*requests = genres.size();
-        RequestQueue queue = Volley.newRequestQueue(context);
-        for (Genre genre : genres){
-            String url = urlv + ALL_BOOKS + ALL_TOP_RATED + SLASH + genre.getId();
-            try{
-                //final boolean responseReceived = false;
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                        (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                //String aux = response.toString();
-                                try{
-                                    JSONArray jsonarray = new JSONArray(response.get("book").toString());
-                                    ArrayList<Book> books = parseJsonArrayToBookList(jsonarray);
-                                    booksByGenre.add(books);
-                                    //responseReceived = true;
-                                    requests--;
-                                    //MockupsValues.setTopRatedBooks(books);
-                                    //aux2 = "";
-                                } catch (org.json.JSONException e) {
-                                    System.out.println("Error");
-                                }
-                                //textView.setText("Response: " + response.toString());
-                            }
-                        }, new Response.ErrorListener() {
-
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                // TODO: Handle error
-                                System.out.println("Error");
-                                booksByGenre.add(new ArrayList<Book>());
-
-                            }
-                        });
-
-                queue.add(jsonObjectRequest);
-
-                //queue.start();
-                //Wait_until_Downloaded();
-                //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }*/
-
-        /*queue.start();
-        while(requests != 0) { System.out.println("WAiting requests, " + requests); }
-        callback.onSuccess(booksByGenre);*/
-
     }
 
     public static void getBookById(final Context context, String bookId, final ServerCallbackForBooks callback) {
         String url = urlv + ALL_BOOKS + SLASH + bookId;
         try {
-            //JSONObject jsonObject = User.toJSON(user);
-            //RequestFuture<JSONObject> jsonObjectRequestFuture = RequestFuture.newFuture();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -656,10 +564,6 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                             } catch (Exception e) {
                                 System.out.println("Error parsing book from jsonobject");
                             }
-
-                            //MockupsValues.user = new User(response);
-                            ////callback.onSuccess(new JSONObject());
-
                         }
                     }, new Response.ErrorListener() {
 
@@ -667,8 +571,6 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                         public void onErrorResponse(VolleyError error) {
                             // TODO: Handle error
                             System.out.println("Error");
-
-
                         }
                     });
             RequestQueue queue = Volley.newRequestQueue(context);
@@ -687,37 +589,24 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
                         @Override
                         public void onResponse(JSONObject response) {
-                            String aux = response.toString();
                             try {
-                                //String aux2 = response.get("genres");
-                                //String aux2 = response.get("genres").toString();
                                 JSONArray jsonarray = new JSONArray(response.get("book").toString());
                                 ArrayList<Book> books = parseJsonArrayToBookList(jsonarray);
                                 MockupsValues.setTopRatedBooks(books);
                                 callback.onSuccess(response);
-                                //aux2 = "";
                             } catch (org.json.JSONException e) {
-
                                 System.out.println("Error");
-
                             }
-                            //textView.setText("Response: " + response.toString());
                         }
                     }, new Response.ErrorListener() {
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // TODO: Handle error
                             System.out.println("Error");
-
                         }
                     });
-
             RequestQueue queue = Volley.newRequestQueue(context);
             queue.add(jsonObjectRequest);
-            //queue.start();
-            //Wait_until_Downloaded();
-            //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -731,50 +620,31 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
 
                         @Override
                         public void onResponse(JSONObject response) {
-                            String aux = response.toString();
                             try {
-                                //String aux2 = response.get("genres");
-                                //String aux2 = response.get("genres").toString();
 
                                 JSONArray jsonarray = new JSONArray(response.get("genres").toString());
                                 for (int i = 0; i < jsonarray.length(); i++) {
                                     genres.add(new Genre(jsonarray.getJSONObject(i)));
-                                    /*JSONObject jsonobject = jsonarray.getJSONObject(i);
-                                    String name = jsonobject.getString("name");
-                                    String url = jsonobject.getString("url");*/
                                 }
                                 MockupsValues.setGenres(genres);
-
                                 callback.onSuccess(response);
-                                //aux2 = "";
                             } catch (org.json.JSONException e) {
-
                                 System.out.println("Error");
-
                             }
-                            //textView.setText("Response: " + response.toString());
                         }
                     }, new Response.ErrorListener() {
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // TODO: Handle error
                             System.out.println("Error");
-
                         }
                     });
-
             RequestQueue queue = Volley.newRequestQueue(context);
             queue.add(jsonObjectRequest);
-            //queue.start();
-            //Wait_until_Downloaded();
-            //jsonObjectRequestFuture.get(30, TimeUnit.SECONDS);
         } catch (Exception e) {
             System.out.println(e);
         }
-        //return genres;
     }
-
 
     @Override
     protected String doInBackground(String... urlString) {
@@ -784,9 +654,6 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             StringBuilder buffer = new StringBuilder();
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            //connection.setDoOutput(true);
-            //connection.setConnectTimeout(5000);
-            //connection.setReadTimeout(5000);
             connection.connect();
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
@@ -804,16 +671,10 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                 JSONArray jsonarray = new JSONArray(jsonObj.get("genres"));
                 for (int i = 0; i < jsonarray.length(); i++) {
                     genres.add(new Genre(jsonarray.getJSONObject(i)));
-                                    /*JSONObject jsonobject = jsonarray.getJSONObject(i);
-                                    String name = jsonobject.getString("name");
-                                    String url = jsonobject.getString("url");*/
                 }
-                //aux2 = "";
             } catch (org.json.JSONException e) {
 
             }
-            //shareeditflag
-            //System.out.println(buffer);
             MockupsValues.setGenres(genres);
             return content;
         } catch (Exception e) {
