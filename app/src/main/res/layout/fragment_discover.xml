@@ -84,8 +84,7 @@
                 android:layout_gravity="top"
                 android:layout_margin="15dp"
                 android:layout_below="@+id/info_text_last_added"
-                card_view:cardBackgroundColor="@color/colorPrimaryLight"
-                card_view:cardCornerRadius="4dp">
+                card_view:cardBackgroundColor="@color/colorPrimaryLight">
 
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/viewPager"
@@ -121,8 +120,7 @@
                 android:layout_below="@+id/info_text_top_rated"
                 android:layout_gravity="top"
                 android:layout_margin="15dp"
-                card_view:cardBackgroundColor="@color/colorPrimaryLight"
-                card_view:cardCornerRadius="@dimen/card_corner_radius">
+                card_view:cardBackgroundColor="@color/colorPrimaryLight">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/top_rated_recycler_view"

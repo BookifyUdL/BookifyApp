@@ -189,7 +189,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
             textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryText));
             textView.setTextSize(25);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(15, 15, 0, 0);
+            params.setMargins((int) getContext().getResources().getDimension(R.dimen.margin_15dp), (int) getContext().getResources().getDimension(R.dimen.margin_15dp), 0, 0);
             if (isFirst) {
                 params.addRule(RelativeLayout.BELOW, R.id.card_view_top_rated);
                 isFirst = false;
@@ -204,12 +204,12 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
             float height = getContext().getResources().getDimension(R.dimen.card_height);
             CardView cardView = new CardView(getContext());
-            cardView.setRadius(4);
             RelativeLayout.LayoutParams cardParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int) height);
-            cardParams.setMargins(15, 15, 15, 15);
+            cardParams.setMargins((int) getContext().getResources().getDimension(R.dimen.margin_15dp), (int) getContext().getResources().getDimension(R.dimen.margin_15dp), (int) getContext().getResources().getDimension(R.dimen.margin_15dp), (int) getContext().getResources().getDimension(R.dimen.margin_15dp));
             cardParams.addRule(RelativeLayout.BELOW, previousId);
             cardParams.addRule(RelativeLayout.ALIGN_TOP);
             cardView.setLayoutParams(cardParams);
+            cardView.setRadius((int) getContext().getResources().getDimension(R.dimen.card_corner_radius_big));
             previousCardId = ViewCompat.generateViewId();
             cardView.setId(previousCardId);
             cardView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryLight));
@@ -217,7 +217,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
             RecyclerView recyclerView = new RecyclerView(getContext());
             RelativeLayout.LayoutParams recyclerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-            recyclerParams.setMargins(10, 10, 10, 10);
+            recyclerParams.setMargins((int) getContext().getResources().getDimension(R.dimen.margin_10dp), (int) getContext().getResources().getDimension(R.dimen.margin_10dp), (int) getContext().getResources().getDimension(R.dimen.margin_10dp), (int) getContext().getResources().getDimension(R.dimen.margin_10dp));
             recyclerView.setLayoutParams(recyclerParams);
 
             //List list = MockupsValues.getLastAddedBooks();
