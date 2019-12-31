@@ -222,11 +222,18 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
     // This method is called when binding the data to the views being created in RecyclerView
     @Override
     public void onBindViewHolder(@NonNull final BookHolder holder, final int position) {
+        boolean found = false;
         final Book book = booksList.get(position);
         holder.bookTitle.setText(book.getTitle());
-        for (Author author : MockupsValues.getAuthors())
-            if (author.getId().equals(book.getAuthor()))
+        for (Author author : MockupsValues.getAuthors()) {
+            if (author.getId().equals(book.getAuthor())) {
                 holder.bookAuthor.setText(author.getName());
+                found = true;
+            }
+        }
+        if (found == false)
+            holder.bookAuthor.setText(book.getAuthor());
+
         setBookCover(holder, book.getPicture());
 
         if (isInReadingList || isInPendingList)
@@ -322,7 +329,6 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
 
         public void setBookTitle(String title){
             bookTitle.setText(title);
-
         }
 
         public void destroyView() {
