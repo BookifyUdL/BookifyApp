@@ -325,6 +325,14 @@ public class Book {
         this.read = false;
     }
 
+    public Book(String id, String title, String author, String picture) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.picture = picture;
+        this.read = false;
+    }
+
     public Book() {
     }
 

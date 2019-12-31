@@ -435,6 +435,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                         parseJsonArrayToBookList(user.getJSONArray("library")),
                         parseJsonArrayToBookList(user.getJSONArray("reading_book")),
                         parseJsonArrayToBookList(user.getJSONArray("interested_book")),
+                        parseJsonArrayToBookList(user.getJSONArray("read_book")),
                         MockupsValues.getAchievements());
                 users.add(auxUser);
             } catch (Exception e) {

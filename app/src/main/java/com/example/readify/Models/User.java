@@ -49,6 +49,7 @@ public class User {
     private String firebaseId;
     private ArrayList<Book> interested;
     private ArrayList<Book> reading;
+    private ArrayList<Book> read;
 
     public User() {
         //this.uid = "0000";
@@ -99,7 +100,7 @@ public class User {
 
     public User(String uid, String firebaseId, String name, String picture, Boolean premium,
                 String email, ArrayList<Genre> genres, ArrayList<Book> library, ArrayList<Book> reading,
-                ArrayList<Book> interested, ArrayList<Achievement> achievements) {
+                ArrayList<Book> interested, ArrayList<Book> read, ArrayList<Achievement> achievements) {
         this.uid = uid;
         this.firebaseId = firebaseId;
         this.name = name;
@@ -110,6 +111,7 @@ public class User {
         this.reading = reading;
         this.interested = interested;
         this.genres = genres;
+        this.read = read;
         this.achievements = achievements;
     }
 
@@ -147,6 +149,7 @@ public class User {
             this.library = Book.bookListFromJson(user.getJSONArray("library"));
             this.interested = Book.bookListFromJson(user.getJSONArray("interested_book"));
             this.reading = Book.bookListFromJson(user.getJSONArray("reading_book"));
+            this.read = Book.bookListFromJson(user.getJSONArray("read_book"));
             this.achievements = MockupsValues.getAchievements();
         } catch (Exception ex) {
             System.out.println("Error adding information user from json object");
@@ -198,7 +201,7 @@ public class User {
 
             JSONObject readBooksJSON = new JSONObject();
             readBooksJSON.put("propName", "read_book");
-            readBooksJSON.put("value", Book.bookListToJSON(user.getReadedBooks()));
+            readBooksJSON.put("value", Book.bookListToJSON(user.getRead()));
             jsonArray.put(readBooksJSON);
 
 
@@ -244,7 +247,7 @@ public class User {
             jsonObject.put("premium", user.isPremium());
 
             jsonObject.put("library", Book.bookListToJSON(user.getLibrary()));
-            jsonObject.put("read_book", Book.bookListToJSON(user.getReadedBooks()));
+            jsonObject.put("read_book", Book.bookListToJSON(user.getRead()));
             jsonObject.put("interested_book", Book.bookListToJSON(user.getInterested()));
             jsonObject.put("reading_book", Book.bookListToJSON(user.getReadingBooks()));
 
@@ -260,6 +263,13 @@ public class User {
 
     }
 
+    public ArrayList<Book> getRead() {
+        return read;
+    }
+
+    public void setRead(ArrayList<Book> read) {
+        this.read = read;
+    }
 
     public String getUid() {
         return uid;
@@ -503,6 +513,12 @@ public class User {
         Type type4 = new TypeToken<List<Book>>() {
         }.getType();
         this.reading = new Gson().fromJson(readingPref, type4);
+
+        //Read
+        String readPref = pref.getString("com.example.readify.read", "");
+        Type type5 = new TypeToken<List<Book>>() {
+        }.getType();
+        this.read = new Gson().fromJson(readPref, type5);
     }
 
     /* Method to update information on database */
@@ -517,6 +533,7 @@ public class User {
         result.put("library", this.library);
         result.put("interested", this.interested);
         result.put("reading", this.reading);
+        result.put("read", this.read);
         result.put("genres", this.genres);
         result.put("achievements", this.achievements);
 

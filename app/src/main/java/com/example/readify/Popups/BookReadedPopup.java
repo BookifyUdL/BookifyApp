@@ -216,8 +216,6 @@ public class BookReadedPopup extends DialogFragment implements Popup {
 
         //MockupsValues.user.setReading(reading);
 
-
-
         ArrayList<Book> auxLibrary = new ArrayList<>();
         auxLibrary.add(book);
         auxLibrary.addAll(library);
@@ -227,6 +225,11 @@ public class BookReadedPopup extends DialogFragment implements Popup {
 
         user.setReading(reading);
         user.setLibrary(auxLibrary);
+
+        ArrayList<Book> addBook = MockupsValues.user.getRead();
+        addBook.add(0, book);
+        user.setRead(addBook);
+
         MockupsValues.user = user;
         //MockupsValues.removeReadingListBook(book);
         //String readingToPref = new Gson().toJson(user.getReading());

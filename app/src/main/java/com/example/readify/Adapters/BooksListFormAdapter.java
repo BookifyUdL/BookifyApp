@@ -92,9 +92,6 @@ public class BooksListFormAdapter extends RecyclerView.Adapter<BooksListFormAdap
         holder.bookAuthor.setText(book.getAuthor());
         String aux = mInflater.getContext().getPackageName();
         setBookCover(holder, book.getPicture());
-        //holder.bookCover.setImageResource(null);
-        /*holder.bookCover.setImageResource(mInflater.getContext()
-                .getResources().getIdentifier(book.getPicture(), "drawable", aux));*/
         holder.addButton.setVisibility(View.GONE);
 
         if (holder.cardView.getTag() == mInflater.getContext().getString(R.string.cardView_unmark)) {
@@ -112,14 +109,21 @@ public class BooksListFormAdapter extends RecyclerView.Adapter<BooksListFormAdap
             @Override
             public void onClick(View view) {
                 if (user.containsBook(book)) {
-                    if (read)
+                    if (read) {
                         user.removeBookToLibrary(book);
-                    else
+                        ArrayList<Book> remBook = user.getRead();
+                        remBook.remove(book);
+                        user.setRead(remBook);
+                    } else {
                         user.removeBookInterestedBooks(book);
+                    }
                 } else {
                     if (read) {
                         book.setRead(true);
                         user.addBookToLibrary(book);
+                        ArrayList<Book> addBook = user.getRead();
+                        addBook.add(book);
+                        user.setRead(addBook);
                     } else {
                         book.setRead(false);
                         user.addBookToInterestedBooks(book);
@@ -132,34 +136,10 @@ public class BooksListFormAdapter extends RecyclerView.Adapter<BooksListFormAdap
         });
     }
 
-    private void setBookCover(@NonNull final BookHolder holder, String coverUrl){
+    private void setBookCover(@NonNull final BookHolder holder, String coverUrl) {
         Picasso.with(context) // Context
                 .load(coverUrl) // URL or file
                 .into(holder.bookCover);
-        /*@SuppressLint("StaticFieldLeak")
-        AsyncTask<Void, Void, Bitmap> t = new AsyncTask<Void, Void, Bitmap>() {
-            protected Bitmap doInBackground(Void... p) {
-                Bitmap bmp = null;
-                try {
-                    URL aURL = new URL(user.getPicture());
-                    URLConnection conn = aURL.openConnection();
-                    conn.setUseCaches(true);
-                    conn.connect();
-                    InputStream is = conn.getInputStream();
-                    BufferedInputStream bis = new BufferedInputStream(is);
-                    bmp = BitmapFactory.decodeStream(bis);
-                    bis.close();
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return bmp;
-            }
-
-            protected void onPostExecute(Bitmap bmp) {
-                holder.bookCover.setImageBitmap(bmp);
-            }
-        };*/
     }
 
     // total number of cells
