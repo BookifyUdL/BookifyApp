@@ -82,8 +82,11 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
     private OnFragmentInteractionListener mListener;
 
+    private BooksHorizontalAdapter adapter;
+    private BooksHorizontalAdapter adapter2;
+
     public DiscoverFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -91,6 +94,11 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         DiscoverFragment fragment = new DiscoverFragment();
 
         return fragment;
+    }
+
+    public void updateDiscover(){
+        adapter.setUser(MockupsValues.user);
+        adapter2.setUser(MockupsValues.user);
     }
 
     @Override
@@ -147,7 +155,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
             @Override
             public void onSuccess(JSONObject result) {
                 recyclerView.setLayoutManager(horizontalLayoutManager);
-                BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), MockupsValues.getTopRatedBooks(), true, MockupsValues.user);
+                adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), MockupsValues.getTopRatedBooks(), true, MockupsValues.user);
                 adapter.setClickListener(discoverFragment);
                 recyclerView.setAdapter(adapter);
 
@@ -224,9 +232,9 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
             LinearLayoutManager horizontalLayoutManager
                     = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
             recyclerView.setLayoutManager(horizontalLayoutManager);
-            BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), booksByGenre.get(i), true, user);
-            adapter.setClickListener(this);
-            recyclerView.setAdapter(adapter);
+            adapter2 = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), booksByGenre.get(i), true, user);
+            adapter2.setClickListener(this);
+            recyclerView.setAdapter(adapter2);
 
             cardView.addView(recyclerView);
             relativeLayout.addView(cardView);

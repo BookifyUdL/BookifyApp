@@ -57,6 +57,11 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
         this.user = user;
     }
 
+    public void setUser(User user){
+        this.user = user;
+        notifyDataSetChanged();
+    }
+
     // inflates the row layout from xml when needed
     @Override
     @NonNull

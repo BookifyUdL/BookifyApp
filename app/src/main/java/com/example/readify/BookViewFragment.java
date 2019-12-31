@@ -44,6 +44,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -144,7 +146,7 @@ public class BookViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-        user = MockupsValues.getUser();
+        user = MockupsValues.user;
         //user = new User();
         //user.readFromSharedPreferences(prefs);
         //User user = MockupsValues.getUser();
@@ -181,7 +183,7 @@ public class BookViewFragment extends Fragment {
 
 
         final ImageButton addBook = (ImageButton) view.findViewById(R.id.add_button);
-        if(user.getInterested().contains(book)){
+        if(user.getLibrary().contains(book)){
             Drawable drawable = ContextCompat.getDrawable(getContext(),
                     getContext().getResources().getIdentifier("ic_reading_white", "drawable", getContext().getPackageName()));
             //holder.addButton.setImageResource(R.drawable.ic_added_book);
@@ -190,24 +192,38 @@ public class BookViewFragment extends Fragment {
         addBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!user.getInterested().contains(book)){
+                if(!user.getLibrary().contains(book)){
                     Drawable drawable = ContextCompat.getDrawable(getContext(),
                             getContext().getResources().getIdentifier("ic_reading_white", "drawable", getContext().getPackageName()));
                     //holder.addButton.setImageResource(R.drawable.ic_added_book);
                     addBook.setImageDrawable(drawable);
                     //Book book = mViewBooks.get(position);
 
+
+                    /* Add book to interest list user */
                     ArrayList<Book> pending = user.getInterested();
                     pending.add(book);
-                    user.setInterested(pending);
+                    MockupsValues.user.setInterested(pending);
+
+                    /* Add book to user library */
                     ArrayList<Book> library = user.getLibrary();
                     library.add(book);
-                    user.setLibrary(library);
+                    MockupsValues.user.setLibrary(library);
+
+                    //Update user in Database
+                    ApiConnector.updateUser(getApplicationContext(), new ServerCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            Toast.makeText(getApplicationContext(), "Book added correctly to library", Toast.LENGTH_LONG).show();
+                        }
+                    }, MockupsValues.user);
+
                     //MockupsValues.addPendingBook(book);
                     //String interestedToPref = new Gson().toJson(user.getInterested());
                     //prefs.edit().putString("com.example.readify.interested", interestedToPref).apply();
 
                     MainActivity activity = (MainActivity) getActivity();
+                    activity.updateDiscover();
                     activity.notifyPendingListChanged(user);
                     Toast.makeText(getContext(), book.getTitle() + " " + getContext().getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
 

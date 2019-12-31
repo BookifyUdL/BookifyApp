@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements
     private BottomNavigationView navigation;
     private ReadingFragment fragment1 = new ReadingFragment();
     private LibraryFragment fragment2 = new LibraryFragment();
-    private Fragment fragment3 = DiscoverFragment.newInstance();
+    private DiscoverFragment fragment3 = DiscoverFragment.newInstance();
     private ProfileFragment fragment4 = new ProfileFragment();
     private Fragment fragment5 = new SearchBookFragment();
     private BookViewFragment fragment6 = new BookViewFragment();
@@ -143,6 +143,10 @@ public class MainActivity extends AppCompatActivity implements
         fragment4.setExitTransition(new Slide(Gravity.TOP));
         fm.beginTransaction().hide(active).show(fragment4).commit();
         active = fragment4;
+    }
+
+    public void updateDiscover() {
+        fragment3.updateDiscover();
     }
 
     public void backToDiscoverFragment() {
