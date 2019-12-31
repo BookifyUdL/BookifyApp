@@ -111,11 +111,10 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
 
 
     private void setBookCover(@NonNull final BooksGridAdapter.ViewHolder holder, String picture) {
-        ImageView imageView = new ImageView(context);
         Picasso.with(context) // Context
                 .load(picture) // URL or file
-                .into(imageView);
-        holder.imageLayout.setBackground(imageView.getDrawable());
+                .into(holder.imageView);
+        holder.imageView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorBlank));
     }
 
     /*private void setAddButtonIcon(BooksGridAdapter.ViewHolder holder){
@@ -131,13 +130,12 @@ public class BooksGridAdapter extends RecyclerView.Adapter<BooksGridAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageButton addButton;
-        RelativeLayout layout, imageLayout;
+        ImageView imageView;
 
         ViewHolder(View itemView) {
             super(itemView);
             pref = itemView.getContext().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-            layout = itemView.findViewById(R.id.relative_layout);
-            imageLayout = itemView.findViewById(R.id.image_layout);
+            imageView = itemView.findViewById(R.id.image_layout);
             addButton = itemView.findViewById(R.id.add_button);
             itemView.setOnClickListener(this);
         }

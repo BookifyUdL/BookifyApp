@@ -352,7 +352,7 @@ public class User {
         return false;
     }
 
-    public ArrayList<Book> getLibrary() {
+    public ArrayList<Book> getLibraryPers() {
         ArrayList<Book> lib = new ArrayList<>();
         lib.addAll(getReadingBooks());
         for (Book book : getInterested()) {
@@ -368,6 +368,10 @@ public class User {
                 lib.add(book);
         }
         return lib;
+    }
+
+    public ArrayList<Book> getLibrary() {
+        return library;
     }
 
     public void setLibrary(ArrayList<Book> library) {
@@ -522,7 +526,7 @@ public class User {
     public void saveToFirebase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put(this.uid, this.toMap());
+        childUpdates.put(this.firebaseId, this.toMap());
         database.getReference("users").updateChildren(childUpdates);
     }
 
