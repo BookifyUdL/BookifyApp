@@ -352,7 +352,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         }
     }
 
-    public static void getAllUsers(Context context, final ServerCallback callback) {
+    public static void getAllUsers(final Context context, final ServerCallback callback) {
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, urlv + ALL_USERS, null, new Response.Listener<JSONObject>() {
@@ -361,7 +361,7 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                         public void onResponse(JSONObject response) {
                             try {
                                 JSONArray jsonarray = new JSONArray(response.get("users").toString());
-                                ArrayList<User> users = parseJsonArrayToUserList(jsonarray);
+                                ArrayList<User> users = parseJsonArrayToUserList(jsonarray, context);
 
                                 MockupsValues.setAllUsers(users);
 
@@ -419,7 +419,39 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         return books;
     }
 
-    public static ArrayList<User> parseJsonArrayToUserList(JSONArray jsonarray) {
+    public static ArrayList<Book> parseJsonArrayToBookListFromUsers(JSONArray jsonarray, Context context) {
+        final ArrayList<Book> books = new ArrayList<>();
+        for (int i = 0; i < jsonarray.length(); i++) {
+            try {
+                final JSONObject book = jsonarray.getJSONObject(i);
+                ApiConnector.getAuthorById(context, book.getString("author"), new ServerCallbackForAuthors() {
+                    @Override
+                    public void onSuccess(ArrayList<ArrayList<Author>> authors) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Author author) {
+                        Book auxBook = null;
+                        try {
+                            auxBook = new Book(book.getString("_id"),
+                                    book.getString("title"), author, book.getString("cover_image"), book.getBoolean("is_new"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //Book auxBook = new Book(book);
+                        books.add(auxBook);
+                    }
+                });
+
+            } catch (Exception e) {
+                System.out.println("Error parsion book ");
+            }
+        }
+        return books;
+    }
+
+    public static ArrayList<User> parseJsonArrayToUserList(JSONArray jsonarray, Context context) {
         final ArrayList<User> users = new ArrayList<>();
         for (int i = 0; i < jsonarray.length(); i++) {
             try {
@@ -432,10 +464,10 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
                         user.getBoolean("premium"),
                         user.getString("email"),
                         parseJsonArrayToGenreList(user.getJSONArray("genres")),
-                        parseJsonArrayToBookList(user.getJSONArray("library")),
-                        parseJsonArrayToBookList(user.getJSONArray("reading_book")),
-                        parseJsonArrayToBookList(user.getJSONArray("interested_book")),
-                        parseJsonArrayToBookList(user.getJSONArray("read_book")),
+                        parseJsonArrayToBookListFromUsers(user.getJSONArray("library"), context),
+                        parseJsonArrayToBookListFromUsers(user.getJSONArray("reading_book"), context),
+                        parseJsonArrayToBookListFromUsers(user.getJSONArray("interested_book"), context),
+                        parseJsonArrayToBookListFromUsers(user.getJSONArray("read_book"), context),
                         MockupsValues.getAchievements());
                 users.add(auxUser);
             } catch (Exception e) {

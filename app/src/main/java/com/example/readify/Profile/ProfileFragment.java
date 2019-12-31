@@ -122,8 +122,6 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
 
     public void setUserMain() {
         user = MockupsValues.user;
-        //prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-        //user.readFromSharedPreferences(prefs);
 
         buttonUpgrade.setVisibility(View.VISIBLE);
         disconnectButton.setVisibility(View.VISIBLE);
