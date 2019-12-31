@@ -49,7 +49,6 @@ public class UsersSectionFragment extends Fragment {
         recyclerView.setLayoutManager(verticalLayoutManager);
 
         ArrayList<User> list  = new ArrayList<>();
-        //TODO Change for obtain all users from database?
         list.addAll(MockupsValues.getUsers());
 
         adapter = new UserListVerticalAdapter((MainActivity) getActivity(), getContext(), list, user);

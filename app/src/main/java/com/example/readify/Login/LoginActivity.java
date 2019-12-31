@@ -4,14 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -20,14 +17,11 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -81,7 +75,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity implements ConnectivityReceiver.ConnectivityReceiverListener {
 
@@ -107,8 +100,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButton;
 
-    //private boolean isInDatabase = false;
-
     private BroadcastReceiver connectivityReceiver = null;
     private Boolean connectionEnabled;
 
@@ -121,6 +112,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
 
+        // Connectivity receiver
         connectionEnabled = true;
         connectivityReceiver = new ConnectivityReceiver();
 
@@ -129,34 +121,19 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
             FacebookSdk.setIsDebugEnabled(true);
             FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
         }
-
-        /*// Initialize all components in Login Layout
-        initViews();
-
-        // Create an initial animation
-        initializeAnimation();
-
-        // Create an animated background with gif
-        initializeBackgroundGif();
-
-        // Initialize Facebook Login button
-        initializeSignInFacebook();
-
-        // Initialize Google login button
-        initializeSignInGoogle();*/
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+
         // Initialize all components in Login Layout
         initViews();
-        final FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            //GET user info ::
-            getUserInfoAndUpdateUi(currentUser);
 
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            getUserInfoAndUpdateUi(currentUser);
         } else {
             // Create an initial animation
             initializeAnimation();
@@ -256,7 +233,7 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
     private void startAnimation() {
         ViewPropertyAnimator viewPropertyAnimator = bookIconImageView.animate();
         viewPropertyAnimator.y(100f);
-        viewPropertyAnimator.setDuration(3000);
+        viewPropertyAnimator.setDuration(2000);
         viewPropertyAnimator.setListener(new Animator.AnimatorListener() {
 
             @Override
@@ -289,50 +266,6 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    //Method to read from database a different params that will use in app after
-    private void readDataFromFirebase(String uid, final Intent intent) {
-        databaseReference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //TODO Improve if the user didn't make the first form
-
-                User user = dataSnapshot.getValue(User.class);
-
-                if (user == null) {
-                    //If we don't complete de first form, it appear again
-                    Intent firstFormAgain = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
-                    startActivity(firstFormAgain);
-                } else {
-                    pref.edit().putBoolean("com.example.readify.premium", user.isPremium()).apply();
-
-                    String genresToPref = new Gson().toJson(user.getGenres());
-                    pref.edit().putString("com.example.readify.genres", genresToPref).apply();
-
-                    String libraryToPref = new Gson().toJson(user.getLibrary());
-                    pref.edit().putString("com.example.readify.library", libraryToPref).apply();
-
-                    String interestedToPref = new Gson().toJson(user.getInterested());
-                    pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
-
-                    String readingToPref = new Gson().toJson(user.getReading());
-                    pref.edit().putString("com.example.readify.reading", readingToPref).apply();
-
-                    String achievementsToPref = new Gson().toJson(user.getAchievements());
-                    pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
-
-                    //Go to app
-                    startActivity(intent);
-                }
-                finish();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(LoginActivity.this, "Error to read the data from database", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     //Initialize a methods to do login on facebook
@@ -445,94 +378,70 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                 });
     }
 
-    //Methods to update an app after to do a login
-    private void updateUI(FirebaseUser currentUser) {
+    //Method to read from database a different params that will use in app after
+    private void readDataFromFirebase(String uid, final Intent intent) {
+        databaseReference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //TODO Improve if the user didn't make the first form
 
-        try {
-            MockupsValues.setContext(this);
-            MockupsValues.getUser().setFirebaseId(currentUser.getUid());
-            Uri url = currentUser.getPhotoUrl();
-            MockupsValues.getUser().setPicture(url.toString());
+                User user = dataSnapshot.getValue(User.class);
 
-            pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
-            pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
-            pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
-            pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString()).apply();
-
-            final String uid = currentUser.getUid();
-            ApiConnector.getGenres(getApplicationContext(), new ServerCallback() {
-                @Override
-                public void onSuccess(JSONObject result) {
-                    System.out.println("Get genres funko!!!!");
-                    MockupsValues.setContext(getApplicationContext());
-                    ApiConnector.getAllBooks(getApplicationContext(), new ServerCallback() {
+                if (user == null) {
+                    //If we don't complete de first form, it appear again
+                    Intent firstFormAgain = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
+                    startActivity(firstFormAgain);
+                    finish();
+                } else {
+                    MockupsValues.user.setUid(user.getUid());
+                    pref.edit().putString("com.example.readify._id", user.getUid()).apply();
+                    //Obtain the rest of the data from database
+                    ApiConnector.getInfoClientUser(getApplicationContext(), new ServerCallback() {
                         @Override
                         public void onSuccess(JSONObject result) {
-                            System.out.println("Get allBooks funko!!!!");
-                            ApiConnector.getAllUsers(getApplicationContext(), new ServerCallback() {
-                                @Override
-                                public void onSuccess(JSONObject result) {
-                                    System.out.println("Get allUsers funko!!!!");
-                                    ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
-                                        @Override
-                                        public void onSuccess(JSONObject result) {
-                                            System.out.println("Get userInfo funko!!!!");
-                                            //MockupsValues.setIsUserInDatabase(true);
-                                            //updateUI(currentUser);
-                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                            readDataFromFirebase(uid, intent);
+                            System.out.println("The obtaining information of the user client works correctly");
 
-                                            //Intent intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        }
-                                    });
-                                }
-                            });
+                            pref.edit().putBoolean("com.example.readify.premium", MockupsValues.user.isPremium()).apply();
+
+                            String genresToPref = new Gson().toJson(MockupsValues.user.getGenres());
+                            pref.edit().putString("com.example.readify.genres", genresToPref).apply();
+
+                            String libraryToPref = new Gson().toJson(MockupsValues.user.getLibrary());
+                            pref.edit().putString("com.example.readify.library", libraryToPref).apply();
+
+                            String interestedToPref = new Gson().toJson(MockupsValues.user.getInterested());
+                            pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
+
+                            String readingToPref = new Gson().toJson(MockupsValues.user.getReading());
+                            pref.edit().putString("com.example.readify.reading", readingToPref).apply();
+
+                            String achievementsToPref = new Gson().toJson(MockupsValues.user.getAchievements());
+                            pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
+
+                            //Go to app
+                            startActivity(intent);
+                            finish();
                         }
                     });
                 }
-            });
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            Toast.makeText(getApplicationContext(), "Error in login 1", Toast.LENGTH_SHORT).show();
-        }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(LoginActivity.this, "Error to read the data from database", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    /*private void updateUI(FirebaseUser currentUser, Task<AuthResult> task) {
-        try {
-            MockupsValues.setContext(this);
-            MockupsValues.getUser().setFirebaseId(currentUser.getUid());
-            Uri url =currentUser.getPhotoUrl();
-            MockupsValues.getUser().setPicture(url.toString());
-            Intent intent;
-            pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
-            pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
-            pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
-            pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString() + "?type=large").apply();
-
-
-            if (!task.getResult().getAdditionalUserInfo().isNewUser()) {
-                intent = new Intent(LoginActivity.this, MainActivity.class);
-                readDataFromFirebase(currentUser.getUid(), intent);
-            } else {
-                intent = new Intent(LoginActivity.this, FirstTimeFormActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            Toast.makeText(getApplicationContext(), "Error in login 2", Toast.LENGTH_SHORT).show();
-        }
-        //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        //readDataFromFirebase(currentUser.getUid(), intent);
-    }*/
-
     private void updateUI(FirebaseUser currentUser, Task<AuthResult> task) {
+        // Load data to User
         MockupsValues.setContext(this);
-        MockupsValues.getUser().setFirebaseId(currentUser.getUid());
+        MockupsValues.user.setFirebaseId(currentUser.getUid());
+        MockupsValues.user.setPicture(currentUser.getPhotoUrl().toString());
+        MockupsValues.user.setName(currentUser.getDisplayName());
+        MockupsValues.user.setEmail(currentUser.getEmail());
 
-        pref.edit().putString("com.example.readify.uid", currentUser.getUid()).apply();
+        pref.edit().putString("com.example.readify.idFirebase", currentUser.getUid()).apply();
         pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
         pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
         pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString() + "?type=large").apply();
@@ -550,25 +459,24 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
 
     // For on start method
     private void getUserInfoAndUpdateUi(final FirebaseUser currentUser) {
-        //api call solution
+        MockupsValues.setContext(getApplicationContext());
+
+        // API call solution
         ApiConnector.getGenres(getApplicationContext(), new ServerCallback() {
             @Override
             public void onSuccess(JSONObject result) {
-                System.out.println("Get genres funko!!!!");
-                MockupsValues.setContext(getApplicationContext());
+                System.out.println("The obtaining of the genres works correctly");
                 ApiConnector.getAllBooks(getApplicationContext(), new ServerCallback() {
                     @Override
                     public void onSuccess(JSONObject result) {
-                        System.out.println("Get allBooks funko!!!!");
-                        ApiConnector.getAllUsers(getApplicationContext(), new ServerCallback() {
+                        System.out.println("The obtaining of the books works correctly");
+                        ApiConnector.getAllAuthors(getApplicationContext(), new ServerCallback() {
                             @Override
                             public void onSuccess(JSONObject result) {
-                                System.out.println("Get allUsers funko!!!!");
-                                ApiConnector.getUser(getApplicationContext(), new ServerCallback() {
+                                ApiConnector.getAllUsers(getApplicationContext(), new ServerCallback() {
                                     @Override
                                     public void onSuccess(JSONObject result) {
-                                        System.out.println("Get userInfo funko!!!!");
-                                        MockupsValues.setIsUserInDatabase(true);
+                                        System.out.println("The obtaining of the users works correctly");
                                         updateUI(currentUser);
                                     }
                                 });
@@ -578,6 +486,27 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                 });
             }
         });
+    }
+
+    //Methods to update an app after to do a login
+    private void updateUI(FirebaseUser currentUser) {
+
+        // Load data to User
+        MockupsValues.setContext(this);
+        MockupsValues.user.setFirebaseId(currentUser.getUid());
+        MockupsValues.user.setPicture(currentUser.getPhotoUrl().toString());
+        MockupsValues.user.setName(currentUser.getDisplayName());
+        MockupsValues.user.setEmail(currentUser.getEmail());
+
+        // Load data to Shared Preferences
+        pref.edit().putString("com.example.readify.idFirebase", currentUser.getUid()).apply();
+        pref.edit().putString("com.example.readify.name", currentUser.getDisplayName()).apply();
+        pref.edit().putString("com.example.readify.email", currentUser.getEmail()).apply();
+        pref.edit().putString("com.example.readify.photo", currentUser.getPhotoUrl().toString()).apply();
+
+        // Read data from Firebase
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        readDataFromFirebase(currentUser.getUid(), intent);
     }
 
     @Override

@@ -21,7 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.readify.ApiConnector;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
+import com.example.readify.Models.Author;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.ServerCallback;
+import com.example.readify.Models.ServerCallbackForAuthors;
 import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
 
@@ -30,10 +33,14 @@ import com.example.readify.R;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.ListIterator;
 
 import tyrantgit.explosionfield.ExplosionField;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVerticalAdapter.BookHolder> {
     private ArrayList<Book> booksList, originalSearchList;
@@ -55,6 +62,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         this.mContext = context;
         this.isInReadingList = false;
         this.user = user;
+        this.prefs = context.getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
     }
 
     /* Reading */
@@ -67,6 +75,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         this.isInReadingList = true;
         this.fragmentManager = manager;
         this.user = user;
+        this.prefs = context.getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
     }
 
     public BooksListVerticalAdapter(Context context, ArrayList<Book> booksList, User user) {
@@ -76,6 +85,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
         this.mContext = context;
         this.isInReadingList = false;
         this.user = user;
+        this.prefs = context.getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
     }
 
     public void setIsInPendingList(boolean bool) {
@@ -105,10 +115,15 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
                 prefs.edit().putString("com.example.readify.interested", interestedToPref).apply();
             }
 
+            ApiConnector.updateUser(getApplicationContext(), new ServerCallback() {
+                @Override
+                public void onSuccess(JSONObject result) {
+                    Toast.makeText(getApplicationContext(), "Book added correctly to library", Toast.LENGTH_LONG).show();
+                }
+            }, user);
+
             activity.notifyReadingListChanged(user);
             activity.notifyPendingListChanged(user);
-
-            user.saveToFirebase();
         }
 
         notifyDataSetChanged();
@@ -116,29 +131,53 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
 
     public void readingListChanged(int position) {
         Book book = booksList.get(position);
+
         ArrayList<Book> reading = user.getReading();
         ArrayList<Book> pending = user.getInterested();
+
         reading.add(book);
         pending.remove(position);
+
         user.setReading(reading);
         user.setInterested(pending);
-        MockupsValues.user = user;
+
+        //Save data to Database
+        ApiConnector.updateUser(getApplicationContext(), new ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                Toast.makeText(getApplicationContext(), "Book added correctly to library", Toast.LENGTH_LONG).show();
+            }
+        }, user);
+
         activity.notifyPendingListChanged(user);
         activity.notifyReadingListChanged(user);
+
         notifyDataSetChanged();
     }
 
     public void pendingListChanged(int position) {
         Book book = booksList.get(position);
+
         ArrayList<Book> reading = user.getReading();
         ArrayList<Book> pending = user.getInterested();
+
         pending.add(book);
         reading.remove(position);
+
         user.setReading(reading);
         user.setInterested(pending);
-        MockupsValues.user = user;
+
+        //Save data to Database
+        ApiConnector.updateUser(getApplicationContext(), new ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                Toast.makeText(getApplicationContext(), "Book added correctly to library", Toast.LENGTH_LONG).show();
+            }
+        }, user);
+
         activity.notifyReadingListChanged(user);
         activity.notifyPendingListChanged(user);
+
         notifyDataSetChanged();
     }
 
@@ -183,15 +222,19 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
     // This method is called when binding the data to the views being created in RecyclerView
     @Override
     public void onBindViewHolder(@NonNull final BookHolder holder, final int position) {
+        boolean found = false;
         final Book book = booksList.get(position);
-        String b = book.getTitle();
-        //holder.setBookTitle("Verga");
         holder.bookTitle.setText(book.getTitle());
-        holder.bookAuthor.setText(book.getAuthor());
-        String aux = mContext.getPackageName();
+        for (Author author : MockupsValues.getAuthors()) {
+            if (author.getId().equals(book.getAuthor())) {
+                holder.bookAuthor.setText(author.getName());
+                found = true;
+            }
+        }
+        if (found == false)
+            holder.bookAuthor.setText(book.getAuthor());
+
         setBookCover(holder, book.getPicture());
-        /*holder.bookCover.setImageResource(
-                mContext.getResources().getIdentifier(book.getPicture(), "drawable", aux));*/
 
         if (isInReadingList || isInPendingList)
             holder.addButton.setVisibility(View.GONE);
@@ -211,7 +254,6 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
                             BookReadedPopup dialog = new BookReadedPopup(activity, holder, fragmentManager, b, user);
                             FragmentTransaction ft2 = fragmentManager.beginTransaction();
                             dialog.show(ft2, "book_readed_popup");
-                            //dialog.s
                         }
                     });
                 }
@@ -245,7 +287,7 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
                         String libraryToPref = new Gson().toJson(user.getLibrary());
                         prefs.edit().putString("com.example.readify.library", libraryToPref).apply();
 
-                        activity.notifyLibraryListChanged(user);
+                        activity.notifyLibraryListChanged(user, true);
 
                         Toast.makeText(getContext(), book.getTitle() + " " + getContext().getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
                     }
@@ -287,7 +329,6 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
 
         public void setBookTitle(String title){
             bookTitle.setText(title);
-
         }
 
         public void destroyView() {

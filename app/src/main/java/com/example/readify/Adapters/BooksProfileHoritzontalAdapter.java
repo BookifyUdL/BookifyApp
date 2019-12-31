@@ -14,6 +14,8 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.readify.MockupsValues;
+import com.example.readify.Models.Author;
 import com.example.readify.Models.Book;
 import com.example.readify.R;
 import com.squareup.picasso.Picasso;
@@ -32,6 +34,7 @@ public class BooksProfileHoritzontalAdapter extends RecyclerView.Adapter<BooksPr
         this.mInflater = LayoutInflater.from(context);
         this.mContext = context;
         this.mData = data;
+        //mData.add(new Book("0","Add books", "", "add_book"));
     }
 
     @NonNull
@@ -43,14 +46,30 @@ public class BooksProfileHoritzontalAdapter extends RecyclerView.Adapter<BooksPr
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Book book = mData.get(position);
+        boolean found = false;
+        if (position + 1 == getItemCount()) {
+            holder.myTextViewTitle.setText("Add books");
+            holder.myTextViewDescription.setText("");
+            Picasso.with(mContext).load(R.drawable.add_book).into(holder.myImageView);
+        } else {
+            Book book = mData.get(position);
 
-        holder.myTextViewTitle.setText(book.getTitle());
-        holder.myTextViewDescription.setText(book.getAuthor());
-        setBookCover(holder, book.getPicture());
-        /*holder.myImageView.setImageResource(mInflater.getContext()
-                .getResources().getIdentifier(book.getPicture(), "drawable", mInflater.getContext().getPackageName()));*/
-        if (position == mData.size() - 1) {
+            holder.myTextViewTitle.setText(book.getTitle());
+            holder.myTextViewDescription.setText(book.getAuthor());
+
+            for (Author author : MockupsValues.getAuthors()) {
+                if (author.getId().equals(book.getAuthor())) {
+                    holder.myTextViewDescription.setText(author.getName());
+                    found = true;
+                }
+            }
+            if (found == false)
+                holder.myTextViewDescription.setText(book.getAuthor());
+
+            setBookCover(holder, book.getPicture());
+        }
+
+        if (position == mData.size()) {
             holder.myCardView.setBackgroundColor(ContextCompat.getColor(mInflater.getContext(), R.color.colorPrimary));
             holder.myTextViewTitle.setTextColor(ContextCompat.getColor(mInflater.getContext(), R.color.icons));
         } else {
@@ -67,12 +86,11 @@ public class BooksProfileHoritzontalAdapter extends RecyclerView.Adapter<BooksPr
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mData.size() + 1;
     }
 
     public void setList(ArrayList<Book> readedBooks) {
         this.mData = readedBooks;
-        mData.add(new Book("Add books", "", "add_book"));
     }
 
     // stores and recycles views as they are scrolled off screen

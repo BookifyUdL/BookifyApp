@@ -99,7 +99,7 @@ public class UserListVerticalAdapter extends RecyclerView.Adapter<UserListVertic
 
     // This method is called when binding the data to the views being created in RecyclerView
     @Override
-    public void onBindViewHolder(@NonNull final UserHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull UserHolder holder, final int position) {
         final User user = userList.get(position);
         holder.userName.setText(user.getName());
         holder.userEmail.setText(user.getEmail());
