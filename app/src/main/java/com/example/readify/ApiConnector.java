@@ -15,6 +15,7 @@ import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
 import com.example.readify.Models.Review;
 import com.example.readify.Models.ServerCallback;
+import com.example.readify.Models.ServerCallbackForAuthors;
 import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
 
@@ -316,6 +317,41 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         //return genres;
     }
 
+    public static void getAllAuthors(Context context, final ServerCallback callback) {
+        try {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, urlv + "authors", null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            String aux = response.toString();
+                            try {
+
+                                JSONArray jsonarray = new JSONArray(response.get("authors").toString());
+                                ArrayList<Author> authors = parseJsonArrayToAuthorList(jsonarray);
+
+                                MockupsValues.setAuthors(authors);
+
+                                callback.onSuccess(response);
+                            } catch (org.json.JSONException e) {
+                                System.out.println("Error");
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            System.out.println("Error");
+
+                        }
+                    });
+
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     public static void getAllUsers(Context context, final ServerCallback callback) {
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -348,6 +384,22 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    public static ArrayList<Author> parseJsonArrayToAuthorList(JSONArray jsonarray) {
+        final ArrayList<Author> authors = new ArrayList<>();
+        for (int i = 0; i < jsonarray.length(); i++) {
+            try {
+                JSONObject author = jsonarray.getJSONObject(i);
+                Author auxAuthor = new Author(author.getString("_id"),
+                        author.getString("name"));
+                //Book auxBook = new Book(book);
+                authors.add(auxAuthor);
+            } catch (Exception e) {
+                System.out.println("Error parsion book ");
+            }
+        }
+        return authors;
     }
 
     public static ArrayList<Book> parseJsonArrayToBookList(JSONArray jsonarray) {
@@ -576,6 +628,37 @@ public class ApiConnector extends AsyncTask<String, Integer, String> {
             RequestQueue queue = Volley.newRequestQueue(context);
             queue.add(jsonObjectRequest);
             //queue.start();
+        } catch (Exception e) {
+            System.out.println("GET catch error, user.");
+            System.out.println(e);
+        }
+    }
+
+    public static void getAuthorById(final Context context, String authorId, final ServerCallbackForAuthors callback) {
+        String url = urlv + "authors" + SLASH + authorId;
+        try {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            System.out.println(response.toString());
+                            try {
+                                JSONObject aux = response.getJSONObject("author");
+                                Author author = new Author(aux);
+                                callback.onSuccess(author);
+                            } catch (Exception e) {
+                                System.out.println("Error parsing book from jsonobject");
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            System.out.println("Error");
+                        }
+                    });
+            RequestQueue queue = Volley.newRequestQueue(context);
+            queue.add(jsonObjectRequest);
         } catch (Exception e) {
             System.out.println("GET catch error, user.");
             System.out.println(e);

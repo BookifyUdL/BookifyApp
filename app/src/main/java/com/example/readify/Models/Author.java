@@ -20,9 +20,9 @@ public class Author {
         }
     }
 
-    public Author(String name, String id) {
-        this.name = name;
+    public Author(String id, String name) {
         this.id = id;
+        this.name = name;
     }
 
     public JSONObject toJson(){

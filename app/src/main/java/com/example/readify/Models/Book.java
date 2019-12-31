@@ -150,32 +150,8 @@ public class Book {
             this.isNew = jsonobject.getBoolean("is_new");
             //String aux = jsonobject.get("genre").toString();
             this.extension = jsonobject.getInt("num_page");
-            this.auth = new Author(jsonobject.getJSONObject("author"));
-            this.author = this.auth.getName();
-
-            //missing comments
-
-           /* "publication_date": "2019-01-01T00:00:00.000Z",
-                    "author": {
-                "_id": "5ddd69ac99439a0f2d99edc9",
-                        "name": "DEFREDS JOSE. A. GOMEZ IGLESIAS"
-            },
-            "genre": [
-            {
-                "_id": "5de7fb595a66a02fe3c39ead",
-                    "picture": "genre2",
-                    "name": "Computing / Interenet"
-            }
-            ],
-            "cover_image": "https://imagessl6.casadellibro.com/a/l/t1/16/9788467056716.jpg",
-                    "comments": [],
-            "rating": 5,
-                    "num_rating": 1,
-                    "is_new": true,
-                    "request": {
-                "type": "GET",
-                        "url": "http://localhost:3000/books/5de7fb655a66a02fe3c39ebc"
-            }*/
+            //this.auth = new Author(jsonobject.getJSONObject("author"));
+            this.author = jsonobject.getString("author");
         } catch (JSONException e) {
             System.out.println("Error parsing book constructor");
             //this.name = "Error";

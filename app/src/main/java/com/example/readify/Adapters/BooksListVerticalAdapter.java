@@ -21,8 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.readify.ApiConnector;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
+import com.example.readify.Models.Author;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.ServerCallback;
+import com.example.readify.Models.ServerCallbackForAuthors;
 import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
 
@@ -222,7 +224,9 @@ public class BooksListVerticalAdapter extends RecyclerView.Adapter<BooksListVert
     public void onBindViewHolder(@NonNull final BookHolder holder, final int position) {
         final Book book = booksList.get(position);
         holder.bookTitle.setText(book.getTitle());
-        holder.bookAuthor.setText(book.getAuthor());
+        for (Author author : MockupsValues.getAuthors())
+            if (author.getId().equals(book.getAuthor()))
+                holder.bookAuthor.setText(author.getName());
         setBookCover(holder, book.getPicture());
 
         if (isInReadingList || isInPendingList)

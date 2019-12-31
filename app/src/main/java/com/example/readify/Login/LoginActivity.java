@@ -470,11 +470,16 @@ public class LoginActivity extends AppCompatActivity implements ConnectivityRece
                     @Override
                     public void onSuccess(JSONObject result) {
                         System.out.println("The obtaining of the books works correctly");
-                        ApiConnector.getAllUsers(getApplicationContext(), new ServerCallback() {
+                        ApiConnector.getAllAuthors(getApplicationContext(), new ServerCallback() {
                             @Override
                             public void onSuccess(JSONObject result) {
-                                System.out.println("The obtaining of the users works correctly");
-                                updateUI(currentUser);
+                                ApiConnector.getAllUsers(getApplicationContext(), new ServerCallback() {
+                                    @Override
+                                    public void onSuccess(JSONObject result) {
+                                        System.out.println("The obtaining of the users works correctly");
+                                        updateUI(currentUser);
+                                    }
+                                });
                             }
                         });
                     }
