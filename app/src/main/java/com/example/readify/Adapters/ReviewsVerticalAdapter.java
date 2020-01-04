@@ -368,11 +368,13 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
 
         private void addCommentSubComments(LayoutInflater layoutInflater){
             ArrayList<Review> reviews = reviewsList.get(position).getSubReviews();
-            for (int i = 0; i < reviews.size(); i++) {
-                View to_add = layoutInflater.inflate(R.layout.review_item_without_options,
-                        subCommentsRecyclerView,false);
-                addSubComment(to_add, reviews.get(i));
-                subCommentsRecyclerView.addView(to_add);
+            if(reviews != null){
+                for (int i = 0; i < reviews.size(); i++) {
+                    View to_add = layoutInflater.inflate(R.layout.review_item_without_options,
+                            subCommentsRecyclerView,false);
+                    addSubComment(to_add, reviews.get(i));
+                    subCommentsRecyclerView.addView(to_add);
+                }
             }
         }
 

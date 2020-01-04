@@ -38,8 +38,8 @@
     </LinearLayout>
 
 
-
     <RelativeLayout
+        android:id="@+id/realtive_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -68,6 +68,20 @@
             </LinearLayout>
 
         </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/empty_message_layout"
+            android:layout_margin="@dimen/margin_10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:visibility="invisible">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:text="@string/any_comment_yet"/>
+        </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_comment_button"

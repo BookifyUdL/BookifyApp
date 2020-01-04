@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -18,7 +19,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class Book {
+public class Book implements Serializable {
     private String title;
     private String author;
     private String picture;
@@ -194,6 +195,12 @@ public class Book {
         if(comments == null)
             comments = new ArrayList<>();
         comments.add(comment);
+    }
+
+    public ArrayList<Review> getComments(){
+        if(comments == null)
+            comments = new ArrayList<>();
+        return this.comments;
     }
 
     public JSONObject toJsonObject(){

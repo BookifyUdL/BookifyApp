@@ -20,6 +20,7 @@ public class Review {
 
     private String comment;
     private User user;
+    public String userId;
     private CommentType commentType;
     private Uri uri;
     private ArrayList<Review> subReviews;
@@ -58,9 +59,11 @@ public class Review {
 
     public Review(JSONObject jsonObject){
         try{
-            this.user = new User(jsonObject.getJSONObject("user"));
+            //this.user = new User(jsonObject.getJSONObject("user"));
+            this.userId = jsonObject.getString("user");
             this.comment = jsonObject.getString("message");
             int comment = jsonObject.getInt("comment_type");
+
             if(comment == 1){
                 commentType = CommentType.COMMENT;
                 this.uri = this.uri = Uri.parse("No uri broh");
@@ -78,7 +81,9 @@ public class Review {
                 this.userLikedId.add(userLiked.getString(i));
             }
 
-            JSONArray subReviews = jsonObject.getJSONArray("user_liked");
+            this.userLiked = new ArrayList<>();
+
+            JSONArray subReviews = jsonObject.getJSONArray("subreviews");
             this.subReviewsId = new ArrayList<>();
             for (int i = 0; i < subReviews.length(); i++){
                 this.subReviewsId.add(subReviews.getString(i));
