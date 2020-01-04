@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Review {
 
@@ -60,6 +61,7 @@ public class Review {
     public Review(JSONObject jsonObject){
         try{
             //this.user = new User(jsonObject.getJSONObject("user"));
+            this.id = jsonObject.getString("_id");
             this.userId = jsonObject.getString("user");
             this.comment = jsonObject.getString("message");
             int comment = jsonObject.getInt("comment_type");
@@ -104,9 +106,16 @@ public class Review {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("id", this.id);
+            //this.id = this.userId +
+            if(id != null)
+                jsonObject.put("_id", this.id);
+            /*} else {
+                Random r = new Random();
+                String commentId = user.getUid()  + r.nextInt((9999 - 0) + 1) + 0;
+                jsonObject.put("_id", commentId);
+            }*/
             jsonObject.put("message", comment);
-            jsonObject.put("user", User.toJSON(user));
+            jsonObject.put("user", user.getUid());
             jsonObject.put("uri", uri);
             jsonObject.put("comment_type", type);
             jsonObject.put("is_sub", isSub);
@@ -116,6 +125,8 @@ public class Review {
             }
             jsonObject.put("user_liked", liked);
             JSONArray subReviewIdJson = new JSONArray();
+            if(subReviewsId == null)
+                subReviewsId = new ArrayList<>();
             for(String subReviewId: subReviewsId){
                 subReviewIdJson.put(subReviewId);
             }
@@ -129,7 +140,7 @@ public class Review {
                 "url": "http://localhost:3000/comments/5df8e808db179a094b66c188"
             }*/
         } catch (Exception e) {
-
+            System.out.println("seti");
         }
         return jsonObject;
     }

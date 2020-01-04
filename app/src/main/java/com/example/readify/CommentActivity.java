@@ -43,6 +43,7 @@ import com.example.readify.Models.Review;
 import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.JsonObject;
 import com.gsconrad.richcontentedittext.RichContentEditText;
 
 import org.json.JSONObject;
@@ -242,14 +243,24 @@ public class CommentActivity extends AppCompatActivity implements RichEditTextIn
                     @Override
                     public void onSuccess(JSONObject result) {
                         String results = result.toString();
-                        Book commentedBook =  MockupsValues.getCurrentBookViewing();
-                        commentedBook.addComment(review);
-                        ApiConnector.updateBook(getApplicationContext(), commentedBook, new ServerCallback() {
-                            @Override
-                            public void onSuccess(JSONObject result) {
-                                finishActivity();
-                            }
-                        });
+                        try {
+                            JSONObject createdComment = result.getJSONObject("createdComment");
+                            JSONObject request = createdComment.getJSONObject("request");
+                            String url = request.getString("url");
+                            String id = url.substring(url.lastIndexOf("/") + 1);
+                            review.setId(id);
+                            Book commentedBook =  MockupsValues.getCurrentBookViewing();
+                            commentedBook.addComment(review);
+                            //finishActivity();
+                            ApiConnector.updateBook(getApplicationContext(), commentedBook, new ServerCallback() {
+                                @Override
+                                public void onSuccess(JSONObject result) {
+                                    finishActivity();
+                                }
+                            });
+                        } catch (Exception e) {
+
+                        }
                         //Book commentedBook = (Book) getIntent().getSerializableExtra("Book");
                     }
                 });
