@@ -251,15 +251,21 @@ public class CommentActivity extends AppCompatActivity implements RichEditTextIn
                             review.setId(id);
                             Book commentedBook =  MockupsValues.getCurrentBookViewing();
                             commentedBook.addComment(review);
-                            //finishActivity();
                             ApiConnector.updateBook(getApplicationContext(), commentedBook, new ServerCallback() {
                                 @Override
                                 public void onSuccess(JSONObject result) {
+                                    //Intent data = new Intent();
+                                    //data.putExtra("REVIEW", review);
+                                    //setResult(RESULT_OK, data);
+                                    //setRe
+                                    //finish();
+                                    //setResult(300, data);
                                     finishActivity();
                                 }
                             });
                         } catch (Exception e) {
-
+                            Toast.makeText(getApplicationContext(), "Someting bad happend", Toast.LENGTH_SHORT).show();
+                            finishActivity();
                         }
                         //Book commentedBook = (Book) getIntent().getSerializableExtra("Book");
                     }

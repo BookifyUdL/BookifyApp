@@ -35,6 +35,7 @@ import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Review;
 import com.example.readify.Models.ServerCallback;
+import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.example.readify.RichEditTextInterface;
@@ -57,12 +58,16 @@ public class ReviewsPopup extends DialogFragment implements Popup{
     private SharedPreferences prefs;
     final private Book book;
     private LinearLayout emptyMessage;
+    ArrayList<Review> reviews;
 
+    public ReviewsPopup() {
+        book = null;
+    }
     public ReviewsPopup(Book book){
         this.book = book;
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.reviews_layout, container);
@@ -78,8 +83,9 @@ public class ReviewsPopup extends DialogFragment implements Popup{
                 //commentActivity.setBook(book);
                 MockupsValues.setCurrentBookViewing(book);
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
-                //intent.putExtra("Book", book);
                 startActivity(intent);
+                //startActivityForResult(intent, 300);
+                //onActivityResult();
             }
         });
         ImageButton closeArrow = (ImageButton) view.findViewById(R.id.close_arrow);
@@ -91,6 +97,19 @@ public class ReviewsPopup extends DialogFragment implements Popup{
         });
         return view;
     }
+
+    /*@Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data); comment this unless you want to pass your result to the activity.
+        if (data != null){
+            Review aux = (Review) data.getSerializableExtra("REVIEW");
+            reviews.add(aux);
+            pendingBooksAdapter = new ReviewsVerticalAdapter((MainActivity) getActivity(), getContext(), reviews, addCommentButton, user);
+            recyclerView.setAdapter(pendingBooksAdapter);
+            pendingBooksAdapter.notifyDataSetChanged();
+        }
+        //getReviews();
+    }*/
 
     public boolean hide(TextView v, int actionId ){
         if((actionId == EditorInfo.IME_ACTION_SEND)){
@@ -117,23 +136,7 @@ public class ReviewsPopup extends DialogFragment implements Popup{
         if(book.getComments().size() > 0){
             LinearLayoutManager vlm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(vlm);
-            final ArrayList<Review> reviews = book.getComments();
-            final ArrayList<Review> finalReviews = new ArrayList<>();
-            for(int i = 0; i < reviews.size(); i++){
-                final int aux = i;
-                ApiConnector.getUser(getContext(), reviews.get(i).userId, new ServerCallback() {
-                    @Override
-                    public void onSuccess(JSONObject result) {
-                        Review rev = reviews.get(aux);
-                        rev.setUser(new User(result));
-                        finalReviews.add(rev);
-                        if(aux + 1 == reviews.size()){
-                            pendingBooksAdapter = new ReviewsVerticalAdapter((MainActivity) getActivity(), getContext(), finalReviews, addCommentButton, user);
-                            recyclerView.setAdapter(pendingBooksAdapter);
-                        }
-                    }
-                });
-            }
+            getReviews();
             //reviews.addAll(MockupsValues.getReviews());
         } else {
             emptyMessage.setVisibility(View.VISIBLE);
@@ -141,6 +144,37 @@ public class ReviewsPopup extends DialogFragment implements Popup{
         }
 
     }
+
+    private void getReviews(){
+        reviews = book.getComments();
+        ApiConnector.getBookById(getContext(), book.getId(), new ServerCallbackForBooks() {
+            @Override
+            public void onSuccess(ArrayList<ArrayList<Book>> books) {
+                final ArrayList<Review> finalReviews = new ArrayList<>();
+                for(int i = 0; i < reviews.size(); i++){
+                    final int aux = i;
+                    ApiConnector.getUser(getContext(), reviews.get(i).userId, new ServerCallback() {
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            Review rev = reviews.get(aux);
+                            rev.setUser(new User(result));
+                            finalReviews.add(rev);
+                            if(aux + 1 == reviews.size()){
+                                pendingBooksAdapter = new ReviewsVerticalAdapter((MainActivity) getActivity(), getContext(), finalReviews, addCommentButton, user);
+                                recyclerView.setAdapter(pendingBooksAdapter);
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onSuccess(Book book) {
+
+            }
+        });
+    }
+
 
     private void addReview(String message){
         pendingBooksAdapter.addReview(new Review(user, message));

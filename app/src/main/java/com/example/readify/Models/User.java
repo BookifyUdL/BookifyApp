@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -37,7 +38,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class User {
+public class User implements Serializable {
     private String uid;
     private String name;
     private String email;

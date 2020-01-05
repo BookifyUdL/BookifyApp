@@ -8,11 +8,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Review {
+public class Review implements Serializable {
 
     public static String COMMENT_PARAMETER = "COMMENT_PARAMETER";
     public static String COMMENT_TYPE_PARAMETER = "COMMENT_TYPE_PARAMETER";
@@ -176,6 +177,8 @@ public class Review {
     }
 
     public void addSubReview(Review review){
+        if(this.subReviews == null)
+            this.subReviews = new ArrayList<>();
         this.subReviews.add(review);
     }
 
