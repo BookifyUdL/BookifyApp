@@ -35,7 +35,6 @@ import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Review;
 import com.example.readify.Models.ServerCallback;
-import com.example.readify.Models.ServerCallbackForBooks;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.example.readify.RichEditTextInterface;
@@ -146,33 +145,32 @@ public class ReviewsPopup extends DialogFragment implements Popup{
     }
 
     private void getReviews(){
-        reviews = book.getComments();
-        ApiConnector.getBookById(getContext(), book.getId(), new ServerCallbackForBooks() {
-            @Override
-            public void onSuccess(ArrayList<ArrayList<Book>> books) {
-                final ArrayList<Review> finalReviews = new ArrayList<>();
-                for(int i = 0; i < reviews.size(); i++){
-                    final int aux = i;
-                    ApiConnector.getUser(getContext(), reviews.get(i).userId, new ServerCallback() {
-                        @Override
-                        public void onSuccess(JSONObject result) {
-                            Review rev = reviews.get(aux);
-                            rev.setUser(new User(result));
-                            finalReviews.add(rev);
-                            if(aux + 1 == reviews.size()){
-                                pendingBooksAdapter = new ReviewsVerticalAdapter((MainActivity) getActivity(), getContext(), finalReviews, addCommentButton, user);
-                                recyclerView.setAdapter(pendingBooksAdapter);
-                            }
+        if(MockupsValues.lastReviewFromCommentActivty == null){
+            reviews = book.getComments();
+            final ArrayList<Review> finalReviews = new ArrayList<>();
+            for(int i = 0; i < reviews.size(); i++){
+                final int aux = i;
+                ApiConnector.getUser(getContext(), reviews.get(i).userId, new ServerCallback() {
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        Review rev = reviews.get(aux);
+                        rev.setUser(new User(result));
+                        finalReviews.add(rev);
+                        if(aux + 1 == reviews.size()){
+                            pendingBooksAdapter = new ReviewsVerticalAdapter((MainActivity) getActivity(), getContext(), finalReviews, addCommentButton, user);
+                            recyclerView.setAdapter(pendingBooksAdapter);
                         }
-                    });
-                }
+                    }
+                });
             }
+        } else {
+            //ArrayList<Review> aux = reviews;
+            //aux.add(MockupsValues.lastReviewFromCommentActivty);
+            Review aux = MockupsValues.lastReviewFromCommentActivty;
+            pendingBooksAdapter.addReview(aux);
+            MockupsValues.lastReviewFromCommentActivty = null;
 
-            @Override
-            public void onSuccess(Book book) {
-
-            }
-        });
+        }
     }
 
 

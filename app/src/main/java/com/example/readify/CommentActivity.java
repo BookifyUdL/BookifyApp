@@ -260,6 +260,7 @@ public class CommentActivity extends AppCompatActivity implements RichEditTextIn
                                     //setRe
                                     //finish();
                                     //setResult(300, data);
+                                    MockupsValues.lastReviewFromCommentActivty = review;
                                     finishActivity();
                                 }
                             });

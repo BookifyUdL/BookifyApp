@@ -43,6 +43,7 @@ public class MockupsValues {
     private static Context context;
     private static boolean isUserInDatabase = false;
     private static Book currentBookViewing;
+    public  static Review lastReviewFromCommentActivty;
 
 
     //private static User userProfile = new User("Connor MacArthur", true, getPersonalizedGenres(), getLastAddedBooksWithReads());
