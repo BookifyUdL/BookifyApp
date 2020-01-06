@@ -150,6 +150,10 @@ public class BookReadedPopup extends DialogFragment implements Popup {
             }
         });
 
+        TextView commentsNumber = (TextView) view.findViewById(R.id.comments_number);
+        String aux = String.valueOf(book.getComments().size());
+        commentsNumber.setText(aux);
+
         CardView star1 = (CardView) view.findViewById(R.id.card_view11);
         CardView star2 = (CardView) view.findViewById(R.id.card_view12);
         CardView star3 = (CardView) view.findViewById(R.id.card_view13);
