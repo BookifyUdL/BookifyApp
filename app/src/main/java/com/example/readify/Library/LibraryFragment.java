@@ -76,13 +76,12 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
 
     public void notifyLibraryChanged() {
         //user.readFromSharedPreferences(prefs);
-        user = MockupsValues.getUser();
-        booksAdapter = new BooksGridAdapter((MainActivity) getActivity(), getContext(), user.getLibrary(), user);
-        recyclerViewGenres.setAdapter(booksAdapter);
-        booksAdapter.setClickListener(this);
-        //booksAdapter.setBooksList(user.getLibrary());
+        //booksAdapter = new BooksGridAdapter((MainActivity) getActivity(), getContext(), MockupsValues.user.getLibrary(), MockupsValues.user);
+        //recyclerViewGenres.setAdapter(booksAdapter);
+        //booksAdapter.setClickListener(this);
+        booksAdapter.setBooksList(MockupsValues.user.getLibrary());
         //booksAdapter.reloadAllImages();
-        //booksAdapter.notifyDataSetChanged();
+        booksAdapter.notifyDataSetChanged();
         shouldShowEmptyMessage();
     }
 
@@ -98,7 +97,6 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
 
         View view = inflater.inflate(R.layout.fragment_library, container, false);
 
-        user = MockupsValues.getUser();
         //prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
         //user.readFromSharedPreferences(prefs);
 
@@ -118,7 +116,7 @@ public class LibraryFragment extends Fragment implements SearchView.OnQueryTextL
 
         //RecyclerViewAdapterGenres adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres, MockupsValues.user);
         //adapterGenres.setClickListener(GenresFragment.this);
-        booksAdapter = new BooksGridAdapter((MainActivity) getActivity(), getContext(), user.getLibrary(), user);
+        booksAdapter = new BooksGridAdapter((MainActivity) getActivity(), getContext(), MockupsValues.user.getLibrary(), MockupsValues.user);
         recyclerViewGenres.setAdapter(booksAdapter);
         booksAdapter.setClickListener(this);
 

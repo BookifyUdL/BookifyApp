@@ -62,12 +62,6 @@ public class SwipeToReadOrDeleteCallback extends ItemTouchHelper.SimpleCallback 
             } else {
                 mAdapter.pendingListChanged(position);
             }
-            ApiConnector.updateUser(mContext, new ServerCallback() {
-                @Override
-                public void onSuccess(JSONObject result) {
-                    Toast.makeText(mContext, "Book added correctly", Toast.LENGTH_LONG).show();
-                }
-            }, MockupsValues.getUser());
         }
     }
 

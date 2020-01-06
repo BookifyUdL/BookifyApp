@@ -7,6 +7,8 @@ public class Emoji {
     private int value;
     private int num;
 
+    public Emoji() {}
+
     public Emoji(String name, String emoji) {
         this.name = name;
         this.emoji = emoji;

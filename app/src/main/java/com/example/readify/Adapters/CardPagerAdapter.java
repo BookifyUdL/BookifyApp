@@ -1,17 +1,14 @@
 package com.example.readify.Adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.example.readify.Adapters.CardAdapter;
 import com.example.readify.MainActivity;
 import com.example.readify.Models.Book;
 import com.example.readify.Pages;
@@ -68,7 +65,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
             }
         });
         container.addView(view);
-        bind(mData.get(position), view, container.getContext());
+        bind(mData.get(position), view);
         CardView cardView = (CardView) view.findViewById(R.id.cardView);
 
         if (mBaseElevation == 0) {
@@ -80,7 +77,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         return view;
     }
 
-    private void  showBook(Book book){
+    private void showBook(Book book) {
         activity.goToBookPage(book, Pages.DISCOVER_PAGE);
     }
 
@@ -91,18 +88,16 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         mViews.set(position, null);
     }
 
-    private void bind(Book item, View view, Context context) {
+    private void bind(Book item, View view) {
         TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
         TextView contentTextView = (TextView) view.findViewById(R.id.contentTextView);
         ImageView bookImageView = (ImageView) view.findViewById(R.id.bookImageView);
         titleTextView.setText(item.getAuthor());
         contentTextView.setText(item.getTitle());
         setBookCover(bookImageView, item.getPicture());
-        //bookImageView.setImageResource(bookImageView.getContext().getResources().getIdentifier(item.getPicture(), "drawable", bookImageView.getContext().getPackageName()));
-        //bookImageView.setImageBitmap(context.getResources().getIdentifier(item.getPicture(), "drawable", context.getPackageName()));
     }
 
-    private void setBookCover(ImageView image, String picture){
+    private void setBookCover(ImageView image, String picture) {
         Picasso.with(activity.getApplicationContext()) // Context
                 .load(picture) // URL or file
                 .into(image);

@@ -16,18 +16,24 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.readify.ApiConnector;
 import com.example.readify.MainActivity;
 import com.example.readify.MockupsValues;
 import com.example.readify.Models.Book;
+import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.User;
 import com.example.readify.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontalAdapter.ViewHolder> {
 
@@ -51,6 +57,11 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
         this.user = user;
     }
 
+    public void setUser(User user){
+        this.user = user;
+        notifyDataSetChanged();
+    }
+
     // inflates the row layout from xml when needed
     @Override
     @NonNull
@@ -70,8 +81,6 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
         } else {
             String namePicture = mViewBooks.get(position).getPicture();
             setBookCover(holder, namePicture);
-            //holder.imageLayout.setImageDrawable(ContextCompat.getDrawable(holder.imageLayout.getContext(),
-            //        holder.imageLayout.getContext().getResources().getIdentifier(namePicture, "drawable", holder.layout.getContext().getPackageName())));
 
             ListIterator<Book> itr = user.getLibrary().listIterator();
             while (itr.hasNext()) {
@@ -93,6 +102,7 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
                         ArrayList<Book> pending = user.getInterested();
                         pending.add(book);
                         user.setInterested(pending);
+
                         /*String interestedToPref = new Gson().toJson(user.getInterested());
                         pref.edit().putString("com.example.readify.interested", interestedToPref).apply();*/
 
@@ -104,9 +114,16 @@ public class BooksHorizontalAdapter extends RecyclerView.Adapter<BooksHorizontal
                         /*String libraryToPref = new Gson().toJson(user.getLibrary());
                         pref.edit().putString("com.example.readify.library", libraryToPref).apply();*/
 
-                        //MockupsValues.addPendingBook(book);
+                        //Update user in Database
+                        ApiConnector.updateUser(getApplicationContext(), new ServerCallback() {
+                            @Override
+                            public void onSuccess(JSONObject result) {
+                                Toast.makeText(getApplicationContext(), "Book added correctly to library", Toast.LENGTH_LONG).show();
+                            }
+                        }, user);
+
                         activity.notifyPendingListChanged(user);
-                        Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, book.getTitle() + " " + context.getString(R.string.book_added_correctly_message), Toast.LENGTH_SHORT).show();
                     }
                 });
             }

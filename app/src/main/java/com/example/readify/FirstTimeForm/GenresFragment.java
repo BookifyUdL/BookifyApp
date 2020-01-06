@@ -61,7 +61,8 @@ import java.util.Set;
  * Use the {@link GenresFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GenresFragment extends Fragment implements RecyclerViewAdapterGenres.ItemClickListener, BooksListFormAdapter.ItemClickListener, SearchView.OnQueryTextListener {
+public class GenresFragment extends Fragment implements RecyclerViewAdapterGenres.ItemClickListener,
+        BooksListFormAdapter.ItemClickListener, SearchView.OnQueryTextListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -85,9 +86,6 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
     private BooksListFormAdapter adapterBooksList;
     private BooksListFormAdapter adapterBooksInterest;
     private SharedPreferences pref;
-
-    //private User user;
-    //private User user = MockupsValues.getUser();
 
     public GenresFragment() {
         // Required empty public constructor
@@ -127,12 +125,11 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         pref = getContext().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
 
         //Create a new user with the information about the facebook or google
-        //user = new User();
-        MockupsValues.getUser().setUid(pref.getString("com.example.readify.uid", "0"));
-        MockupsValues.getUser().setName(pref.getString("com.example.readify.name", "Unknown"));
-        MockupsValues.getUser().setEmail(pref.getString("com.example.readify.email", "email@unknown.com"));
-        MockupsValues.getUser().setPicture(pref.getString("com.example.readify.photo", ""));
-        MockupsValues.getUser().setPremium(false);
+        MockupsValues.user.setUid(pref.getString("com.example.readify.uid", "0"));
+        MockupsValues.user.setName(pref.getString("com.example.readify.name", "Unknown"));
+        MockupsValues.user.setEmail(pref.getString("com.example.readify.email", "email@unknown.com"));
+        MockupsValues.user.setPicture(pref.getString("com.example.readify.photo", ""));
+        MockupsValues.user.setPremium(false);
 
         //Initialize carouselView
         CirclePageIndicator indicator = view.findViewById(R.id.indicator);
@@ -144,7 +141,8 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
         carouselView.setViewListener(viewListener);
         carouselView.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
             @Override
             public void onPageSelected(int position) {
@@ -153,7 +151,8 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrollStateChanged(int state) {
+            }
         });
 
         // Inflate the layout for this fragment
@@ -205,33 +204,6 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
                     });
                     createBookInterestDinamically(view);
                     break;
-
-                /*case 3:
-                    //Finalización del formulario
-                    view = getLayoutInflater().inflate(R.layout.first_form_done, null);
-                    Button buttonDone = view.findViewById(R.id.buttonFirstFormDone);
-                    buttonDone.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            pref.edit().putBoolean("com.example.readify.premium", user.isPremium()).apply();
-
-                            String genresToPref = new Gson().toJson(user.getGenres());
-                            pref.edit().putString("com.example.readify.genres", genresToPref).apply();
-
-                            String libraryToPref = new Gson().toJson(user.getLibrary());
-                            pref.edit().putString("com.example.readify.library", libraryToPref).apply();
-
-                            String interestedToPref = new Gson().toJson(user.getInterested());
-                            pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
-
-                            String achievementsToPref = new Gson().toJson(MockupsValues.getAchievements());
-                            pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
-
-                            user.setAchievements(MockupsValues.getAchievements());
-
-                            comunicateFragmentsFirstForm.doneForm(user);
-                        }
-                    });*/
             }
 
             //Defining a skip button
@@ -241,24 +213,32 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
                 skipForm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        pref.edit().putBoolean("com.example.readify.premium", MockupsValues.getUser().isPremium()).apply();
+                        pref.edit().putBoolean("com.example.readify.premium", MockupsValues.user.isPremium()).apply();
 
-                        String genresToPref = new Gson().toJson(MockupsValues.getUser().getGenres());
+                        String genresToPref = new Gson().toJson(MockupsValues.user.getGenres());
                         pref.edit().putString("com.example.readify.genres", genresToPref).apply();
 
-                        String libraryToPref = new Gson().toJson(MockupsValues.getUser().getLibrary());
+                        String libraryToPref = new Gson().toJson(MockupsValues.user.getLibrary());
                         pref.edit().putString("com.example.readify.library", libraryToPref).apply();
 
-                        String interestedToPref = new Gson().toJson(MockupsValues.getUser().getInterested());
+                        String interestedToPref = new Gson().toJson(MockupsValues.user.getInterested());
                         pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
 
                         String achievementsToPref = new Gson().toJson(MockupsValues.getAchievements());
                         pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
 
-                        MockupsValues.getUser().setAchievements(MockupsValues.getAchievements());
+                        MockupsValues.user.setAchievements(MockupsValues.getAchievements());
 
-                        comunicateFragmentsFirstForm.exitForm(MockupsValues.getUser());
-                        addOrUpdateUser();
+                        //comunicateFragmentsFirstForm.exitForm(MockupsValues.getUser());
+
+                        // Add user to database
+                        ApiConnector.addUserToDatabase(getContext(), new ServerCallback() {
+                            @Override
+                            public void onSuccess(JSONObject result) {
+                                System.out.println("The obtaining of the client user works correctly");
+                                comunicateFragmentsFirstForm.exitForm(MockupsValues.getUser());
+                            }
+                        }, MockupsValues.getUser());
                     }
                 });
             }
@@ -268,12 +248,12 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
     };
 
 
-    private void addOrUpdateUser(){
+    /*private void addOrUpdateUser(){
         if(MockupsValues.getIsUserInDatabase()){
             ApiConnector.updateUser(getContext(), new ServerCallback() {
                 @Override
                 public void onSuccess(JSONObject result) {
-                    System.out.println("Get allBooks funko!!!!");
+                    System.out.println("The obtaining of the client user works correctly");
                     comunicateFragmentsFirstForm.doneForm(MockupsValues.getUser());
                 }
             }, MockupsValues.getUser());
@@ -281,14 +261,14 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
             ApiConnector.addUserToDatabase(getContext(), new ServerCallback() {
                 @Override
                 public void onSuccess(JSONObject result) {
-                    System.out.println("Get allBooks funko!!!!");
+                    System.out.println("The obtaining of the client user works correctly");
                     comunicateFragmentsFirstForm.doneForm(MockupsValues.getUser());
                 }
             }, MockupsValues.getUser());
         }
-    }
+    }*/
 
-    private void showTutorialDonePopup(){
+    private void showTutorialDonePopup() {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
 
         String message = getString(R.string.done_first_form_text) + "\n\n" + getString(R.string.done_redirect_first_form_text);
@@ -301,67 +281,65 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
                 getString(R.string.done_end),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        pref.edit().putBoolean("com.example.readify.premium", MockupsValues.getUser().isPremium()).apply();
+                        pref.edit().putBoolean("com.example.readify.premium", MockupsValues.user.isPremium()).apply();
 
-                        String genresToPref = new Gson().toJson(MockupsValues.getUser().getGenres());
+                        String genresToPref = new Gson().toJson(MockupsValues.user.getGenres());
                         pref.edit().putString("com.example.readify.genres", genresToPref).apply();
 
-                        String libraryToPref = new Gson().toJson(MockupsValues.getUser().getLibrary());
+                        String libraryToPref = new Gson().toJson(MockupsValues.user.getLibrary());
                         pref.edit().putString("com.example.readify.library", libraryToPref).apply();
 
-                        String interestedToPref = new Gson().toJson(MockupsValues.getUser().getInterested());
+                        String interestedToPref = new Gson().toJson(MockupsValues.user.getInterested());
                         pref.edit().putString("com.example.readify.interested", interestedToPref).apply();
 
                         String achievementsToPref = new Gson().toJson(MockupsValues.getAchievements());
                         pref.edit().putString("com.example.readify.achievements", achievementsToPref).apply();
 
-                        MockupsValues.getUser().setAchievements(MockupsValues.getAchievements());
+                        MockupsValues.user.setAchievements(MockupsValues.getAchievements());
+
+                        // Add data to database
+                        ApiConnector.addUserToDatabase(getContext(), new ServerCallback() {
+                            @Override
+                            public void onSuccess(JSONObject result) {
+                                System.out.println("The obtaining of the client user works correctly");
+                                comunicateFragmentsFirstForm.doneForm(MockupsValues.getUser());
+                            }
+                        }, MockupsValues.getUser());
 
                         dialog.cancel();
-                        addOrUpdateUser();
-
                     }
                 });
-
-        /*builder1.setNegativeButton(
-                "No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });*/
 
         AlertDialog alert11 = builder1.create();
         alert11.show();
     }
 
-    private void goNextCarousselItem(){
+    private void goNextCarousselItem() {
         carouselView.setCurrentItem(carouselView.getCurrentItem() + 1);
     }
 
     private void createBookGenresDinamically(View view) {
-        //Defining every genre
+        // Defining every genre
         RecyclerView recyclerViewGenres = view.findViewById(R.id.recyclerViewGenres);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(view.getContext(), 3);
         recyclerViewGenres.setLayoutManager(gridLayoutManager);
 
         ArrayList genres = MockupsValues.getGenres();
 
-        adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres, MockupsValues.getUser());
+        adapterGenres = new RecyclerViewAdapterGenres(getContext(), genres, MockupsValues.user);
         adapterGenres.setClickListener(GenresFragment.this);
         recyclerViewGenres.setAdapter(adapterGenres);
     }
 
     private void createBookReadDinamically(View view) {
-        //Defining the adapters and SearchView to show every book
+        // Defining the adapters and SearchView to show every book
         RecyclerView recyclerViewReadBooks = view.findViewById(R.id.recyclerViewReadBooks);
         GridLayoutManager gridLayoutManagerBooksRead = new GridLayoutManager(view.getContext(), 1);
-        //LinearLayoutManager linearLayoutManagerRead = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerViewReadBooks.setLayoutManager(gridLayoutManagerBooksRead);
 
         ArrayList booksRead = MockupsValues.getAllBooksForTutorial();
 
-        adapterBooksList = new BooksListFormAdapter(getContext(), booksRead, MockupsValues.getUser(), true);
+        adapterBooksList = new BooksListFormAdapter(getContext(), booksRead, MockupsValues.user, true);
         adapterBooksList.setClickListener(GenresFragment.this);
         recyclerViewReadBooks.setAdapter(adapterBooksList);
 
@@ -372,8 +350,9 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
     }
 
     private void changeInterestedBooks() {
+        // Remove the books that it had selected on previous list
         ArrayList booksInterest = MockupsValues.getAllBooksForTutorial();
-        for (Book book : MockupsValues.getUser().getLibrary()) {
+        for (Book book : MockupsValues.user.getLibrary()) {
             booksInterest.remove(book);
         }
         adapterBooksInterest.setBooksList(booksInterest);
@@ -381,15 +360,14 @@ public class GenresFragment extends Fragment implements RecyclerViewAdapterGenre
     }
 
     private void createBookInterestDinamically(View view) {
-        //Defining the adapters and SearchView to show every book
+        // Defining the adapters and SearchView to show every book
         LinearLayoutManager linearLayoutManagerInterest = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerViewInterestBooks = view.findViewById(R.id.recyclerViewInterestBooks);
         recyclerViewInterestBooks.setLayoutManager(linearLayoutManagerInterest);
 
         ArrayList booksInterest = MockupsValues.getAllBooksForTutorial();
 
-        //ArrayList booksInterest = MockupsValues.getLastAddedBooks();
-        adapterBooksInterest = new BooksListFormAdapter(getContext(), booksInterest, MockupsValues.getUser(), false);
+        adapterBooksInterest = new BooksListFormAdapter(getContext(), booksInterest, MockupsValues.user, false);
         adapterBooksInterest.setClickListener(GenresFragment.this);
         recyclerViewInterestBooks.setAdapter(adapterBooksInterest);
 

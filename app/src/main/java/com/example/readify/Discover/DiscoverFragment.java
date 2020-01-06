@@ -82,8 +82,11 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
     private OnFragmentInteractionListener mListener;
 
+    private BooksHorizontalAdapter adapter;
+    private BooksHorizontalAdapter adapter2;
+
     public DiscoverFragment() {
-        // Required empty public constructor
+
     }
 
 
@@ -91,6 +94,11 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         DiscoverFragment fragment = new DiscoverFragment();
 
         return fragment;
+    }
+
+    public void updateDiscover(){
+        adapter.setUser(MockupsValues.user);
+        adapter2.setUser(MockupsValues.user);
     }
 
     @Override
@@ -116,7 +124,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
 
-        final ImageView searchButton = (ImageView) view.findViewById(R.id.searchIcon);
+        ImageView searchButton = (ImageView) view.findViewById(R.id.searchIcon);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,7 +132,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
             }
         });
 
-        ArrayList<Book> books = MockupsValues.getLastAddedBooks();
+        /* Latest additions list */
         mCardAdapter = new CardPagerAdapter((MainActivity) getActivity());
         for (int i = 0; i < MockupsValues.getLastAddedBooks().size(); i++) {
             mCardAdapter.addCardItem(MockupsValues.getLastAddedBooks().get(i));
@@ -139,19 +147,17 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         mViewPager.setPageTransformer(false, mCardShadowTransformer);
         mViewPager.setOffscreenPageLimit(3);
 
-        final LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        /* Top rated list*/
+        final LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.top_rated_recycler_view);
         final DiscoverFragment discoverFragment = this;
         ApiConnector.getTopRatedBooks(getContext(), new ServerCallback() {
             @Override
             public void onSuccess(JSONObject result) {
-                /* Llista top rated */
-                recyclerView.setLayoutManager(horizontalLayoutManagaer);
-                BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), MockupsValues.getTopRatedBooks(), true, user);
+                recyclerView.setLayoutManager(horizontalLayoutManager);
+                adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), MockupsValues.getTopRatedBooks(), true, MockupsValues.user);
                 adapter.setClickListener(discoverFragment);
                 recyclerView.setAdapter(adapter);
-
-                ArrayList<Genre> b = MockupsValues.user.getGenres();
 
                 ApiConnector.getTopRatedBooksForGenre(getContext(), MockupsValues.user.getGenres(), new ServerCallbackForBooks() {
                     @Override
@@ -168,25 +174,9 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
             }
         });
 
-        /* Llista top rated */
-        /*LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.top_rated_recycler_view);
-        recyclerView.setLayoutManager(horizontalLayoutManagaer);
-
-
-        // set up the RecyclerView
-        ArrayList<Book> list = MockupsValues.getLastAddedBooks();
-        list.add(MockupsValues.getSameAuthorBooks().get(0));
-        LinearLayoutManager horizontalLayoutManager
-                = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(horizontalLayoutManager);
-        BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), list, true, user);
-        adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
-        addGenres(view);*/
-
         width = view.getWidth();
         height = view.getHeight();
+
         return view;
     }
 
@@ -195,8 +185,6 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
         boolean isFirst = true;
         int previousId = 0;
         int previousCardId = 0;
-        int margin_10dp = (int) getContext().getResources().getDimension(R.dimen.margin_10dp);
-        int margin_15dp = (int) getContext().getResources().getDimension(R.dimen.margin_15dp);
 
         //ArrayList<Book> books = MockupsValues.getLastAddedBooksDiscover();
         //books.add(MockupsValues.getSameAuthorBooks().get(0));
@@ -209,7 +197,7 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
             textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primaryText));
             textView.setTextSize(25);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(margin_15dp, margin_15dp, 0, 0);
+            params.setMargins((int) getContext().getResources().getDimension(R.dimen.margin_15dp), (int) getContext().getResources().getDimension(R.dimen.margin_15dp), 0, 0);
             if (isFirst) {
                 params.addRule(RelativeLayout.BELOW, R.id.card_view_top_rated);
                 isFirst = false;
@@ -224,12 +212,12 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
             float height = getContext().getResources().getDimension(R.dimen.card_height);
             CardView cardView = new CardView(getContext());
-            cardView.setRadius(4);
             RelativeLayout.LayoutParams cardParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int) height);
-            cardParams.setMargins(margin_15dp, margin_15dp, margin_15dp, margin_15dp);
+            cardParams.setMargins((int) getContext().getResources().getDimension(R.dimen.margin_15dp), (int) getContext().getResources().getDimension(R.dimen.margin_15dp), (int) getContext().getResources().getDimension(R.dimen.margin_15dp), (int) getContext().getResources().getDimension(R.dimen.margin_15dp));
             cardParams.addRule(RelativeLayout.BELOW, previousId);
             cardParams.addRule(RelativeLayout.ALIGN_TOP);
             cardView.setLayoutParams(cardParams);
+            cardView.setRadius((int) getContext().getResources().getDimension(R.dimen.card_corner_radius_big));
             previousCardId = ViewCompat.generateViewId();
             cardView.setId(previousCardId);
             cardView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryLight));
@@ -237,24 +225,20 @@ public class DiscoverFragment extends Fragment implements View.OnClickListener,
 
             RecyclerView recyclerView = new RecyclerView(getContext());
             RelativeLayout.LayoutParams recyclerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-            recyclerParams.setMargins(margin_10dp, margin_10dp, margin_10dp, margin_10dp);
+            recyclerParams.setMargins((int) getContext().getResources().getDimension(R.dimen.margin_10dp), (int) getContext().getResources().getDimension(R.dimen.margin_10dp), (int) getContext().getResources().getDimension(R.dimen.margin_10dp), (int) getContext().getResources().getDimension(R.dimen.margin_10dp));
             recyclerView.setLayoutParams(recyclerParams);
 
             //List list = MockupsValues.getLastAddedBooks();
             LinearLayoutManager horizontalLayoutManager
                     = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
             recyclerView.setLayoutManager(horizontalLayoutManager);
-            BooksHorizontalAdapter adapter = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), booksByGenre.get(i), true, user);
-            adapter.setClickListener(this);
-            recyclerView.setAdapter(adapter);
+            adapter2 = new BooksHorizontalAdapter((MainActivity) getActivity(), getContext(), booksByGenre.get(i), true, user);
+            adapter2.setClickListener(this);
+            recyclerView.setAdapter(adapter2);
 
             cardView.addView(recyclerView);
             relativeLayout.addView(cardView);
         }
-
-        /*for (Genre genre : user.getGenres()) {
-
-        }*/
 
         int blankLayoutHeight = (int) getContext().getResources().getDimension(R.dimen.blank_layout);
         LinearLayout linearLayout = new LinearLayout(getContext());

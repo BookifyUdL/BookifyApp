@@ -36,19 +36,19 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class ReadingFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    BooksListVerticalAdapter pendingBooksAdapter;
-    BooksListVerticalAdapter readingBooksAdapter;
-    RecyclerView recyclerView;
-    RecyclerView recyclerView2;
+
+    private BooksListVerticalAdapter pendingBooksAdapter;
+    private BooksListVerticalAdapter readingBooksAdapter;
+
+    private RecyclerView recyclerView;
+    private RecyclerView recyclerView2;
+
     private LinearLayout emptyLayout;
     private LinearLayout anyBookMessage;
     private LinearLayout readingTextLayout;
     private LinearLayout pendingTextLayout;
 
     private SharedPreferences prefs;
-    private User user;
 
     private OnFragmentInteractionListener mListener;
 
@@ -56,7 +56,6 @@ public class ReadingFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static ReadingFragment newInstance() {
         ReadingFragment fragment = new ReadingFragment();
         return fragment;
@@ -65,10 +64,6 @@ public class ReadingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
     }
 
     @Override
@@ -77,8 +72,6 @@ public class ReadingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_reading, container, false);
 
         prefs = view.getContext().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-        user = MockupsValues.getUser();
-        //user.readFromSharedPreferences(prefs);
 
         LinearLayout discoverButton = view.findViewById(R.id.discover_layout);
         anyBookMessage = (LinearLayout) view.findViewById(R.id.any_book_layout);
@@ -93,18 +86,19 @@ public class ReadingFragment extends Fragment {
             }
         });
 
-        ArrayList<Book> list = user.getInterested();
-        ArrayList<Book> list2 = user.getReading();
+        /*ArrayList<Book> list = MockupsValues.user.getInterested();
+        ArrayList<Book> list2 = MockupsValues.user.getReading();
 
         ArrayList<Book> pendingBooks = new ArrayList<>();
         ArrayList<Book> readingBooks = new ArrayList<>();
+
         for(Book b: MockupsValues.getAllBooksForTutorial()){
             if(list.contains(b))
                 pendingBooks.add(b);
             if(list2.contains(b))
                 readingBooks.add(b);
 
-        }
+        }*/
 
         /* Reading books */
         LinearLayoutManager verticalLayoutManagaer = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -112,7 +106,8 @@ public class ReadingFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.reading_books_recycler_view);
         recyclerView.setLayoutManager(verticalLayoutManagaer);
 
-        readingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), readingBooks, getActivity().getSupportFragmentManager(), user);
+        readingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(),
+                MockupsValues.user.getReading(), getActivity().getSupportFragmentManager(), MockupsValues.user);
         recyclerView.setAdapter(readingBooksAdapter);
 
         ItemTouchHelper itemTouchHelperReading = new ItemTouchHelper(new SwipeToReadOrDeleteCallback(readingBooksAdapter, false, getContext()));
@@ -124,8 +119,8 @@ public class ReadingFragment extends Fragment {
         recyclerView2 = (RecyclerView) view.findViewById(R.id.pending_books_recycler_view);
         recyclerView2.setLayoutManager(vlm);
 
-
-        pendingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(), pendingBooks, user);
+        pendingBooksAdapter = new BooksListVerticalAdapter((MainActivity) getActivity(), getContext(),
+                MockupsValues.user.getInterested(), MockupsValues.user);
         pendingBooksAdapter.setIsInPendingList(true);
         recyclerView2.setAdapter(pendingBooksAdapter);
 
@@ -138,14 +133,14 @@ public class ReadingFragment extends Fragment {
     }
 
     private void shouldShowEmptyMessage() {
-        if (user.getReading() == null) {
-            user.setReading(new ArrayList<Book>());
+        if (MockupsValues.user.getReading() == null) {
+            MockupsValues.user.setReading(new ArrayList<Book>());
         }
-        if (user.getInterested() == null) {
-            user.setInterested(new ArrayList<Book>());
+        if (MockupsValues.user.getInterested() == null) {
+            MockupsValues.user.setInterested(new ArrayList<Book>());
         }
 
-        if (user.getReading().isEmpty() && user.getInterested().isEmpty()) {
+        if (MockupsValues.user.getReading().isEmpty() && MockupsValues.user.getInterested().isEmpty()) {
             anyBookMessage.setVisibility(View.VISIBLE);
             emptyLayout.setVisibility(View.GONE);
             pendingTextLayout.setVisibility(View.GONE);
@@ -163,19 +158,13 @@ public class ReadingFragment extends Fragment {
     }
 
     public void readingBooksChanged() {
-        //user.readFromSharedPreferences(prefs);
-        user = MockupsValues.getUser();
-        ArrayList<Book> readingBooks = user.getReadingBooks();
-        readingBooksAdapter.setBooksList(readingBooks);
+        readingBooksAdapter.setBooksList(MockupsValues.user.getReadingBooks());
         readingBooksAdapter.notifyDataSetChanged();
         shouldShowEmptyMessage();
     }
 
     public void pendingListChanged() {
-        //user.readFromSharedPreferences(prefs);
-        user = MockupsValues.getUser();
-        ArrayList<Book> pendingBooks = user.getInterested();
-        pendingBooksAdapter.setBooksList(pendingBooks);
+        pendingBooksAdapter.setBooksList(MockupsValues.user.getInterested());
         pendingBooksAdapter.notifyDataSetChanged();
         shouldShowEmptyMessage();
     }

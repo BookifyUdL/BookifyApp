@@ -3,6 +3,7 @@ package com.example.readify;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 
+import com.example.readify.Models.Author;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Emoji;
 import com.example.readify.Models.Genre;
@@ -13,6 +14,7 @@ import com.example.readify.Models.User;
 import com.example.readify.Models.Achievement;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
 
 public class MockupsValues {
 
@@ -39,12 +41,20 @@ public class MockupsValues {
     private static ArrayList<Review> SUB_REVIEWS;
     private static ArrayList<Emoji> EMOJIS;
     private static ArrayList<User> USERS;
+    private static ArrayList<Author> AUTHORS;
     public  static User user = new User();
     private static Context context;
-    private static boolean isUserInDatabase = false;
     private static Book currentBookViewing;
     public  static Review lastReviewFromCommentActivty;
 
+
+    public static void setAuthors(ArrayList<Author> authors){
+        AUTHORS = authors;
+    }
+
+    public static ArrayList<Author> getAuthors(){
+        return AUTHORS;
+    }
 
     //private static User userProfile = new User("Connor MacArthur", true, getPersonalizedGenres(), getLastAddedBooksWithReads());
 
@@ -95,14 +105,6 @@ public class MockupsValues {
         if(TOP_RATED_BOOKS == null)
             TOP_RATED_BOOKS = new ArrayList<>();
         return TOP_RATED_BOOKS;
-    }
-
-    public static void setIsUserInDatabase(boolean isOrNot){
-        isUserInDatabase = isOrNot;
-    }
-
-    public static boolean getIsUserInDatabase(){
-        return isUserInDatabase;
     }
 
     public static ArrayList<Item> getItems(){

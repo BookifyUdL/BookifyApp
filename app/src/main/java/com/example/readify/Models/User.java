@@ -50,6 +50,7 @@ public class User implements Serializable {
     private String firebaseId;
     private ArrayList<Book> interested;
     private ArrayList<Book> reading;
+    private ArrayList<Book> read;
 
     public User() {
         //this.uid = "0000";
@@ -61,7 +62,7 @@ public class User implements Serializable {
         this.reading = new ArrayList<>();
         this.interested = new ArrayList<>();
         this.genres = new ArrayList<>();
-        this.achievements = MockupsValues.getAchievementsPersonalized();
+        this.achievements = MockupsValues.getAchievements();
     }
 
     public User(String name, String picture) {
@@ -73,7 +74,7 @@ public class User implements Serializable {
         this.reading = new ArrayList<>();
         this.interested = new ArrayList<>();
         this.genres = new ArrayList<>();
-        this.achievements = MockupsValues.getAchievementsPersonalized();
+        this.achievements = MockupsValues.getAchievements();
     }
 
     public User(String name, String email, String picture) {
@@ -85,7 +86,7 @@ public class User implements Serializable {
         this.reading = new ArrayList<>();
         this.interested = new ArrayList<>();
         this.genres = new ArrayList<>();
-        this.achievements = MockupsValues.getAchievementsPersonalized();
+        this.achievements = MockupsValues.getAchievements();
     }
 
     public User(String name, Boolean premium, ArrayList<Genre> genres, ArrayList<Book> library) {
@@ -95,12 +96,12 @@ public class User implements Serializable {
             this.library = library;
         if (genres != null)
             this.genres = genres;
-        this.achievements = MockupsValues.getAchievementsPersonalized();
+        this.achievements = MockupsValues.getAchievements();
     }
 
     public User(String uid, String firebaseId, String name, String picture, Boolean premium,
                 String email, ArrayList<Genre> genres, ArrayList<Book> library, ArrayList<Book> reading,
-                ArrayList<Book> interested, ArrayList<Achievement> achievements){
+                ArrayList<Book> interested, ArrayList<Book> read, ArrayList<Achievement> achievements) {
         this.uid = uid;
         this.firebaseId = firebaseId;
         this.name = name;
@@ -111,57 +112,50 @@ public class User implements Serializable {
         this.reading = reading;
         this.interested = interested;
         this.genres = genres;
+        this.read = read;
         this.achievements = achievements;
     }
 
-    public User(JSONObject userJson){
-        try{
-           JSONObject user = userJson.getJSONObject("genre");
-           this.premium = user.getBoolean("premium");
-           // MIssing Achivements
-           this.achievements = new ArrayList<>();
-           this.library = Book.bookListFromJson(user.getJSONArray("library"));
-           this.reading = Book.bookListFromJson(user.getJSONArray("reading_book"));
-           this.interested = Book.bookListFromJson(user.getJSONArray("interested_book"));
-           this.uid = user.getString("_id");
-           this.firebaseId = user.getString("firebaseId");
-           this.picture = user.getString("userPicture");
-           this.name = user.getString("name");
-           this.email = user.getString("email");
+    public User(JSONObject userJson) {
+        try {
+            JSONObject user = userJson.getJSONObject("genre");
+            this.premium = user.getBoolean("premium");
+            // MIssing Achivements
+            this.achievements = new ArrayList<>();
+            this.library = Book.bookListFromJson(userJson.getJSONArray("library"));
+            this.reading = Book.bookListFromJson(userJson.getJSONArray("reading_book"));
+            this.interested = Book.bookListFromJson(userJson.getJSONArray("interested_book"));
+            this.uid = user.getString("_id");
+            this.firebaseId = user.getString("firebaseId");
+            this.picture = user.getString("userPicture");
+            this.name = user.getString("name");
+            this.email = user.getString("email");
 
-           JSONArray genresId = user.getJSONArray("genres");
-           this.genres = Genre.genresFromJSONArray(genresId);
-               /*
-               "genres": [
-                {
-                    "_id": "5de7fb595a66a02fe3c39eac",
-                    "picture": "genre1",
-                    "name": "Biography"
-                },
-                {
-                    "_id": "5de7fb595a66a02fe3c39eae",
-                    "picture": "genre3",
-                    "name": "Crime"
-                },
-                {
-                    "_id": "5de7fb595a66a02fe3c39ead",
-                    "picture": "genre2",
-                    "name": "Computing / Interenet"
-                }
-            ],
-               * */
-           //Falta cridar per cada id de genre el genre en concret
+            JSONArray genresId = user.getJSONArray("genres");
+            this.genres = Genre.genresFromJSONArray(genresId);
 
-
-           //this.read
-
-        } catch (Error e){
+        } catch (Error e) {
             System.out.println("Error creating user from json object");
         } catch (JSONException ex) {
             System.out.println("Error creating user from json object. Catching json");
         }
     }
 
+    public void getInfoFromJSON(JSONObject userJson) {
+        try {
+            JSONObject user = userJson.getJSONObject("genre");
+            this.premium = user.getBoolean("premium");
+
+            this.genres = Genre.genresFromJSONArray(user.getJSONArray("genres"));
+            this.library = Book.bookListFromJson(user.getJSONArray("library"));
+            this.interested = Book.bookListFromJson(user.getJSONArray("interested_book"));
+            this.reading = Book.bookListFromJson(user.getJSONArray("reading_book"));
+            this.read = Book.bookListFromJson(user.getJSONArray("read_book"));
+            this.achievements = MockupsValues.getAchievements();
+        } catch (Exception ex) {
+            System.out.println("Error adding information user from json object");
+        }
+    }
 
     public String getFirebaseId() {
         return firebaseId;
@@ -171,7 +165,7 @@ public class User implements Serializable {
         this.firebaseId = firebaseId;
     }
 
-    public static JSONArray toJSONPatch(User user){
+    public static JSONArray toJSONPatch(User user) {
         JSONArray jsonArray = new JSONArray();
         try {
 
@@ -208,7 +202,7 @@ public class User implements Serializable {
 
             JSONObject readBooksJSON = new JSONObject();
             readBooksJSON.put("propName", "read_book");
-            readBooksJSON.put("value", Book.bookListToJSON(user.getReadedBooks()));
+            readBooksJSON.put("value", Book.bookListToJSON(user.getRead()));
             jsonArray.put(readBooksJSON);
 
 
@@ -240,53 +234,43 @@ public class User implements Serializable {
         }
     }
 
-    public static JSONObject toJSON(User user){
+    public static JSONObject toJSON(User user) {
 
-        JSONObject jsonObject= new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         try {
-            if(user.uid != null)
+            if (user.uid != null)
                 jsonObject.put("_id", user.getUid());
-            jsonObject.put("name", user.getName());
-            //MISSING ACHIEVEMENTS
-            jsonObject.put("achievements", new JSONArray());
             jsonObject.put("firebaseId", user.getFirebaseId());
+            jsonObject.put("name", user.getName());
             jsonObject.put("userPicture", user.getPicture());
+            jsonObject.put("email", user.getEmail());
+            jsonObject.put("genres", Genre.genresListToJSON(user.getGenres()));
             jsonObject.put("premium", user.isPremium());
-            jsonObject.put("library", Book.bookListToJSON(user.getLibrary()));
 
-            jsonObject.put("read_book", Book.bookListToJSON(user.getReadedBooks()));
+            jsonObject.put("library", Book.bookListToJSON(user.getLibrary()));
+            jsonObject.put("read_book", Book.bookListToJSON(user.getRead()));
             jsonObject.put("interested_book", Book.bookListToJSON(user.getInterested()));
             jsonObject.put("reading_book", Book.bookListToJSON(user.getReadingBooks()));
 
-            jsonObject.put("email", user.getEmail());
-            jsonObject.put("genres", Genre.genresListToJSON(user.getGenres()));
+            //MISSING ACHIEVEMENTS
+            jsonObject.put("achievements", new JSONArray());
 
-            /*"_id": "5ddd6287e1cc0e546e3d476a",
-                    "name": "Agricolesa",
-                    "firebaseId": "5ddc0f601b6cd31ed7b8afa4",
-                    "userPicture": "-",
-                    "premium": false,
-                    "achievements": [],
-            "library": [],
-            "read_book": [],
-            "interested_book": [],
-            "genres": [],
-            "email": "agri@coles.ca",
-                    "request": {
-                "type": "GET",
-                        "url": "http://localhost:3000/users/5ddd6287e1cc0e546e3d476a"*/
-
-            //String aux = jsonObject.toString();
             return jsonObject;
+
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return new JSONObject();
         }
 
     }
 
+    public ArrayList<Book> getRead() {
+        return read;
+    }
 
+    public void setRead(ArrayList<Book> read) {
+        this.read = read;
+    }
 
     public String getUid() {
         return uid;
@@ -337,7 +321,7 @@ public class User implements Serializable {
     }
 
     public ArrayList<Book> getReadingBooks() {
-        if(this.reading == null)
+        if (this.reading == null)
             this.reading = new ArrayList<>();
         return reading;
     }
@@ -355,7 +339,7 @@ public class User implements Serializable {
     }
 
     public ArrayList<Book> getReading() {
-        if(this.reading == null)
+        if (this.reading == null)
             this.reading = new ArrayList<>();
         return reading;
     }
@@ -379,22 +363,26 @@ public class User implements Serializable {
         return false;
     }
 
-    public ArrayList<Book> getLibrary() {
+    public ArrayList<Book> getLibraryPers() {
         ArrayList<Book> lib = new ArrayList<>();
         lib.addAll(getReadingBooks());
-        for(Book book : getInterested()){
-            if(!lib.contains(book))
+        for (Book book : getInterested()) {
+            if (!lib.contains(book))
                 lib.add(book);
         }
-        for(Book book : getReadedBooks()){
-            if(!lib.contains(book))
+        for (Book book : getReadedBooks()) {
+            if (!lib.contains(book))
                 lib.add(book);
         }
-        for(Book book : getInterested()){
-            if(!lib.contains(book))
+        for (Book book : getInterested()) {
+            if (!lib.contains(book))
                 lib.add(book);
         }
         return lib;
+    }
+
+    public ArrayList<Book> getLibrary() {
+        return library;
     }
 
     public void setLibrary(ArrayList<Book> library) {
@@ -481,7 +469,7 @@ public class User implements Serializable {
     }
 
     public ArrayList<Book> getInterested() {
-        if(this.interested == null)
+        if (this.interested == null)
             this.interested = new ArrayList<>();
         return interested;
     }
@@ -491,7 +479,7 @@ public class User implements Serializable {
     }
 
     public void readFromSharedPreferences(SharedPreferences pref) {
-        /*this.uid = pref.getString("com.example.readify.uid", "0");
+        this.uid = pref.getString("com.example.readify.uid", "0");
         this.name = pref.getString("com.example.readify.name", "Unknown");
         this.email = pref.getString("com.example.readify.email", "mail@unknown.com");
         this.picture = pref.getString("com.example.readify.photo", "userfinale");
@@ -499,34 +487,46 @@ public class User implements Serializable {
 
         //Library
         String libraryPref = pref.getString("com.example.readify.library", "");
-        Type type = new TypeToken<List<Book>>() {}.getType();
+        Type type = new TypeToken<List<Book>>() {
+        }.getType();
         this.library = new Gson().fromJson(libraryPref, type);
 
         //Genres
         String genresPref = pref.getString("com.example.readify.genres", "");
-        Type type1 = new TypeToken<List<Genre>>() {}.getType();
+        Type type1 = new TypeToken<List<Genre>>() {
+        }.getType();
         this.genres = new Gson().fromJson(genresPref, type1);
 
         //Interested
         String interestedPref = pref.getString("com.example.readify.interested", "");
-        Type type2 = new TypeToken<List<Book>>() {}.getType();
+        Type type2 = new TypeToken<List<Book>>() {
+        }.getType();
         this.interested = new Gson().fromJson(interestedPref, type2);
 
         //Achievements
         String achievementsPref = pref.getString("com.example.readify.achievements", "");
-        Type type3 = new TypeToken<List<Achievement>>() {}.getType();
+        Type type3 = new TypeToken<List<Achievement>>() {
+        }.getType();
         this.achievements = new Gson().fromJson(achievementsPref, type3);
 
         //Reading
         String readingPref = pref.getString("com.example.readify.reading", "");
-        Type type4 = new TypeToken<List<Book>>() {}.getType();
-        this.reading = new Gson().fromJson(readingPref, type4);*/
+        Type type4 = new TypeToken<List<Book>>() {
+        }.getType();
+        this.reading = new Gson().fromJson(readingPref, type4);
+
+        //Read
+        String readPref = pref.getString("com.example.readify.read", "");
+        Type type5 = new TypeToken<List<Book>>() {
+        }.getType();
+        this.read = new Gson().fromJson(readPref, type5);
     }
 
     /* Method to update information on database */
     private Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("uid", this.uid);
+        result.put("idFirebase", this.firebaseId);
         result.put("name", this.name);
         result.put("email", this.email);
         result.put("picture", this.picture);
@@ -534,16 +534,17 @@ public class User implements Serializable {
         result.put("library", this.library);
         result.put("interested", this.interested);
         result.put("reading", this.reading);
+        result.put("read", this.read);
         result.put("genres", this.genres);
         result.put("achievements", this.achievements);
 
         return result;
     }
 
-    public void saveToFirebase(){
+    public void saveToFirebase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put(this.uid, this.toMap());
+        childUpdates.put(this.firebaseId, this.toMap());
         database.getReference("users").updateChildren(childUpdates);
     }
 

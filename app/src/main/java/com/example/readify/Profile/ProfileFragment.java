@@ -36,6 +36,7 @@ import com.example.readify.Adapters.BooksProfileHoritzontalAdapter;
 import com.example.readify.Adapters.GenresHoritzontalAdapter;
 import com.example.readify.MainActivity;
 import com.example.readify.MainActivityLogOut;
+import com.example.readify.MockupsValues;
 import com.example.readify.Models.Achievement;
 import com.example.readify.Models.Book;
 import com.example.readify.Models.Genre;
@@ -120,9 +121,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     }
 
     public void setUserMain() {
-        user = new User();
-        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-        user.readFromSharedPreferences(prefs);
+        user = MockupsValues.user;
 
         buttonUpgrade.setVisibility(View.VISIBLE);
         disconnectButton.setVisibility(View.VISIBLE);
@@ -185,9 +184,9 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         getProfileImage();
         textViewNameUser.setText(user.getName());
         //Num of books readed
-        readedBooksTextView.setText(Integer.toString(user.getReadedBooks().size()));
+        readedBooksTextView.setText(Integer.toString(user.getRead().size()));
         //Num of the achievements
-        textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + user.getAchievements().size());
+        textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + MockupsValues.getAchievements().size());
         //Num of the comments
         commentsNumber.setText("10");
         //Show badge premium
@@ -201,7 +200,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         adapterGenrePreferences.notifyDataSetChanged();
 
         //Update readed books
-        adapterReaderBooks.setList(user.getReadedBooks());
+        adapterReaderBooks.setList(user.getRead());
         adapterReaderBooks.notifyDataSetChanged();
 
         //Update achievements
@@ -222,8 +221,6 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
         user = new User();
         user.readFromSharedPreferences(prefs);
-        readedBooksTextView.setText(Integer.toString(user.getReadedBooks().size()));
-        textViewAchievements.setText(user.getNumCompletedAchievements() + getResources().getString(R.string.diagonalBar) + user.getAchievements().size());
 
         // Change the layout accord to the type of account
         if (user.isPremium())
@@ -238,9 +235,9 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        user = new User();
-        prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
-        user.readFromSharedPreferences(prefs);
+        user = MockupsValues.user;
+        //prefs = getActivity().getSharedPreferences("com.example.readify", Context.MODE_PRIVATE);
+        //user.readFromSharedPreferences(prefs);
 
         // Change an user image
         userImage = (CircleImageView) view.findViewById(R.id.profile_image);
@@ -255,7 +252,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
 
         // Num of readed books by the user
         readedBooksTextView = (TextView) view.findViewById(R.id.numReadedBooksText);
-        readedBooksTextView.setText(Integer.toString(user.getReadedBooks().size()));
+        readedBooksTextView.setText(Integer.toString(user.getRead().size()));
 
         // Num of comments
         commentsNumber = (TextView) view.findViewById(R.id.commentsNumber);
@@ -280,8 +277,7 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
         RecyclerView recyclerViewReadedBooks = (RecyclerView) view.findViewById(R.id.recycler_view_profile_favourite_books);
         recyclerViewReadedBooks.setLayoutManager(readedBooksManager);
 
-        List<Book> listReadedBooks = user.getReadedBooks();
-        adapterReaderBooks = new BooksProfileHoritzontalAdapter(getContext(), listReadedBooks);
+        adapterReaderBooks = new BooksProfileHoritzontalAdapter(getContext(), user.getRead());
         adapterReaderBooks.setClickListener(this);
         recyclerViewReadedBooks.setAdapter(adapterReaderBooks);
 
@@ -480,10 +476,10 @@ public class ProfileFragment extends Fragment implements BooksProfileHoritzontal
     @Override
     public void onItemClick(View view, int position) {
         MainActivity activity = (MainActivity) getActivity();
-        if (user.getReadedBooks().size() == position)
+        if (user.getRead().size() == position)
             activity.focusDiscoverFragment();
         else
-            activity.goToBookPage(user.getReadedBooks().get(position), Pages.PROFILE_PAGE);
+            activity.goToBookPage(user.getRead().get(position), Pages.PROFILE_PAGE);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
