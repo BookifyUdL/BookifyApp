@@ -114,13 +114,14 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
     public void onBindViewHolder(@NonNull final ReviewsVerticalAdapter.BookHolder holder, final int position) {
         final Review review = reviewsList.get(position);
         holder.position = position;
+        String name = review.getUser().getName();
         holder.userName.setText(review.getUser().getName());
         String comment = review.getComment();
         if(!comment.isEmpty())
             holder.userComment.setText(comment);
 
-        holder.userImage.setImageResource(
-                mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
+        //holder.userImage.setImageResource(
+        //       mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
         getProfileImage(review.getUser(), holder.userImage);
 
         if(review.getCommentType() != CommentType.COMMENT){

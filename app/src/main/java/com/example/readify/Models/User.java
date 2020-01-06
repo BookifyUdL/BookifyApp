@@ -265,6 +265,8 @@ public class User implements Serializable {
     }
 
     public ArrayList<Book> getRead() {
+        if(read == null)
+            read = new ArrayList<>();
         return read;
     }
 
@@ -382,6 +384,8 @@ public class User implements Serializable {
     }
 
     public ArrayList<Book> getLibrary() {
+        if(library == null)
+            library = new ArrayList<>();
         return library;
     }
 

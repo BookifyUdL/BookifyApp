@@ -295,13 +295,15 @@ public class Book implements Serializable {
 
     public static JSONArray bookListToJSON(ArrayList<Book> books){
         JSONArray booksArray = new JSONArray();
-        for (Book book : books){
-            JSONObject object = new JSONObject();
-            try{
-                object.put("_id", book.getId());
-                booksArray.put(object);
-            } catch (Exception e) {
-                //continue;
+        if(books != null){
+            for (Book book : books){
+                JSONObject object = new JSONObject();
+                try{
+                    object.put("_id", book.getId());
+                    booksArray.put(object);
+                } catch (Exception e) {
+                    //continue;
+                }
             }
         }
         return booksArray;
