@@ -122,9 +122,9 @@ public class User implements Serializable {
             this.premium = user.getBoolean("premium");
             // MIssing Achivements
             this.achievements = new ArrayList<>();
-            this.library = Book.bookListFromJson(userJson.getJSONArray("library"));
-            this.reading = Book.bookListFromJson(userJson.getJSONArray("reading_book"));
-            this.interested = Book.bookListFromJson(userJson.getJSONArray("interested_book"));
+            this.library = Book.bookListFromJson(user.getJSONArray("library"));
+            this.reading = Book.bookListFromJson(user.getJSONArray("reading_book"));
+            this.interested = Book.bookListFromJson(user.getJSONArray("interested_book"));
             this.uid = user.getString("_id");
             this.firebaseId = user.getString("firebaseId");
             this.picture = user.getString("userPicture");
