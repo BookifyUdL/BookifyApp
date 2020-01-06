@@ -8,10 +8,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Random;
 
-public class Review {
+public class Review implements Serializable {
 
     public static String COMMENT_PARAMETER = "COMMENT_PARAMETER";
     public static String COMMENT_TYPE_PARAMETER = "COMMENT_TYPE_PARAMETER";
@@ -20,6 +22,7 @@ public class Review {
 
     private String comment;
     private User user;
+    public String userId;
     private CommentType commentType;
     private Uri uri;
     private ArrayList<Review> subReviews;
@@ -58,9 +61,12 @@ public class Review {
 
     public Review(JSONObject jsonObject){
         try{
-            this.user = new User(jsonObject.getJSONObject("user"));
+            //this.user = new User(jsonObject.getJSONObject("user"));
+            this.id = jsonObject.getString("_id");
+            this.userId = jsonObject.getString("user");
             this.comment = jsonObject.getString("message");
             int comment = jsonObject.getInt("comment_type");
+
             if(comment == 1){
                 commentType = CommentType.COMMENT;
                 this.uri = this.uri = Uri.parse("No uri broh");
@@ -78,7 +84,9 @@ public class Review {
                 this.userLikedId.add(userLiked.getString(i));
             }
 
-            JSONArray subReviews = jsonObject.getJSONArray("user_liked");
+            this.userLiked = new ArrayList<>();
+
+            JSONArray subReviews = jsonObject.getJSONArray("subreviews");
             this.subReviewsId = new ArrayList<>();
             for (int i = 0; i < subReviews.length(); i++){
                 this.subReviewsId.add(subReviews.getString(i));
@@ -99,9 +107,16 @@ public class Review {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("id", this.id);
+            //this.id = this.userId +
+            if(id != null)
+                jsonObject.put("_id", this.id);
+            /*} else {
+                Random r = new Random();
+                String commentId = user.getUid()  + r.nextInt((9999 - 0) + 1) + 0;
+                jsonObject.put("_id", commentId);
+            }*/
             jsonObject.put("message", comment);
-            jsonObject.put("user", User.toJSON(user));
+            jsonObject.put("user", user.getUid());
             jsonObject.put("uri", uri);
             jsonObject.put("comment_type", type);
             jsonObject.put("is_sub", isSub);
@@ -111,6 +126,8 @@ public class Review {
             }
             jsonObject.put("user_liked", liked);
             JSONArray subReviewIdJson = new JSONArray();
+            if(subReviewsId == null)
+                subReviewsId = new ArrayList<>();
             for(String subReviewId: subReviewsId){
                 subReviewIdJson.put(subReviewId);
             }
@@ -124,7 +141,7 @@ public class Review {
                 "url": "http://localhost:3000/comments/5df8e808db179a094b66c188"
             }*/
         } catch (Exception e) {
-
+            System.out.println("seti");
         }
         return jsonObject;
     }
@@ -160,6 +177,8 @@ public class Review {
     }
 
     public void addSubReview(Review review){
+        if(this.subReviews == null)
+            this.subReviews = new ArrayList<>();
         this.subReviews.add(review);
     }
 

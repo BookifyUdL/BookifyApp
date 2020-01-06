@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -37,7 +38,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class User {
+public class User implements Serializable {
     private String uid;
     private String name;
     private String email;
@@ -121,9 +122,9 @@ public class User {
             this.premium = user.getBoolean("premium");
             // MIssing Achivements
             this.achievements = new ArrayList<>();
-            this.library = Book.bookListFromJson(userJson.getJSONArray("library"));
-            this.reading = Book.bookListFromJson(userJson.getJSONArray("reading_book"));
-            this.interested = Book.bookListFromJson(userJson.getJSONArray("interested_book"));
+            this.library = Book.bookListFromJson(user.getJSONArray("library"));
+            this.reading = Book.bookListFromJson(user.getJSONArray("reading_book"));
+            this.interested = Book.bookListFromJson(user.getJSONArray("interested_book"));
             this.uid = user.getString("_id");
             this.firebaseId = user.getString("firebaseId");
             this.picture = user.getString("userPicture");
@@ -264,6 +265,8 @@ public class User {
     }
 
     public ArrayList<Book> getRead() {
+        if(read == null)
+            read = new ArrayList<>();
         return read;
     }
 
@@ -381,6 +384,8 @@ public class User {
     }
 
     public ArrayList<Book> getLibrary() {
+        if(library == null)
+            library = new ArrayList<>();
         return library;
     }
 

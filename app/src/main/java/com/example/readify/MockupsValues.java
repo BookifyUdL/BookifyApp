@@ -45,6 +45,7 @@ public class MockupsValues {
     public  static User user = new User();
     private static Context context;
     private static Book currentBookViewing;
+    public  static Review lastReviewFromCommentActivty;
 
 
     public static void setAuthors(ArrayList<Author> authors){

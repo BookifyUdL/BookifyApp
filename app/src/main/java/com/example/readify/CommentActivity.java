@@ -43,6 +43,7 @@ import com.example.readify.Models.Review;
 import com.example.readify.Models.ServerCallback;
 import com.example.readify.Models.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.JsonObject;
 import com.gsconrad.richcontentedittext.RichContentEditText;
 
 import org.json.JSONObject;
@@ -241,30 +242,33 @@ public class CommentActivity extends AppCompatActivity implements RichEditTextIn
                 ApiConnector.postComment(getApplicationContext(), review, new ServerCallback() {
                     @Override
                     public void onSuccess(JSONObject result) {
-                        /*
-                        {"message":"Comment created successfully","createdComment":{"message":"great comment","user":{"_id":"5df52db360700d30166d1a46","name":"Bookify Lleida","achievements":[],"firebaseId":"UEExXuowbBgdw84uTdL2ZDRJNV62","userPicture":"userfinale","premium":false,"library":[{"_id":"5de7fb675a66a02fe3c39ec0"},{"_id":"5de7fb695a66a02fe3c39ec4"},{"_id":"5de7fb6a5a66a02fe3c39ec8"}],"read_book":[],"interested_book":[{"_id":"5de7fb695a66a02fe3c39ec4"},{"_id":"5de7fb6a5a66a02fe3c39ec8"}],"reading_book":[{"_id":"5de7fb675a66a02fe3c39ec0"}],"email":"bookifylleida@gmail.com","genres":[{"_id":"5de7fb595a66a02fe3c39eac"},{"_id":"5de7fb595a66a02fe3c39eaf"}]},"user_liked":[],"uri":"content:\/\/com.google.android.inputmethod.latin.fileprovider\/content\/tenor_gif\/tenor_gif291209037141317610.gif","comment_type":3,"request":{"type":"GET","url":"http:\/\/localhost:3000\/comments\/5df90b03c4c2a561916fc51c"}}}
-                        */
-                        /*try {
-                            JSONObject object = result.getJSONObject("createdComment");
-                            JSONObject object1 = object.getJSONObject("user");
-                            String id = object1.getString("_id");
-                            //Review aux = new Review(result.getJSONObject("createdComment"));
-                            //Book book = MockupsValues.getCurrentBookViewing();
-                            //book.addComment(aux);
+                        String results = result.toString();
+                        try {
+                            JSONObject createdComment = result.getJSONObject("createdComment");
+                            JSONObject request = createdComment.getJSONObject("request");
+                            String url = request.getString("url");
+                            String id = url.substring(url.lastIndexOf("/") + 1);
                             review.setId(id);
-                            Book book = MockupsValues.getCurrentBookViewing();
-                            book.addComment(review);
-                            ApiConnector.updateBook(getApplicationContext(), book, new ServerCallback() {
+                            Book commentedBook =  MockupsValues.getCurrentBookViewing();
+                            commentedBook.addComment(review);
+                            ApiConnector.updateBook(getApplicationContext(), commentedBook, new ServerCallback() {
                                 @Override
                                 public void onSuccess(JSONObject result) {
+                                    //Intent data = new Intent();
+                                    //data.putExtra("REVIEW", review);
+                                    //setResult(RESULT_OK, data);
+                                    //setRe
+                                    //finish();
+                                    //setResult(300, data);
+                                    MockupsValues.lastReviewFromCommentActivty = review;
                                     finishActivity();
                                 }
                             });
-
                         } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "Someting bad happend", Toast.LENGTH_SHORT).show();
                             finishActivity();
-                        }*/
-                        finishActivity();
+                        }
+                        //Book commentedBook = (Book) getIntent().getSerializableExtra("Book");
                     }
                 });
 

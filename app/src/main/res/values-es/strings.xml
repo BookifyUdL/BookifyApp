@@ -107,5 +107,6 @@
 
     <string name="facebook_app_id">2457878697756823</string>
     <string name="fb_login_protocol_scheme">fb2457878697756823</string>
+    <string name="any_comment_yet">Todavía no hay ningún comentario!</string>
 
 </resources>

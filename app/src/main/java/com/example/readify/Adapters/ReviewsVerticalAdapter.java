@@ -51,6 +51,7 @@ import com.example.readify.RichEditTextInterface;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
+import com.squareup.picasso.Picasso;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
@@ -99,8 +100,6 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
     @Override
     public ReviewsVerticalAdapter.BookHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-
-        // Inflate the layout view you have created for the list rows here
         View view = layoutInflater.inflate(R.layout.review_item, parent, false);
         return new ReviewsVerticalAdapter.BookHolder(view);
     }
@@ -115,13 +114,14 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
     public void onBindViewHolder(@NonNull final ReviewsVerticalAdapter.BookHolder holder, final int position) {
         final Review review = reviewsList.get(position);
         holder.position = position;
+        String name = review.getUser().getName();
         holder.userName.setText(review.getUser().getName());
         String comment = review.getComment();
         if(!comment.isEmpty())
             holder.userComment.setText(comment);
 
-        holder.userImage.setImageResource(
-                mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
+        //holder.userImage.setImageResource(
+        //       mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
         getProfileImage(review.getUser(), holder.userImage);
 
         if(review.getCommentType() != CommentType.COMMENT){
@@ -300,9 +300,10 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             View add_comment = layoutInflater.inflate(R.layout.add_comment_layout,
                             addCommentLayout,false);
             CircleImageView imageView = (CircleImageView) add_comment.findViewById(R.id.profile_image);
+
             /*imageView.setImageResource(
                     mContext.getResources().getIdentifier(MockupsValues.user.getPicture(), "drawable", mContext.getPackageName()));*/
-            getProfileImage(user, imageView);
+            getProfileImage(MockupsValues.user, imageView);
 
             RelativeLayout relativeLayout = add_comment.findViewById(R.id.relative_layout);
             int height = relativeLayout.getHeight();
@@ -338,7 +339,7 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             sendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    checkSubComment(layoutInflater);
+                    //checkSubComment(layoutInflater);
                 }
             });
 
@@ -368,11 +369,13 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
 
         private void addCommentSubComments(LayoutInflater layoutInflater){
             ArrayList<Review> reviews = reviewsList.get(position).getSubReviews();
-            for (int i = 0; i < reviews.size(); i++) {
-                View to_add = layoutInflater.inflate(R.layout.review_item_without_options,
-                        subCommentsRecyclerView,false);
-                addSubComment(to_add, reviews.get(i));
-                subCommentsRecyclerView.addView(to_add);
+            if(reviews != null){
+                for (int i = 0; i < reviews.size(); i++) {
+                    View to_add = layoutInflater.inflate(R.layout.review_item_without_options,
+                            subCommentsRecyclerView,false);
+                    addSubComment(to_add, reviews.get(i));
+                    subCommentsRecyclerView.addView(to_add);
+                }
             }
         }
 
@@ -380,8 +383,8 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             CircleImageView image = (CircleImageView) to_add.findViewById(R.id.profile_image);
             TextView name = (TextView) to_add.findViewById(R.id.user_name);
             TextView comment =  to_add.findViewById(R.id.user_comment);
-            /*image.setImageResource(
-                    mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));*/
+            image.setImageResource(
+                    mContext.getResources().getIdentifier(review.getUser().getPicture(), "drawable", mContext.getPackageName()));
             getProfileImage(review.getUser(), image);
 
             name.setText(review.getUser().getName());
@@ -395,7 +398,11 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
     }
 
     private void getProfileImage(final User user, final CircleImageView circleImageView) {
-        @SuppressLint("StaticFieldLeak")
+        String vrg = user.getPicture();
+        Picasso.with(mContext) // Context
+                .load(user.getPicture()) // URL or file
+                .into(circleImageView);
+        /*@SuppressLint("StaticFieldLeak")
         AsyncTask<Void, Void, Bitmap> t = new AsyncTask<Void, Void, Bitmap>() {
             protected Bitmap doInBackground(Void... p) {
                 Bitmap bmp = null;
@@ -420,6 +427,6 @@ public class ReviewsVerticalAdapter extends RecyclerView.Adapter<ReviewsVertical
             }
         };
 
-        t.execute();
+        t.execute();*/
     }
 }
